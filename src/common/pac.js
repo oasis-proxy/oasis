@@ -7,7 +7,6 @@ import { RuleType, ProxyProtocol } from './config.js'
  */
 export function generatePacScript(config) {
   const proxyStrings = generateProxyStrings(config.proxies)
-  const rules = config.auto.rules
   const defaultProfileId = config.auto.defaultProfileId
   
   // Helper functions to be embedded in the PAC script
@@ -31,38 +30,55 @@ export function generatePacScript(config) {
     }
   `
 
-  // Compile Rules
-  const checks = rules.map(rule => {
-      const proxyString = proxyStrings[rule.profileId] || 'DIRECT'
-      
-      switch (rule.type) {
-        case RuleType.DOMAIN_SUFFIX:
-          // dnsDomainIs(host, ".google.com")
-          // Note: dnsDomainIs isn't strictly suffix match in all browsers/contexts but is standard PAC
-          // Often safer to check both Exact Match OR Suffix Match for "." + domain
-          return `if (dnsDomainIs(host, "${rule.pattern}") || host === "${rule.pattern}") return "${proxyString}";`
+  // Compile Rules Function
+  const compileRules = (rules, defaultProxyIdForSet) => {
+      return rules.map(rule => {
+          const proxyString = proxyStrings[rule.profileId || defaultProxyIdForSet] || 'DIRECT'
           
-        case RuleType.DOMAIN_KEYWORD:
-          return `if (host.indexOf("${rule.pattern}") !== -1) return "${proxyString}";`
-          
-        case RuleType.IP_CIDR:
-          // format: 192.168.0.0/16
-          // Split IP and Mask is tricky in static PAC without helper
-          // We'll use our _cidr helper defined above
-          return `if (_cidr(host, "${rule.pattern}")) return "${proxyString}";`
-          
-        case RuleType.WILDCARD:
-          return `if (_wildcard("${rule.pattern}", host)) return "${proxyString}";`
-          
-        case RuleType.REGEX:
-          // Escape backslashes for the string inside the JS code
-          const escapedPattern = rule.pattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
-          return `if (_regex("${escapedPattern}", url)) return "${proxyString}";`
-          
-        default:
-          return ''
-      }
-  }).join('\n    ')
+          switch (rule.type) {
+            case RuleType.DOMAIN_SUFFIX:
+              return `if (dnsDomainIs(host, "${rule.pattern}") || host === "${rule.pattern}") return "${proxyString}";`
+              
+            case RuleType.DOMAIN_KEYWORD:
+              return `if (host.indexOf("${rule.pattern}") !== -1) return "${proxyString}";`
+              
+            case RuleType.IP_CIDR:
+              return `if (_cidr(host, "${rule.pattern}")) return "${proxyString}";`
+              
+            case RuleType.WILDCARD:
+              return `if (_wildcard("${rule.pattern}", host)) return "${proxyString}";`
+              
+            case RuleType.REGEX: {
+              const escapedPattern = rule.pattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+              return `if (_regex("${escapedPattern}", url)) return "${proxyString}";`
+            }
+              
+            default:
+              return ''
+          }
+      }).join('\n    ')
+  }
+
+  // Priority 0: Temporary Session Rules
+  const tempChecks = compileRules(config.auto.tempRules || [])
+
+  // Priority 1: Custom Reject Rules
+  const customRejectChecks = compileRules(config.auto.rejectRules || [])
+
+  // Priority 2: Subscribed Reject Sets
+  const subscribedRejectChecks = (config.auto.rejectRuleSets || [])
+      .filter(set => set.enabled && set.rules && set.rules.length > 0)
+      .map(set => compileRules(set.rules, set.profileId || 'reject'))
+      .join('\n    ')
+
+  // Priority 3: Custom Proxy Rules
+  const customProxyChecks = compileRules(config.auto.proxyRules || [])
+
+  // Priority 4: Subscribed Proxy Sets
+  const subscribedProxyChecks = (config.auto.proxyRuleSets || [])
+      .filter(set => set.enabled && set.rules && set.rules.length > 0)
+      .map(set => compileRules(set.rules, set.profileId || 'default'))
+      .join('\n    ')
 
   const defaultProxy = proxyStrings[defaultProfileId] || 'DIRECT'
 
@@ -70,8 +86,20 @@ export function generatePacScript(config) {
 function FindProxyForURL(url, host) {
 ${helpers}
 
-    // Rules
-    ${checks}
+    // 0. Temporary Rules
+    ${tempChecks}
+
+    // 1. Custom Reject Rules
+    ${customRejectChecks}
+
+    // 2. Subscribed Reject Rules
+    ${subscribedRejectChecks}
+
+    // 3. Custom Proxy Rules
+    ${customProxyChecks}
+
+    // 4. Subscribed Proxy Rules
+    ${subscribedProxyChecks}
 
     // Default
     return "${defaultProxy}";
@@ -90,8 +118,10 @@ function generateProxyStrings(proxies) {
       map[id] = 'DIRECT'
       // Note: 'System' logic in PAC usually just means trying DIRECT or returning specific string if supported
     } else if (proxy.type === 'reject') {
-        // Use a local blackhole to simulate blocking
-        map[id] = 'PROXY 127.0.0.1:65535'
+        // Use configured host/port or fallback to default blackhole
+        const rHost = proxy.host || '127.0.0.1'
+        const rPort = proxy.port || 65535
+        map[id] = `PROXY ${rHost}:${rPort}`
     } else if (proxy.type === 'server') {
         let typeStr = 'PROXY'
         if (proxy.scheme === ProxyProtocol.SOCKS4 || proxy.scheme === ProxyProtocol.SOCKS5) {

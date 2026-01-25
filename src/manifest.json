@@ -19,5 +19,5 @@
       "js": ["src/content/index.js"]
     }
   ],
-  "permissions": []
+  "permissions": ["proxy", "storage", "alarms"]
 }

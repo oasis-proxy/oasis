@@ -19,6 +19,7 @@ export function parseAutoProxyRules(content) {
         // Sanity check: decoded content should look like text (no binary control chars)
         // AutoProxy rules are text, so we expect mostly printable items + newlines
         // If it has many control chars, it's likely not what we want
+        // eslint-disable-next-line no-control-regex
         if (!/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(decodedCandidate)) {
            decoded = decodedCandidate;
         }

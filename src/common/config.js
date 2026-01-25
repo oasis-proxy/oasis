@@ -37,7 +37,13 @@ export const DEFAULT_CONFIG = {
   proxies: {
     'direct': { id: 'direct', type: 'direct', label: 'Direct' },
     'system': { id: 'system', type: 'system', label: 'System' },
-    'reject': { id: 'reject', type: 'reject', label: 'Reject' },
+    'reject': {
+      id: 'reject',
+      type: 'reject',
+      label: 'Reject',
+      host: '127.0.0.1',
+      port: 65535
+    },
     'default': {
       id: 'default',
       type: 'server',
@@ -64,8 +70,12 @@ export const DEFAULT_CONFIG = {
     // Default action if no rule matches
     defaultProfileId: 'direct',
     
+    // Temporary Session Rules (Highest Priority)
+    tempRules: [],
+
     // External Rule Sets Subscription
-    ruleSets: [
+    rejectRuleSets: [],
+    proxyRuleSets: [
         {
             id: 'gfwlist',
             url: 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt',
@@ -75,8 +85,11 @@ export const DEFAULT_CONFIG = {
         }
     ],
 
-    // List of switching rules
-    rules: [
+    // Custom Reject Rules (Higher Priority)
+    rejectRules: [],
+
+    // Custom Proxy Rules
+    proxyRules: [
       {
         id: '1', // Unique ID
         type: RuleType.DOMAIN_KEYWORD,
@@ -95,6 +108,31 @@ export const DEFAULT_CONFIG = {
         pattern: '*.example.com',
         profileId: 'default'
       }
+
     ]
-  }
+  },
+
+  // 4. Global UI Settings
+  ui: {
+    theme: 'auto', // 'light', 'dark', 'auto'
+  },
+
+  // 5. Update Settings
+  update: {
+    // 0 = Manual, 15 = 15 min, 60 = 1 hr, 720 = 12 hr, 1440 = 24 hr
+    interval: 0 
+  },
+
+  // 6. Behavior Settings
+  behavior: {
+    refreshOnSwitch: false
+  },
+
+  // 7. Cloud Sync Settings
+  sync: {
+    enabled: false
+  },
+
+  // 8. IP Tags
+  ipTags: {}
 }
