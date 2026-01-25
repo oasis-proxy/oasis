@@ -1,8 +1,8 @@
 <template>
-  <aside class="w-72 bg-slate-50 border-r border-slate-200 flex flex-col shrink-0">
+  <aside class="w-72 bg-slate-50 dark:bg-sidebar-dark border-r border-slate-200 dark:border-divider-dark flex flex-col shrink-0 transition-colors">
     <!-- Logo / Brand -->
-    <div class="h-24 flex items-center px-6 border-b border-slate-100">
-      <div class="flex items-center gap-3 text-slate-900">
+    <div class="h-24 flex items-center px-6 border-b border-slate-100 dark:border-divider-dark transition-colors">
+      <div class="flex items-center gap-3 text-slate-900 dark:text-white">
         <div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white shadow-lg shadow-primary/30" style="width: 32px; height: 32px;">
           <i class="bi bi-router text-[18px]"></i>
         </div>
@@ -27,7 +27,7 @@
             <button 
               @click="navigate"
               class="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all border group"
-              :class="isActive ? 'bg-white shadow-sm border-slate-100 text-primary font-medium' : 'border-transparent text-slate-600 hover:bg-slate-100'"
+              :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
             >
               <i class="bi bi-gear text-[18px]"></i>
               <span class="text-xs">General Settings</span>
@@ -42,7 +42,7 @@
             <button 
                @click="navigate"
                class="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors border group"
-               :class="isActive ? 'bg-white shadow-sm border-slate-100 text-primary font-medium' : 'border-transparent text-slate-600 hover:bg-slate-100'"
+               :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
             >
               <i class="bi bi-clock-history text-[18px]"></i>
               <span class="text-xs">Temporary Rules</span>
@@ -54,8 +54,8 @@
       <!-- Variable: Proxy Hosts -->
       <div>
         <div class="px-2 mb-2 flex items-center justify-between group">
-          <h3 class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider m-0">Proxy Hosts</h3>
-          <button class="text-slate-400 hover:text-primary transition-colors p-1 rounded hover:bg-slate-200 border-0">
+          <h3 class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider m-0">Proxy Hosts</h3>
+          <button class="text-slate-400 hover:text-primary transition-colors p-1 rounded bg-transparent hover:bg-transparent dark:hover:bg-white/5 border-0">
             <i class="bi bi-plus text-[14px]"></i>
           </button>
         </div>
@@ -70,9 +70,9 @@
              <button 
                 @click="navigate"
                 class="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors border group"
-                :class="isActive ? 'bg-white shadow-sm border-slate-100 text-primary font-medium' : 'border-transparent text-slate-600 hover:bg-slate-100'"
+                :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
              >
-                <i :class="['bi text-[18px]', host.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600']"></i>
+                <i :class="['bi text-[18px]', host.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']"></i>
                 <span class="text-xs">{{ host.name }}</span>
                 <span v-if="host.status" :class="['ml-auto w-2 h-2 rounded-full', host.statusColor]"></span>
              </button>
@@ -83,8 +83,8 @@
       <!-- Variable: Policy Rules -->
       <div>
         <div class="px-2 mb-2 flex items-center justify-between group">
-          <h3 class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider m-0">Policy Rules</h3>
-          <button class="text-slate-400 hover:text-primary transition-colors p-1 rounded hover:bg-slate-200 border-0">
+          <h3 class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider m-0">Policy Rules</h3>
+          <button class="text-slate-400 hover:text-primary transition-colors p-1 rounded bg-transparent hover:bg-transparent dark:hover:bg-white/5 border-0">
             <i class="bi bi-plus text-[14px]"></i>
           </button>
         </div>
@@ -99,9 +99,9 @@
              <button 
                 @click="navigate"
                 class="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors border group"
-                :class="isActive ? 'bg-white shadow-sm border-slate-100 text-primary font-medium' : 'border-transparent text-slate-600 hover:bg-slate-100'"
+                :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
              >
-                <i :class="['bi text-[18px]', rule.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600']"></i>
+                <i :class="['bi text-[18px]', rule.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']"></i>
                 <span class="text-xs">{{ rule.name }}</span>
              </button>
           </router-link>

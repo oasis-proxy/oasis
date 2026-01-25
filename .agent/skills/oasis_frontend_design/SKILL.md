@@ -60,6 +60,40 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 - **Allowed**: `bg-green-50 text-green-600 border-green-100`.
 - **Tracker**: `bg-orange-50 text-orange-600 border-orange-100`.
 
+### 2.4 Dark Mode Standards
+
+**Principles**:
+
+- **Semantic Overrides**: NEVER rely on `bg-white` + `dark:bg-...` overrides alone, as specificity issues (like `!important` in `bg-white`) will break them.
+- **Transparency**: Highlighting in dark mode should use **White with Opacity** (e.g., `rgba(255,255,255,0.05)`), NOT solid colors.
+- **Text Safety**: Text must explicitly switch to white/light-grey. Do not rely on inheritance.
+
+**Semantic Classes (Required)**:
+Use these classes instead of raw Tailwind utilities for settings pages:
+
+| Element            | Class                      | Light Mode                | Dark Mode                          |
+| :----------------- | :------------------------- | :------------------------ | :--------------------------------- |
+| **Containers**     | `.settings-card`           | White / Border Slate-200  | `#252525` / Border `#333`          |
+| **Inputs**         | `.settings-input`          | Slate-50 / Text Slate-900 | `#2d2d2d` / Text White             |
+| **Primary Text**   | `.settings-text-primary`   | Slate-900                 | White                              |
+| **Secondary Text** | `.settings-text-secondary` | Slate-500                 | Slate-400                          |
+| **Icons**          | `.settings-icon-{color}`   | `bg-{color}-50`           | `rgba({color}, 0.2)` (Transparent) |
+| **Dashed Button**  | `.settings-button-dashed`  | Transparent Border        | Transparent White-05 Hover         |
+
+**Implementation Rule**:
+
+```html
+<!-- INCORRECT -->
+<div class="bg-white dark:bg-slate-800 ...">
+  <h3 class="text-slate-900">Title</h3>
+</div>
+
+<!-- CORRECT -->
+<div class="settings-card ...">
+  <h3 class="settings-text-primary">Title</h3>
+</div>
+```
+
 ## 3. CSS Utilities (Tailwind-Compatibility)
 
 The project uses standard CSS that _mimics_ Tailwind classes.
