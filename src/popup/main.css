@@ -1,0 +1,27 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* Shared Design System Styles */
+:root {
+  --bs-primary: #137fec;
+  --bs-body-bg: #f3f4f6;
+  --bs-body-color: #0f172a;
+}
+html { font-size: 14px; }
+
+/* Default Constraint */
+input[type="text"] {
+  max-width: 200px;
+  height: 2rem; /* h-8 */
+}
+select {
+  max-width: 100px;
+  height: 2rem; /* h-8 */
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+.w-full { width: 100% !important; }
+.h-full { height: 100% !important; }

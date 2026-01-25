@@ -1,57 +1,88 @@
-/* global chrome */
 import { DEFAULT_CONFIG } from './config'
 
 /**
  * Load configuration from storage.
+ * Assembles the multiple top-level storage keys into a single Runtime Config Object.
  * @returns {Promise<typeof DEFAULT_CONFIG>}
  */
 export async function loadConfig() {
-  // Load persistent config
-  const localResult = await chrome.storage.local.get('proxyConfig')
-  let config = DEFAULT_CONFIG
-  
-  if (localResult.proxyConfig) {
-    config = { ...DEFAULT_CONFIG, ...localResult.proxyConfig }
+  const keys = ['config', 'proxies', 'pacs', 'policies', 'system', 'direct', 'reject']
+  const result = await chrome.storage.local.get(keys)
+
+  // Start with default structure
+  const runtimeConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
+
+  // 1. Merge 'config' (General Settings)
+  if (result.config) {
+      // Deep merge logic for config object (ui, behavior, etc.)
+      const deepMerge = (target, source) => {
+        for (const key of Object.keys(source)) {
+          if (source[key] instanceof Object && key in target && target[key] instanceof Object && !Array.isArray(target[key])) {
+             deepMerge(target[key], source[key])
+          } else {
+             target[key] = source[key]
+          }
+        }
+      }
+      deepMerge(runtimeConfig, result.config)
   }
 
-  // Load session rules if available
+  // 2. Load Profiles (Arrays) - Overwrite defaults if present in storage
+  if (result.proxies) runtimeConfig.proxies = result.proxies
+  if (result.pacs) runtimeConfig.pacs = result.pacs
+  if (result.policies) runtimeConfig.policies = result.policies
+
+  // 3. Load Singletons - Overwrite defaults if present
+  if (result.system) runtimeConfig.system = result.system
+  if (result.direct) runtimeConfig.direct = result.direct
+  if (result.reject) runtimeConfig.reject = result.reject
+  
+  // 4. Load Session Rules (Temp Rules)
+  // These belong to the active policy if it's an auto policy? 
+  // Or we just attach them to a special property 'tempRules'?
+  // For now, let's attach to the runtime config root for easy access, 
+  // though physically they might apply to the active auto policy.
   try {
     const sessionResult = await chrome.storage.session.get('tempRules')
     if (sessionResult.tempRules) {
-        // Ensure auto exists and merge tempRules
-        config.auto = {
-            ...config.auto,
-            tempRules: sessionResult.tempRules
-        }
+        runtimeConfig.tempRules = sessionResult.tempRules
     }
   } catch (e) {
-      // Session storage might not be available or fail
-      console.warn('Failed to load session rules', e)
+      // console.warn('Failed to load session rules', e)
   }
 
-  return config
+  return runtimeConfig
 }
 
 /**
  * Save configuration to storage.
+ * Splits the Runtime Config Object into top-level storage keys.
  * @param {typeof DEFAULT_CONFIG} config 
  */
 export async function saveConfig(config) {
-  // We don't save tempRules to local storage, strip them out?
-  // Ideally we keep the object clean, but if config includes tempRules 
-  // we should be careful not to persist them if we just dump the whole object.
-  // For now, we assume the caller handles this or we save the whole object 
-  // but note that 'tempRules' in local storage will be ignored/overwritten by session on load ideally.
-  // A cleaner approach is to separate them.
+  // Extract keys to save to their respective storage locations
   
-  // Clone to avoid mutating
-  const configToSave = JSON.parse(JSON.stringify(config))
-  // Clear tempRules before saving to local
-  if (configToSave.auto && configToSave.auto.tempRules) {
-      configToSave.auto.tempRules = []
+  // 1. Config (General Settings) - Strip out profiles
+  const configData = {
+      activeProfileId: config.activeProfileId,
+      ui: config.ui,
+      update: config.update,
+      behavior: config.behavior,
+      sync: config.sync,
+      ipTags: config.ipTags
   }
 
-  await chrome.storage.local.set({ proxyConfig: configToSave })
+  const storageData = {
+      config: configData,
+      proxies: config.proxies,
+      pacs: config.pacs,
+      policies: config.policies,
+      system: config.system,
+      direct: config.direct,
+      reject: config.reject
+  }
+
+  await chrome.storage.local.set(storageData)
 }
 
 /**
@@ -73,36 +104,10 @@ export async function clearSessionRules() {
 }
 
 /**
- * Export the current configuration as a JSON object.
- * @returns {Promise<object>} The configuration object.
- */
-export async function exportConfig() {
-    const result = await chrome.storage.local.get('proxyConfig')
-    // Return existing config or default if null
-    // We export exactly what is in storage (persistent config)
-    return result.proxyConfig || DEFAULT_CONFIG
-}
-
-/**
- * Import configuration.
- * @param {object} configData - The configuration object to import.
- */
-export async function importConfig(configData) {
-    if (!configData || typeof configData !== 'object') {
-        throw new Error('Invalid configuration data')
-    }
-    // Basic structural validation could go here
-    // For now we assume if it's an object, it's valid enough to save
-    // Ideally we should valid against DEFAULT_CONFIG schema
-
-    await chrome.storage.local.set({ proxyConfig: configData })
-}
-
-/**
  * Clear all configuration and reset to defaults.
  */
 export async function clearConfig() {
-    await chrome.storage.local.remove('proxyConfig')
+    const keys = ['config', 'proxies', 'pacs', 'policies', 'system', 'direct', 'reject']
+    await chrome.storage.local.remove(keys)
     await clearSessionRules()
 }
-

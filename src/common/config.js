@@ -2,13 +2,6 @@
  * Proxy config definitions and default state.
  */
 
-// Proxy Modes
-export const ProxyMode = {
-  FIXED: 'fixed',
-  PAC: 'pac',
-  AUTO: 'auto'
-}
-
 // Proxy Protocols
 export const ProxyProtocol = {
   HTTP: 'http',
@@ -29,110 +22,77 @@ export const RuleType = {
 
 // Default Configuration Structure
 export const DEFAULT_CONFIG = {
-  // Current active mode
-  mode: ProxyMode.FIXED,
+  // --- General Settings (Storage Key: 'config') ---
+  activeProfileId: 'direct', // Only one active profile at a time
 
-  // Map of proxy profiles
-  // Key: ID, Value: Proxy Config
-  proxies: {
-    'direct': { id: 'direct', type: 'direct', label: 'Direct' },
-    'system': { id: 'system', type: 'system', label: 'System' },
-    'reject': {
-      id: 'reject',
-      type: 'reject',
-      label: 'Reject',
-      host: '127.0.0.1',
-      port: 65535
-    },
-    'default': {
-      id: 'default',
-      type: 'server',
-      label: 'Proxy 1',
-      scheme: ProxyProtocol.HTTP,
-      host: '127.0.0.1',
-      port: 7890,
-      auth: null
-    }
-  },
-
-  // 1. Fixed Server Configuration
-  fixed: {
-    activeProxyId: 'default'
-  },
-
-  // 2. PAC Script Configuration
-  pac: {
-    url: '' // URL to the PAC file
-  },
-
-  // 3. Auto Switch Configuration
-  auto: {
-    // Default action if no rule matches
-    defaultProfileId: 'direct',
-    
-    // Temporary Session Rules (Highest Priority)
-    tempRules: [],
-
-    // External Rule Sets Subscription
-    rejectRuleSets: [],
-    proxyRuleSets: [
-        {
-            id: 'gfwlist',
-            url: 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt',
-            format: 'autoproxy', // 'autoproxy' is the only supported format for now
-            profileId: 'default', // Apply this proxy to all rules in this set
-            enabled: false
-        }
-    ],
-
-    // Custom Reject Rules (Higher Priority)
-    rejectRules: [],
-
-    // Custom Proxy Rules
-    proxyRules: [
-      {
-        id: '1', // Unique ID
-        type: RuleType.DOMAIN_KEYWORD,
-        pattern: 'google',
-        profileId: 'default'
-      },
-      {
-        id: '2',
-        type: RuleType.DOMAIN_SUFFIX,
-        pattern: 'github.com',
-        profileId: 'default'
-      },
-      {
-        id: '3',
-        type: RuleType.WILDCARD,
-        pattern: '*.example.com',
-        profileId: 'default'
-      }
-
-    ]
-  },
-
-  // 4. Global UI Settings
   ui: {
     theme: 'auto', // 'light', 'dark', 'auto'
+    showContextMenu: false
   },
 
-  // 5. Update Settings
   update: {
     // 0 = Manual, 15 = 15 min, 60 = 1 hr, 720 = 12 hr, 1440 = 24 hr
     interval: 0 
   },
 
-  // 6. Behavior Settings
   behavior: {
-    refreshOnSwitch: false
+    refreshOnSwitch: false,
+    connectionMonitoring: false,
+    autoRefresh: false
   },
 
-  // 7. Cloud Sync Settings
   sync: {
     enabled: false
   },
 
-  // 8. IP Tags
-  ipTags: {}
+  ipTags: {},
+
+
+  // --- Profiles (Storage Keys: 'proxies', 'pacs', 'policies') ---
+  
+  // Array of Proxy Servers
+  proxies: [
+    {
+      id: 'default_proxy',
+      type: 'server',
+      label: 'Example Proxy',
+      scheme: ProxyProtocol.HTTP,
+      host: '127.0.0.1',
+      port: 7890,
+      auth: null
+    }
+  ],
+
+  // Array of PAC Scripts
+  pacs: [
+    {
+      id: 'default_pac',
+      url: '' 
+    }
+  ],
+
+  // Array of Auto Policies
+  policies: [
+    {
+      id: 'default_policy',
+      defaultProfileId: 'direct',
+      rules: [],
+      ruleSets: [] // Subscriptions
+    }
+  ],
+
+
+  // --- Singletons (Storage Keys: 'system', 'direct', 'reject') ---
+  
+  system: { id: 'system', type: 'system', label: 'System' },
+  
+  direct: { id: 'direct', type: 'direct', label: 'Direct' },
+  
+  reject: {
+    id: 'reject',
+    type: 'reject',
+    label: 'Reject',
+    host: '127.0.0.1',
+    port: 65535
+  }
 }

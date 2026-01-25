@@ -14,7 +14,9 @@
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.2",
-    "vue": "^3.4.15"
+    "bootstrap-icons": "^1.13.1",
+    "vue": "^3.4.15",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.23",
