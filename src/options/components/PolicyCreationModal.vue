@@ -7,14 +7,14 @@
       @click.self="emit('close')"
     >
       <!-- Modal Card -->
-      <div class="modal-container settings-card">
+      <div class="modal-container ui-card">
         
         <!-- Modal Header -->
         <div class="modal-header">
-          <h3 class="settings-text-primary text-xl font-semibold leading-tight tracking-tight">Create New Policy</h3>
+          <h3 class="ui-text-primary text-xl font-semibold leading-tight tracking-tight">Create New Policy</h3>
           <button 
             @click="emit('close')" 
-            class="-mr-2 -mt-2 p-2 bg-transparent hover:bg-transparent settings-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
+            class="-mr-2 -mt-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
           >
             <i class="bi bi-x-lg text-lg"></i>
           </button>
@@ -26,20 +26,20 @@
             
             <!-- Name Input -->
             <label class="flex flex-col gap-2 w-full">
-              <span class="settings-text-primary text-sm font-medium leading-none">Name</span>
+              <span class="ui-text-primary text-sm font-medium leading-none">Name</span>
               <div class="relative group w-full">
                 <input 
                   v-model="name"
                   ref="nameInput"
                   autofocus 
-                  class="w-full rounded-lg border settings-input h-10 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
+                  class="w-full rounded-lg border ui-input h-10 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
                   style="min-width: 100%; width: 100%; max-width: 100% !important;" 
                   placeholder="Enter policy name..." 
                   type="text"
                   @keydown.enter="handleConfirm"
                 />
               </div>
-              <p class="text-xs settings-text-secondary">This name will be used to identify your policy.</p>
+              <p class="text-xs ui-text-secondary">This name will be used to identify your policy.</p>
             </label>
 
             <!-- Type Selector -->
@@ -48,13 +48,13 @@
               <!-- Auto Policy Option -->
               <label 
                 class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
-                :class="type === 'policy' ? 'border-primary bg-blue-50/50 dark:bg-primary/10' : 'settings-card hover:border-slate-300 dark:hover:border-slate-600'"
+                :class="type === 'policy' ? 'border-primary bg-blue-50/50 dark:bg-primary/10' : 'ui-card hover:border-slate-300 dark:hover:border-slate-600'"
               >
                 <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="policy"/>
                 <span class="flex flex-1">
                   <span class="flex flex-col">
-                    <span class="block text-xs font-medium mb-1" :class="type === 'policy' ? 'text-primary' : 'settings-text-primary'">Auto Policy</span>
-                    <span class="mt-1 flex items-center text-xs settings-text-secondary">Flexible rule sets</span>
+                    <span class="block text-xs font-medium mb-1" :class="type === 'policy' ? 'text-primary' : 'ui-text-primary'">Auto Policy</span>
+                    <span class="mt-1 flex items-center text-xs ui-text-secondary">Flexible rule sets</span>
                   </span>
                 </span>
                 <i v-if="type === 'policy'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -63,13 +63,13 @@
               <!-- PAC Script Option -->
               <label 
                 class="relative flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
-                :class="type === 'pac' ? 'border-primary bg-blue-50/50 dark:bg-primary/10' : 'settings-card hover:border-slate-300 dark:hover:border-slate-600'"
+                :class="type === 'pac' ? 'border-primary bg-blue-50/50 dark:bg-primary/10' : 'ui-card hover:border-slate-300 dark:hover:border-slate-600'"
               >
                 <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="pac"/>
                 <span class="flex flex-1">
                   <span class="flex flex-col">
-                    <span class="block text-xs font-medium mb-1" :class="type === 'pac' ? 'text-primary' : 'settings-text-primary'">PAC Script</span>
-                    <span class="mt-1 flex items-center text-xs settings-text-secondary">Custom JS script</span>
+                    <span class="block text-xs font-medium mb-1" :class="type === 'pac' ? 'text-primary' : 'ui-text-primary'">PAC Script</span>
+                    <span class="mt-1 flex items-center text-xs ui-text-secondary">Custom JS script</span>
                   </span>
                 </span>
                 <i v-if="type === 'pac'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -83,7 +83,7 @@
         <div class="modal-footer">
           <button 
             @click="emit('close')"
-            class="px-4 py-2 rounded-lg text-sm font-medium settings-text-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none border-0"
+            class="px-4 py-2 rounded-lg text-sm font-medium ui-text-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none border-0"
           >
             Cancel
           </button>
@@ -104,7 +104,7 @@
 <script setup>
 import { ref, nextTick, onMounted } from 'vue'
 
-const props = defineProps({
+defineProps({
   visible: Boolean
 })
 

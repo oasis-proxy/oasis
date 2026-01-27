@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-background-light dark:bg-background-dark font-display settings-text-primary h-screen overflow-hidden flex items-center justify-center p-4 sm:p-8 transition-colors">
-    <div class="w-full max-w-6xl h-full max-h-[900px] settings-card rounded-2xl shadow-lg flex overflow-hidden border transition-colors">
+  <div class="bg-background-light dark:bg-background-dark font-display ui-text-primary h-screen overflow-hidden flex items-center justify-center p-4 sm:p-8 transition-colors">
+    <div class="w-full max-w-6xl h-full max-h-[900px] ui-card rounded-2xl shadow-lg flex overflow-hidden border transition-colors">
       
       <!-- Integrated Sidebar -->
       <Sidebar />
@@ -15,8 +15,8 @@
 </template>
 
 <script setup>
-import { onMounted, watch, ref } from 'vue'
-import Sidebar from './components/Sidebar.vue'
+import { onMounted, ref } from 'vue'
+import Sidebar from './components/AppSidebar.vue'
 import { loadConfig } from '../common/storage'
 
 const theme = ref('auto')

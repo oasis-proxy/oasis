@@ -53,12 +53,48 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 
 - Height: `h-24` (Options), `h-14` (Popup).
 - visual: Border bottom, flex layout.
+- **Title**: `text-[20px] font-bold text-slate-900 dark:text-slate-50`.
+- **Subtitle**: `text-[10px] text-slate-500 dark:text-slate-400 mt-1`.
+
+### 2.3 Page Layout (Standard)
+
+- **Container**: `h-full flex flex-col`.
+- **Content Area**: `flex-1 overflow-y-auto custom-scrollbar p-8`.
+- **Max Width**: `max-w-3xl mx-auto space-y-8` (for settings pages).
 
 ### 2.3 Status Badges
 
 - **Blocked**: `bg-red-50 text-red-600 border-red-100`.
 - **Allowed**: `bg-green-50 text-green-600 border-green-100`.
 - **Tracker**: `bg-orange-50 text-orange-600 border-orange-100`.
+
+### 2.5 Detailed UI Components
+
+#### Cards
+
+- **Class**: `.settings-card`
+- **Structure**: `rounded-xl border divide-y shadow-sm`
+- **Item Padding**: `p-5`
+- **Titles**: `text-xs font-medium settings-text-primary`
+- **Descriptions**: `text-[10px] settings-text-secondary`
+
+#### Buttons
+
+- **Secondary (Default)**: `.settings-button-secondary` (`px-3 py-2 text-[10px] font-medium border rounded-lg`)
+- **Danger**: `.settings-button-danger`
+- **Dashed (Add)**: `.settings-button-dashed` (`border-dashed w-full`)
+
+#### Inputs & Selects
+
+- **Class**: `.settings-input`
+- **Height**: `h-8`
+- **Font**: `text-[10px]`
+- **State**: `focus:border-primary focus:ring-primary`
+
+#### Section Labels
+
+- **Style**: `text-[10px] font-semibold settings-label mb-4 flex items-center gap-2`
+- **Icon**: `text-[18px]` text-primary
 
 ### 2.4 Dark Mode Standards
 
@@ -71,14 +107,14 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 **Semantic Classes (Required)**:
 Use these classes instead of raw Tailwind utilities for settings pages:
 
-| Element            | Class                      | Light Mode                | Dark Mode                          |
-| :----------------- | :------------------------- | :------------------------ | :--------------------------------- |
-| **Containers**     | `.settings-card`           | White / Border Slate-200  | `#252525` / Border `#333`          |
-| **Inputs**         | `.settings-input`          | Slate-50 / Text Slate-900 | `#2d2d2d` / Text White             |
-| **Primary Text**   | `.settings-text-primary`   | Slate-900                 | White                              |
-| **Secondary Text** | `.settings-text-secondary` | Slate-500                 | Slate-400                          |
-| **Icons**          | `.settings-icon-{color}`   | `bg-{color}-50`           | `rgba({color}, 0.2)` (Transparent) |
-| **Dashed Button**  | `.settings-button-dashed`  | Transparent Border        | Transparent White-05 Hover         |
+| Element            | Class                | Light Mode                | Dark Mode                          |
+| :----------------- | :------------------- | :------------------------ | :--------------------------------- |
+| **Containers**     | `.ui-card`           | White / Border Slate-200  | `#252525` / Border `#333`          |
+| **Inputs**         | `.ui-input`          | Slate-50 / Text Slate-900 | `#2d2d2d` / Text White             |
+| **Primary Text**   | `.ui-text-primary`   | Slate-900                 | White                              |
+| **Secondary Text** | `.ui-text-secondary` | Slate-500                 | Slate-400                          |
+| **Icons**          | `.ui-icon-{color}`   | `bg-{color}-50`           | `rgba({color}, 0.2)` (Transparent) |
+| **Dashed Button**  | `.ui-button-dashed`  | Transparent Border        | Transparent White-05 Hover         |
 
 **Implementation Rule**:
 
@@ -89,8 +125,8 @@ Use these classes instead of raw Tailwind utilities for settings pages:
 </div>
 
 <!-- CORRECT -->
-<div class="settings-card ...">
-  <h3 class="settings-text-primary">Title</h3>
+<div class="ui-card ...">
+  <h3 class="ui-text-primary">Title</h3>
 </div>
 ```
 

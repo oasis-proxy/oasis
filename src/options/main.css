@@ -53,141 +53,141 @@ body {
   background-color: rgba(255, 255, 255, 0.05) !important;
 }
 
-/* Semantic Classes for Settings */
-.settings-card {
+/* Semantic Classes for settings UI (Renamed from settings-*) */
+.ui-card {
   background-color: #ffffff !important;
   border-color: #e2e8f0 !important;
 }
-.dark .settings-card {
+.dark .ui-card {
   background-color: #252525 !important;
   border-color: #333333 !important;
 }
 
-.settings-input {
+.ui-input {
   background-color: #f8fafc !important; /* bg-slate-50 */
   border-color: #cbd5e1 !important; /* border-slate-300 */
   color: #0f172a !important;
 }
-.dark .settings-input {
+.dark .ui-input {
   background-color: #2d2d2d !important;
   border-color: #333333 !important;
   color: #ffffff !important;
 }
 
-.settings-button-secondary {
+.ui-button-secondary {
   background-color: #ffffff !important;
   border-color: #e2e8f0 !important;
   color: #475569 !important; /* slate-600 */
 }
-.settings-button-secondary:hover {
+.ui-button-secondary:hover {
   background-color: #f8fafc !important;
 }
-.dark .settings-button-secondary {
+.dark .ui-button-secondary {
   background-color: #2d2d2d !important;
   border-color: #333333 !important;
   color: #cbd5e1 !important; /* slate-300 */
 }
-.dark .settings-button-secondary:hover {
+.dark .ui-button-secondary:hover {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-.settings-button-danger {
+.ui-button-danger {
   background-color: #ffffff !important;
   border-color: #fecaca !important; /* red-200 */
   color: #dc2626 !important; /* red-600 */
 }
-.settings-button-danger:hover {
+.ui-button-danger:hover {
   background-color: #fef2f2 !important; /* red-50 */
 }
-.dark .settings-button-danger {
+.dark .ui-button-danger {
   background-color: #2d2d2d !important;
   border-color: rgba(127, 29, 29, 0.3) !important;
   color: #f87171 !important; /* red-400 */
 }
-.dark .settings-button-danger:hover {
+.dark .ui-button-danger:hover {
   background-color: rgba(127, 29, 29, 0.2) !important;
 }
 
-.settings-table-header {
+.ui-table-header {
   background-color: #f8fafc !important; /* slate-50 */
 }
-.dark .settings-table-header {
+.dark .ui-table-header {
   background-color: #2d2d2d !important;
 }
 
-.settings-table-row {
+.ui-table-row {
   background-color: #ffffff !important;
 }
-.dark .settings-table-row {
+.dark .ui-table-row {
   background-color: #252525 !important; /* card-dark */
 }
 
-.settings-button-dashed {
+.ui-button-dashed {
   background-color: transparent !important;
   color: var(--bs-primary) !important;
   border-color: rgba(19, 127, 236, 0.3) !important;
 }
-.settings-button-dashed:hover {
+.ui-button-dashed:hover {
   background-color: #ffffff !important;
   border-color: rgba(19, 127, 236, 0.6) !important;
 }
-.dark .settings-button-dashed:hover {
+.dark .ui-button-dashed:hover {
   background-color: rgba(255, 255, 255, 0.05) !important;
 }
 
-.settings-label {
+.ui-label {
   color: #0f172a !important; /* slate-900 */
 }
-.dark .settings-label {
+.dark .ui-label {
   color: #ffffff !important;
 }
 
-.settings-text-primary {
+.ui-text-primary {
   color: #0f172a !important; /* slate-900 */
 }
-.dark .settings-text-primary {
+.dark .ui-text-primary {
   color: #f8fafc !important; /* slate-50 */
 }
 
-.settings-text-secondary {
+.ui-text-secondary {
   color: #64748b !important; /* slate-500 */
 }
-.dark .settings-text-secondary {
+.dark .ui-text-secondary {
   color: #94a3b8 !important; /* slate-400 */
 }
 
 /* Icon Wrappers */
-.settings-icon-wrapper {
+.ui-icon-wrapper {
   background-color: #f1f5f9 !important; /* slate-100 fallback */
   color: #64748b !important;
 }
 
-.settings-icon-blue { background-color: #eff6ff !important; color: #2563eb !important; }
-.dark .settings-icon-blue { background-color: rgba(37, 99, 235, 0.2) !important; color: #60a5fa !important; }
+.ui-icon-blue { background-color: #eff6ff !important; color: #2563eb !important; }
+.dark .ui-icon-blue { background-color: rgba(37, 99, 235, 0.2) !important; color: #60a5fa !important; }
 
-.settings-icon-indigo { background-color: #eef2ff !important; color: #4f46e5 !important; }
-.dark .settings-icon-indigo { background-color: rgba(79, 70, 229, 0.2) !important; color: #818cf8 !important; }
+.ui-icon-indigo { background-color: #eef2ff !important; color: #4f46e5 !important; }
+.dark .ui-icon-indigo { background-color: rgba(79, 70, 229, 0.2) !important; color: #818cf8 !important; }
 
-.settings-icon-green { background-color: #f0fdf4 !important; color: #16a34a !important; }
-.dark .settings-icon-green { background-color: rgba(22, 163, 74, 0.2) !important; color: #4ade80 !important; }
+.ui-icon-green { background-color: #f0fdf4 !important; color: #16a34a !important; }
+.dark .ui-icon-green { background-color: rgba(22, 163, 74, 0.2) !important; color: #4ade80 !important; }
 
-.settings-icon-purple { background-color: #faf5ff !important; color: #9333ea !important; }
-.dark .settings-icon-purple { background-color: rgba(147, 51, 234, 0.2) !important; color: #c084fc !important; }
+.ui-icon-purple { background-color: #faf5ff !important; color: #9333ea !important; }
+.dark .ui-icon-purple { background-color: rgba(147, 51, 234, 0.2) !important; color: #c084fc !important; }
 
-.settings-icon-orange { background-color: #fff7ed !important; color: #ea580c !important; }
-.dark .settings-icon-orange { background-color: rgba(234, 88, 12, 0.2) !important; color: #fb923c !important; }
+.ui-icon-orange { background-color: #fff7ed !important; color: #ea580c !important; }
+.dark .ui-icon-orange { background-color: rgba(234, 88, 12, 0.2) !important; color: #fb923c !important; }
 
-.settings-icon-red { background-color: #fef2f2 !important; color: #dc2626 !important; }
-.dark .settings-icon-red { background-color: rgba(220, 38, 38, 0.2) !important; color: #f87171 !important; }
+.ui-icon-red { background-color: #fef2f2 !important; color: #dc2626 !important; }
+.dark .ui-icon-red { background-color: rgba(220, 38, 38, 0.2) !important; color: #f87171 !important; }
 
-.settings-icon-teal { background-color: #f0fdfa !important; color: #0d9488 !important; }
-.dark .settings-icon-teal { background-color: rgba(13, 148, 136, 0.2) !important; color: #2dd4bf !important; }
+.ui-icon-teal { background-color: #f0fdfa !important; color: #0d9488 !important; }
+.dark .ui-icon-teal { background-color: rgba(13, 148, 136, 0.2) !important; color: #2dd4bf !important; }
 
-.settings-icon-pink { background-color: #fdf2f8 !important; color: #db2777 !important; }
-.dark .settings-icon-pink { background-color: rgba(219, 39, 119, 0.2) !important; color: #f472b6 !important; }
+.ui-icon-pink { background-color: #fdf2f8 !important; color: #db2777 !important; }
+.dark .ui-icon-pink { background-color: rgba(219, 39, 119, 0.2) !important; color: #f472b6 !important; }
 
-.settings-icon-gray { background-color: #f9fafb !important; color: #4b5563 !important; }
-.dark .settings-icon-gray { background-color: rgba(75, 85, 99, 0.2) !important; color: #9ca3af !important; }
+.ui-icon-gray { background-color: #f9fafb !important; color: #4b5563 !important; }
+.dark .ui-icon-gray { background-color: rgba(75, 85, 99, 0.2) !important; color: #9ca3af !important; }
 
 
 /* Tailwind Compatibility Layer - Copied from Design System */
