@@ -84,7 +84,10 @@
       <div>
         <div class="px-2 mb-2 flex items-center justify-between group">
           <h3 class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider m-0">Policy Rules</h3>
-          <button class="text-slate-400 hover:text-primary transition-colors p-1 rounded bg-transparent hover:bg-transparent dark:hover:bg-white/5 border-0">
+          <button 
+            @click="showPolicyModal = true"
+            class="text-slate-400 hover:text-primary transition-colors p-1 rounded bg-transparent hover:bg-transparent dark:hover:bg-white/5 border-0"
+          >
             <i class="bi bi-plus text-[14px]"></i>
           </button>
         </div>
@@ -109,22 +112,111 @@
       </div>
 
     </nav>
+    
+
+
+    <!-- Modals -->
+    <PolicyCreationModal 
+      :visible="showPolicyModal"
+      @close="showPolicyModal = false"
+      @create="handleCreatePolicy"
+    />
   </aside>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { loadConfig, saveConfig } from '../../common/storage'
+import PolicyCreationModal from './PolicyCreationModal.vue'
 
-// Mock Data for "Variable" items
-// In a real app, this would come from a store or props
-const proxyHosts = ref([
-    { id: '1', name: 'Home Server', icon: 'bi-hdd-network', status: 'online', statusColor: 'bg-green-500' },
-    { id: '2', name: 'Office VPN', icon: 'bi-building', status: null },
-    { id: '3', name: 'US West Node', icon: 'bi-rocket-takeoff', status: null },
-])
+const router = useRouter()
+const config = ref(null)
+const showPolicyModal = ref(false)
 
-const policyRules = ref([
-    { id: '1', name: 'Netflix Direct', icon: 'bi-list-check' },
-    { id: '2', name: 'AdBlock Lists', icon: 'bi-shield-check' }
-])
+// Computed lists for sidebar
+const proxyHosts = computed(() => {
+  if (!config.value?.proxies) return []
+  return Object.values(config.value.proxies).map(p => ({
+    id: p.id,
+    name: p.label || p.host, // Fallback to host if label missing
+    icon: 'bi-hdd-network', // Static icon for now, could be dynamic based on type
+    status: null // No real status checking yet
+  }))
+})
+
+const policyRules = computed(() => {
+    if (!config.value) return []
+    const rules = []
+    
+    // 1. PAC Scripts
+    if (config.value.pacs) {
+        Object.values(config.value.pacs).forEach(pac => {
+            rules.push({
+                id: pac.id,
+                name: pac.name || pac.url || 'Unnamed PAC', // Support 'name' property
+                icon: 'bi-file-earmark-code', // Distinct icon for PAC
+                type: 'pac'
+            })
+        })
+    }
+
+    // 2. Auto Policies
+    if (config.value.policies) {
+        Object.values(config.value.policies).forEach(policy => {
+            rules.push({
+                id: policy.id,
+                name: policy.name || policy.id, // Support 'name' property
+                icon: 'bi-diagram-3',
+                type: 'policy'
+            })
+        })
+    }
+    
+    return rules
+})
+
+// Load Data
+const refreshConfig = async () => {
+    config.value = await loadConfig()
+}
+
+onMounted(() => {
+    refreshConfig()
+    // Listen for storage changes to update sidebar list
+    chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === 'local') {
+            refreshConfig()
+        }
+    })
+})
+
+const handleCreatePolicy = async ({ name, type }) => {
+    // Reload latest config to ensure atomicity-ish
+    const latestConfig = await loadConfig()
+    // Simple ID generation - in real app might want UUID or check collision
+    const id = `${type}_${Date.now()}`
+
+    if (type === 'pac') {
+        if (!latestConfig.pacs || typeof latestConfig.pacs !== 'object') latestConfig.pacs = {}
+        latestConfig.pacs[id] = {
+            id: id,
+            name: name, // Saving the user-provided name
+            url: '' 
+        }
+    } else {
+        if (!latestConfig.policies || typeof latestConfig.policies !== 'object') latestConfig.policies = {}
+        latestConfig.policies[id] = {
+            id: id,
+            name: name, // Saving the user-provided name
+            defaultProfileId: 'direct',
+            rules: []
+        }
+    }
+
+    await saveConfig(latestConfig)
+    
+    // Navigation
+    router.push(`/policy/${id}`)
+}
 </script>

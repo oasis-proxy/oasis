@@ -50,9 +50,9 @@ export const DEFAULT_CONFIG = {
 
   // --- Profiles (Storage Keys: 'proxies', 'pacs', 'policies') ---
   
-  // Array of Proxy Servers
-  proxies: [
-    {
+  // Map of Proxy Servers (Key: ID)
+  proxies: {
+    'default_proxy': {
       id: 'default_proxy',
       type: 'server',
       label: 'Example Proxy',
@@ -61,25 +61,25 @@ export const DEFAULT_CONFIG = {
       port: 7890,
       auth: null
     }
-  ],
+  },
 
-  // Array of PAC Scripts
-  pacs: [
-    {
+  // Map of PAC Scripts (Key: ID)
+  pacs: {
+    'default_pac': {
       id: 'default_pac',
       url: '' 
     }
-  ],
+  },
 
-  // Array of Auto Policies
-  policies: [
-    {
+  // Map of Auto Policies (Key: ID)
+  policies: {
+    'default_policy': {
       id: 'default_policy',
       defaultProfileId: 'direct',
       rules: [],
       ruleSets: [] // Subscriptions
     }
-  ],
+  },
 
 
   // --- Singletons (Storage Keys: 'system', 'direct', 'reject') ---

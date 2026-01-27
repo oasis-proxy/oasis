@@ -162,15 +162,15 @@ async function applyProxySettings(config) {
     else if (activeId === 'direct') profile = config.direct
     else if (activeId === 'reject') profile = config.reject
     
-    // 2. Check Arrays (Proxies, PACs, Policies)
+    // 2. Check Maps (Proxies, PACs, Policies)
     if (!profile && config.proxies) {
-        profile = config.proxies.find(p => p.id === activeId)
+        profile = config.proxies[activeId]
     }
     if (!profile && config.pacs) {
-        profile = config.pacs.find(p => p.id === activeId)
+        profile = config.pacs[activeId]
     }
     if (!profile && config.policies) {
-        profile = config.policies.find(p => p.id === activeId)
+        profile = config.policies[activeId]
     }
 
     if (!profile) {
