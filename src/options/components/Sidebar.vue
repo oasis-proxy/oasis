@@ -55,7 +55,10 @@
       <div>
         <div class="px-2 mb-2 flex items-center justify-between group">
           <h3 class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider m-0">Proxy Hosts</h3>
-          <button class="text-slate-400 hover:text-primary transition-colors p-1 rounded bg-transparent hover:bg-transparent dark:hover:bg-white/5 border-0">
+          <button 
+            @click="showProxyModal = true"
+            class="text-slate-400 hover:text-primary transition-colors p-1 rounded bg-transparent hover:bg-transparent dark:hover:bg-white/5 border-0"
+          >
             <i class="bi bi-plus text-[14px]"></i>
           </button>
         </div>
@@ -121,6 +124,11 @@
       @close="showPolicyModal = false"
       @create="handleCreatePolicy"
     />
+    <ProxyCreationModal 
+      :visible="showProxyModal"
+      @close="showProxyModal = false"
+      @create="handleCreateProxy"
+    />
   </aside>
 </template>
 
@@ -129,10 +137,12 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { loadConfig, saveConfig } from '../../common/storage'
 import PolicyCreationModal from './PolicyCreationModal.vue'
+import ProxyCreationModal from './ProxyCreationModal.vue'
 
 const router = useRouter()
 const config = ref(null)
 const showPolicyModal = ref(false)
+const showProxyModal = ref(false)
 
 // Computed lists for sidebar
 const proxyHosts = computed(() => {
@@ -190,6 +200,27 @@ onMounted(() => {
         }
     })
 })
+
+const handleCreateProxy = async ({ name }) => {
+    const latestConfig = await loadConfig()
+    const id = `proxy_${Date.now()}`
+    
+    if (!latestConfig.proxies || typeof latestConfig.proxies !== 'object') latestConfig.proxies = {}
+    
+    latestConfig.proxies[id] = {
+        id: id,
+        type: 'server',
+        label: name,
+        scheme: 'http', // Default to HTTP
+        host: '',
+        port: null,
+        auth: null
+    }
+
+    await saveConfig(latestConfig)
+    showProxyModal.value = false
+    router.push(`/host/${id}`)
+}
 
 const handleCreatePolicy = async ({ name, type }) => {
     // Reload latest config to ensure atomicity-ish
