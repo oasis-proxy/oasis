@@ -16,26 +16,26 @@
 
 ## 2. Typography
 
-- **Global**: Font size `14px` (`1rem` = `14px` in HTML).
+- **Global**: Font size `16px` (`1rem` = `16px` in HTML default).
 - **Header Title**:
-  - Size: `text-[20px]`
+  - Size: `text-[22px]`
   - Weight: `font-bold`
   - Color: `text-slate-900` (`dark:text-slate-50`)
 - **Header Description**:
-  - Size: `text-[10px]`
+  - Size: `text-xs` (12px)
   - Color: `text-slate-500` (`dark:text-slate-400`)
   - Margin: `mt-1`
 - **Section Label**:
-  - Size: `text-[10px]`
+  - Size: `text-sm` (14px)
   - Weight: `font-semibold`
   - Color: `.settings-label` (`slate-900` / `white`)
-  - Icon size: `text-[18px]`
+  - Icon size: `text-[20px]`
 - **Card Item Title**:
-  - Size: `text-xs` (12px)
+  - Size: `text-sm` (14px)
   - Weight: `font-medium`
   - Color: `.settings-text-primary` (`slate-900` / `slate-50`)
 - **Card Item Description**:
-  - Size: `text-[10px]`
+  - Size: `text-xs` (12px)
   - Color: `.settings-text-secondary` (`slate-500` / `slate-400`)
   - Margin: `mt-0.5`
 
@@ -66,7 +66,7 @@
 ### Icons
 
 - Container: `p-2 rounded-lg`
-- Size: `text-[22px]`
+- Size: `text-[24px]`
 - Variants:
   - Blue: `.settings-icon-blue` (bg-blue-50 text-blue-600)
   - Indigo: `.settings-icon-indigo`
@@ -87,9 +87,9 @@
   - Selects: `max-width: 100px`
 - Radius: `rounded-lg`
 - Border: `border`
-- Text: `text-[10px]`
+- Text: `text-xs` (12px)
 - Border: `border`
-- Text: `text-[10px]`
+- Text: `text-xs` (12px)
 - Focus: `focus:border-primary focus:ring-primary`
 - **Spacing**:
   - Grid Gap: `gap-4` (1rem / 16px) for input groups.
@@ -103,7 +103,7 @@
   - Hover: Darker Blue (`#1170cf`)
 - **Secondary (Default Actions)**:
   - Class: `.settings-button-secondary`
-  - Size: `px-3 py-2 text-[10px] font-medium`
+  - Size: `px-3 py-2 text-xs font-medium`
   - Style: `border rounded-lg`
 - **Danger (Delete/Clear)**:
   - Class: `.settings-button-danger`

@@ -6,7 +6,7 @@
       </div>
       <div>
         <h2 class="text-lg font-bold ui-text-primary">Temporary Rules</h2>
-        <p class="text-xs ui-text-secondary max-w-xs mx-auto mt-1">Manage temporary proxy rules created from the popup interface.</p>
+        <p class="text-sm ui-text-secondary max-w-xs mx-auto mt-1">Manage temporary proxy rules created from the popup interface.</p>
       </div>
     </div>
   </div>

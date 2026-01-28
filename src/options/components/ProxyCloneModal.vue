@@ -26,8 +26,8 @@
             
             <!-- Source Display -->
             <label class="flex flex-col gap-2 w-full">
-              <span class="ui-text-primary text-sm font-medium leading-none">Clone from</span>
-              <div class="px-3 py-2 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm ui-text-secondary flex items-center gap-2">
+              <span class="ui-text-primary text-base font-medium leading-none">Clone from</span>
+              <div class="px-3 py-2 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-base ui-text-secondary flex items-center gap-2">
                 <i class="bi bi-back"></i>
                 <span>{{ currentName }}</span>
               </div>
@@ -35,13 +35,13 @@
 
             <!-- New Name Input -->
             <label class="flex flex-col gap-2 w-full">
-              <span class="ui-text-primary text-sm font-medium leading-none">New Name</span>
+              <span class="ui-text-primary text-base font-medium leading-none">New Name</span>
               <div class="relative group w-full">
                 <input 
                   v-model="newName"
                   ref="nameInput"
                   autofocus 
-                  class="w-full rounded-lg border ui-input h-10 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
+                  class="w-full rounded-lg border ui-input h-10 px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
                   style="min-width: 100%; width: 100%; max-width: 100% !important;" 
                   placeholder="Enter name for copy" 
                   type="text"
@@ -57,14 +57,14 @@
         <div class="modal-footer">
           <button 
             @click="emit('close')"
-            class="px-4 py-2 rounded-lg text-sm font-medium ui-text-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none border-0"
+            class="px-4 py-2 rounded-lg text-base font-medium ui-text-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none border-0"
           >
             Cancel
           </button>
           <button 
             @click="handleConfirm"
             :disabled="!isValid"
-            class="px-4 py-2 rounded-lg text-sm font-bold text-white bg-primary hover:bg-blue-600 shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed border-0"
+            class="px-4 py-2 rounded-lg text-base font-bold text-white bg-primary hover:bg-blue-600 shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed border-0"
           >
             Clone
           </button>

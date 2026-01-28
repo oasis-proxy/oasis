@@ -3,8 +3,8 @@
     <!-- Header -->
     <header class="h-24 px-8 flex items-center justify-between border-b border-slate-100 dark:border-slate-700 transition-colors">
       <div>
-        <h2 class="text-[20px] font-bold text-slate-900 dark:text-slate-50 m-0">General Settings</h2>
-        <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1 m-0">Configure global behavior for the extension.</p>
+        <h2 class="text-[22px] font-bold text-slate-900 dark:text-slate-50 m-0">General Settings</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 m-0">Configure global behavior for the extension.</p>
       </div>
     </header>
 
@@ -13,8 +13,8 @@
         
         <!-- Basic Configuration -->
         <section>
-          <h3 class="text-[10px] font-semibold ui-label mb-4 flex items-center gap-2 m-0">
-            <i class="bi bi-sliders text-primary text-[18px]"></i>
+          <h3 class="text-sm font-semibold ui-label mb-4 flex items-center gap-2 m-0">
+            <i class="bi bi-sliders text-primary text-[20px]"></i>
             Basic Configuration
           </h3>
           <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-slate-700 shadow-sm transition-colors">
@@ -26,11 +26,11 @@
                   <i class="bi bi-palette text-[22px]"></i>
                 </div>
                 <div>
-                  <p class="text-xs font-medium ui-text-primary m-0">Theme Style</p>
-                  <p class="text-[10px] ui-text-secondary mt-0.5 m-0">Choose your preferred visual theme.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">Theme Style</p>
+                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Choose your preferred visual theme.</p>
                 </div>
               </div>
-              <select v-model="config.ui.theme" class="form-select ui-input block w-32 rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 ps-2 pe-4">
+              <select v-model="config.ui.theme" class="form-select ui-input block w-32 rounded-lg border text-xs focus:border-primary focus:ring-primary h-8 py-0 ps-2 pe-4">
                 <option v-for="option in styleOptions" :key="option.value" :value="option.value">{{ option.label }}</option>
               </select>
             </div>
@@ -42,11 +42,11 @@
                   <i class="bi bi-arrow-repeat text-[22px]"></i>
                 </div>
                 <div>
-                  <p class="text-xs font-medium ui-text-primary m-0">External Policy Update Cycle</p>
-                  <p class="text-[10px] ui-text-secondary mt-0.5 m-0">Frequency of checking for policy updates.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">External Policy Update Cycle</p>
+                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Frequency of checking for policy updates.</p>
                 </div>
               </div>
-              <select v-model="config.update.interval" class="form-select ui-input block w-32 rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 ps-2 pe-4">
+              <select v-model="config.update.interval" class="form-select ui-input block w-32 rounded-lg border text-xs focus:border-primary focus:ring-primary h-8 py-0 ps-2 pe-4">
                 <option v-for="interval in updateIntervals" :key="interval.value" :value="interval.value">{{ interval.label }}</option>
               </select>
             </div>
@@ -58,8 +58,8 @@
                   <i class="bi bi-arrow-clockwise text-[22px]"></i>
                 </div>
                 <div>
-                  <p class="text-xs font-medium ui-text-primary m-0">Auto Refresh</p>
-                  <p class="text-[10px] ui-text-secondary mt-0.5 m-0">Automatically refresh connections when idle.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">Auto Refresh</p>
+                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Automatically refresh connections when idle.</p>
                 </div>
               </div>
               <div class="form-check form-switch">
@@ -74,8 +74,8 @@
                   <i class="bi bi-cloud-arrow-down text-[22px]"></i>
                 </div>
                 <div>
-                  <p class="text-xs font-medium ui-text-primary m-0">Auto Sync</p>
-                  <p class="text-[10px] ui-text-secondary mt-0.5 m-0">Synchronize settings across devices automatically.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">Auto Sync</p>
+                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Synchronize settings across devices automatically.</p>
                 </div>
               </div>
               <div class="form-check form-switch">
@@ -90,18 +90,18 @@
                   <i class="bi bi-tools text-[22px]"></i>
                 </div>
                 <div>
-                  <p class="text-xs font-medium ui-text-primary m-0">Maintenance</p>
-                  <p class="text-[10px] ui-text-secondary mt-0.5 m-0">Manage configuration data.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">Maintenance</p>
+                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Manage configuration data.</p>
                 </div>
               </div>
               <div class="flex gap-2">
-                <button class="px-3 py-2 text-[10px] font-medium ui-button-secondary border rounded-lg transition-colors flex items-center gap-1">
+                <button class="px-3 py-2 text-xs font-medium ui-button-secondary border rounded-lg transition-colors flex items-center gap-1">
                   <i class="bi bi-upload text-[14px]"></i> Import
                 </button>
-                <button class="px-3 py-2 text-[10px] font-medium ui-button-secondary border rounded-lg transition-colors flex items-center gap-1">
+                <button class="px-3 py-2 text-xs font-medium ui-button-secondary border rounded-lg transition-colors flex items-center gap-1">
                   <i class="bi bi-download text-[14px]"></i> Export
                 </button>
-                 <button class="px-3 py-2 text-[10px] font-medium ui-button-danger border rounded-lg transition-colors flex items-center gap-1">
+                 <button class="px-3 py-2 text-xs font-medium ui-button-danger border rounded-lg transition-colors flex items-center gap-1">
                   <i class="bi bi-trash text-[14px]"></i> Clear
                 </button>
               </div>
@@ -111,8 +111,8 @@
 
         <!-- Advanced Configuration -->
         <section>
-          <h3 class="text-[10px] font-semibold ui-label mb-4 flex items-center gap-2 m-0">
-             <i class="bi bi-terminal text-primary text-[18px]"></i>
+          <h3 class="text-sm font-semibold ui-label mb-4 flex items-center gap-2 m-0">
+             <i class="bi bi-terminal text-primary text-[20px]"></i>
             Advanced Configuration
           </h3>
           <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-slate-700 shadow-sm">
@@ -124,11 +124,11 @@
                   <i class="bi bi-slash-circle text-[22px]"></i>
                 </div>
                 <div>
-                  <p class="text-xs font-medium ui-text-primary m-0">Reject Address</p>
-                  <p class="text-[10px] ui-text-secondary mt-0.5 m-0">Connections to this address will be dropped immediately.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">Reject Address</p>
+                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Connections to this address will be dropped immediately.</p>
                 </div>
               </div>
-              <input v-model.lazy="rejectAddress" type="text" placeholder="ip:port" class="form-control ui-input block w-48 rounded-lg border text-[10px] focus:border-primary focus:ring-primary placeholder:text-slate-400" />
+              <input v-model.lazy="rejectAddress" type="text" placeholder="ip:port" class="form-control ui-input block w-48 rounded-lg border text-xs focus:border-primary focus:ring-primary placeholder:text-slate-400" />
             </div>
 
              <!-- Connection Monitoring -->
@@ -138,8 +138,8 @@
                   <i class="bi bi-activity text-[22px]"></i>
                 </div>
                 <div>
-                  <p class="text-xs font-medium ui-text-primary m-0">Connection Monitoring</p>
-                  <p class="text-[10px] ui-text-secondary mt-0.5 m-0">Monitor and log connection attempts.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">Connection Monitoring</p>
+                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Monitor and log connection attempts.</p>
                 </div>
               </div>
               <div class="form-check form-switch">
@@ -154,8 +154,8 @@
                   <i class="bi bi-menu-button-wide text-[22px]"></i>
                 </div>
                 <div>
-                  <p class="text-xs font-medium ui-text-primary m-0">Context Menu</p>
-                  <p class="text-[10px] ui-text-secondary mt-0.5 m-0">Show proxy options in the browser right-click menu.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">Context Menu</p>
+                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Show proxy options in the browser right-click menu.</p>
                 </div>
               </div>
                <div class="form-check form-switch">
@@ -171,8 +171,8 @@
                             <i class="bi bi-tag text-[22px]"></i>
                         </div>
                         <div>
-                            <p class="text-xs font-medium ui-text-primary m-0">IP Tags</p>
-                            <p class="text-[10px] ui-text-secondary mt-0.5 m-0">Assign friendly names to IP addresses.</p>
+                            <p class="text-sm font-medium ui-text-primary m-0">IP Tags</p>
+                            <p class="text-xs ui-text-secondary mt-0.5 m-0">Assign friendly names to IP addresses.</p>
                         </div>
                     </div>
                  </div>
@@ -181,13 +181,13 @@
                      <div class="bg-blue-50/50 dark:bg-primary/20 px-4 py-2 border-b border-slate-200 dark:border-divider-dark flex items-center justify-between">
                          <div class="flex items-center gap-2">
                              <div class="h-4 w-4 flex items-center justify-center rounded bg-primary text-white text-[8px] font-bold">{{ selectedTags.length }}</div>
-                             <span class="text-[10px] font-medium ui-text-secondary">Selected</span>
+                             <span class="text-xs font-medium ui-text-secondary">Selected</span>
                          </div>
                          <div class="flex items-center gap-2">
-                            <button class="px-2 py-1 text-[10px] font-medium text-slate-600 hover:text-slate-900 bg-transparent hover:bg-slate-50 border border-transparent rounded transition-all flex items-center gap-1">
+                            <button class="px-2 py-1 text-xs font-medium text-slate-600 hover:text-slate-900 bg-transparent hover:bg-slate-50 border border-transparent rounded transition-all flex items-center gap-1">
                                 <i class="bi bi-download text-[14px]"></i> Export
                             </button>
-                             <button @click="deleteSelectedTags" class="px-2 py-1 text-[10px] font-medium text-red-600 hover:text-red-700 bg-transparent hover:bg-red-50 border border-transparent rounded transition-all flex items-center gap-1">
+                             <button @click="deleteSelectedTags" class="px-2 py-1 text-xs font-medium text-red-600 hover:text-red-700 bg-transparent hover:bg-red-50 border border-transparent rounded transition-all flex items-center gap-1">
                                 <i class="bi bi-trash text-[14px]"></i> Delete
                             </button>
                          </div>
@@ -204,9 +204,9 @@
                                       @change="toggleAllTags"
                                     />
                                 </th>
-                                <th class="px-4 py-2 text-left text-[10px] font-medium text-slate-500 uppercase tracking-wider">IP Address</th>
-                                <th class="px-4 py-2 text-left text-[10px] font-medium text-slate-500 uppercase tracking-wider w-full">Tag Name</th>
-                                <th class="px-4 py-2 text-right text-[10px] font-medium text-slate-500 uppercase tracking-wider">Actions</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">IP Address</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider w-full">Tag Name</th>
+                                <th class="px-4 py-2 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                          <tbody class="ui-card divide-y divide-slate-100 dark:divide-divider-dark">
@@ -223,11 +223,11 @@
                                       v-model="selectedTags"
                                     />
                                 </td>
-                                <td class="px-4 py-2 text-[10px] text-slate-700 font-mono">
-                                  <input v-model.lazy="item.ip" @change="updateTag()" type="text" class="bg-transparent border-0 w-full p-0 text-[10px] focus:ring-0 font-mono text-slate-900 dark:text-white" placeholder="0.0.0.0" />
+                                <td class="px-4 py-2 text-xs text-slate-700 font-mono">
+                                  <input v-model.lazy="item.ip" @change="updateTag()" type="text" class="bg-transparent border-0 w-full p-0 text-xs focus:ring-0 font-mono text-slate-900 dark:text-white" placeholder="0.0.0.0" />
                                 </td>
-                                <td class="px-4 py-2 text-[10px] text-slate-700">
-                                  <input v-model.lazy="item.tag" @change="updateTag()" type="text" class="bg-transparent border-0 w-full p-0 text-[10px] focus:ring-0 text-slate-700 dark:text-white" placeholder="Tag Name" />
+                                <td class="px-4 py-2 text-xs text-slate-700">
+                                  <input v-model.lazy="item.tag" @change="updateTag()" type="text" class="bg-transparent border-0 w-full p-0 text-xs focus:ring-0 text-slate-700 dark:text-white" placeholder="Tag Name" />
                                 </td>
                                 <td class="px-4 py-2 text-right">
                                     <button @click="deleteTag(item.ip)" class="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-full bg-transparent hover:bg-transparent border-0">
@@ -238,7 +238,7 @@
                          </tbody>
                      </table>
                      <div class="settings-table-header px-4 py-2 border-t border-slate-200 dark:border-divider-dark">
-                         <button @click="addTag" class="w-full py-2 text-[10px] font-medium settings-button-dashed border border-dashed rounded transition-all flex items-center justify-center gap-2">
+                         <button @click="addTag" class="w-full py-2 text-xs font-medium settings-button-dashed border border-dashed rounded transition-all flex items-center justify-center gap-2">
                              <i class="bi bi-plus text-[14px]"></i> Add New Tag
                          </button>
                      </div>

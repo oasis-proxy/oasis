@@ -6,8 +6,8 @@
        </div>
        <div>
          <h2 class="text-lg font-bold ui-text-primary">Policy Rule</h2>
-         <p class="text-xs ui-text-secondary mt-1">ID: {{ $route.params.id }}</p>
-         <p class="text-xs ui-text-secondary max-w-xs mx-auto mt-1">Rule definition and patterns.</p>
+         <p class="text-sm ui-text-secondary mt-1">ID: {{ $route.params.id }}</p>
+         <p class="text-sm ui-text-secondary max-w-xs mx-auto mt-1">Rule definition and patterns.</p>
        </div>
      </div>
    </div>

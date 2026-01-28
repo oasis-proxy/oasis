@@ -26,20 +26,20 @@
             
             <!-- Name Input -->
             <label class="flex flex-col gap-2 w-full">
-              <span class="ui-text-primary text-sm font-medium leading-none">Name</span>
+              <span class="ui-text-primary text-base font-medium leading-none">Name</span>
               <div class="relative group w-full">
                 <input 
                   v-model="name"
                   ref="nameInput"
                   autofocus 
-                  class="w-full rounded-lg border ui-input h-10 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
+                  class="w-full rounded-lg border ui-input h-10 px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
                   style="min-width: 100%; width: 100%; max-width: 100% !important;" 
                   placeholder="Enter policy name..." 
                   type="text"
                   @keydown.enter="handleConfirm"
                 />
               </div>
-              <p class="text-xs ui-text-secondary">This name will be used to identify your policy.</p>
+              <p class="text-sm ui-text-secondary">This name will be used to identify your policy.</p>
             </label>
 
             <!-- Type Selector -->
@@ -53,8 +53,8 @@
                 <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="policy"/>
                 <span class="flex flex-1">
                   <span class="flex flex-col">
-                    <span class="block text-xs font-medium mb-1" :class="type === 'policy' ? 'text-primary' : 'ui-text-primary'">Auto Policy</span>
-                    <span class="mt-1 flex items-center text-xs ui-text-secondary">Flexible rule sets</span>
+                    <span class="block text-sm font-medium mb-1" :class="type === 'policy' ? 'text-primary' : 'ui-text-primary'">Auto Policy</span>
+                    <span class="mt-1 flex items-center text-sm ui-text-secondary">Flexible rule sets</span>
                   </span>
                 </span>
                 <i v-if="type === 'policy'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -68,8 +68,8 @@
                 <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="pac"/>
                 <span class="flex flex-1">
                   <span class="flex flex-col">
-                    <span class="block text-xs font-medium mb-1" :class="type === 'pac' ? 'text-primary' : 'ui-text-primary'">PAC Script</span>
-                    <span class="mt-1 flex items-center text-xs ui-text-secondary">Custom JS script</span>
+                    <span class="block text-sm font-medium mb-1" :class="type === 'pac' ? 'text-primary' : 'ui-text-primary'">PAC Script</span>
+                    <span class="mt-1 flex items-center text-sm ui-text-secondary">Custom JS script</span>
                   </span>
                 </span>
                 <i v-if="type === 'pac'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -83,14 +83,14 @@
         <div class="modal-footer">
           <button 
             @click="emit('close')"
-            class="px-4 py-2 rounded-lg text-sm font-medium ui-text-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none border-0"
+            class="px-4 py-2 rounded-lg text-base font-medium ui-text-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none border-0"
           >
             Cancel
           </button>
           <button 
             @click="handleConfirm"
             :disabled="!name.trim()"
-            class="px-4 py-2 rounded-lg text-sm font-bold text-white bg-primary hover:bg-blue-600 shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed border-0"
+            class="px-4 py-2 rounded-lg text-base font-bold text-white bg-primary hover:bg-blue-600 shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed border-0"
           >
             Confirm
           </button>

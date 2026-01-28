@@ -18,14 +18,14 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 
 ### 1.2 Typography & Sizing
 
-- **Root Font Size**: `14px` (1rem = 14px).
+- **Root Font Size**: `16px` (1rem = 16px).
 - **Font Family**: `Inter`, sans-serif (`font-display`).
 - **Strict Size Classes**:
-  - `text-[10px]`: for badges, tiny labels.
-  - `text-xs`: (12px) for secondary text.
-  - `text-sm`: (14px) for body text.
-  - `text-[18px]`: for sidebar icons.
-  - `text-[20px]`: for large icons.
+  - `text-xs`: (12px) for badges, tiny labels.
+  - `text-sm`: (14px) for body text, section labels.
+  - `text-base`: (16px) for body text.
+  - `text-[20px]`: for sidebar icons.
+  - `text-[22px]`: for large icons.
 
 ### 1.3 Input Constraints
 
@@ -55,8 +55,8 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 - Height: `h-24` (Options), `h-14` (Popup).
 - Padding: `px-8` (Horizontal).
 - Visual: Border bottom, flex layout, `justify-between`.
-- **Title**: `text-[20px] font-bold ui-text-primary m-0`.
-- **Subtitle**: `text-[10px] ui-text-secondary mt-1 m-0`.
+- **Title**: `text-[22px] font-bold ui-text-primary m-0`.
+- **Subtitle**: `text-xs ui-text-secondary mt-1 m-0`.
 
 ### 2.3 Page Layout (Standard)
 
@@ -77,8 +77,8 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 - **Class**: `.settings-card`
 - **Structure**: `rounded-xl border divide-y shadow-sm`
 - **Item Padding**: `p-5`
-- **Titles**: `text-xs font-medium settings-text-primary`
-- **Descriptions**: `text-[10px] settings-text-secondary`
+- **Titles**: `text-sm font-medium settings-text-primary`
+- **Descriptions**: `text-xs settings-text-secondary`
 
 #### Buttons
 
@@ -91,13 +91,13 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 
 - **Class**: `.settings-input`
 - **Height**: `h-8`
-- **Font**: `text-[10px]`
+- **Font**: `text-xs`
 - **State**: `focus:border-primary focus:ring-primary`
 
 #### Section Labels
 
-- **Style**: `text-[10px] font-semibold settings-label mb-4 flex items-center gap-2`
-- **Icon**: `text-[18px]` text-primary
+- **Style**: `text-sm font-semibold settings-label mb-4 flex items-center gap-2`
+- **Icon**: `text-[20px]` text-primary
 
 #### Grid Layouts (Forms)
 
