@@ -6,13 +6,21 @@
     <header class="h-24 px-5 d-flex align-items-center justify-content-between border-b border-slate-100 dark:border-slate-700 transition-colors">
       <!-- Header / Actions -->
       <div class="d-flex align-items-center justify-content-between w-100">
-        <div>
-           <h1 class="text-[22px] font-bold ui-text-primary tracking-tight">{{ proxy.label || proxy.host || 'Unnamed Proxy' }}</h1>
+        <div class="d-flex align-items-center gap-3">
+           <input 
+             type="color" 
+             v-model="proxy.color"
+             class="border-0 p-0 rounded-full overflow-hidden cursor-pointer transition-transform hover:scale-110 shadow-sm"
+             style="width: 24px; height: 24px; background: none;"
+             title="Choose color"
+           />
+           <h1 class="text-[22px] font-bold ui-text-primary tracking-tight m-0">{{ proxy.label || proxy.host || 'Unnamed Proxy' }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
            
            <button 
              @click="resetChanges"
+             :disabled="!isDirty"
              class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all"
            >
              Reset
@@ -20,6 +28,7 @@
 
            <button 
              @click="saveChanges"
+             :disabled="!isDirty"
              class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg shadow-primary/30 transition-colors d-flex align-items-center gap-2"
            >
              <i class="bi bi-check-lg text-lg"></i>
@@ -375,6 +384,7 @@ const route = useRoute()
 const router = useRouter()
 const config = ref(null)
 const proxy = ref(null) // Changed to null, will be populated by loadProxyData
+const originalProxy = ref(null) // For dirty state tracking
 const showRenameModal = ref(false)
 const showCloneModal = ref(false)
 const showDeleteModal = ref(false)
@@ -474,11 +484,22 @@ const loadProxyData = async () => {
     if (!proxy.value.overrides.http) proxy.value.overrides.http = { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
     if (!proxy.value.overrides.https) proxy.value.overrides.https = { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
     if (!proxy.value.overrides.ftp) proxy.value.overrides.ftp = { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
+    // Ensure default color
+    if (!proxy.value.color) proxy.value.color = '#137fec' // Default Primary Blue
+
+    // Store original state for dirty checking
+    originalProxy.value = JSON.parse(JSON.stringify(proxy.value))
   } else {
     // Handle case where proxy ID is not found, e.g., navigate away or show error
     router.push('/settings') // Redirect to settings if proxy not found
   }
 }
+
+// Dirty State Computation
+const isDirty = computed(() => {
+  if (!proxy.value || !originalProxy.value) return false
+  return JSON.stringify(proxy.value) !== JSON.stringify(originalProxy.value)
+})
 
 onMounted(() => {
   loadProxyData()

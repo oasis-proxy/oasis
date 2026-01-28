@@ -75,7 +75,7 @@
                 class="w-100 d-flex align-items-center gap-3 px-3 py-2 rounded-lg transition-colors border group"
                 :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
              >
-                <i :class="['bi text-[20px]', host.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']"></i>
+                <i :class="['bi text-[20px]', host.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: host.color ? host.color : undefined }"></i>
                 <span class="text-sm">{{ host.name }}</span>
                 <span v-if="host.status" :class="['ml-auto w-2 h-2 rounded-full', host.statusColor]"></span>
              </button>
@@ -151,6 +151,7 @@ const proxyHosts = computed(() => {
     id: p.id,
     name: p.label || p.host, // Fallback to host if label missing
     icon: 'bi-hdd-network', // Static icon for now, could be dynamic based on type
+    color: p.color, // Custom color
     status: null // No real status checking yet
   }))
 })
