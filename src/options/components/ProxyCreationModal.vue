@@ -2,16 +2,21 @@
   <Teleport to="body">
     <!-- Modal Overlay -->
     <div 
-      class="modal-mask"
-      :class="{ 'visible': visible }"
+      class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center p-3"
+      :class="visible ? 'visible opacity-100' : 'invisible opacity-0'"
+      style="z-index: 1050; transition: all 0.3s ease; background-color: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);"
       @click.self="emit('close')"
     >
       <!-- Modal Card -->
-      <div class="modal-container ui-card">
+      <div 
+        class="ui-card w-100 d-flex flex-column overflow-hidden rounded-xl shadow-lg"
+        style="max-width: 480px; transition: transform 0.3s ease;"
+        :style="{ transform: visible ? 'scale(1)' : 'scale(0.95)' }"
+      >
         
         <!-- Modal Header -->
-        <div class="modal-header">
-          <h3 class="ui-text-primary text-xl font-semibold leading-tight tracking-tight">Add Proxy Host</h3>
+        <div class="d-flex justify-content-between align-items-start p-4">
+          <h3 class="ui-text-primary text-xl font-semibold leading-tight tracking-tight m-0">Add Proxy Host</h3>
           <button 
             @click="emit('close')" 
             class="-mr-2 -mt-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
@@ -21,32 +26,32 @@
         </div>
 
         <!-- Modal Body -->
-        <div class="modal-body">
-          <div class="modal-form-group">
+        <div class="px-4 flex-1">
+          <div class="d-flex flex-column gap-3">
             
             <!-- Name Input -->
-            <label class="flex flex-col gap-2 w-full">
+            <label class="d-flex flex-column gap-2 w-100">
               <span class="ui-text-primary text-base font-medium leading-none">Name</span>
-              <div class="relative group w-full">
+              <div class="relative group w-100">
                 <input 
                   v-model="name"
                   ref="nameInput"
                   autofocus 
-                  class="w-full rounded-lg border ui-input h-10 px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
+                  class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
                   style="min-width: 100%; width: 100%; max-width: 100% !important;" 
                   placeholder="My Proxy" 
                   type="text"
                   @keydown.enter="handleConfirm"
                 />
               </div>
-              <p class="text-sm ui-text-secondary">This name will be used to identify your proxy.</p>
+              <p class="text-sm ui-text-secondary m-0">This name will be used to identify your proxy.</p>
             </label>
 
           </div>
         </div>
 
         <!-- Modal Footer -->
-        <div class="modal-footer">
+        <div class="d-flex justify-content-end gap-3 p-4">
           <button 
             @click="emit('close')"
             class="px-4 py-2 rounded-lg text-base font-medium ui-text-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none border-0"
@@ -103,80 +108,3 @@ const handleConfirm = () => {
     emit('close')
 }
 </script>
-
-<style scoped>
-/* Copied from PolicyCreationModal.vue for consistency */
-.modal-mask {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1050; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background-color: rgba(15, 23, 42, 0);
-  backdrop-filter: blur(0);
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.modal-mask.visible {
-  background-color: rgba(15, 23, 42, 0.5); 
-  backdrop-filter: blur(4px);
-  visibility: visible;
-  opacity: 1;
-}
-
-.modal-container {
-  width: 100%;
-  max-width: 480px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border-radius: 0.75rem; 
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); 
-  transform: scale(0.95);
-  transition: transform 0.3s ease;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 20px 24px; 
-}
-
-.modal-body {
-  padding: 0 24px; 
-  flex: 1;
-}
-
-.modal-form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem; 
-}
-
-.modal-type-selector {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 0.75rem; 
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem; 
-  padding: 16px 24px; 
-  border-bottom-left-radius: 0.75rem;
-  border-bottom-right-radius: 0.75rem;
-}
-
-.modal-mask.visible .modal-container {
-  transform: scale(1);
-}
-</style>

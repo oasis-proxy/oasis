@@ -10,9 +10,9 @@
   - Alignment: `flex items-center justify-between`
 - **Content Area**:
   - Scrollable: `flex-1 overflow-y-auto custom-scrollbar`
-  - Padding: `p-8` (2rem / 32px)
+  - Padding: `px-5 pt-4 pb-5` (Sides: 3rem/48px, Top: 1.5rem/24px, Bottom: 3rem/48px)
   - Max Width: `max-w-3xl mx-auto` (48rem / 768px inner content)
-  - Spacing: `space-y-8` between sections
+  - Spacing: `d-flex flex-column gap-5` (3rem / 48px) between sections
 
 ## 2. Typography
 
@@ -58,10 +58,10 @@
 
 - Class: `.settings-card`
 - Style: `rounded-xl border divide-y shadow-sm`
-- Item Padding: `p-5` (1.25rem / 20px)
+- Item Padding: `p-4` (1.5rem / 24px)
 - **Spacing**:
   - Between Cards: `space-y-6` (1.5rem / 24px)
-  - Inside Card (Sections): `space-y-6`
+  - Inside Card (Sections): `space-y-3` (0.75rem / 12px)
 
 ### Icons
 
@@ -110,7 +110,33 @@
 - **Dashed (Add New)**:
   - Class: `.settings-button-dashed`
   - Style: `border border-dashed w-full flex items-center justify-center`
+- **Icon Button (Action)**:
+  - Class: `.ui-button-icon`
+  - Style: `bg-transparent border-0 p-1 rounded text-slate-400 hover:text-primary transition-colors`
+  - Hover Bg: `hover:bg-transparent` (Light) / `dark:hover:bg-white/5` (Dark)
 
 ### Toggles (Switches)
 
 - Standard Bootstrap `form-switch` with `form-check-input`.
+
+### Modals
+
+- **Overlay**:
+  - Class: `position-fixed top-0 start-0 w-100 h-100`
+  - Style: `d-flex align-items-center justify-content-center`
+  - Background: `rgba(15, 23, 42, 0.5)` + `backdrop-filter: blur(4px)`
+  - Z-Index: `1050`
+- **Container**:
+  - Class: `.ui-card`
+  - Radius: `rounded-xl`
+  - Shadow: `shadow-lg`
+  - Width: `w-100` with `max-width` constraint (e.g. 480px, 600px)
+- **Header**:
+  - Padding: `p-4`
+  - Title: `text-xl font-semibold ui-text-primary`
+- **Body**:
+  - Padding: `px-4`
+  - Spacing: `gap-3` (vertical stack)
+- **Footer**:
+  - Padding: `p-4`
+  - Alignment: `d-flex justify-content-end gap-3`

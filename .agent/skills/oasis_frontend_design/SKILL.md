@@ -159,3 +159,15 @@ The project uses standard CSS that _mimics_ Tailwind classes.
 ---
 
 **Usage**: Read this file before creating or modifying any Vue components or HTML files to ensure UI consistency.
+
+## 5. Workflow Automation
+
+### 5.1 Build Process
+
+- **Mandatory Build**: After **EVERY** set of modifications to Vue files, CSS, or build configurations, you **MUST** run `npm run build` to ensure the extension is correctly compiled.
+- **Verification**: Check the build output for errors.
+
+### 5.2 Version Control
+
+- **No Manual Staging**: Do **NOT** automatically run `git add` or `git commit` after changes unless the user **EXPLICITLY** requests it.
+- **Usage**: Leave the staging area management to the user. Only modify the files and build.

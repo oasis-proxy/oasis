@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full flex flex-col p-8 items-center justify-center">
+  <div class="h-100 d-flex flex-column p-8 align-items-center justify-content-center">
      <div class="text-center space-y-4">
-       <div class="size-16 ui-icon-wrapper rounded-full flex items-center justify-center mx-auto">
+       <div class="size-16 ui-icon-wrapper rounded-full d-flex align-items-center justify-content-center mx-auto">
          <i class="bi bi-shield-check text-3xl"></i>
        </div>
        <div>

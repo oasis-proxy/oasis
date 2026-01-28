@@ -1,28 +1,28 @@
 <template>
-  <div class="h-full flex flex-col">
+  <div class="h-100 d-flex flex-column">
     <!-- Header -->
-    <header class="h-24 px-8 flex items-center justify-between border-b border-slate-100 dark:border-slate-700 transition-colors">
+    <header class="h-24 px-5 d-flex align-items-center justify-content-between border-b border-slate-100 dark:border-slate-700 transition-colors">
       <div>
         <h2 class="text-[22px] font-bold text-slate-900 dark:text-slate-50 m-0">General Settings</h2>
         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 m-0">Configure global behavior for the extension.</p>
       </div>
     </header>
 
-    <div class="flex-1 overflow-y-auto custom-scrollbar p-8">
-      <div class="max-w-3xl mx-auto space-y-8">
+    <div class="flex-1 overflow-y-auto custom-scrollbar px-5 pt-4 pb-5">
+      <div class="max-w-3xl mx-auto d-flex flex-column gap-5">
         
         <!-- Basic Configuration -->
         <section>
-          <h3 class="text-sm font-semibold ui-label mb-4 flex items-center gap-2 m-0">
+          <h3 class="text-sm font-semibold ui-label mb-4 d-flex align-items-center gap-2 m-0">
             <i class="bi bi-sliders text-primary text-[20px]"></i>
             Basic Configuration
           </h3>
           <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-slate-700 shadow-sm transition-colors">
             
             <!-- Theme Style -->
-            <div class="flex items-center justify-between p-5 hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
-              <div class="flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-blue flex items-center justify-center">
+            <div class="d-flex align-items-center justify-content-between px-4 pt-4 pb-3 hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+              <div class="d-flex items-start gap-4">
+                <div class="p-2 rounded-lg ui-icon-blue d-flex align-items-center justify-content-center">
                   <i class="bi bi-palette text-[22px]"></i>
                 </div>
                 <div>
@@ -36,9 +36,9 @@
             </div>
 
             <!-- Update Cycle -->
-            <div class="flex items-center justify-between p-5 hover:bg-slate-50/50 transition-colors">
-              <div class="flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-indigo flex items-center justify-center">
+            <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
+              <div class="d-flex items-start gap-4">
+                <div class="p-2 rounded-lg ui-icon-indigo d-flex align-items-center justify-content-center">
                   <i class="bi bi-arrow-repeat text-[22px]"></i>
                 </div>
                 <div>
@@ -52,9 +52,9 @@
             </div>
 
             <!-- Auto Refresh -->
-            <div class="flex items-center justify-between p-5 hover:bg-slate-50/50 transition-colors">
-              <div class="flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-green flex items-center justify-center">
+            <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
+              <div class="d-flex items-start gap-4">
+                <div class="p-2 rounded-lg ui-icon-green d-flex align-items-center justify-content-center">
                   <i class="bi bi-arrow-clockwise text-[22px]"></i>
                 </div>
                 <div>
@@ -68,9 +68,9 @@
             </div>
 
             <!-- Auto Sync -->
-             <div class="flex items-center justify-between p-5 hover:bg-slate-50/50 transition-colors">
-              <div class="flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-purple flex items-center justify-center">
+             <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
+              <div class="d-flex items-start gap-4">
+                <div class="p-2 rounded-lg ui-icon-purple d-flex align-items-center justify-content-center">
                   <i class="bi bi-cloud-arrow-down text-[22px]"></i>
                 </div>
                 <div>
@@ -84,9 +84,9 @@
             </div>
 
             <!-- Maintenance -->
-            <div class="flex items-center justify-between p-5 hover:bg-slate-50/50 transition-colors">
-              <div class="flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-orange flex items-center justify-center">
+            <div class="d-flex align-items-center justify-content-between px-4 pt-3 pb-4 hover:bg-slate-50/50 transition-colors">
+              <div class="d-flex items-start gap-4">
+                <div class="p-2 rounded-lg ui-icon-orange d-flex align-items-center justify-content-center">
                   <i class="bi bi-tools text-[22px]"></i>
                 </div>
                 <div>
@@ -94,14 +94,14 @@
                   <p class="text-xs ui-text-secondary mt-0.5 m-0">Manage configuration data.</p>
                 </div>
               </div>
-              <div class="flex gap-2">
-                <button class="px-3 py-2 text-xs font-medium ui-button-secondary border rounded-lg transition-colors flex items-center gap-1">
+              <div class="d-flex gap-2">
+                <button class="px-3 py-2 text-xs font-medium ui-button-secondary border rounded-lg transition-colors d-flex align-items-center gap-1">
                   <i class="bi bi-upload text-[14px]"></i> Import
                 </button>
-                <button class="px-3 py-2 text-xs font-medium ui-button-secondary border rounded-lg transition-colors flex items-center gap-1">
+                <button class="px-3 py-2 text-xs font-medium ui-button-secondary border rounded-lg transition-colors d-flex align-items-center gap-1">
                   <i class="bi bi-download text-[14px]"></i> Export
                 </button>
-                 <button class="px-3 py-2 text-xs font-medium ui-button-danger border rounded-lg transition-colors flex items-center gap-1">
+                 <button class="px-3 py-2 text-xs font-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-1">
                   <i class="bi bi-trash text-[14px]"></i> Clear
                 </button>
               </div>
@@ -111,16 +111,16 @@
 
         <!-- Advanced Configuration -->
         <section>
-          <h3 class="text-sm font-semibold ui-label mb-4 flex items-center gap-2 m-0">
+          <h3 class="text-sm font-semibold ui-label mb-4 d-flex align-items-center gap-2 m-0">
              <i class="bi bi-terminal text-primary text-[20px]"></i>
             Advanced Configuration
           </h3>
           <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-slate-700 shadow-sm">
             
             <!-- Reject Address -->
-            <div class="flex items-center justify-between p-5 hover:bg-slate-50/50 transition-colors">
-              <div class="flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-red flex items-center justify-center">
+            <div class="d-flex align-items-center justify-content-between px-4 pt-4 pb-3 hover:bg-slate-50/50 transition-colors">
+              <div class="d-flex items-start gap-4">
+                <div class="p-2 rounded-lg ui-icon-red d-flex align-items-center justify-content-center">
                   <i class="bi bi-slash-circle text-[22px]"></i>
                 </div>
                 <div>
@@ -132,9 +132,9 @@
             </div>
 
              <!-- Connection Monitoring -->
-            <div class="flex items-center justify-between p-5 hover:bg-slate-50/50 transition-colors">
-              <div class="flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-teal flex items-center justify-center">
+            <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
+              <div class="d-flex items-start gap-4">
+                <div class="p-2 rounded-lg ui-icon-teal d-flex align-items-center justify-content-center">
                   <i class="bi bi-activity text-[22px]"></i>
                 </div>
                 <div>
@@ -148,9 +148,9 @@
             </div>
 
             <!-- Context Menu -->
-             <div class="flex items-center justify-between p-5 hover:bg-slate-50/50 transition-colors">
-              <div class="flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-pink flex items-center justify-center">
+             <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
+              <div class="d-flex items-start gap-4">
+                <div class="p-2 rounded-lg ui-icon-pink d-flex align-items-center justify-content-center">
                   <i class="bi bi-menu-button-wide text-[22px]"></i>
                 </div>
                 <div>
@@ -164,10 +164,10 @@
             </div>
 
             <!-- IP Tags -->
-             <div class="p-5 hover:bg-slate-50/50 transition-colors">
-                 <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-start gap-4">
-                        <div class="p-2 rounded-lg ui-icon-gray flex items-center justify-center">
+             <div class="px-4 pt-3 pb-4 hover:bg-slate-50/50 transition-colors">
+                 <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex items-start gap-4">
+                        <div class="p-2 rounded-lg ui-icon-gray d-flex align-items-center justify-content-center">
                             <i class="bi bi-tag text-[22px]"></i>
                         </div>
                         <div>
@@ -176,18 +176,18 @@
                         </div>
                     </div>
                  </div>
-                  <div class="overflow-hidden rounded-lg border border-slate-200 flex flex-col">
+                  <div class="overflow-hidden rounded-lg border border-slate-200 d-flex flex-column">
                      <!-- Selected Actions Bar -->
-                     <div class="bg-blue-50/50 dark:bg-primary/20 px-4 py-2 border-b border-slate-200 dark:border-divider-dark flex items-center justify-between">
-                         <div class="flex items-center gap-2">
-                             <div class="h-4 w-4 flex items-center justify-center rounded bg-primary text-white text-[8px] font-bold">{{ selectedTags.length }}</div>
+                     <div class="bg-blue-50/50 dark:bg-primary/20 px-4 py-2 border-b border-slate-200 dark:border-divider-dark d-flex align-items-center justify-content-between">
+                         <div class="d-flex align-items-center gap-2">
+                             <div class="h-4 w-4 d-flex align-items-center justify-content-center rounded bg-primary text-white text-[8px] font-bold">{{ selectedTags.length }}</div>
                              <span class="text-xs font-medium ui-text-secondary">Selected</span>
                          </div>
-                         <div class="flex items-center gap-2">
-                            <button class="px-2 py-1 text-xs font-medium text-slate-600 hover:text-slate-900 bg-transparent hover:bg-slate-50 border border-transparent rounded transition-all flex items-center gap-1">
+                         <div class="d-flex align-items-center gap-2">
+                            <button class="px-2 py-1 text-xs font-medium text-slate-600 hover:text-slate-900 bg-transparent hover:bg-slate-50 border border-transparent rounded transition-all d-flex align-items-center gap-1">
                                 <i class="bi bi-download text-[14px]"></i> Export
                             </button>
-                             <button @click="deleteSelectedTags" class="px-2 py-1 text-xs font-medium text-red-600 hover:text-red-700 bg-transparent hover:bg-red-50 border border-transparent rounded transition-all flex items-center gap-1">
+                             <button @click="deleteSelectedTags" class="px-2 py-1 text-xs font-medium text-red-600 hover:text-red-700 bg-transparent hover:bg-red-50 border border-transparent rounded transition-all d-flex align-items-center gap-1">
                                 <i class="bi bi-trash text-[14px]"></i> Delete
                             </button>
                          </div>
@@ -204,9 +204,9 @@
                                       @change="toggleAllTags"
                                     />
                                 </th>
-                                <th class="px-4 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">IP Address</th>
-                                <th class="px-4 py-2 text-left text-xs font-medium text-slate-500 uppercase tracking-wider w-full">Tag Name</th>
-                                <th class="px-4 py-2 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-slate-500 tracking-wider">IP Address</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-slate-500 tracking-wider w-100">Tag Name</th>
+                                <th class="px-4 py-2 text-right text-xs font-medium text-slate-500 tracking-wider">Actions</th>
                             </tr>
                         </thead>
                          <tbody class="ui-card divide-y divide-slate-100 dark:divide-divider-dark">
@@ -224,10 +224,10 @@
                                     />
                                 </td>
                                 <td class="px-4 py-2 text-xs text-slate-700 font-mono">
-                                  <input v-model.lazy="item.ip" @change="updateTag()" type="text" class="bg-transparent border-0 w-full p-0 text-xs focus:ring-0 font-mono text-slate-900 dark:text-white" placeholder="0.0.0.0" />
+                                  <input v-model.lazy="item.ip" @change="updateTag()" type="text" class="bg-transparent border-0 w-100 p-0 text-xs focus:ring-0 font-mono text-slate-900 dark:text-white" placeholder="0.0.0.0" />
                                 </td>
                                 <td class="px-4 py-2 text-xs text-slate-700">
-                                  <input v-model.lazy="item.tag" @change="updateTag()" type="text" class="bg-transparent border-0 w-full p-0 text-xs focus:ring-0 text-slate-700 dark:text-white" placeholder="Tag Name" />
+                                  <input v-model.lazy="item.tag" @change="updateTag()" type="text" class="bg-transparent border-0 w-100 p-0 text-xs focus:ring-0 text-slate-700 dark:text-white" placeholder="Tag Name" />
                                 </td>
                                 <td class="px-4 py-2 text-right">
                                     <button @click="deleteTag(item.ip)" class="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-full bg-transparent hover:bg-transparent border-0">
@@ -238,7 +238,7 @@
                          </tbody>
                      </table>
                      <div class="settings-table-header px-4 py-2 border-t border-slate-200 dark:border-divider-dark">
-                         <button @click="addTag" class="w-full py-2 text-xs font-medium settings-button-dashed border border-dashed rounded transition-all flex items-center justify-center gap-2">
+                         <button @click="addTag" class="w-100 py-2 text-xs font-medium settings-button-dashed border border-dashed rounded transition-all d-flex align-items-center justify-content-center gap-2">
                              <i class="bi bi-plus text-[14px]"></i> Add New Tag
                          </button>
                      </div>
