@@ -135,7 +135,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { loadConfig, saveConfig } from '../../common/storage'
+import { loadConfig, saveProxies, savePolicies, savePacs } from '../../common/storage'
 import PolicyCreationModal from './PolicyCreationModal.vue'
 import ProxyCreationModal from './ProxyCreationModal.vue'
 
@@ -214,10 +214,11 @@ const handleCreateProxy = async ({ name }) => {
         scheme: 'http', // Default to HTTP
         host: '',
         port: null,
-        auth: null
+        auth: null,
+        bypassList: []
     }
 
-    await saveConfig(latestConfig)
+    await saveProxies(latestConfig.proxies)
     showProxyModal.value = false
     router.push(`/host/${id}`)
 }
@@ -245,7 +246,11 @@ const handleCreatePolicy = async ({ name, type }) => {
         }
     }
 
-    await saveConfig(latestConfig)
+    if (type === 'pac') {
+       await savePacs(latestConfig.pacs)
+    } else {
+       await savePolicies(latestConfig.policies)
+    }
     
     // Navigation
     router.push(`/policy/${id}`)

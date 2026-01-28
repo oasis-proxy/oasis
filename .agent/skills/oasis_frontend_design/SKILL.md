@@ -39,6 +39,7 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 - **Backgrounds**:
   - Light: `#f3f4f6` (`bg-background-light`).
   - Dark: `#101922` (`bg-background-dark`).
+  - Content Area (Light): `#ffffff` (`bg-white`).
   - Surface: `#ffffff` (`bg-white`) / `#1e293b` (`bg-surface-dark`).
 
 ## 2. Component Patterns
@@ -52,9 +53,10 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 ### 2.2 Header
 
 - Height: `h-24` (Options), `h-14` (Popup).
-- visual: Border bottom, flex layout.
-- **Title**: `text-[20px] font-bold text-slate-900 dark:text-slate-50`.
-- **Subtitle**: `text-[10px] text-slate-500 dark:text-slate-400 mt-1`.
+- Padding: `px-8` (Horizontal).
+- Visual: Border bottom, flex layout, `justify-between`.
+- **Title**: `text-[20px] font-bold ui-text-primary m-0`.
+- **Subtitle**: `text-[10px] ui-text-secondary mt-1 m-0`.
 
 ### 2.3 Page Layout (Standard)
 
@@ -80,9 +82,10 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 
 #### Buttons
 
-- **Secondary (Default)**: `.settings-button-secondary` (`px-3 py-2 text-[10px] font-medium border rounded-lg`)
-- **Danger**: `.settings-button-danger`
-- **Dashed (Add)**: `.settings-button-dashed` (`border-dashed w-full`)
+- **Primary**: `.ui-button-primary` (`bg-primary text-white border-0`).
+- **Secondary (Default)**: `.ui-button-secondary` (`bg-white border border-slate-300 text-slate-600`).
+- **Danger**: `.ui-button-danger`
+- **Dashed (Add)**: `.ui-button-dashed` (`border-dashed w-full`)
 
 #### Inputs & Selects
 
@@ -95,6 +98,14 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 
 - **Style**: `text-[10px] font-semibold settings-label mb-4 flex items-center gap-2`
 - **Icon**: `text-[18px]` text-primary
+
+#### Grid Layouts (Forms)
+
+- **Protocol / Host / Port**: Use a single row with grid columns.
+  - Ratio: **3 : 7 : 2** (e.g., `col-span-3`, `col-span-7`, `col-span-2` in a 12-col grid).
+  - Inputs: Must use `!max-w-full` class to override default width constraints.
+- **Authentication**: Use a single row.
+  - Ratio: **50% : 50%** (e.g., `grid-cols-2`).
 
 ### 2.4 Dark Mode Standards
 

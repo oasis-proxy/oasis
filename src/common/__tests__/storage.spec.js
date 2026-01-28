@@ -1,4 +1,4 @@
-/* global global */
+
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { exportConfig, importConfig, clearConfig, saveConfig } from '../storage'
 import { DEFAULT_CONFIG } from '../config'

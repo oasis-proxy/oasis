@@ -1,29 +1,69 @@
+
 <template>
-  <div class="h-full flex flex-col bg-white dark:bg-slate-900 relative">
+  <div class="h-full flex flex-col bg-white dark:bg-background-dark relative transition-colors">
     
     <!-- Header -->
-    <header class="h-24 px-8 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 shrink-0 bg-white dark:bg-slate-900 z-10">
-      <div>
-        <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-          {{ proxy.label || 'Unnamed Proxy' }}
-          <span v-if="isActive" class="px-2 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800">Active</span>
-        </h2>
-        <p class="text-xs text-slate-500 mt-1">Configure connection details for this proxy server.</p>
-      </div>
-      <div class="flex items-center gap-3">
-        <button 
-          @click="resetChanges"
-          class="px-3 py-2 text-xs font-medium text-slate-600 dark:text-slate-400 bg-transparent border border-transparent hover:border-slate-200 dark:hover:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all"
-        >
-          Reset
-        </button>
-        <button 
-          @click="saveChanges"
-          class="px-3 py-2 text-xs font-medium text-white bg-primary rounded-lg shadow-lg shadow-primary/30 hover:bg-blue-600 transition-colors flex items-center gap-2"
-        >
-          <i class="bi bi-save"></i>
-          Save Changes
-        </button>
+    <header class="h-24 px-8 flex items-center justify-between border-b border-slate-100 dark:border-slate-700 transition-colors">
+      <!-- Header / Actions -->
+      <div class="flex items-center justify-between w-full">
+        <div>
+           <h1 class="text-[20px] font-bold ui-text-primary tracking-tight">{{ proxy.label || proxy.host || 'Unnamed Proxy' }}</h1>
+           <div class="flex items-center gap-2 mt-1">
+             <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 uppercase tracking-wide">
+               {{ proxy.type }}
+             </span>
+             <span class="text-xs ui-text-secondary font-mono">{{ proxy.id }}</span>
+           </div>
+        </div>
+        <div class="flex items-center gap-3">
+           
+           <button 
+             @click="resetChanges"
+             class="px-3 py-2 text-[10px] font-medium ui-button-secondary rounded-lg transition-all"
+           >
+             Reset
+           </button>
+
+           <button 
+             @click="saveChanges"
+             class="px-3 py-2 text-[10px] font-medium ui-button-primary rounded-lg shadow-lg shadow-primary/30 transition-colors flex items-center gap-2"
+           >
+             <i class="bi bi-check-lg text-lg"></i>
+             <span>Save Changes</span>
+           </button>
+
+           <!-- Action Menu -->
+           <div class="dropdown">
+              <button 
+                  class="size-10 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 ui-text-secondary transition-colors border-0"
+                  type="button" 
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false"
+              >
+                  <i class="bi bi-three-dots-vertical text-lg"></i>
+              </button>
+              
+              <!-- Dropdown Menu -->
+              <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-lg overflow-hidden mt-1 p-1 bg-white dark:bg-slate-800 ring-1 ring-slate-200 dark:ring-slate-700">
+                  <li>
+                    <button @click="openRenameModal" class="dropdown-item w-full text-left px-3 py-2 text-sm ui-text-primary hover:bg-slate-50 dark:hover:bg-white/5 rounded-md transition-colors flex items-center gap-2">
+                        <i class="bi bi-pencil text-slate-400"></i> Rename
+                    </button>
+                  </li>
+                  <li>
+                    <button @click="openCloneModal" class="dropdown-item w-full text-left px-3 py-2 text-sm ui-text-primary hover:bg-slate-50 dark:hover:bg-white/5 rounded-md transition-colors flex items-center gap-2">
+                        <i class="bi bi-files text-slate-400"></i> Clone
+                    </button>
+                  </li>
+                  <li><hr class="dropdown-divider my-1 border-slate-100 dark:border-white/5"></li>
+                  <li>
+                    <button @click="openDeleteModal" class="dropdown-item w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-md transition-colors flex items-center gap-2">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                  </li>
+              </ul>
+           </div>
+        </div>
       </div>
     </header>
 
@@ -33,28 +73,28 @@
         
         <!-- Default Configuration -->
         <section>
-          <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-4">Default Configuration</h3>
+          <h3 class="text-[10px] font-semibold ui-text-primary mb-4">Default Configuration</h3>
           
           <div class="space-y-6">
             <!-- Connection Details Card -->
-            <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-              <div class="p-6 border-b border-slate-100 dark:border-slate-700/50">
-                <h3 class="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2 mb-1">
-                  <i class="bi bi-router text-primary text-lg"></i>
+            <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden">
+              <div class="p-5 border-b border-slate-100 dark:border-divider-dark">
+                <h3 class="text-xs font-medium ui-text-primary flex items-center gap-2 mb-1">
+                  <i class="bi bi-router text-primary text-[18px]"></i>
                   Connection Details
                 </h3>
-                <p class="text-xs text-slate-500">Define the core parameters for the proxy connection.</p>
+                <p class="text-[10px] ui-text-secondary">Define the core parameters for the proxy connection.</p>
               </div>
               
-              <div class="p-6 space-y-6">
+              <div class="p-5 space-y-6">
                 <!-- Inputs Grid -->
-                <div class="grid grid-cols-12 gap-6">
+                <div class="grid grid-cols-12 gap-4">
                   <!-- Protocol -->
-                  <div class="col-span-12 sm:col-span-4">
-                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">Proxy Protocol</label>
+                  <div class="col-span-3">
+                    <label class="block text-[10px] font-medium ui-text-secondary mb-1.5">Proxy Protocol</label>
                     <select 
                       v-model="proxy.scheme"
-                      class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs py-2 px-3 border"
+                      class="form-select ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3"
                     >
                       <option value="http">HTTP</option>
                       <option value="https">HTTPS</option>
@@ -64,52 +104,55 @@
                   </div>
                   
                   <!-- Host -->
-                  <div class="col-span-12 sm:col-span-5">
-                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">Host Address</label>
+                  <div class="col-span-7">
+                    <label class="block text-[10px] font-medium ui-text-secondary mb-1.5">Host Address</label>
                     <input 
                       v-model="proxy.host"
                       type="text" 
-                      placeholder="e.g. 192.168.1.1"
-                      class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs py-2 px-3 border"
+
+                      class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400"
                     />
                   </div>
                   
                   <!-- Port -->
-                  <div class="col-span-12 sm:col-span-3">
-                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">Port</label>
+                  <div class="col-span-2">
+                    <label class="block text-[10px] font-medium ui-text-secondary mb-1.5">Port</label>
                     <input 
                       v-model="proxy.port"
                       type="number" 
-                      placeholder="e.g. 8080"
-                      class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs py-2 px-3 border"
+
+                      class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3"
+                      min="1"
+                      max="65535"
+                      @blur="validatePort(proxy, 'port')"
                     />
                   </div>
                 </div>
               </div>
 
               <!-- Authentication -->
-              <div class="bg-slate-50 dark:bg-slate-900/50 p-6 border-t border-slate-100 dark:border-slate-700/50">
-                <h4 class="text-xs font-medium text-slate-900 dark:text-white mb-4 flex items-center justify-between">
+              <div class="p-5 border-t border-slate-100 dark:border-divider-dark">
+                <h4 class="text-xs font-medium ui-text-primary mb-4 flex items-center justify-between">
                   Authentication (Optional)
-                  <span class="text-[10px] text-slate-500 font-normal">Leave blank if not required</span>
+                  <span class="text-[10px] ui-text-secondary font-normal">Leave blank if not required</span>
                 </h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">Username</label>
+                    <label class="block text-[10px] font-medium ui-text-secondary mb-1.5">Username</label>
                     <input 
                       v-model="authUsername"
                       type="text" 
-                      placeholder="Username"
-                      class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs py-2 px-3 border"
+                     
+                      class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400"
                     />
                   </div>
                   <div>
-                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">Password</label>
+                    <label class="block text-[10px] font-medium ui-text-secondary mb-1.5">Password</label>
                     <input 
                       v-model="authPassword"
                       type="password" 
-                      placeholder="••••••••"
-                      class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs py-2 px-3 border"
+
+                      class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400"
                     />
                   </div>
                 </div>
@@ -117,147 +160,203 @@
             </div>
 
             <!-- Bypass Rules -->
-            <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-6">
+            <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm p-5">
               <div class="flex items-center justify-between mb-2">
-                <label class="block text-xs font-medium text-slate-900 dark:text-white flex items-center gap-2">
-                  <i class="bi bi-sign-turn-right text-primary text-lg"></i>
+                <label class="block text-xs font-medium ui-text-primary flex items-center gap-2">
+                  <i class="bi bi-sign-turn-right text-primary text-[18px]"></i>
                   Bypass Rules
                 </label>
               </div>
-              <p class="text-xs text-slate-500 mb-4">
+              <p class="text-[10px] ui-text-secondary mb-4">
                 Requests to these domains or IPs will bypass the proxy. Supports wildcards (e.g. *.google.com).
               </p>
               <textarea 
                 v-model="bypassList"
                 rows="4"
-                placeholder="localhost&#10;127.0.0.1&#10;::1&#10;*.local"
-                class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs font-mono leading-relaxed py-2 px-3 border"
+
+                class="form-control ui-input w-full rounded-lg border text-[10px] font-mono leading-relaxed py-2 px-3 focus:border-primary focus:ring-primary placeholder:text-slate-400"
               ></textarea>
             </div>
 
             <!-- Advanced Protocol Overrides -->
             <section class="mt-8">
               <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-semibold text-slate-900 dark:text-white">
+                <h3 class="text-[10px] font-semibold ui-text-primary">
                   Advanced Protocol Overrides
-                  <span class="text-xs font-normal text-slate-500 ml-2">(高级协议覆盖)</span>
                 </h3>
               </div>
               
-              <div class="space-y-4">
-                <!-- HTTPS Override -->
-                <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden group">
-                  <div class="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <div class="flex items-center gap-4 flex-1">
+              <div class="space-y-6">
+                <!-- HTTP Override -->
+                <div class="ui-card rounded-xl border border-slate-200 dark:border-divider-dark shadow-sm overflow-hidden group divide-y divide-slate-100 dark:divide-divider-dark">
+                  <div class="p-5">
+                    <div class="flex items-center gap-4">
                       <span class="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-400">
-                        <i class="bi bi-lock-fill text-xl"></i>
+                        <i class="bi bi-globe text-[20px]"></i>
                       </span>
                       <div>
-                        <h4 class="font-semibold text-sm text-slate-900 dark:text-white">HTTPS</h4>
-                        <p class="text-[10px] text-slate-500 mt-0.5">Secure web traffic</p>
-                      </div>
-                    </div>
-                    
-                    <div class="flex items-center gap-4">
-                      <div class="flex items-center gap-2">
-                        <span class="text-[10px] font-medium text-slate-500 uppercase">Enable Override</span>
-                        <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                          <input 
-                            type="checkbox" 
-                            name="toggle-https" 
-                            id="toggle-https"
-                            v-model="httpsOverrideEnabled"
-                            class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-300 dark:border-slate-600 checked:right-0 checked:border-primary transition-all duration-300 top-0.5 left-0.5"
-                          />
-                          <label for="toggle-https" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-200 dark:bg-slate-700 cursor-pointer"></label>
-                        </div>
+                        <h4 class="font-medium text-xs ui-text-primary">HTTP</h4>
+                        <p class="text-[10px] ui-text-secondary mt-0.5">Plain web traffic</p>
                       </div>
                     </div>
                   </div>
 
-                  <!-- HTTPS Details (Conditional) -->
-                  <div v-if="httpsOverrideEnabled" class="border-t border-slate-100 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/20 p-6">
-                    <div class="grid grid-cols-12 gap-6">
-                      <div class="col-span-12 sm:col-span-4">
-                        <label class="block text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide">Protocol</label>
-                        <select v-model="proxy.overrides.https.scheme" class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs py-1.5 px-2 border">
+                  <div class="p-5">
+                    <div class="grid grid-cols-12 gap-4">
+                      <div class="col-span-3">
+                        <label class="block text-[10px] font-medium ui-text-secondary mb-1.5 uppercase tracking-wide">Protocol</label>
+                        <select v-model="httpOverrideScheme" class="form-select ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3">
+                          <option value="default">Default</option>
                           <option value="http">HTTP</option>
                           <option value="https">HTTPS</option>
                           <option value="socks4">SOCKS4</option>
                           <option value="socks5">SOCKS5</option>
                         </select>
                       </div>
-                      <div class="col-span-12 sm:col-span-5">
-                        <label class="block text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide">Host Address</label>
-                        <input v-model="proxy.overrides.https.host" type="text" class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs py-1.5 px-2 border" />
+                      
+                      <div class="col-span-7">
+                        <label class="block text-[10px] font-medium ui-text-secondary mb-1.5 uppercase tracking-wide">Host Address</label>
+                        <input v-model="proxy.overrides.http.host" type="text" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" />
                       </div>
-                      <div class="col-span-12 sm:col-span-3">
-                        <label class="block text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide">Port</label>
-                        <input v-model="proxy.overrides.https.port" type="number" class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs py-1.5 px-2 border" />
+                      <div class="col-span-2">
+                        <label class="block text-[10px] font-medium ui-text-secondary mb-1.5 uppercase tracking-wide">Port</label>
+                        <input v-model="proxy.overrides.http.port" type="number" min="1" max="65535" :disabled="httpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.http, 'port')" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 disabled:opacity-50 disabled:cursor-not-allowed" />
                       </div>
                     </div>
+                  </div>
+
+                  <!-- HTTP Auth -->
+                  <div class="p-5 border-t border-slate-100 dark:border-divider-dark transition-opacity duration-200" :class="{ 'opacity-50 pointer-events-none': httpOverrideScheme === 'default' }">
+                      <h4 class="text-[10px] font-medium ui-text-primary mb-3 uppercase tracking-wide flex items-center justify-between">
+                          Authentication (Optional)
+                          <span class="text-[10px] ui-text-secondary font-normal normal-case">Leave blank if not required</span>
+                      </h4>
+                      <div class="grid grid-cols-2 gap-4">
+                          <div>
+                              <label class="block text-[10px] font-medium ui-text-secondary mb-1.5">Username</label>
+                              <input v-model="proxy.overrides.http.authUsername" type="text" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" />
+                          </div>
+                          <div>
+                              <label class="block text-[10px] font-medium ui-text-secondary mb-1.5">Password</label>
+                              <input v-model="proxy.overrides.http.authPassword" type="password" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" />
+                          </div>
+                      </div>
+                  </div>
+                </div>
+                <!-- HTTPS Override -->
+                <div class="ui-card rounded-xl border border-slate-200 dark:border-divider-dark shadow-sm overflow-hidden group divide-y divide-slate-100 dark:divide-divider-dark">
+                  <div class="p-5">
+                    <div class="flex items-center gap-4">
+                      <span class="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-400">
+                        <i class="bi bi-lock-fill text-[20px]"></i>
+                      </span>
+                      <div>
+                        <h4 class="font-medium text-xs ui-text-primary">HTTPS</h4>
+                        <p class="text-[10px] ui-text-secondary mt-0.5">Secure web traffic</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="p-5">
+                    <div class="grid grid-cols-12 gap-4">
+                      <div class="col-span-3">
+                        <label class="block text-[10px] font-medium ui-text-secondary mb-1.5 uppercase tracking-wide">Protocol</label>
+                        <select v-model="httpsOverrideScheme" class="form-select ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3">
+                          <option value="default">Default</option>
+                          <option value="http">HTTP</option>
+                          <option value="https">HTTPS</option>
+                          <option value="socks4">SOCKS4</option>
+                          <option value="socks5">SOCKS5</option>
+                        </select>
+                      </div>
+                      
+                      <div class="col-span-7">
+                        <label class="block text-[10px] font-medium ui-text-secondary mb-1.5 uppercase tracking-wide">Host Address</label>
+                        <input v-model="proxy.overrides.https.host" type="text" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" />
+                      </div>
+                      <div class="col-span-2">
+                        <label class="block text-[10px] font-medium ui-text-secondary mb-1.5 uppercase tracking-wide">Port</label>
+                        <input v-model="proxy.overrides.https.port" type="number" min="1" max="65535" :disabled="httpsOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.https, 'port')" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 disabled:opacity-50 disabled:cursor-not-allowed" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- HTTPS Auth -->
+                  <div class="p-5 border-t border-slate-100 dark:border-divider-dark transition-opacity duration-200" :class="{ 'opacity-50 pointer-events-none': httpsOverrideScheme === 'default' }">
+                      <h4 class="text-[10px] font-medium ui-text-primary mb-3 uppercase tracking-wide flex items-center justify-between">
+                          Authentication (Optional)
+                          <span class="text-[10px] ui-text-secondary font-normal normal-case">Leave blank if not required</span>
+                      </h4>
+                      <div class="grid grid-cols-2 gap-4">
+                          <div>
+                              <label class="block text-[10px] font-medium ui-text-secondary mb-1.5">Username</label>
+                              <input v-model="proxy.overrides.https.authUsername" type="text" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" />
+                          </div>
+                          <div>
+                              <label class="block text-[10px] font-medium ui-text-secondary mb-1.5">Password</label>
+                              <input v-model="proxy.overrides.https.authPassword" type="password" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" />
+                          </div>
+                      </div>
                   </div>
                 </div>
 
                 <!-- FTP Override -->
-                <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden group">
-                  <div class="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <div class="flex items-center gap-4 flex-1">
+                <div class="ui-card rounded-xl border border-slate-200 dark:border-divider-dark shadow-sm overflow-hidden group divide-y divide-slate-100 dark:divide-divider-dark">
+                  <div class="p-5">
+                    <div class="flex items-center gap-4">
                       <span class="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-400">
-                        <i class="bi bi-folder-fill text-xl"></i>
+                        <i class="bi bi-folder-fill text-[20px]"></i>
                       </span>
                       <div>
-                        <h4 class="font-semibold text-sm text-slate-900 dark:text-white">FTP</h4>
-                        <p class="text-[10px] text-slate-500 mt-0.5">File transfer traffic</p>
-                      </div>
-                    </div>
-                    
-                    <div class="flex items-center gap-4">
-                      <div class="flex items-center gap-2">
-                        <span class="text-[10px] font-medium text-slate-500 uppercase">Enable Override</span>
-                        <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                          <input 
-                            type="checkbox" 
-                            name="toggle-ftp" 
-                            id="toggle-ftp"
-                            v-model="ftpOverrideEnabled"
-                            class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-300 dark:border-slate-600 checked:right-0 checked:border-primary transition-all duration-300 top-0.5 left-0.5"
-                          />
-                          <label for="toggle-ftp" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-200 dark:bg-slate-700 cursor-pointer"></label>
-                        </div>
+                        <h4 class="font-medium text-xs ui-text-primary">FTP</h4>
+                        <p class="text-[10px] ui-text-secondary mt-0.5">File transfer traffic</p>
                       </div>
                     </div>
                   </div>
 
-                  <!-- FTP Details (Conditional) -->
-                  <div v-if="ftpOverrideEnabled" class="border-t border-slate-100 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/20 p-6">
-                    <div class="grid grid-cols-12 gap-6">
-                      <div class="col-span-12 sm:col-span-4">
-                        <label class="block text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide">Protocol</label>
-                        <select v-model="proxy.overrides.ftp.scheme" class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs py-1.5 px-2 border">
+                  <div class="p-5">
+                    <div class="grid grid-cols-12 gap-4">
+                      <div class="col-span-3">
+                        <label class="block text-[10px] font-medium ui-text-secondary mb-1.5 uppercase tracking-wide">Protocol</label>
+                        <select v-model="ftpOverrideScheme" class="form-select ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3">
+                          <option value="default">Default</option>
                           <option value="http">HTTP</option>
                           <option value="https">HTTPS</option>
                           <option value="socks4">SOCKS4</option>
                           <option value="socks5">SOCKS5</option>
                         </select>
                       </div>
-                      <div class="col-span-12 sm:col-span-5">
-                        <label class="block text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide">Host Address</label>
-                        <input v-model="proxy.overrides.ftp.host" type="text" class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs py-1.5 px-2 border" />
+                      
+                      <div class="col-span-7">
+                        <label class="block text-[10px] font-medium ui-text-secondary mb-1.5 uppercase tracking-wide">Host Address</label>
+                        <input v-model="proxy.overrides.ftp.host" type="text" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" />
                       </div>
-                      <div class="col-span-12 sm:col-span-3">
-                        <label class="block text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide">Port</label>
-                        <input v-model="proxy.overrides.ftp.port" type="number" class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary text-xs py-1.5 px-2 border" />
+                      <div class="col-span-2">
+                        <label class="block text-[10px] font-medium ui-text-secondary mb-1.5 uppercase tracking-wide">Port</label>
+                        <input v-model="proxy.overrides.ftp.port" type="number" min="1" max="65535" :disabled="ftpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.ftp, 'port')" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 disabled:opacity-50 disabled:cursor-not-allowed" />
                       </div>
                     </div>
                   </div>
+
+                  <!-- FTP Auth -->
+                  <div class="p-5 border-t border-slate-100 dark:border-divider-dark transition-opacity duration-200" :class="{ 'opacity-50 pointer-events-none': ftpOverrideScheme === 'default' }">
+                      <h4 class="text-[10px] font-medium ui-text-primary mb-3 uppercase tracking-wide flex items-center justify-between">
+                          Authentication (Optional)
+                          <span class="text-[10px] ui-text-secondary font-normal normal-case">Leave blank if not required</span>
+                      </h4>
+                      <div class="grid grid-cols-2 gap-4">
+                          <div>
+                              <label class="block text-[10px] font-medium ui-text-secondary mb-1.5">Username</label>
+                              <input v-model="proxy.overrides.ftp.authUsername" type="text" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" />
+                          </div>
+                          <div>
+                              <label class="block text-[10px] font-medium ui-text-secondary mb-1.5">Password</label>
+                              <input v-model="proxy.overrides.ftp.authPassword" type="password" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-full max-w-full rounded-lg border text-[10px] focus:border-primary focus:ring-primary h-8 py-0 px-3 placeholder:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed" />
+                          </div>
+                      </div>
+                  </div>
                 </div>
 
-              </div>
-              
-              <div class="mt-4 p-4 rounded-lg bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-900/30 flex gap-3 text-xs text-orange-800 dark:text-orange-300">
-                <i class="bi bi-exclamation-triangle-fill shrink-0 text-[18px]"></i>
-                <p>Configured overrides will take precedence over the default configuration for their respective protocols when enabled.</p>
               </div>
             </section>
           </div>
@@ -265,30 +364,47 @@
 
       </div>
     </div>
+    <!-- Modals -->
+    <ProxyRenameModal 
+      :visible="showRenameModal" 
+      :currentName="proxy.label || ''" 
+      @close="showRenameModal = false"
+      @save="handleRename"
+    />
+    <ProxyCloneModal
+      :visible="showCloneModal" 
+      :currentName="proxy.label || ''"
+      @close="showCloneModal = false"
+      @clone="handleClone"
+    />
+    <ProxyDeleteModal
+      :visible="showDeleteModal"
+      :proxyName="proxy.label || ''"
+      @close="showDeleteModal = false"
+      @delete="handleDelete" 
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { loadConfig, saveConfig } from '../../common/storage'
+import { useRoute, useRouter } from 'vue-router'
+import { loadConfig, saveProxies } from '../../common/storage'
+import ProxyRenameModal from '../components/ProxyRenameModal.vue'
+import ProxyCloneModal from '../components/ProxyCloneModal.vue'
+import ProxyDeleteModal from '../components/ProxyDeleteModal.vue'
 
 const route = useRoute()
+const router = useRouter()
 const config = ref(null)
-const proxy = ref({
-  id: '',
-  label: '',
-  scheme: 'http',
-  host: '',
-  port: null,
-  auth: null,
-  bypassList: [],
-  overrides: {}
-})
+const proxy = ref(null) // Changed to null, will be populated by loadProxyData
+const showRenameModal = ref(false)
+const showCloneModal = ref(false)
+const showDeleteModal = ref(false)
 
 // Authentication Computed Properties
 const authUsername = computed({
-  get: () => proxy.value.auth?.username || '',
+  get: () => proxy.value?.auth?.username || '',
   set: (val) => {
     if (!proxy.value.auth) proxy.value.auth = {}
     proxy.value.auth.username = val
@@ -296,7 +412,7 @@ const authUsername = computed({
 })
 
 const authPassword = computed({
-  get: () => proxy.value.auth?.password || '',
+  get: () => proxy.value?.auth?.password || '',
   set: (val) => {
     if (!proxy.value.auth) proxy.value.auth = {}
     proxy.value.auth.password = val
@@ -305,42 +421,66 @@ const authPassword = computed({
 
 // Bypass List Computed Property (Array <-> String)
 const bypassList = computed({
-  get: () => proxy.value.bypassList ? proxy.value.bypassList.join('\n') : '',
+  get: () => Array.isArray(proxy.value?.bypassList) ? proxy.value.bypassList.join('\n') : '',
   set: (val) => {
-    proxy.value.bypassList = val.split('\n').map(s => s.trim()).filter(Boolean)
+    if (proxy.value) {
+      proxy.value.bypassList = val.split('\n').map(s => s.trim()).filter(Boolean)
+    }
   }
 })
+
+const validatePort = (obj, key) => {
+  let val = parseInt(obj[key])
+  if (isNaN(val)) {
+    obj[key] = null
+    return
+  }
+  if (val < 1) obj[key] = 1
+  else if (val > 65535) obj[key] = 65535
+  else obj[key] = val // Ensure integer
+}
 
 // Overrides Computed Properties
-const httpsOverrideEnabled = computed({
-  get: () => !!proxy.value.overrides?.https,
+const httpOverrideScheme = computed({
+  get: () => proxy.value?.overrides?.http?.scheme || 'default',
   set: (val) => {
     if (!proxy.value.overrides) proxy.value.overrides = {}
-    if (val) {
-      if (!proxy.value.overrides.https) proxy.value.overrides.https = { scheme: 'http', host: '', port: null }
+    if (!proxy.value.overrides.http) {
+       // Initialize if missing, even for default
+       proxy.value.overrides.http = { scheme: val, host: '', port: null, authUsername: '', authPassword: '' }
     } else {
-      delete proxy.value.overrides.https
+       proxy.value.overrides.http.scheme = val
+    }
+  }
+})
+
+const httpsOverrideScheme = computed({
+  get: () => proxy.value?.overrides?.https?.scheme || 'default',
+  set: (val) => {
+    if (!proxy.value.overrides) proxy.value.overrides = {}
+    if (!proxy.value.overrides.https) {
+       proxy.value.overrides.https = { scheme: val, host: '', port: null, authUsername: '', authPassword: '' }
+    } else {
+       proxy.value.overrides.https.scheme = val
     }
   }
 })
 
 
 
-const ftpOverrideEnabled = computed({
-  get: () => !!proxy.value.overrides?.ftp,
+const ftpOverrideScheme = computed({
+  get: () => proxy.value?.overrides?.ftp?.scheme || 'default',
   set: (val) => {
     if (!proxy.value.overrides) proxy.value.overrides = {}
-    if (val) {
-      if (!proxy.value.overrides.ftp) proxy.value.overrides.ftp = { scheme: 'http', host: '', port: null }
+    if (!proxy.value.overrides.ftp) {
+       proxy.value.overrides.ftp = { scheme: val, host: '', port: null, authUsername: '', authPassword: '' }
     } else {
-      delete proxy.value.overrides.ftp
+       proxy.value.overrides.ftp.scheme = val
     }
   }
 })
 
-const isActive = computed(() => {
-  return config.value?.activeProfileId === proxy.value.id
-})
+
 
 // Load logic
 const loadProxyData = async () => {
@@ -349,9 +489,17 @@ const loadProxyData = async () => {
   if (config.value?.proxies?.[id]) {
     // Deep copy
     proxy.value = JSON.parse(JSON.stringify(config.value.proxies[id]))
-    // Ensure exist
-    if (!proxy.value.bypassList) proxy.value.bypassList = []
+    // Ensure exist and is array
+    if (!Array.isArray(proxy.value.bypassList)) proxy.value.bypassList = []
     if (!proxy.value.overrides) proxy.value.overrides = {}
+    
+    // Ensure override objects exist for UI binding
+    if (!proxy.value.overrides.http) proxy.value.overrides.http = { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
+    if (!proxy.value.overrides.https) proxy.value.overrides.https = { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
+    if (!proxy.value.overrides.ftp) proxy.value.overrides.ftp = { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
+  } else {
+    // Handle case where proxy ID is not found, e.g., navigate away or show error
+    router.push('/settings') // Redirect to settings if proxy not found
   }
 }
 
@@ -364,42 +512,109 @@ onMounted(() => {
     })
 })
 
-watch(() => route.params.id, () => {
-  loadProxyData()
+watch(() => route.params.id, (newId, oldId) => {
+  if (newId !== oldId) {
+    loadProxyData()
+  }
 })
+
 
 const resetChanges = () => {
   loadProxyData()
 }
-
 const saveChanges = async () => {
-  if (!config.value) return 
+  if (!config.value || !proxy.value) return 
   
+  // Clone proxy data to avoid breaking UI reactivity
+  const payload = JSON.parse(JSON.stringify(proxy.value))
+
   // Clean up auth if empty
-  if (proxy.value.auth && !proxy.value.auth.username && !proxy.value.auth.password) {
-    proxy.value.auth = null
+  if (payload.auth && !payload.auth.username && !payload.auth.password) {
+    payload.auth = null
+  }
+
+  // Clean up default overrides
+  if (payload.overrides) {
+    if (payload.overrides.http?.scheme === 'default') delete payload.overrides.http
+    if (payload.overrides.https?.scheme === 'default') delete payload.overrides.https
+    if (payload.overrides.ftp?.scheme === 'default') delete payload.overrides.ftp
   }
 
   // Update local config object
-  config.value.proxies[proxy.value.id] = JSON.parse(JSON.stringify(proxy.value))
+  config.value.proxies[payload.id] = payload
   
-  // Save to storage
-  await saveConfig(config.value)
+  // Save Proxies only
+  await saveProxies(config.value.proxies)
   
   // Reload
   await loadProxyData()
+
+  // Show success feedback if needed
+}
+
+// --- Action Handlers ---
+
+const openRenameModal = () => {
+    showRenameModal.value = true
+}
+
+const openCloneModal = () => {
+    showCloneModal.value = true
+}
+
+const openDeleteModal = () => {
+    showDeleteModal.value = true
+}
+
+const handleRename = async (newName) => {
+  if (!proxy.value || !config.value) return
+  
+  // Update label
+  config.value.proxies[proxy.value.id].label = newName
+  
+  // Save
+  await saveProxies(config.value.proxies)
+  await loadProxyData()
+  showRenameModal.value = false
+}
+
+const handleClone = async (newName) => {
+  if (!proxy.value || !config.value) return
+  
+  // Create deep copy
+  const newId = `proxy_${Date.now()}`
+  const newProxy = JSON.parse(JSON.stringify(config.value.proxies[proxy.value.id]))
+  
+  newProxy.id = newId
+  newProxy.label = newName
+  
+  // Add to config
+  config.value.proxies[newId] = newProxy
+  
+  // Save
+  await saveProxies(config.value.proxies)
+  
+  // Navigate to new proxy
+  router.push(`/host/${newId}`)
+  showCloneModal.value = false
+}
+
+const handleDelete = async () => {
+  if (!proxy.value || !config.value) return
+  
+  // Remove from config
+  delete config.value.proxies[proxy.value.id]
+  
+  // Save
+  await saveProxies(config.value.proxies)
+  
+  // Navigate away
+  router.push('/settings')
+  showDeleteModal.value = false
 }
 </script>
 
 <style scoped>
-/* Scoped styles to match Tailwind utilities if needed, mostly using Bootstrap-like classes now */
-.ui-text-primary {
-    color: #1e293b; 
-}
-.dark .ui-text-primary {
-    color: #f8fafc;
-}
-.ui-text-secondary {
-    color: #64748b;
-}
+/* Scoped styles removed as they are now handled by main.css (ui-* classes) */
 </style>
+

@@ -59,7 +59,8 @@ export const DEFAULT_CONFIG = {
       scheme: ProxyProtocol.HTTP,
       host: '127.0.0.1',
       port: 7890,
-      auth: null
+      auth: null,
+      bypassList: []
     }
   },
 

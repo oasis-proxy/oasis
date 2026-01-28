@@ -19,7 +19,9 @@ html {
 }
 
 /* Default Constraint */
-input[type="text"] {
+input[type="text"],
+input[type="password"],
+input[type="number"] {
   max-width: 200px;
   height: 2rem; /* h-8 */
 }
@@ -74,13 +76,26 @@ body {
   color: #ffffff !important;
 }
 
+.ui-button-primary {
+  background-color: var(--bs-primary) !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+.ui-button-primary:hover {
+  background-color: #1170cf !important; /* Darker Blue */
+}
+.dark .ui-button-primary:hover {
+  background-color: #1170cf !important;
+}
+
 .ui-button-secondary {
   background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
+  border: 1px solid #cbd5e1 !important; /* Light Gray Border */
   color: #475569 !important; /* slate-600 */
 }
 .ui-button-secondary:hover {
   background-color: #f8fafc !important;
+  border-color: #94a3b8 !important; /* Darker on hover */
 }
 .dark .ui-button-secondary {
   background-color: #2d2d2d !important;
@@ -360,3 +375,17 @@ body {
 
 /* Reset Lists & Buttons */
 ul { padding: 0; margin: 0; list-style: none; }
+
+/* Grid Layout System */
+.grid { display: grid !important; }
+.grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)) !important; }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+.col-span-2 { grid-column: span 2 / span 2 !important; }
+.col-span-3 { grid-column: span 3 / span 3 !important; }
+.col-span-4 { grid-column: span 4 / span 4 !important; }
+.col-span-5 { grid-column: span 5 / span 5 !important; }
+.col-span-7 { grid-column: span 7 / span 7 !important; }
+
+/* Sizing */
+.max-w-full { max-width: 100% !important; }
+.h-8 { height: 2rem !important; }

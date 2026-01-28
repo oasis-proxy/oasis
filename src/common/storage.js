@@ -81,6 +81,31 @@ export async function saveConfig(config) {
       direct: config.direct,
       reject: config.reject
   }
+  console.log('saveConfig storageData', storageData)
+  await chrome.storage.local.set(storageData)
+}
+
+/**
+ * Save ONLY General Settings and Singletons.
+ * Used by GeneralSettings.vue to avoid overwriting profiles with stale data.
+ * @param {typeof DEFAULT_CONFIG} config 
+ */
+export async function saveGeneralSettings(config) {
+  const configData = {
+      activeProfileId: config.activeProfileId,
+      ui: config.ui,
+      update: config.update,
+      behavior: config.behavior,
+      sync: config.sync,
+      ipTags: config.ipTags
+  }
+  
+  const storageData = {
+      config: configData,
+      system: config.system,
+      direct: config.direct,
+      reject: config.reject
+  }
 
   await chrome.storage.local.set(storageData)
 }
@@ -101,6 +126,36 @@ export async function addSessionRule(rule) {
  */
 export async function clearSessionRules() {
     await chrome.storage.session.remove('tempRules')
+}
+
+/**
+ * Save Proxies Map ONLY.
+ * @param {object} proxies 
+ */
+export async function saveProxies(proxies) {
+  // Strip reactivity
+  const raw = JSON.parse(JSON.stringify(proxies || {}))
+  await chrome.storage.local.set({ proxies: raw })
+}
+
+/**
+ * Save Policies Map ONLY.
+ * @param {object} policies 
+ */
+export async function savePolicies(policies) {
+  // Strip reactivity
+  const raw = JSON.parse(JSON.stringify(policies || {}))
+  await chrome.storage.local.set({ policies: raw })
+}
+
+/**
+ * Save PACs Map ONLY.
+ * @param {object} pacs 
+ */
+export async function savePacs(pacs) {
+  // Strip reactivity
+  const raw = JSON.parse(JSON.stringify(pacs || {}))
+  await chrome.storage.local.set({ pacs: raw })
 }
 
 /**

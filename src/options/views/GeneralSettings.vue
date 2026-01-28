@@ -254,7 +254,7 @@
 
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from 'vue'
-import { loadConfig, saveConfig } from '../../common/storage'
+import { loadConfig, saveGeneralSettings } from '../../common/storage'
 import { DEFAULT_CONFIG } from '../../common/config'
 
 // Reactive State
@@ -308,8 +308,8 @@ onMounted(async () => {
 
 // Auto-Save Watcher
 watch(config, (newVal) => {
-    saveConfig(newVal)
-    console.log('Config saved:', newVal)
+    saveGeneralSettings(newVal)
+    console.log('Config saved (General Only):', newVal)
 }, { deep: true })
 
 // Tag Management Logic
