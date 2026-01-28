@@ -107,20 +107,19 @@ body {
 }
 
 .ui-button-danger {
-  background-color: #ffffff !important;
-  border-color: #fecaca !important; /* red-200 */
-  color: #dc2626 !important; /* red-600 */
+  background-color: #dc2626 !important; /* red-600 */
+  border: none !important;
+  color: #ffffff !important;
 }
 .ui-button-danger:hover {
-  background-color: #fef2f2 !important; /* red-50 */
+  background-color: #b91c1c !important; /* red-700 */
 }
 .dark .ui-button-danger {
-  background-color: #2d2d2d !important;
-  border-color: rgba(127, 29, 29, 0.3) !important;
-  color: #f87171 !important; /* red-400 */
+  background-color: #ef4444 !important; /* red-500 for better visibility in dark */
+  color: #ffffff !important;
 }
 .dark .ui-button-danger:hover {
-  background-color: rgba(127, 29, 29, 0.2) !important;
+  background-color: #dc2626 !important; /* red-600 */
 }
 
 .ui-table-header {

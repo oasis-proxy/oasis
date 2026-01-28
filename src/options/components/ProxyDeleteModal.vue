@@ -15,11 +15,11 @@
       >
         
         <!-- Modal Header -->
-        <div class="d-flex justify-content-between align-items-start p-4">
-          <h3 class="text-xl font-semibold leading-tight tracking-tight text-red-600 dark:text-red-400 m-0">Delete Proxy Host</h3>
+        <div class="d-flex justify-content-between align-items-center p-4">
+          <h3 class="text-[20px] font-semibold leading-tight tracking-tight text-red-600 dark:text-red-400 m-0">Delete Proxy Host</h3>
           <button 
             @click="emit('close')" 
-            class="-mr-2 -mt-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
+            class="-mr-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
           >
             <i class="bi bi-x-lg text-lg"></i>
           </button>
@@ -28,16 +28,14 @@
         <!-- Modal Body -->
         <div class="px-4 flex-1">
           <div class="d-flex flex-column gap-4">
-            <div class="p-4 rounded-lg bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/20 text-red-600 dark:text-red-400 text-base">
-                <div class="d-flex items-start gap-3">
-                    <i class="bi bi-exclamation-triangle-fill text-xl shrink-0"></i>
-                    <div>
-                        <p class="font-bold mb-1">Warning: Destructive Action</p>
-                        <p class="opacity-90 leading-relaxed m-0">
-                            Are you sure you want to delete <span class="font-bold underline">{{ proxyName }}</span>? 
-                            This action cannot be undone and will permanently remove this proxy configuration.
-                        </p>
-                    </div>
+            <div class="d-flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
+                <i class="bi bi-exclamation-triangle-fill text-xl text-red-600 dark:text-red-400 shrink-0"></i>
+                <div>
+                    <p class="font-bold mb-1 text-slate-900 dark:text-slate-100">Warning: Destructive Action</p>
+                    <p class="opacity-90 leading-relaxed m-0">
+                        Are you sure you want to delete <span class="font-bold underline">{{ proxyName }}</span>? 
+                        This action cannot be undone and will permanently remove this proxy configuration.
+                    </p>
                 </div>
             </div>
           </div>
@@ -47,13 +45,13 @@
         <div class="d-flex justify-content-end gap-3 p-4">
           <button 
             @click="emit('close')"
-            class="px-4 py-2 rounded-lg text-base font-medium ui-text-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none border-0"
+            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none"
           >
             Cancel
           </button>
           <button 
             @click="emit('delete')"
-            class="px-4 py-2 rounded-lg text-base font-bold text-white bg-red-600 hover:bg-red-700 shadow-md shadow-red-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 border-0"
+            class="px-3 py-2 rounded-lg text-xs font-bold ui-button-danger shadow-md shadow-red-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
           >
             Delete Forever
           </button>
