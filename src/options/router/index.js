@@ -3,6 +3,7 @@ import GeneralSettings from '../views/GeneralSettings.vue'
 import TempRules from '../views/TempRules.vue'
 import ProxyHostDetail from '../views/ProxyHostDetail.vue'
 import PolicyRuleDetail from '../views/PolicyRuleDetail.vue'
+import PacScriptDetail from '../views/PacScriptDetail.vue'
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
     path: '/policy/:id',
     name: 'PolicyRule',
     component: PolicyRuleDetail
+  },
+  {
+    path: '/pac/:id',
+    name: 'PacScript',
+    component: PacScriptDetail
   }
 ]
 

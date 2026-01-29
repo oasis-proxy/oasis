@@ -31,9 +31,9 @@
             <div class="d-flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
                 <i class="bi bi-exclamation-triangle-fill text-xl text-red-600 dark:text-red-400 shrink-0"></i>
                 <div>
-                    <p class="font-bold mb-1 text-slate-900 dark:text-slate-100">Warning: Destructive Action</p>
+                    <p class="font-bold mb-1 text-red-600 dark:text-red-400">Warning: Destructive Action</p>
                     <p class="opacity-90 leading-relaxed m-0">
-                        Are you sure you want to delete <span class="font-bold underline">{{ proxyName }}</span>? 
+                        Are you sure you want to delete <span class="font-bold underline text-slate-900 dark:text-white">{{ proxyName }}</span>? 
                         This action cannot be undone and will permanently remove this proxy configuration.
                     </p>
                 </div>

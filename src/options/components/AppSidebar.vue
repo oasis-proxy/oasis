@@ -98,7 +98,7 @@
           <router-link 
             v-for="rule in policyRules" 
             :key="rule.id"
-            :to="`/policy/${rule.id}`"
+            :to="rule.type === 'pac' ? `/pac/${rule.id}` : `/policy/${rule.id}`"
             custom 
             v-slot="{ navigate, isActive }"
           >

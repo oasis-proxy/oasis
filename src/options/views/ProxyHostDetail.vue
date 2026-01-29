@@ -47,20 +47,20 @@
               </button>
               
               <!-- Dropdown Menu -->
-              <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-lg overflow-hidden mt-1 p-1 bg-white dark:bg-slate-800 ring-1 ring-slate-200 dark:ring-slate-700" style="min-width: 140px;">
+              <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                   <li>
-                    <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary hover:bg-slate-50 dark:hover:bg-white/5 rounded-md transition-colors d-flex align-items-center gap-2">
+                    <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
                         <i class="bi bi-pencil text-slate-400"></i> Rename
                     </button>
                   </li>
                   <li>
-                    <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary hover:bg-slate-50 dark:hover:bg-white/5 rounded-md transition-colors d-flex align-items-center gap-2">
+                    <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
                         <i class="bi bi-files text-slate-400"></i> Clone
                     </button>
                   </li>
-                  <li><hr class="dropdown-divider my-1 border-slate-100 dark:border-white/5"></li>
+                  <li><hr class="dropdown-divider my-1 border-slate-100 dark:border-divider-dark"></li>
                   <li>
-                    <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-md transition-colors d-flex align-items-center gap-2">
+                    <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-red-600 dark:text-red-400 rounded-md transition-colors d-flex align-items-center gap-2">
                         <i class="bi bi-trash"></i> Delete
                     </button>
                   </li>

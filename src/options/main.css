@@ -35,6 +35,7 @@ body {
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
   -webkit-font-smoothing: antialiased;
+  min-width: 1200px; /* Enforce minimum page width */
 }
 
 /* Semantic Classes for Sidebar Navigation */
@@ -422,3 +423,22 @@ ul { padding: 0; margin: 0; list-style: none; }
 /* Sizing */
 /* .max-w-full replaced by .mw-100 */
 .h-8 { height: 2rem !important; }
+
+/* Dropdown Menu - Dark Mode */
+.dark .dropdown-menu {
+  background-color: #1e1e1e !important; /* sidebar-dark */
+  border: 1px solid #333333 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+}
+.dark .dropdown-item {
+  color: #cbd5e1 !important; /* slate-300 */
+}
+.dark .dropdown-item:hover, 
+.dark .dropdown-item:focus,
+.dark .dropdown-item:active {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+}
+.dark .dropdown-divider {
+  border-top-color: #333333 !important;
+}

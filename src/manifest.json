@@ -19,5 +19,14 @@
       "js": ["src/content/index.js"]
     }
   ],
-  "permissions": ["proxy", "storage", "alarms"]
+  "permissions": [
+    "alarms",
+    "contextMenus",
+    "downloads",
+    "webRequest",
+    "webRequestAuthProvider",
+    "unlimitedStorage",
+    "storage",
+    "proxy"],
+  "host_permissions": ["*://*/*"]
 }
