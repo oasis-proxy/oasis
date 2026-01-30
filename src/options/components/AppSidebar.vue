@@ -75,7 +75,7 @@
                 class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors border group"
                 :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
              >
-                <i :class="['bi text-base', host.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: host.color ? host.color : undefined }"></i>
+                <i :class="['bi text-base', host.icon, (isActive || host.color) ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: host.color ? host.color : undefined }"></i>
                 <span class="text-xs">{{ host.name }}</span>
                 <span v-if="host.status" :class="['ml-auto w-2 h-2 rounded-full', host.statusColor]"></span>
              </button>
@@ -107,7 +107,7 @@
                 class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors border group"
                 :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
              >
-                <i :class="['bi text-base', rule.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: rule.color ? rule.color : undefined }"></i>
+                <i :class="['bi text-base', rule.icon, (isActive || rule.color) ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: rule.color ? rule.color : undefined }"></i>
                 <span class="text-xs">{{ rule.name }}</span>
              </button>
           </router-link>
@@ -169,6 +169,7 @@ const policyRules = computed(() => {
                 id: pac.id,
                 name: pac.name || pac.url || 'Unnamed PAC', // Support 'name' property
                 icon: 'bi-file-earmark-code', // Distinct icon for PAC
+                color: pac.color,
                 type: 'pac'
             })
         })
@@ -181,6 +182,7 @@ const policyRules = computed(() => {
                 id: policy.id,
                 name: policy.name || policy.id, // Support 'name' property
                 icon: 'bi-diagram-3',
+                color: policy.color,
                 type: 'policy'
             })
         })
@@ -224,7 +226,8 @@ const handleCreateProxy = async ({ name }) => {
         host: '',
         port: null,
         auth: null,
-        bypassList: []
+        bypassList: [],
+        color: '#137fec' // Default Primary Blue
     }
 
     await saveProxies(latestConfig.proxies)
@@ -250,7 +253,8 @@ const handleCreatePolicy = async ({ name, type }) => {
         latestConfig.pacs[id] = {
             id: id,
             name: name, // Saving the user-provided name
-            url: '' 
+            url: '',
+            color: '#8b5cf6' // violet-500
         }
     } else {
         if (!latestConfig.policies || typeof latestConfig.policies !== 'object') latestConfig.policies = {}
@@ -258,7 +262,8 @@ const handleCreatePolicy = async ({ name, type }) => {
             id: id,
             name: name, // Saving the user-provided name
             defaultProfileId: 'direct',
-            rules: []
+            rules: [],
+            color: '#10b981' // emerald-500
         }
     }
 
