@@ -10,7 +10,7 @@
            <input 
              type="color" 
              v-model="proxy.color"
-             class="border-0 p-0 rounded-full overflow-hidden cursor-pointer transition-transform hover:scale-110 shadow-sm"
+             class="border-0 p-0 rounded-lg overflow-hidden cursor-pointer transition-transform hover:scale-110 shadow-sm"
              style="width: 24px; height: 24px; background: none;"
              title="Choose color"
            />
@@ -58,7 +58,7 @@
                         <i class="bi bi-files text-slate-400"></i> Clone
                     </button>
                   </li>
-                  <li><hr class="dropdown-divider my-1 border-slate-100 dark:border-divider-dark"></li>
+                  <li><hr class="dropdown-divider my-1 border-slate-200 dark:border-divider-dark"></li>
                   <li>
                     <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-red-600 dark:text-red-400 rounded-md transition-colors d-flex align-items-center gap-2">
                         <i class="bi bi-trash"></i> Delete
@@ -373,9 +373,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '../router'
 import { loadConfig, saveProxies } from '../../common/storage'
+import { toast } from '../utils/toast'
 import ProxyRenameModal from '../components/ProxyRenameModal.vue'
 import ProxyCloneModal from '../components/ProxyCloneModal.vue'
 import ProxyDeleteModal from '../components/ProxyDeleteModal.vue'
@@ -516,6 +518,22 @@ watch(() => route.params.id, (newId, oldId) => {
   }
 })
 
+// Register unsaved changes checker
+onMounted(() => {
+  registerUnsavedChangesChecker(() => {
+    if (isDirty.value) {
+      toast.warning('You have unsaved changes. Please save or reset before leaving.')
+      return true  // Has unsaved changes
+    }
+    return false  // No unsaved changes
+  })
+})
+
+// Unregister on unmount
+onBeforeUnmount(() => {
+  unregisterUnsavedChangesChecker()
+})
+
 
 const resetChanges = () => {
   loadProxyData()
@@ -544,24 +562,32 @@ const saveChanges = async () => {
   // Save Proxies only
   await saveProxies(config.value.proxies)
   
+  toast.success('Proxy saved successfully')
+  
   // Reload
   await loadProxyData()
-
-  // Show success feedback if needed
 }
 
 // --- Action Handlers ---
 
 const openRenameModal = () => {
-    showRenameModal.value = true
+  if (isDirty.value) {
+    toast.warning('Please save or reset your changes before renaming')
+    return
+  }
+  showRenameModal.value = true
 }
 
 const openCloneModal = () => {
-    showCloneModal.value = true
+  if (isDirty.value) {
+    toast.warning('Please save or reset your changes before cloning')
+    return
+  }
+  showCloneModal.value = true
 }
 
 const openDeleteModal = () => {
-    showDeleteModal.value = true
+  showDeleteModal.value = true
 }
 
 const handleRename = async (newName) => {
@@ -572,6 +598,7 @@ const handleRename = async (newName) => {
   
   // Save
   await saveProxies(config.value.proxies)
+  toast.success('Proxy renamed successfully')
   await loadProxyData()
   showRenameModal.value = false
 }
@@ -592,6 +619,8 @@ const handleClone = async (newName) => {
   // Save
   await saveProxies(config.value.proxies)
   
+  toast.success('Proxy cloned successfully')
+  
   // Navigate to new proxy
   router.push(`/host/${newId}`)
   showCloneModal.value = false
@@ -605,6 +634,8 @@ const handleDelete = async () => {
   
   // Save
   await saveProxies(config.value.proxies)
+  
+  toast.success('Proxy deleted successfully')
   
   // Navigate away
   router.push('/settings')

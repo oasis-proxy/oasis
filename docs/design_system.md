@@ -105,6 +105,11 @@
   - Class: `.settings-button-secondary`
   - Size: `px-3 py-2 text-xs font-medium`
   - Style: `border rounded-lg`
+- **Tertiary (Add Actions)**:
+  - Class: `.ui-button-tertiary`
+  - Size: `px-2.5 py-1.5 text-[11px] font-medium` (smaller than primary/secondary)
+  - Style: `bg-primary/10 no-border rounded-lg`
+  - Usage: "Add Rule", "Add Item" buttons
 - **Danger (Delete/Clear)**:
   - Class: `.settings-button-danger`
 - **Dashed (Add New)**:
@@ -133,10 +138,135 @@
   - Width: `w-100` with `max-width` constraint (e.g. 480px, 600px)
 - **Header**:
   - Padding: `p-4`
-  - Title: `text-xl font-semibold ui-text-primary`
+  - Title: `.ui-modal-title` (18px, font-semibold, ui-text-primary)
 - **Body**:
   - Padding: `px-4`
   - Spacing: `gap-3` (vertical stack)
 - **Footer**:
   - Padding: `p-4`
   - Alignment: `d-flex justify-content-end gap-3`
+
+## 10. Toast Notifications
+
+**Component**: `src/options/components/Toast.vue`  
+**Utility**: `src/options/utils/toast.js`
+
+### Design Specifications
+
+- **Position**: Fixed, top-right corner
+  - `top: 80px` (below header)
+  - `right: 24px`
+  - `z-index: 9999`
+- **Size**:
+  - `min-width: 320px`
+  - `max-width: 480px`
+- **Styling**:
+  - Background: `var(--ui-card-bg)`
+  - Border: `1px solid var(--ui-border)` + 3px colored left border
+  - Border Radius: `12px`
+  - Shadow: `0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08)`
+  - Backdrop Filter: `blur(10px)`
+  - Padding: `14px 16px`
+
+### Toast Types
+
+| Type    | Color     | Icon                           | Border Color |
+| ------- | --------- | ------------------------------ | ------------ |
+| Success | `#10b981` | `bi-check-circle-fill`         | Green        |
+| Error   | `#ef4444` | `bi-exclamation-circle-fill`   | Red          |
+| Warning | `#f59e0b` | `bi-exclamation-triangle-fill` | Amber        |
+| Info    | `#3b82f6` | `bi-info-circle-fill`          | Blue         |
+
+### Animation
+
+- **Enter**: Slide from right + scale up
+- **Leave**: Slide to right + scale down
+- **Duration**: 300ms
+- **Easing**: `cubic-bezier(0.4, 0, 0.2, 1)`
+
+### Usage
+
+```javascript
+import { toast } from '@/options/utils/toast'
+
+// Quick methods
+toast.success('Changes saved successfully')
+toast.error('Failed to save changes')
+toast.warning('You have unsaved changes')
+toast.info('Loading data...')
+```
+
+---
+
+**Last Updated**: 2026-01-30
+
+## Sidebar Component
+
+**Component**: `src/options/components/AppSidebar.vue`
+
+### Layout
+
+- **Width**: `w-72` (288px, fixed)
+- **Background**: `bg-slate-50` / `dark:bg-sidebar-dark`
+- **Border**: `border-r border-slate-200` / `dark:border-divider-dark`
+
+### Logo/Brand Section
+
+- **Height**: `h-24` (96px)
+- **Padding**: `px-4`
+- **Border**: `border-b border-slate-100` / `dark:border-divider-dark`
+- **Logo Icon**: `32x32px`, `bg-primary`, `rounded-lg`, icon size `text-base` (16px)
+- **Title**: `text-base` (16px), `font-bold`
+
+### Navigation Section
+
+- **Padding**: `p-3`
+- **Gap between groups**: `gap-4`
+- **Scrollable**: `overflow-y-auto custom-scrollbar`
+
+### Section Headers
+
+- **Text**: `text-xs` (12px), `font-semibold`, `uppercase`, `tracking-wider`
+- **Color**: `text-slate-400` / `dark:text-slate-500`
+- **Padding**: `px-2 mb-2`
+
+### Navigation Items
+
+- **Padding**: `px-3 py-2`
+- **Border Radius**: `rounded-lg`
+- **Gap**: `gap-2` (0.5rem / 8px)
+- **Icon Size**: `text-base` (16px)
+- **Text Size**: `text-xs` (12px) ← Updated from 14px
+- **Active State**: `nav-item-active`, `text-primary`, `font-medium`, `shadow-sm`
+- **Inactive State**: `text-slate-600` / `dark:text-slate-400`
+- **Hover**: `nav-item-hover`
+
+### Add Buttons (+ icons)
+
+- **Size**: `ui-button-icon`
+- **Icon Size**: `text-xs` (12px) ← Updated from 14px
+- **Position**: Right side of section header
+
+### Status Indicators
+
+- **Size**: `w-2 h-2` (8px)
+- **Shape**: `rounded-full`
+- **Position**: `ml-auto`
+
+---
+
+## 11. Button Border Specifications
+
+- **Primary Button**: No border ().
+- **Secondary Button**:
+  - **Light Mode**: 1px solid slate-300 (`#cbd5e1`).
+  - **Dark Mode**: No visible border (`border-color: transparent`).
+- **Tertiary / Icon Button**: No border.
+
+## 11. Button Border Specifications
+
+- **Primary Button**: No border (`border: none`).
+- **Secondary Button**:
+  - **Light Mode**: 1px solid slate-300 (`#cbd5e1`).
+  - **Dark Mode**: No visible border (`border-color: transparent`).
+- **Tertiary / Icon Button**: No border.

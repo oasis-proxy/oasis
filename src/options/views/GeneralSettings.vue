@@ -13,18 +13,14 @@
         
         <!-- Basic Configuration -->
         <section>
-          <h3 class="text-sm font-semibold ui-label mb-4 d-flex align-items-center gap-2 m-0">
-            <i class="bi bi-sliders text-primary text-[20px]"></i>
+          <h3 class="text-sm font-semibold ui-label mb-4 m-0">
             Basic Configuration
           </h3>
           <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-slate-700 shadow-sm transition-colors">
             
             <!-- Theme Style -->
             <div class="d-flex align-items-center justify-content-between px-4 pt-4 pb-3 hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
-              <div class="d-flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-blue d-flex align-items-center justify-content-center">
-                  <i class="bi bi-palette text-[22px]"></i>
-                </div>
+              <div class="d-flex items-start">
                 <div>
                   <p class="text-sm font-medium ui-text-primary m-0">Theme Style</p>
                   <p class="text-xs ui-text-secondary mt-0.5 m-0">Choose your preferred visual theme.</p>
@@ -37,10 +33,7 @@
 
             <!-- Update Cycle -->
             <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
-              <div class="d-flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-indigo d-flex align-items-center justify-content-center">
-                  <i class="bi bi-arrow-repeat text-[22px]"></i>
-                </div>
+              <div class="d-flex items-start">
                 <div>
                   <p class="text-sm font-medium ui-text-primary m-0">External Policy Update Cycle</p>
                   <p class="text-xs ui-text-secondary mt-0.5 m-0">Frequency of checking for policy updates.</p>
@@ -53,10 +46,7 @@
 
             <!-- Auto Refresh -->
             <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
-              <div class="d-flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-green d-flex align-items-center justify-content-center">
-                  <i class="bi bi-arrow-clockwise text-[22px]"></i>
-                </div>
+              <div class="d-flex items-start">
                 <div>
                   <p class="text-sm font-medium ui-text-primary m-0">Auto Refresh</p>
                   <p class="text-xs ui-text-secondary mt-0.5 m-0">Automatically refresh connections when idle.</p>
@@ -69,10 +59,7 @@
 
             <!-- Auto Sync -->
              <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
-              <div class="d-flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-purple d-flex align-items-center justify-content-center">
-                  <i class="bi bi-cloud-arrow-down text-[22px]"></i>
-                </div>
+              <div class="d-flex items-start">
                 <div>
                   <p class="text-sm font-medium ui-text-primary m-0">Auto Sync</p>
                   <p class="text-xs ui-text-secondary mt-0.5 m-0">Synchronize settings across devices automatically.</p>
@@ -85,10 +72,7 @@
 
             <!-- Maintenance -->
             <div class="d-flex align-items-center justify-content-between px-4 pt-3 pb-4 hover:bg-slate-50/50 transition-colors">
-              <div class="d-flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-orange d-flex align-items-center justify-content-center">
-                  <i class="bi bi-tools text-[22px]"></i>
-                </div>
+              <div class="d-flex items-start">
                 <div>
                   <p class="text-sm font-medium ui-text-primary m-0">Maintenance</p>
                   <p class="text-xs ui-text-secondary mt-0.5 m-0">Manage configuration data.</p>
@@ -111,18 +95,14 @@
 
         <!-- Advanced Configuration -->
         <section>
-          <h3 class="text-sm font-semibold ui-label mb-4 d-flex align-items-center gap-2 m-0">
-             <i class="bi bi-terminal text-primary text-[20px]"></i>
+          <h3 class="text-sm font-semibold ui-label mb-4 m-0">
             Advanced Configuration
           </h3>
           <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-slate-700 shadow-sm">
             
             <!-- Reject Address -->
             <div class="d-flex align-items-center justify-content-between px-4 pt-4 pb-3 hover:bg-slate-50/50 transition-colors">
-              <div class="d-flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-red d-flex align-items-center justify-content-center">
-                  <i class="bi bi-slash-circle text-[22px]"></i>
-                </div>
+              <div class="d-flex items-start">
                 <div>
                   <p class="text-sm font-medium ui-text-primary m-0">Reject Address</p>
                   <p class="text-xs ui-text-secondary mt-0.5 m-0">Connections to this address will be dropped immediately.</p>
@@ -133,10 +113,7 @@
 
              <!-- Connection Monitoring -->
             <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
-              <div class="d-flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-teal d-flex align-items-center justify-content-center">
-                  <i class="bi bi-activity text-[22px]"></i>
-                </div>
+              <div class="d-flex items-start">
                 <div>
                   <p class="text-sm font-medium ui-text-primary m-0">Connection Monitoring</p>
                   <p class="text-xs ui-text-secondary mt-0.5 m-0">Monitor and log connection attempts.</p>
@@ -149,10 +126,7 @@
 
             <!-- Context Menu -->
              <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
-              <div class="d-flex items-start gap-4">
-                <div class="p-2 rounded-lg ui-icon-pink d-flex align-items-center justify-content-center">
-                  <i class="bi bi-menu-button-wide text-[22px]"></i>
-                </div>
+              <div class="d-flex items-start">
                 <div>
                   <p class="text-sm font-medium ui-text-primary m-0">Context Menu</p>
                   <p class="text-xs ui-text-secondary mt-0.5 m-0">Show proxy options in the browser right-click menu.</p>
@@ -166,10 +140,7 @@
             <!-- IP Tags -->
              <div class="px-4 pt-3 pb-4 hover:bg-slate-50/50 transition-colors">
                  <div class="d-flex align-items-center justify-content-between mb-4">
-                    <div class="d-flex items-start gap-4">
-                        <div class="p-2 rounded-lg ui-icon-gray d-flex align-items-center justify-content-center">
-                            <i class="bi bi-tag text-[22px]"></i>
-                        </div>
+                    <div class="d-flex items-start">
                         <div>
                             <p class="text-sm font-medium ui-text-primary m-0">IP Tags</p>
                             <p class="text-xs ui-text-secondary mt-0.5 m-0">Assign friendly names to IP addresses.</p>

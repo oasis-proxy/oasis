@@ -4,7 +4,7 @@
     <div class="h-24 d-flex align-items-center px-4 border-b border-slate-100 dark:border-divider-dark transition-colors">
       <div class="d-flex align-items-center gap-3 text-slate-900 dark:text-white">
         <div class="size-8 bg-primary rounded-lg d-flex align-items-center justify-content-center text-white shadow-lg shadow-primary/30" style="width: 32px; height: 32px;">
-          <i class="bi bi-router text-[20px]"></i>
+          <i class="bi bi-router text-base"></i>
         </div>
         <h1 class="text-base font-bold tracking-tight m-0">Oasis Proxy</h1>
       </div>
@@ -26,11 +26,11 @@
           >
             <button 
               @click="navigate"
-              class="w-100 d-flex align-items-center gap-3 px-3 py-2 rounded-lg transition-all border group"
+              class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-all border group"
               :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
             >
-              <i class="bi bi-gear text-[20px]"></i>
-              <span class="text-sm">General Settings</span>
+              <i class="bi bi-gear text-base"></i>
+              <span class="text-xs">General Settings</span>
             </button>
           </router-link>
 
@@ -41,11 +41,11 @@
           >
             <button 
                @click="navigate"
-               class="w-100 d-flex align-items-center gap-3 px-3 py-2 rounded-lg transition-colors border group"
+               class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors border group"
                :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
             >
-              <i class="bi bi-clock-history text-[20px]"></i>
-              <span class="text-sm">Temporary Rules</span>
+              <i class="bi bi-clock-history text-base"></i>
+              <span class="text-xs">Temporary Rules</span>
             </button>
           </router-link>
         </div>
@@ -59,7 +59,7 @@
             @click="showProxyModal = true"
             class="ui-button-icon"
           >
-            <i class="bi bi-plus text-[14px]"></i>
+            <i class="bi bi-plus text-xs"></i>
           </button>
         </div>
         <div class="d-flex flex-column gap-1">
@@ -72,11 +72,11 @@
           >
              <button 
                 @click="navigate"
-                class="w-100 d-flex align-items-center gap-3 px-3 py-2 rounded-lg transition-colors border group"
+                class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors border group"
                 :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
              >
-                <i :class="['bi text-[20px]', host.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: host.color ? host.color : undefined }"></i>
-                <span class="text-sm">{{ host.name }}</span>
+                <i :class="['bi text-base', host.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: host.color ? host.color : undefined }"></i>
+                <span class="text-xs">{{ host.name }}</span>
                 <span v-if="host.status" :class="['ml-auto w-2 h-2 rounded-full', host.statusColor]"></span>
              </button>
           </router-link>
@@ -91,7 +91,7 @@
             @click="showPolicyModal = true"
             class="ui-button-icon"
           >
-            <i class="bi bi-plus text-[14px]"></i>
+            <i class="bi bi-plus text-xs"></i>
           </button>
         </div>
         <div class="d-flex flex-column gap-1">
@@ -104,11 +104,11 @@
           >
              <button 
                 @click="navigate"
-                class="w-100 d-flex align-items-center gap-3 px-3 py-2 rounded-lg transition-colors border group"
+                class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors border group"
                 :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
              >
-                <i :class="['bi text-[20px]', rule.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']"></i>
-                <span class="text-sm">{{ rule.name }}</span>
+                <i :class="['bi text-base', rule.icon, isActive ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: rule.color ? rule.color : undefined }"></i>
+                <span class="text-xs">{{ rule.name }}</span>
              </button>
           </router-link>
         </div>
@@ -136,6 +136,8 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { loadConfig, saveProxies, savePolicies, savePacs } from '../../common/storage'
+import { hasUnsavedChanges } from '../router'
+import { toast } from '../utils/toast'
 import PolicyCreationModal from './PolicyCreationModal.vue'
 import ProxyCreationModal from './ProxyCreationModal.vue'
 
@@ -203,6 +205,12 @@ onMounted(() => {
 })
 
 const handleCreateProxy = async ({ name }) => {
+    // Check for unsaved changes
+    const unsaved = hasUnsavedChanges()
+    if (unsaved) {
+        return // Toast already shown
+    }
+    
     const latestConfig = await loadConfig()
     const id = `proxy_${Date.now()}`
     
@@ -220,11 +228,18 @@ const handleCreateProxy = async ({ name }) => {
     }
 
     await saveProxies(latestConfig.proxies)
+    toast.success('Proxy host created successfully')
     showProxyModal.value = false
     router.push(`/host/${id}`)
 }
 
 const handleCreatePolicy = async ({ name, type }) => {
+    // Check for unsaved changes
+    const unsaved = hasUnsavedChanges()
+    if (unsaved) {
+        return // Toast already shown
+    }
+    
     // Reload latest config to ensure atomicity-ish
     const latestConfig = await loadConfig()
     // Simple ID generation - in real app might want UUID or check collision
@@ -249,8 +264,10 @@ const handleCreatePolicy = async ({ name, type }) => {
 
     if (type === 'pac') {
        await savePacs(latestConfig.pacs)
+       toast.success('PAC script created successfully')
     } else {
        await savePolicies(latestConfig.policies)
+       toast.success('Policy created successfully')
     }
     
     // Navigation

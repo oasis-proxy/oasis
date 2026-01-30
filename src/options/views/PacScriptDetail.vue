@@ -6,6 +6,13 @@
       <!-- Header / Actions -->
       <div class="d-flex align-items-center justify-content-between w-100">
         <div class="d-flex align-items-center gap-3">
+           <input 
+             type="color" 
+             v-model="pac.color"
+             class="p-0 border-0 rounded-lg overflow-hidden shadow-sm cursor-pointer transition-transform hover:scale-110"
+             style="width: 24px; height: 24px; min-width: 24px;"
+             title="Choose color"
+           />
            <h1 class="text-[22px] font-bold ui-text-primary tracking-tight m-0">{{ pac.name || pac.url || 'Unnamed PAC' }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
@@ -50,7 +57,7 @@
                         <i class="bi bi-files text-slate-400"></i> Clone
                     </button>
                   </li>
-                  <li><hr class="dropdown-divider my-1 border-slate-100 dark:border-divider-dark"></li>
+                  <li><hr class="dropdown-divider my-1 border-slate-200 dark:border-divider-dark"></li>
                   <li>
                     <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-red-600 dark:text-red-400 rounded-md transition-colors d-flex align-items-center gap-2">
                         <i class="bi bi-trash"></i> Delete
@@ -76,7 +83,6 @@
              <!-- Header -->
              <div class="px-4 pt-4 pb-3 border-b border-slate-100 dark:border-divider-dark">
                 <h3 class="text-sm font-medium ui-text-primary d-flex align-items-center gap-2 mb-1">
-                  <i class="bi bi-globe text-primary"></i>
                   <span>PAC Source</span>
                 </h3>
                 <p class="text-xs ui-text-secondary m-0">Choose how the PAC script is sourced and updated.</p>
@@ -121,7 +127,7 @@
 
                     <!-- Refresh Button (2) -->
                     <div class="col-span-2 d-flex flex-column justify-content-end">
-                       <button @click="fetchPacContent" class="w-100 px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors d-flex align-items-center justify-content-center gap-1 text-xs font-medium h-8">
+                       <button @click="fetchPacContent" class="w-100 px-3 py-1 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none d-flex align-items-center justify-content-center gap-1 h-8">
                            <i class="bi bi-arrow-clockwise"></i> Refresh
                        </button>
                     </div>
@@ -151,7 +157,7 @@
         <!-- Script Content -->
         <section class="d-flex flex-column" style="height: 600px;">
             <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden d-flex flex-column h-100 w-100 flex-1">
-                <div class="px-4 py-3 border-b border-slate-100 dark:border-divider-dark d-flex align-items-center justify-content-between bg-slate-50 dark:bg-slate-800/50">
+                <div class="px-4 py-3 border-b border-slate-100 dark:border-divider-dark d-flex align-items-center justify-content-between bg-slate-50 dark:bg-slate-800">
                     <div>
                         <h3 class="text-sm font-semibold ui-text-primary d-flex align-items-center gap-2 m-0">
                             <i class="bi bi-file-earmark-code text-primary"></i>
@@ -169,7 +175,7 @@
                     <textarea 
                         v-model="pac.script"
                         :readonly="pac.mode === 'remote'"
-                        class="form-control w-100 h-100 p-4 font-mono text-xs leading-relaxed bg-white dark:bg-background-dark ui-text-primary border-0 focus:ring-0 resize-none rounded-0"
+                        class="form-control w-100 h-100 p-4 font-mono text-xs leading-relaxed custom-scrollbar bg-white dark:bg-background-dark ui-text-primary border-0 focus:ring-0 resize-none rounded-0"
                         spellcheck="false"
                         placeholder="function FindProxyForURL(url, host) { ... }"
                     ></textarea>
@@ -207,6 +213,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { loadConfig, savePacs } from '../../common/storage'
+import { toast } from '../utils/toast'
 import ProxyRenameModal from '../components/ProxyRenameModal.vue'
 import ProxyCloneModal from '../components/ProxyCloneModal.vue'
 import ProxyDeleteModal from '../components/ProxyDeleteModal.vue'
@@ -232,6 +239,7 @@ const loadPacData = async () => {
         if (!pac.value.updateInterval) pac.value.updateInterval = 720
         if (!pac.value.url) pac.value.url = ''
         if (!pac.value.script) pac.value.script = ''
+        if (!pac.value.color) pac.value.color = '#8b5cf6' // violet-500
 
         originalPac.value = JSON.parse(JSON.stringify(pac.value))
     } else {
@@ -267,19 +275,38 @@ const saveChanges = async () => {
     // Persist
     await savePacs(config.value.pacs)
     
+    toast.success('PAC script saved successfully')
+    
     // Refresh
     await loadPacData()
 }
 
 // Modal Handlers
-const openRenameModal = () => showRenameModal.value = true
-const openCloneModal = () => showCloneModal.value = true
-const openDeleteModal = () => showDeleteModal.value = true
+const openRenameModal = () => {
+  if (isDirty.value) {
+    toast.warning('Please save or reset your changes before renaming')
+    return
+  }
+  showRenameModal.value = true
+}
+
+const openCloneModal = () => {
+  if (isDirty.value) {
+    toast.warning('Please save or reset your changes before cloning')
+    return
+  }
+  showCloneModal.value = true
+}
+
+const openDeleteModal = () => {
+  showDeleteModal.value = true
+}
 
 const handleRename = async (newName) => {
     if (!pac.value || !config.value) return
     config.value.pacs[pac.value.id].name = newName
     await savePacs(config.value.pacs)
+    toast.success('PAC script renamed successfully')
     await loadPacData()
     showRenameModal.value = false
 }
@@ -292,6 +319,7 @@ const handleClone = async (newName) => {
     newPac.name = newName
     config.value.pacs[newId] = newPac
     await savePacs(config.value.pacs)
+    toast.success('PAC script cloned successfully')
     router.push(`/pac/${newId}`)
     showCloneModal.value = false
 }
@@ -300,6 +328,7 @@ const handleDelete = async () => {
     if (!pac.value || !config.value) return
     delete config.value.pacs[pac.value.id]
     await savePacs(config.value.pacs)
+    toast.success('PAC script deleted successfully')
     router.push('/settings')
     showDeleteModal.value = false
 }

@@ -42,4 +42,39 @@ const router = createRouter({
   routes
 })
 
+// Global navigation guard to prevent leaving pages with unsaved changes
+let checkUnsavedChanges = null
+
+// Export function to register unsaved changes checker
+export function registerUnsavedChangesChecker(checker) {
+  checkUnsavedChanges = checker
+}
+
+// Export function to unregister checker
+export function unregisterUnsavedChangesChecker() {
+  checkUnsavedChanges = null
+}
+
+// Export function to check if there are unsaved changes (renamed to avoid conflict)
+export function hasUnsavedChanges() {
+  if (checkUnsavedChanges && typeof checkUnsavedChanges === 'function') {
+    return checkUnsavedChanges()
+  }
+  return false
+}
+
+router.beforeEach((to, from, next) => {
+  // Check if current page has unsaved changes
+  if (checkUnsavedChanges && typeof checkUnsavedChanges === 'function') {
+    const hasUnsaved = checkUnsavedChanges()
+    if (hasUnsaved) {
+      // Block navigation
+      next(false)
+      return
+    }
+  }
+  // Allow navigation
+  next()
+})
+
 export default router

@@ -1,0 +1,32 @@
+[AutoProxy 0.2.9]
+! Title: Comments and Formatting Test
+! Description: Tests comment handling and empty lines
+! Last Modified: 2026-01-30
+! Author: Test Suite
+! This is a multi-line comment
+! that should be completely ignored
+
+||example.com
+
+! ===== Section 1 =====
+! This section has comments
+
+||test.com
+! Inline comment after rule
+
+! ===== Section 2 =====
+
+
+! Empty lines above and below should be ignored
+
+
+||demo.org
+
+! Multiple consecutive comments
+! Line 1
+! Line 2
+! Line 3
+
+||final.net
+
+! End of file comment

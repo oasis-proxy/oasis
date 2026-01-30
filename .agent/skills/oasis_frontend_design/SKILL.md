@@ -46,9 +46,57 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 
 ### 2.1 Sidebar (Options Page)
 
-- Width: `w-72` (Fixed).
-- Styles: `bg-slate-50 border-r border-slate-200`.
-- Navigation Items: Rounded corners, hover effects (`hover:bg-slate-100`), active state (`bg-white shadow-sm border-slate-100 text-primary`).
+**Component**: `src/options/components/AppSidebar.vue`
+
+**Layout**:
+
+- Width: `w-72` (288px, fixed)
+- Background: `bg-slate-50` / `dark:bg-sidebar-dark`
+- Border: `border-r border-slate-200` / `dark:border-divider-dark`
+
+**Logo/Brand Section**:
+
+- Height: `h-24` (96px)
+- Padding: `px-4`
+- Border: `border-b border-slate-100` / `dark:border-divider-dark`
+- Logo Icon: `32x32px`, `bg-primary`, `rounded-lg`
+- Logo Icon Size: `text-base` (16px)
+- Title: `text-base` (16px), `font-bold`
+
+**Navigation Section**:
+
+- Padding: `p-3`
+- Gap between groups: `gap-4`
+- Scrollable: `overflow-y-auto custom-scrollbar`
+
+**Section Headers**:
+
+- Text: `text-xs` (12px), `font-semibold`, `uppercase`, `tracking-wider`
+- Color: `text-slate-400` / `dark:text-slate-500`
+- Padding: `px-2 mb-2`
+
+**Navigation Items**:
+
+- Padding: `px-3 py-2`
+- Border Radius: `rounded-lg`
+- **Gap: `gap-2` (0.5rem / 8px)**
+- **Icon Size: `text-base` (16px)**
+- **Text Size: `text-xs` (12px)**
+- Active State: `nav-item-active`, `text-primary`, `font-medium`, `shadow-sm`
+- Inactive State: `text-slate-600` / `dark:text-slate-400`
+- Hover: `nav-item-hover`
+
+**Add Buttons** (+ icons):
+
+- Size: `ui-button-icon`
+- **Icon Size: `text-xs` (12px)**
+- Position: Right side of section header
+
+**Status Indicators**:
+
+- Size: `w-2 h-2` (8px)
+- Shape: `rounded-full`
+- Position: `ml-auto`
 
 ### 2.2 Header
 
@@ -83,7 +131,9 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 #### Buttons
 
 - **Primary**: `.ui-button-primary` (`bg-primary text-white border-0`).
-- **Secondary (Default)**: `.ui-button-secondary` (`bg-white border border-slate-300 text-slate-600`).
+- **Secondary (Default)**: `.ui-button-secondary`.
+  - Light: `bg-white border border-slate-300 text-slate-600`.
+  - Dark: `bg-slate-700/800 border-transparent text-slate-300`.
 - **Danger**: `.ui-button-danger`
 - **Dashed (Add)**: `.ui-button-dashed` (`border-dashed w-full`)
 
@@ -171,3 +221,37 @@ The project uses standard CSS that _mimics_ Tailwind classes.
 
 - **No Manual Staging**: Do **NOT** automatically run `git add` or `git commit` after changes unless the user **EXPLICITLY** requests it.
 - **Usage**: Leave the staging area management to the user. Only modify the files and build.
+
+### 2.8 Toast Notifications
+
+**Component**: `src/options/components/Toast.vue`  
+**Utility**: `src/options/utils/toast.js`
+
+**Design Specifications**:
+
+- **Position**: Fixed, top-right (`top: 80px; right: 24px`)
+- **Size**: `min-width: 320px; max-width: 480px`
+- **Background**: `var(--ui-card-bg)` with backdrop blur
+- **Border**: `1px solid var(--ui-border)` + 3px colored left border
+- **Border Radius**: `12px`
+- **Shadow**: `0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08)`
+- **Padding**: `14px 16px`
+- **Animation**: Slide in from right with scale effect
+
+**Types & Colors**:
+
+- **Success**: `#10b981` (green) - `bi-check-circle-fill`
+- **Error**: `#ef4444` (red) - `bi-exclamation-circle-fill`
+- **Warning**: `#f59e0b` (amber) - `bi-exclamation-triangle-fill`
+- **Info**: `#3b82f6` (blue) - `bi-info-circle-fill`
+
+**Usage**:
+
+```javascript
+import { toast } from '@/options/utils/toast'
+
+toast.success('Changes saved successfully')
+toast.error('Failed to save changes')
+toast.warning('You have unsaved changes')
+toast.info('Loading data...')
+```

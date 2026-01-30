@@ -1,0 +1,38 @@
+[AutoProxy 0.2.9]
+! Title: Mixed Rule Types Test
+! Description: Tests different AutoProxy rule formats
+! Last Modified: 2026-01-30
+
+! ===== Domain Anchors =====
+! Should convert to wildcard patterns
+||example.com
+||test.org
+||demo.net
+
+! ===== URL Anchors =====
+! Should convert to regex patterns
+|https://api.example.com/v1/
+|http://cdn.test.org/assets/
+
+! ===== Regex Patterns =====
+! Should preserve as regex
+/^https?:\/\/.*\.cdn\.example\.com\//
+/\.m3u8$/
+/\/api\/v[0-9]+\//
+
+! ===== Wildcard Patterns =====
+! Should convert to wildcard type
+*analytics*
+*tracking*
+*advertisement*
+
+! ===== Keyword Matches =====
+! Should convert to wildcard patterns
+ads
+tracker
+banner
+popup
+
+! ===== Path-based Rules =====
+||example.com/api/*
+||test.org/cdn/

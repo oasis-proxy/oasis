@@ -16,7 +16,7 @@
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <h3 class="text-[20px] font-semibold leading-tight tracking-tight text-red-600 dark:text-red-400 m-0">Delete Proxy Host</h3>
+          <h3 class="ui-modal-title tracking-tight text-red-600 dark:text-red-400 m-0">Delete Proxy Host</h3>
           <button 
             @click="emit('close')" 
             class="-mr-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"

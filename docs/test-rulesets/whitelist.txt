@@ -1,0 +1,21 @@
+[AutoProxy 0.2.9]
+! Title: Whitelist Test RuleSet
+! Description: Tests whitelist rules (currently skipped)
+! Last Modified: 2026-01-30
+
+! ===== Blacklist Rules =====
+! These should be processed
+||blocked-site.com
+||restricted-domain.org
+||censored-content.net
+
+! ===== Whitelist Rules =====
+! These should be skipped (not implemented yet)
+@@||allowed-exception.com
+@@||whitelisted-domain.org
+@@||bypass-proxy.net
+
+! ===== Mixed =====
+||another-blocked.com
+@@||another-exception.com
+||final-blocked.org

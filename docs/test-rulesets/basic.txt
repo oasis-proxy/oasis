@@ -1,0 +1,33 @@
+[AutoProxy 0.2.9]
+! Title: Basic Test RuleSet
+! Last Modified: 2026-01-30
+! Homepage: https://github.com/example/test-ruleset
+! Description: Basic test file with common domains
+
+! Google services
+||google.com
+||googleapis.com
+||gstatic.com
+||googleusercontent.com
+
+! Social media platforms
+||facebook.com
+||twitter.com
+||instagram.com
+||linkedin.com
+
+! Video streaming
+||youtube.com
+||youtu.be
+||vimeo.com
+||dailymotion.com
+
+! Cloud storage
+||dropbox.com
+||drive.google.com
+||onedrive.live.com
+
+! Developer resources
+||github.com
+||stackoverflow.com
+||npmjs.com

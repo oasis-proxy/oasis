@@ -16,7 +16,7 @@
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <h3 class="ui-text-primary text-[20px] font-semibold leading-tight tracking-tight m-0">Create New Policy</h3>
+          <h3 class="ui-text-primary ui-modal-title tracking-tight m-0">Create New Policy</h3>
           <button 
             @click="emit('close')" 
             class="-mr-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
@@ -58,8 +58,8 @@
                 <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="policy"/>
                 <span class="d-flex flex-1">
                   <span class="d-flex flex-column">
-                    <span class="block text-sm font-medium mb-1" :class="type === 'policy' ? 'text-primary' : 'ui-text-primary'">Auto Policy</span>
-                    <span class="mt-1 d-flex align-items-center text-sm ui-text-secondary">Flexible rule sets</span>
+                    <span class="block text-xs font-medium mb-1" :class="type === 'policy' ? 'text-primary' : 'ui-text-primary'">Auto Policy</span>
+                    <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">Flexible rule sets</span>
                   </span>
                 </span>
                 <i v-if="type === 'policy'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -73,8 +73,8 @@
                 <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="pac"/>
                 <span class="d-flex flex-1">
                   <span class="d-flex flex-column">
-                    <span class="block text-sm font-medium mb-1" :class="type === 'pac' ? 'text-primary' : 'ui-text-primary'">PAC Script</span>
-                    <span class="mt-1 d-flex align-items-center text-sm ui-text-secondary">Custom JS script</span>
+                    <span class="block text-xs font-medium mb-1" :class="type === 'pac' ? 'text-primary' : 'ui-text-primary'">PAC Script</span>
+                    <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">Custom JS script</span>
                   </span>
                 </span>
                 <i v-if="type === 'pac'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -107,9 +107,9 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted } from 'vue'
+import { ref, nextTick, watch, computed } from 'vue'
 
-defineProps({
+const props = defineProps({
   visible: Boolean
 })
 
@@ -119,19 +119,25 @@ const name = ref('')
 const type = ref('policy')
 const nameInput = ref(null)
 
-onMounted(() => {
+// Reset form when opening
+watch(() => props.visible, (newVal) => {
+  if (newVal) {
     name.value = ''
     type.value = 'policy'
-    
     nextTick(() => {
-       if (nameInput.value) {
-           nameInput.value.focus()
-       }
+      if (nameInput.value) {
+        nameInput.value.focus()
+      }
     })
+  }
+})
+
+const isValid = computed(() => {
+  return name.value.trim() !== ''
 })
 
 const handleConfirm = () => {
-    if (!name.value.trim()) return
+    if (!isValid.value) return
     emit('create', { name: name.value.trim(), type: type.value })
     emit('close')
 }

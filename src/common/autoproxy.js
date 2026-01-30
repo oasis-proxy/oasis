@@ -81,3 +81,77 @@ export function parseAutoProxyRules(content) {
 
   return rules;
 }
+
+/**
+ * Converts parsed AutoProxy rules to internal rule format.
+ * @param {Array<{pattern: string, type: string, isWhitelist: boolean}>} parsedRules
+ * @param {string} defaultRuleType - Default rule type to use ('wildcard', 'regex', etc.)
+ * @returns {Array<{ruleType: string, pattern: string}>}
+ */
+export function convertAutoProxyToInternalRules(parsedRules, defaultRuleType = 'wildcard') {
+  const internalRules = [];
+
+  for (const rule of parsedRules) {
+    // Skip whitelist rules for now (they would need special handling)
+    if (rule.isWhitelist) {
+      continue;
+    }
+
+    let ruleType = defaultRuleType;
+    let pattern = rule.pattern;
+
+    switch (rule.type) {
+      case 'regex':
+        ruleType = 'regex';
+        break;
+      case 'domain':
+        // Domain rules like ||example.com can be converted to wildcard
+        ruleType = 'wildcard';
+        // Convert domain to wildcard pattern
+        pattern = `*.${pattern}*`;
+        break;
+      case 'wildcard':
+        ruleType = 'wildcard';
+        break;
+      case 'keyword':
+        // Keywords can be treated as wildcard with * on both sides
+        ruleType = 'wildcard';
+        if (!pattern.includes('*')) {
+          pattern = `*${pattern}*`;
+        }
+        break;
+      case 'full_url_start':
+      case 'full_url_end':
+        // These need regex for proper matching
+        ruleType = 'regex';
+        if (rule.type === 'full_url_start') {
+          pattern = `^${escapeRegex(pattern)}`;
+        } else {
+          pattern = `${escapeRegex(pattern)}$`;
+        }
+        break;
+      default:
+        // Default to wildcard
+        ruleType = 'wildcard';
+        if (!pattern.includes('*')) {
+          pattern = `*${pattern}*`;
+        }
+    }
+
+    internalRules.push({
+      ruleType,
+      pattern
+    });
+  }
+
+  return internalRules;
+}
+
+/**
+ * Helper function to escape special regex characters.
+ * @param {string} str
+ * @returns {string}
+ */
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
