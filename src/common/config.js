@@ -51,36 +51,13 @@ export const DEFAULT_CONFIG = {
   // --- Profiles (Storage Keys: 'proxies', 'pacs', 'policies') ---
   
   // Map of Proxy Servers (Key: ID)
-  proxies: {
-    'default_proxy': {
-      id: 'default_proxy',
-      type: 'server',
-      label: 'Example Proxy',
-      scheme: ProxyProtocol.HTTP,
-      host: '127.0.0.1',
-      port: 7890,
-      auth: null,
-      bypassList: []
-    }
-  },
+  proxies: {},
 
   // Map of PAC Scripts (Key: ID)
-  pacs: {
-    'default_pac': {
-      id: 'default_pac',
-      url: '' 
-    }
-  },
+  pacs: {},
 
   // Map of Auto Policies (Key: ID)
-  policies: {
-    'default_policy': {
-      id: 'default_policy',
-      defaultProfileId: 'direct',
-      rules: [],
-      ruleSets: [] // Subscriptions
-    }
-  },
+  policies: {},
 
 
   // --- Singletons (Storage Keys: 'system', 'direct', 'reject') ---

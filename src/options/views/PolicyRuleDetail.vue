@@ -543,7 +543,7 @@ const loadPolicyData = async () => {
         if (!policy.value.color) {
             policy.value.color = '#10b981' // emerald-500
         }
-
+        
         originalPolicy.value = JSON.parse(JSON.stringify(policy.value))
     } else {
         router.push('/settings')

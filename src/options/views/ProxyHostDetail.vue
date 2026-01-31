@@ -382,10 +382,27 @@ import ProxyRenameModal from '../components/ProxyRenameModal.vue'
 import ProxyCloneModal from '../components/ProxyCloneModal.vue'
 import ProxyDeleteModal from '../components/ProxyDeleteModal.vue'
 
+// Safe default state factory
+const getEmptyProxyState = () => ({
+  id: '',
+  label: '',
+  scheme: 'http',
+  host: '',
+  port: null,
+  color: '#137fec',
+  auth: { username: '', password: '' },
+  bypassList: [],
+  overrides: {
+    http: { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' },
+    https: { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' },
+    ftp: { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
+  }
+})
+
 const route = useRoute()
 const router = useRouter()
 const config = ref(null)
-const proxy = ref(null) // Changed to null, will be populated by loadProxyData
+const proxy = ref(getEmptyProxyState()) // Initialize with safe default
 const originalProxy = ref(null) // For dirty state tracking
 const showRenameModal = ref(false)
 const showCloneModal = ref(false)
@@ -428,6 +445,8 @@ const validatePort = (obj, key) => {
   else if (val > 65535) obj[key] = 65535
   else obj[key] = val // Ensure integer
 }
+
+
 
 // Overrides Computed Properties
 const httpOverrideScheme = computed({
@@ -544,6 +563,14 @@ const saveChanges = async () => {
   // Clone proxy data to avoid breaking UI reactivity
   const payload = JSON.parse(JSON.stringify(proxy.value))
 
+  // Apply default port if missing
+  if (!payload.port) {
+      const scheme = payload.scheme
+      if (scheme === 'http') payload.port = 8080
+      else if (scheme === 'https') payload.port = 443
+      else if (['socks4', 'socks5'].includes(scheme)) payload.port = 1080
+  }
+
   // Clean up auth if empty
   if (payload.auth && !payload.auth.username && !payload.auth.password) {
     payload.auth = null
@@ -567,6 +594,8 @@ const saveChanges = async () => {
   // Reload
   await loadProxyData()
 }
+
+
 
 // --- Action Handlers ---
 

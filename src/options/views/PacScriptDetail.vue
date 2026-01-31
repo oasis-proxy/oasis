@@ -156,21 +156,14 @@
 
         <!-- Script Content -->
         <section class="d-flex flex-column" style="height: 600px;">
-            <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden d-flex flex-column h-100 w-100 flex-1">
-                <div class="px-4 py-3 border-b border-slate-100 dark:border-divider-dark d-flex align-items-center justify-content-between bg-slate-50 dark:bg-slate-800">
-                    <div>
-                        <h3 class="text-sm font-semibold ui-text-primary d-flex align-items-center gap-2 m-0">
-                            <i class="bi bi-file-earmark-code text-primary"></i>
-                            Script Content
-                        </h3>
-                    </div>
-                    <div>
-                    <div>
-                        <span v-if="pac.mode === 'remote'" class="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-[10px] font-mono text-slate-600 dark:text-slate-300">Read Only</span>
-                        <span v-else class="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-[10px] font-mono text-slate-600 dark:text-slate-300">Editable</span>
-                    </div>
-                    </div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h3 class="text-sm font-semibold ui-text-primary m-0 uppercase tracking-wide">Script Content</h3>
+                <div>
+                    <span v-if="pac.mode === 'remote'" class="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-[10px] font-mono text-slate-600 dark:text-slate-300">Read Only</span>
+                    <span v-else class="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-[10px] font-mono text-slate-600 dark:text-slate-300">Editable</span>
                 </div>
+            </div>
+            <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden d-flex flex-column h-100 w-100 flex-1">
                 <div class="flex-1 position-relative">
                     <textarea 
                         v-model="pac.script"

@@ -1,8 +1,12 @@
 
 import { DEFAULT_CONFIG } from '../common/config'
 import { loadConfig, saveConfig } from '../common/storage'
-import { generatePacScript } from '../common/pac'
-import { parseAutoProxyRules } from '../common/autoproxy'
+import { generatePacScriptFromPolicy } from '../common/pac'
+
+
+// Store proxy authentication credentials
+// Map structure: "host:port" -> { username, password }
+let proxyAuthMap = {}
 
 // Initialize on install
 chrome.runtime.onInstalled.addListener(async () => {
@@ -105,42 +109,58 @@ async function checkUpdates() {
     const config = await loadConfig()
     let configChanged = false
     
-    // Helper to process a list of sets
-    const processSets = async (sets) => {
-        if (!sets) return
-        for (const set of sets) {
-            if (!set.enabled || !set.url) continue
-            
-            // Optimization: Skip if updated recently (if triggered manually but not enough time passed?)
-            // For now we assume this function is called when we WANT to update (alarm or manual)
-            // But we could check set.lastUpdated vs config.update.interval
-            
-            try {
-                console.log(`Oasis: Updating rule set '${set.id}' from ${set.url}...`)
-                const response = await fetch(set.url)
-                if (!response.ok) throw new Error(`HTTP ${response.status}`)
-                const text = await response.text()
+    // Helper to process rules in a policy
+    const processPolicyRules = async (policyId, rules) => {
+        if (!rules || !Array.isArray(rules)) return
+
+        for (const rule of rules) {
+            // Check if rule has a subscription URL (RuleSet)
+            if (rule.ruleSet && rule.ruleSet.url && rule.ruleSet.url.trim()) {
+                const url = rule.ruleSet.url.trim()
                 
-                let rules = []
-                if (set.format === 'autoproxy') {
-                    rules = parseAutoProxyRules(text)
-                } 
-                // Add more formats here if needed
-                
-                // Update the set object
-                set.rules = rules
-                set.lastUpdated = Date.now()
-                configChanged = true
-                console.log(`Oasis: Updated '${set.id}'. Found ${rules.length} rules.`)
-                
-            } catch (e) {
-                console.error(`Oasis: Failed to update rule set '${set.id}':`, e)
+                try {
+                    console.log(`Oasis: Updating RuleSet for policy '${policyId}' from ${url}...`)
+                    const response = await fetch(url)
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+                    const text = await response.text()
+                    
+                    // Simple validation / processing
+                    // We just store the raw content, interpretation happens at parsing time (PAC gen)
+                    // But we might want to validate format here?
+                    // For now, mirroring frontend logic: fetch and store.
+                    
+                    const now = Date.now()
+                    rule.ruleSet.content = text
+                    rule.ruleSet.lastUpdated = now
+                    rule.ruleSet.lastFetched = now
+                    rule.ruleSet.fetchError = null
+                    
+                    // Backward compatibility field
+                    rule.ruleSetContent = text
+                    
+                    configChanged = true
+                    console.log(`Oasis: Updated RuleSet in policy '${policyId}'. Size: ${text.length} chars.`)
+                    
+                } catch (e) {
+                    console.error(`Oasis: Failed to update RuleSet in policy '${policyId}':`, e)
+                    if (rule.ruleSet) {
+                         rule.ruleSet.fetchError = e.message
+                         rule.ruleSet.lastFetched = Date.now()
+                         configChanged = true // Save error state
+                    }
+                }
             }
         }
     }
 
-    await processSets(config.auto.rejectRuleSets)
-    await processSets(config.auto.proxyRuleSets)
+    // Iterate all policies
+    if (config.policies) {
+        for (const [policyId, policy] of Object.entries(config.policies)) {
+            if (!policy) continue
+            await processPolicyRules(policyId, policy.rules)
+            await processPolicyRules(policyId, policy.rejectRules)
+        }
+    }
 
     if (configChanged) {
         await saveConfig(config)
@@ -179,8 +199,20 @@ async function applyProxySettings(config) {
         return
     }
 
-    console.log(`Oasis: Applying profile '${activeId}' (Type: ${profile.type || 'unknown'})`)
+
+    // Improve type detection for logging
+    let profileType = profile.type || 'unknown'
+    if (profileType === 'unknown') {
+        if (profile.url !== undefined && !profile.rules) {
+            profileType = 'pac'
+        } else if (profile.rules || profile.defaultProfileId) {
+            profileType = 'policy'
+        }
+    }
+    
+    console.log(`Oasis: Applying profile '${activeId}' (Type: ${profileType})`)
     const proxyConfig = {}
+
 
     try {
         if (profile.type === 'system' || profile.type === 'direct') {
@@ -209,17 +241,30 @@ async function applyProxySettings(config) {
         }
         else if (profile.url !== undefined && !profile.rules) { 
             // PAC Script (Check if it has URL and NO rules, to distinguish from auto/policy if structure is similar)
-            // Ideally we should have explicit 'type' on all objects. 
-            // Assuming PAC object has 'url' and maybe type='pac' (we didn't strictly define type for PAC in DEFAULT, but we can infer)
             proxyConfig.mode = 'pac_script'
-            proxyConfig.pacScript = {
-                url: profile.url
+            
+            // Handle both remote and manual PAC scripts
+            if (profile.mode === 'manual' && profile.script) {
+                // Manual mode: use script data
+                proxyConfig.pacScript = {
+                    data: profile.script
+                }
+            } else if (profile.url) {
+                // Remote mode: use URL
+                proxyConfig.pacScript = {
+                    url: profile.url
+                }
+            } else {
+                // Fallback: empty PAC script returns DIRECT
+                proxyConfig.pacScript = {
+                    data: 'function FindProxyForURL(url, host) { return "DIRECT"; }'
+                }
             }
         }
         else if (profile.rules || profile.defaultProfileId) {
              // Auto Policy
              // Generate PAC script from rules
-             const pacScriptData = generatePacScript(config, profile) // Pass full config + specific policy
+             const pacScriptData = generatePacScriptFromPolicy(profile, config.proxies || {}) 
              proxyConfig.mode = 'pac_script'
              proxyConfig.pacScript = {
                  data: pacScriptData
@@ -230,6 +275,61 @@ async function applyProxySettings(config) {
             proxyConfig.mode = 'system'
         }
 
+        // Store authentication credentials for current profile
+        proxyAuthMap = {}
+        
+        try {
+            if (profile && profile.type === 'server' && profile.auth && profile.auth.username) {
+                // Single proxy server
+                const key = `${profile.host}:${profile.port}`
+                proxyAuthMap[key] = {
+                    username: profile.auth.username,
+                    password: profile.auth.password || ''
+                }
+                console.log(`Oasis: Stored auth for proxy ${key}`)
+            } else if (profile && profileType === 'policy') {
+                // Auto policy - collect credentials from all referenced proxies
+                
+                // Add default proxy credentials
+                if (profile.defaultProfileId && config && config.proxies && config.proxies[profile.defaultProfileId]) {
+                    const defaultProxy = config.proxies[profile.defaultProfileId]
+                    if (defaultProxy && defaultProxy.auth && defaultProxy.auth.username) {
+                        const key = `${defaultProxy.host}:${defaultProxy.port}`
+                        proxyAuthMap[key] = {
+                            username: defaultProxy.auth.username,
+                            password: defaultProxy.auth.password || ''
+                        }
+                        console.log(`Oasis: Stored auth for default proxy ${key}`)
+                    }
+                }
+                
+                // Add credentials from proxies referenced in rules
+                if (profile.rules && Array.isArray(profile.rules)) {
+                    profile.rules.forEach(rule => {
+                        if (rule && rule.proxyId && config && config.proxies && config.proxies[rule.proxyId]) {
+                            const proxy = config.proxies[rule.proxyId]
+                            if (proxy && proxy.auth && proxy.auth.username) {
+                                const key = `${proxy.host}:${proxy.port}`
+                                proxyAuthMap[key] = {
+                                    username: proxy.auth.username,
+                                    password: proxy.auth.password || ''
+                                }
+                                console.log(`Oasis: Stored auth for rule proxy ${key}`)
+                            }
+                        }
+                    })
+                }
+                
+                const credCount = Object.keys(proxyAuthMap).length
+                if (credCount > 0) {
+                    console.log(`Oasis: Configured authentication for ${credCount} proxy server(s)`)
+                }
+            }
+        } catch (err) {
+            console.error('Oasis: Error collecting proxy credentials:', err)
+            proxyAuthMap = {}
+        }
+
         // Apply to Chrome
         await chrome.proxy.settings.set({ value: proxyConfig, scope: 'regular' })
         console.log('Oasis: Proxy settings applied successfully.', proxyConfig)
@@ -238,6 +338,34 @@ async function applyProxySettings(config) {
         console.error('Oasis: Failed to apply proxy settings:', err)
     }
 }
+
+// Proxy authentication handler
+chrome.webRequest.onAuthRequired.addListener(
+    (details) => {
+        // Only handle proxy authentication
+        if (!details.isProxy) {
+            return {}
+        }
+        
+        // Extract proxy host and port from challenger
+        const challenger = details.challenger
+        if (challenger && challenger.host && challenger.port) {
+            const key = `${challenger.host}:${challenger.port}`
+            const credentials = proxyAuthMap[key]
+            
+            if (credentials) {
+                console.log(`Oasis: Providing auth for proxy ${key}`)
+                return { authCredentials: credentials }
+            } else {
+                console.warn(`Oasis: No credentials found for proxy ${key}`)
+            }
+        }
+        
+        return {}
+    },
+    { urls: ['<all_urls>'] },
+    ['blocking']
+)
 
 // Listen for messages from options/popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {

@@ -30,7 +30,19 @@ export async function loadConfig() {
   // 2. Load Profiles (Arrays) - Overwrite defaults if present in storage
   if (result.proxies) runtimeConfig.proxies = result.proxies
   if (result.pacs) runtimeConfig.pacs = result.pacs
-  if (result.policies) runtimeConfig.policies = result.policies
+  if (result.policies) {
+    runtimeConfig.policies = result.policies
+    
+    // Self-healing: Fix corrupted arrays (Vue Proxy serialization issue)
+    Object.values(runtimeConfig.policies).forEach(policy => {
+      if (policy.rules && typeof policy.rules === 'object' && !Array.isArray(policy.rules)) {
+        policy.rules = Object.values(policy.rules)
+      }
+      if (policy.rejectRules && typeof policy.rejectRules === 'object' && !Array.isArray(policy.rejectRules)) {
+        policy.rejectRules = Object.values(policy.rejectRules)
+      }
+    })
+  }
 
   // 3. Load Singletons - Overwrite defaults if present
   if (result.system) runtimeConfig.system = result.system
@@ -74,9 +86,9 @@ export async function saveConfig(config) {
 
   const storageData = {
       config: configData,
-      proxies: config.proxies,
-      pacs: config.pacs,
-      policies: config.policies,
+      proxies: JSON.parse(JSON.stringify(config.proxies || {})),
+      pacs: JSON.parse(JSON.stringify(config.pacs || {})),
+      policies: JSON.parse(JSON.stringify(config.policies || {})),
       system: config.system,
       direct: config.direct,
       reject: config.reject
