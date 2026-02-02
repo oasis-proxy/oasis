@@ -98,6 +98,7 @@
             </div>
           </div>
 
+
           <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden">
             <!-- Table Header -->
             <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-[10px] font-semibold ui-text-secondary uppercase tracking-wider">
@@ -269,6 +270,31 @@
             <div v-else class="p-2 d-flex align-items-center justify-content-center" style="min-height: 44px;">
               <p class="text-[10px] ui-text-secondary m-0">No rules defined. Click "+" to get started.</p>
             </div>
+
+
+            <!-- Default Strategy Footer -->
+            <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-t border-slate-100 dark:border-divider-dark transition-colors">
+              <div style="width: 4%;"></div>
+              <div style="width: 16%;"></div>
+              <div style="width: 52%;" class="d-flex align-items-center justify-content-end px-2">
+                 <div class="d-flex align-items-center gap-2 text-[10px] font-semibold ui-text-secondary uppercase tracking-widest whitespace-nowrap">
+                   <i class="bi bi-arrow-return-right"></i> Default Strategy
+                </div>
+              </div>
+              <div style="width: 20%;">
+                <select 
+                    v-model="policy.defaultProfileId"
+                    class="form-select ui-input w-100 rounded border text-[10px] py-0 px-1.5" 
+                    style="height: 28px; max-width: none;"
+                >
+                    <option value="direct">Direct</option>
+                    <option v-for="proxy in proxyOptions" :key="proxy.id" :value="proxy.id">
+                        {{ proxy.label }}
+                    </option>
+                </select>
+              </div>
+              <div style="width: 8%;"></div>
+            </div>
           </div>
         </section>
 
@@ -395,9 +421,7 @@
                     @focus="focusedIndex = index"
                     @blur="focusedIndex = null; validateRejectRule(index, rule)"
                   />
-                  <div v-if="rejectValidationErrors[index]" class="position-absolute text-xs text-red-500" style="top: 100%; left: 0; margin-top: 2px;">
-                    {{ rejectValidationErrors[index] }}
-                  </div>
+
                 </div>
                 <div style="width: 20%;">
                   <div class="w-100 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-[10px] px-2 d-flex align-items-center gap-2 cursor-not-allowed" style="user-select: none; height: 28px;">
@@ -542,6 +566,10 @@ const loadPolicyData = async () => {
         }
         if (!policy.value.color) {
             policy.value.color = '#10b981' // emerald-500
+        }
+        // Ensure default profile
+        if (!policy.value.defaultProfileId) {
+            policy.value.defaultProfileId = 'direct'
         }
         
         originalPolicy.value = JSON.parse(JSON.stringify(policy.value))

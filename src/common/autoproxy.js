@@ -92,23 +92,19 @@ export function convertAutoProxyToInternalRules(parsedRules, defaultRuleType = '
   const internalRules = [];
 
   for (const rule of parsedRules) {
-    // Skip whitelist rules for now (they would need special handling)
-    if (rule.isWhitelist) {
-      continue;
-    }
-
     let ruleType = defaultRuleType;
     let pattern = rule.pattern;
+    const isWhitelist = rule.isWhitelist;
 
     switch (rule.type) {
       case 'regex':
         ruleType = 'regex';
         break;
       case 'domain':
-        // Domain rules like ||example.com can be converted to wildcard
+        // Domain rules like ||example.com should be strict wildcard
         ruleType = 'wildcard';
-        // Convert domain to wildcard pattern
-        pattern = `*.${pattern}*`;
+        // Convert to *.domain.com to trigger optimized dnsDomainIs path in PAC
+        pattern = `*.${pattern}`;
         break;
       case 'wildcard':
         ruleType = 'wildcard';
@@ -140,7 +136,8 @@ export function convertAutoProxyToInternalRules(parsedRules, defaultRuleType = '
 
     internalRules.push({
       ruleType,
-      pattern
+      pattern,
+      isWhitelist
     });
   }
 

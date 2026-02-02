@@ -50,12 +50,60 @@ describe('generatePacScriptFromPolicy', () => {
 
     it('should include correct proxy return string', () => {
         const script = generatePacScriptFromPolicy(mockPolicy, mockProxies)
-        expect(script).toContain('PROXY 127.0.0.1:7890')
+        expect(script).toContain('return "HTTP 127.0.0.1:7890"')
     })
     
-    it('should include wildcard check', () => {
-        const script = generatePacScriptFromPolicy(mockPolicy, mockProxies)
-        expect(script).toContain('shExpMatch(host, "*.google.com")')
+    it('should generate valid wildcard checks', () => {
+        const script = generatePacScriptFromPolicy({
+            ...mockPolicy,
+            rules: [
+                { ruleType: 'wildcard', pattern: '**.example.com', proxyId: 'proxy1' },
+                { ruleType: 'wildcard', pattern: '*.test.com', proxyId: 'proxy1' },
+                { ruleType: 'wildcard', pattern: '.domain.com', proxyId: 'proxy1' },
+                { ruleType: 'wildcard', pattern: '*google.com*', proxyId: 'proxy1' }
+            ]
+        }, mockProxies)
+
+        // **.example.com -> Subdomains only
+        expect(script).toContain('dnsDomainIs(host, ".example.com") && host !== "example.com"')
+        
+        // *.test.com -> Root + Subdomains
+        expect(script).toContain('(dnsDomainIs(host, ".test.com") || host === "test.com")')
+        
+        // .domain.com -> Root + Subdomains
+        expect(script).toContain('(dnsDomainIs(host, ".domain.com") || host === "domain.com")')
+        
+        // *google.com* -> Standard shExpMatch
+        expect(script).toContain('shExpMatch(host, "*google.com*")')
+    })
+
+    it('should handle RuleSet with whitelist correctly', () => {
+        const script = generatePacScriptFromPolicy({
+            ...mockPolicy,
+            rules: [
+                { 
+                    ruleType: 'ruleset', 
+                    proxyId: 'proxy1',
+                    ruleSetContent: '||example.com\n@@||whitelist.com'
+                }
+            ]
+        }, mockProxies)
+        
+        // Whitelist rule (@@) should be checked first and return DIRECT
+        // ||whitelist.com -> *.whitelist.com -> strict wildcard logic
+        const whitelistCheck = '(dnsDomainIs(host, ".whitelist.com") || host === "whitelist.com")'
+        expect(script).toContain(`if (${whitelistCheck}) return "DIRECT";`)
+        
+        // Proxy rule (||) should be checked after
+        // ||example.com -> *.example.com -> strict wildcard logic
+        const proxyCheck = '(dnsDomainIs(host, ".example.com") || host === "example.com")'
+        expect(script).toContain(`if (${proxyCheck}) return "HTTP 127.0.0.1:7890";`)
+        
+        // Verify order
+        const whitelistIndex = script.indexOf(`if (${whitelistCheck}) return "DIRECT"`)
+        const proxyIndex = script.indexOf(`if (${proxyCheck}) return "HTTP`)
+        
+        expect(whitelistIndex).toBeLessThan(proxyIndex)
     })
 
     it('should include regex check', () => {

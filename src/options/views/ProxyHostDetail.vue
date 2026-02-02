@@ -616,6 +616,38 @@ const openCloneModal = () => {
 }
 
 const openDeleteModal = () => {
+  if (!proxy.value || !config.value) return
+
+  const proxyId = proxy.value.id
+  const usedInPolicies = []
+
+  // Check usage in policies
+  if (config.value.policies) {
+    Object.values(config.value.policies).forEach(policy => {
+      let isUsed = false
+      
+      // Check default profile
+      if (policy.defaultProfileId === proxyId) {
+        isUsed = true
+      }
+      
+      // Check rules
+      if (!isUsed && policy.rules) {
+        const found = policy.rules.some(rule => rule.proxyId === proxyId)
+        if (found) isUsed = true
+      }
+
+      if (isUsed) {
+        usedInPolicies.push(policy.name || 'Unnamed Policy')
+      }
+    })
+  }
+
+  if (usedInPolicies.length > 0) {
+    toast.warning(`Cannot delete proxy. It is used by: ${usedInPolicies.join(', ')}`)
+    return
+  }
+
   showDeleteModal.value = true
 }
 

@@ -25,6 +25,7 @@ export function generatePacScriptFromPolicy(policy, proxies) {
     // Correctly map scheme to PAC return string
     const scheme = (proxy.scheme || 'http').toLowerCase()
     let typeStr = 'PROXY'
+
     
     if (scheme === 'socks' || scheme === 'socks4') {
         typeStr = 'SOCKS'
@@ -32,8 +33,9 @@ export function generatePacScriptFromPolicy(policy, proxies) {
         typeStr = 'SOCKS5'
     } else if (scheme === 'https') {
         typeStr = 'HTTPS'
+    } else {
+        typeStr = 'HTTP' // Default to HTTP for 'http' and other unknown schemes
     }
-    // http defaults to PROXY
     
     return `${typeStr} ${proxy.host}:${proxy.port}`
   }
@@ -51,9 +53,24 @@ export function generatePacScriptFromPolicy(policy, proxies) {
   
   // Generate condition from rule
   const generateRuleCondition = (rule) => {
+    if (!rule.pattern) return null
     switch (rule.ruleType) {
-      case 'wildcard':
-        return `shExpMatch(host, "${rule.pattern}")`
+      case 'wildcard': {
+        const pattern = rule.pattern
+        if (pattern.startsWith('**.')) {
+            const domain = pattern.substring(3)
+            return `dnsDomainIs(host, ".${domain}") && host !== "${domain}"`
+        } else if (pattern.startsWith('*.')) {
+            const domain = pattern.substring(2)
+            // Strict wildcard: matches .example.com subdomains AND example.com root
+            return `(dnsDomainIs(host, ".${domain}") || host === "${domain}")`
+        } else if (pattern.startsWith('.')) {
+            const domain = pattern.substring(1)
+            // Strict wildcard: matches .example.com subdomains AND example.com root
+            return `(dnsDomainIs(host, ".${domain}") || host === "${domain}")`
+        }
+        return `shExpMatch(host, "${pattern}")`
+      }
       case 'regex': {
         // Only escape forward slashes (regex delimiters)
         // Do NOT escape backslashes as they are part of the regex pattern (e.g. \. for literal dot)
@@ -107,7 +124,16 @@ export function generatePacScriptFromPolicy(policy, proxies) {
             const internalRules = convertAutoProxyToInternalRules(parsedRules)
             const proxyStr = getProxyString(rule.proxyId)
             
-            internalRules.forEach(expandedRule => {
+            // Prioritize whitelist rules (DIRECT)
+            internalRules.filter(r => r.isWhitelist).forEach(expandedRule => {
+                 const condition = generateRuleCondition(expandedRule)
+                 if (condition) {
+                   pacContent += `  if (${condition}) return "DIRECT";\n`
+                 }
+            })
+
+            // Then standard rules
+            internalRules.filter(r => !r.isWhitelist).forEach(expandedRule => {
               const condition = generateRuleCondition(expandedRule)
               if (condition) {
                 pacContent += `  if (${condition}) return "${proxyStr}";\n`
@@ -130,8 +156,10 @@ export function generatePacScriptFromPolicy(policy, proxies) {
     pacContent += `\n`
   }
   
-  pacContent += `  // Default: DIRECT\n`
-  pacContent += `  return "DIRECT";\n`
+  // Default
+  const defaultAction = getProxyString(policy.defaultProfileId || 'direct')
+  pacContent += `  // Default: ${defaultAction}\n`
+  pacContent += `  return "${defaultAction}";\n`
   pacContent += `}\n`
   
   return pacContent
