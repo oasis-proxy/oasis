@@ -59,7 +59,7 @@
             @click="showProxyModal = true"
             class="ui-button-icon"
           >
-            <i class="bi bi-plus text-xs"></i>
+            <i class="bi bi-plus-lg text-sm"></i>
           </button>
         </div>
         <div class="d-flex flex-column gap-1">
@@ -91,7 +91,7 @@
             @click="showPolicyModal = true"
             class="ui-button-icon"
           >
-            <i class="bi bi-plus text-xs"></i>
+            <i class="bi bi-plus-lg text-sm"></i>
           </button>
         </div>
         <div class="d-flex flex-column gap-1">

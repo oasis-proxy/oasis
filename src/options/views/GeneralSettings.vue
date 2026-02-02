@@ -137,84 +137,110 @@
               </div>
             </div>
 
-            <!-- IP Tags -->
-             <div class="px-4 pt-3 pb-4 hover:bg-slate-50/50 transition-colors">
-                 <div class="d-flex align-items-center justify-content-between mb-4">
+              <div class="px-4 pt-3 pb-4 hover:bg-slate-50/50 transition-colors">
+                  <div class="d-flex align-items-center justify-content-between mb-4">
                     <div class="d-flex items-start">
                         <div>
                             <p class="text-sm font-medium ui-text-primary m-0">IP Tags</p>
                             <p class="text-xs ui-text-secondary mt-0.5 m-0">Assign friendly names to IP addresses.</p>
                         </div>
                     </div>
-                 </div>
-                  <div class="overflow-hidden rounded-lg border border-slate-200 d-flex flex-column">
-                     <!-- Selected Actions Bar -->
-                     <div class="bg-blue-50/50 dark:bg-primary/20 px-4 py-2 border-b border-slate-200 dark:border-divider-dark d-flex align-items-center justify-content-between">
-                         <div class="d-flex align-items-center gap-2">
-                             <div class="h-4 w-4 d-flex align-items-center justify-content-center rounded bg-primary text-white text-[8px] font-bold">{{ selectedTags.length }}</div>
-                             <span class="text-xs font-medium ui-text-secondary">Selected</span>
-                         </div>
-                         <div class="d-flex align-items-center gap-2">
-                            <button class="px-2 py-1 text-xs font-medium text-slate-600 hover:text-slate-900 bg-transparent hover:bg-slate-50 border border-transparent rounded transition-all d-flex align-items-center gap-1">
-                                <i class="bi bi-download text-[14px]"></i> Export
-                            </button>
-                             <button @click="deleteSelectedTags" class="px-2 py-1 text-xs font-medium text-red-600 hover:text-red-700 bg-transparent hover:bg-red-50 border border-transparent rounded transition-all d-flex align-items-center gap-1">
-                                <i class="bi bi-trash text-[14px]"></i> Delete
-                            </button>
-                         </div>
-                     </div>
+                    <button 
+                        @click="addTag"
+                        class="ui-button-icon"
+                        title="Add Tag"
+                    >
+                        <i class="bi bi-plus-lg text-xs"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden">
+                    <!-- Header -->
+                    <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-[10px] font-semibold ui-text-secondary uppercase tracking-wider">
+                      <div style="width: 50%;" class="px-2">IP Address</div>
+                      <div style="width: 40%;" class="px-2">Tag Name</div>
+                      <div style="width: 10%;" class="text-center">Action</div>
+                    </div>
 
-                     <table class="min-w-full divide-y divide-slate-200">
-                        <thead class="ui-table-header">
-                            <tr>
-                                <th class="px-4 py-2 w-10 text-center">
-                                    <input 
-                                      type="checkbox" 
-                                      class="form-check-input h-4 w-4"
-                                      :checked="selectedTags.length === ipTagsList.length && ipTagsList.length > 0"
-                                      @change="toggleAllTags"
-                                    />
-                                </th>
-                                <th class="px-4 py-2 text-left text-xs font-medium text-slate-500 tracking-wider">IP Address</th>
-                                <th class="px-4 py-2 text-left text-xs font-medium text-slate-500 tracking-wider w-100">Tag Name</th>
-                                <th class="px-4 py-2 text-right text-xs font-medium text-slate-500 tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                         <tbody class="ui-card divide-y divide-slate-100 dark:divide-divider-dark">
-                              <tr 
-                                v-for="(item, index) in ipTagsList" 
-                                :key="index"
-                                :class="{'bg-blue-50/50 dark:bg-primary/10': selectedTags.includes(item.ip)}"
-                              >
-                                <td class="px-4 py-2 text-center">
-                                    <input 
-                                      type="checkbox" 
-                                      class="form-check-input h-4 w-4" 
-                                      :value="item.ip" 
-                                      v-model="selectedTags"
-                                    />
-                                </td>
-                                <td class="px-4 py-2 text-xs text-slate-700 font-mono">
-                                  <input v-model.lazy="item.ip" @change="updateTag()" type="text" class="bg-transparent border-0 w-100 p-0 text-xs focus:ring-0 font-mono text-slate-900 dark:text-white" placeholder="0.0.0.0" />
-                                </td>
-                                <td class="px-4 py-2 text-xs text-slate-700">
-                                  <input v-model.lazy="item.tag" @change="updateTag()" type="text" class="bg-transparent border-0 w-100 p-0 text-xs focus:ring-0 text-slate-700 dark:text-white" placeholder="Tag Name" />
-                                </td>
-                                <td class="px-4 py-2 text-right">
-                                    <button @click="deleteTag(item.ip)" class="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-full bg-transparent hover:bg-transparent border-0">
-                                        <i class="bi bi-trash text-[16px]"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                         </tbody>
-                     </table>
-                     <div class="settings-table-header px-4 py-2 border-t border-slate-200 dark:border-divider-dark">
-                         <button @click="addTag" class="w-100 py-2 text-xs font-medium settings-button-dashed border border-dashed rounded transition-all d-flex align-items-center justify-content-center gap-2">
-                             <i class="bi bi-plus text-[14px]"></i> Add New Tag
-                         </button>
-                     </div>
-                 </div>
-             </div>
+                    <!-- List -->
+                    <div v-if="localIpTags.length > 0">
+                      <div 
+                        v-for="(item, index) in localIpTags" 
+                        :key="index"
+                        class="d-flex align-items-center gap-1 p-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                      >
+                        <div style="width: 50%;" class="px-2">
+                          <input 
+                            v-if="item.isEditing"
+                            v-model="item.ip" 
+                            type="text" 
+                            class="form-control ui-input w-100 rounded text-[10px] py-0 px-2 font-mono"
+                            style="height: 24px;"
+                            :style="item.errors?.ip ? 'border-color: #dc3545 !important;' : ''"
+                            placeholder="0.0.0.0" 
+                            @keyup.enter="saveTag(index)"
+                            @keyup.esc="cancelEdit(index)"
+                            @blur="validateItem(index)"
+                          />
+                          <span v-else class="text-[10px] font-mono text-slate-700 dark:text-slate-300">{{ item.ip }}</span>
+                        </div>
+                        <div style="width: 40%;" class="px-2">
+                           <input 
+                            v-if="item.isEditing"
+                            v-model="item.tag" 
+                            type="text" 
+                            class="form-control ui-input w-100 rounded text-[10px] py-0 px-2"
+                            style="height: 24px;"
+                            :style="item.errors?.tag ? 'border-color: #dc3545 !important;' : ''"
+                            placeholder="Tag Name" 
+                            @keyup.enter="saveTag(index)"
+                            @keyup.esc="cancelEdit(index)"
+                            @blur="validateItem(index)"
+                          />
+                          <span v-else class="text-[10px] text-slate-700 dark:text-slate-300">{{ item.tag }}</span>
+                        </div>
+                        <div style="width: 10%;" class="d-flex align-items-center justify-content-center gap-1">
+                            <template v-if="item.isEditing">
+                                <button 
+                                    @click="saveTag(index)" 
+                                    class="ui-button-icon text-green-500 hover:text-green-600"
+                                    title="Save"
+                                >
+                                    <i class="bi bi-check-lg text-xs"></i>
+                                </button>
+                                <button 
+                                    @click="cancelEdit(index)" 
+                                    class="ui-button-icon text-slate-400 hover:text-slate-500"
+                                    title="Cancel"
+                                >
+                                    <i class="bi bi-x-lg text-xs"></i>
+                                </button>
+                            </template>
+                             <button 
+                                v-else
+                                @click="editTag(index)" 
+                                class="ui-button-icon"
+                                title="Edit"
+                            >
+                                <i class="bi bi-pencil text-xs"></i>
+                            </button>
+
+                            <button 
+                                @click="deleteTag(index)" 
+                                class="ui-button-icon text-red-500 hover:text-red-600"
+                                title="Delete"
+                            >
+                                <i class="bi bi-trash text-xs"></i>
+                            </button>
+                        </div>
+                      </div>
+                    </div>
+                     <!-- Empty State -->
+                    <div v-else class="p-2 d-flex align-items-center justify-content-center" style="min-height: 44px;">
+                      <p class="text-[10px] ui-text-secondary m-0">No tags defined.</p>
+                    </div>
+                  </div>
+              </div>
 
           </div>
         </section>
@@ -224,13 +250,17 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch, onMounted } from 'vue'
+import { reactive, computed, watch, onMounted, ref } from 'vue'
 import { loadConfig, saveGeneralSettings } from '../../common/storage'
 import { DEFAULT_CONFIG } from '../../common/config'
+import { toast } from '../utils/toast'
+
+// Constants
+const IPV4_REGEX = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
 
 // Reactive State
 const config = reactive(JSON.parse(JSON.stringify(DEFAULT_CONFIG)))
-const selectedTags = ref([]) // For table selection
+
 
 // Config Options
 const styleOptions = [
@@ -245,6 +275,7 @@ const updateIntervals = [
   { label: '1h', value: 60 },
   { label: '15min', value: 15 },
   { label: 'Never', value: 0 },
+  { label: 'Manual', value: -1 }
 ]
 
 // Computed Properties for Mapping
@@ -257,73 +288,161 @@ const rejectAddress = computed({
   }
 })
 
-// IP Tags Mapping: Array for UI <-> Object for Config
-const ipTagsList = computed({
-    get: () => Object.entries(config.ipTags || {}).map(([ip, tag]) => ({ ip, tag })),
-    set: (val) => {
-        const newTags = {}
-        val.forEach(item => { if (item.ip) newTags[item.ip] = item.tag })
-        config.ipTags = newTags
-    }
-})
+// IP Tags Logic
+const localIpTags = ref([])
 
-// Load Config
-onMounted(async () => {
-    const loaded = await loadConfig()
-    // Update reactive state
-    // We iterate keys to preserve reactivity of the 'config' root object
-    // or we could just use Object.assign
-    Object.assign(config, loaded)
-    console.log('Config loaded:', config)
-})
+// Helper to sort tags by IP
+const sortTags = (tags) => {
+    return tags.sort((a, b) => {
+        // Simple numeric sort for IPv4
+        const numA = a.ip.split('.').map(n => parseInt(n) || 0).reduce((acc, n) => acc * 256 + n, 0)
+        const numB = b.ip.split('.').map(n => parseInt(n) || 0).reduce((acc, n) => acc * 256 + n, 0)
+        return numA - numB
+    })
+}
 
-// Auto-Save Watcher
+// Sync config to local state
+const syncToLocal = () => {
+    if (!config.ipTags) return
+    const tags = Object.entries(config.ipTags).map(([ip, tag]) => ({ 
+        ip, 
+        tag,
+        isEditing: false,
+        originalIp: ip, // Track original IP for renaming
+        errors: { ip: false, tag: false }
+    }))
+    localIpTags.value = sortTags(tags)
+}
+
+// Watch for external config changes
 watch(config, (newVal) => {
     saveGeneralSettings(newVal)
-    console.log('Config saved (General Only):', newVal)
+    // We do NOT sync to local here to avoid overwriting ongoing edits.
+    // Local state is the source of truth for UI, Config is source of truth for Storage.
+    // When we Save, we update Config.
 }, { deep: true })
 
-// Tag Management Logic
+// Initialize
+onMounted(async () => {
+    const loaded = await loadConfig()
+    Object.assign(config, loaded)
+    syncToLocal()
+})
+
 const addTag = () => {
-    // We modify the computed property which updates the config
-    const currentList = [...ipTagsList.value]
-    currentList.push({ ip: '', tag: '' })
-    ipTagsList.value = currentList
-}
-
-const deleteTag = (ip) => {
-    if (!ip) return
-    const newTags = { ...config.ipTags }
-    delete newTags[ip]
-    config.ipTags = newTags
-    selectedTags.value = selectedTags.value.filter(t => t !== ip)
-}
-
-const updateTag = () => {
-    // When editing inline, we rebuild the whole object to handle key changes (IP change)
-    // This is a bit heavy but ensures consistency.
-    // Ideally we would track "original IP" to delete old key.
-    // For now, we trust the computed setter to rebuild from ipTagsList.
-    
-    // Trigger reset via assigning ipTagsList
-    // eslint-disable-next-line no-self-assign
-    ipTagsList.value = ipTagsList.value
-}
-
-const toggleAllTags = (e) => {
-    if (e.target.checked) {
-        selectedTags.value = ipTagsList.value.map(i => i.ip).filter(ip => ip)
-    } else {
-        selectedTags.value = []
-    }
-}
-
-const deleteSelectedTags = () => {
-    const newTags = { ...config.ipTags }
-    selectedTags.value.forEach(ip => {
-        delete newTags[ip]
+    // Add to top
+    localIpTags.value.unshift({
+        ip: '',
+        tag: '',
+        isEditing: true,
+        originalIp: null,
+        errors: { ip: false, tag: false }
     })
-    config.ipTags = newTags
-    selectedTags.value = []
 }
+
+const editTag = (index) => {
+    localIpTags.value[index].isEditing = true
+    localIpTags.value[index].originalIp = localIpTags.value[index].ip
+    localIpTags.value[index].errors = { ip: false, tag: false }
+}
+
+const cancelEdit = (index) => {
+    const item = localIpTags.value[index]
+    if (!item.originalIp && !item.ip) {
+        // Was a new item, just remove it
+        localIpTags.value.splice(index, 1)
+        return
+    }
+    // Revert
+    item.ip = item.originalIp
+    item.isEditing = false
+    item.errors = { ip: false, tag: false }
+    // No need to syncToLocal, just reverting this item is enough
+}
+
+const validateItem = (index) => {
+    const item = localIpTags.value[index]
+    let isValid = true
+    const errors = { ip: false, tag: false }
+
+    // Validate IP
+    if (!item.ip || !IPV4_REGEX.test(item.ip)) {
+        errors.ip = true
+        isValid = false
+    }
+
+    // Validate Tag
+    if (!item.tag) {
+        errors.tag = true
+        isValid = false
+    }
+
+    // Check duplicates (Tag Name uniqueness check as per user request)
+    // "tagname needs to be confirmed not empty, and different from other tagnames"
+    const duplicateTag = Object.values(config.ipTags || {}).find(t => t === item.tag && item.originalIp && config.ipTags[item.originalIp] !== t)
+    // Note: Checking duplicates against config is tricky if we are editing.
+    // We need to check against OTHER items.
+    // More robust approach: Check against localIpTags (excluding self)
+    const duplicateTagLocal = localIpTags.value.some((t, i) => i !== index && t.tag === item.tag)
+    
+    if (duplicateTagLocal) {
+        errors.tag = true
+        isValid = false
+    }
+    
+    // Check Duplicate IP (if changed)
+    const duplicateIpLocal = localIpTags.value.some((t, i) => i !== index && t.ip === item.ip)
+    if (duplicateIpLocal) {
+        errors.ip = true
+        isValid = false
+    }
+
+    item.errors = errors
+    return isValid
+}
+
+const saveTag = (index) => {
+    const item = localIpTags.value[index]
+    
+    if (!validateItem(index)) {
+        return // Validation failed, errors set in validateItem
+    }
+
+    // Update Config
+    // Ensure object exists
+    if (!config.ipTags) config.ipTags = {}
+    
+    const newTags = { ...config.ipTags }
+    
+    // If we are renaming, delete old key
+    if (item.originalIp && item.originalIp !== item.ip) {
+        delete newTags[item.originalIp]
+    }
+    newTags[item.ip] = item.tag
+    
+    config.ipTags = newTags // This triggers the watch -> saveGeneralSettings
+    
+    // Update local state
+    item.isEditing = false
+    item.originalIp = item.ip
+    item.errors = { ip: false, tag: false }
+    
+    // Re-sort local list to match new IP order
+    localIpTags.value = sortTags(localIpTags.value)
+    toast.success('IP Tag saved')
+}
+
+const deleteTag = (index) => {
+    const item = localIpTags.value[index]
+    if (item.originalIp) {
+        if (!config.ipTags) config.ipTags = {}
+        const newTags = { ...config.ipTags }
+        delete newTags[item.originalIp]
+        config.ipTags = newTags
+        toast.success('IP Tag deleted')
+    }
+    localIpTags.value.splice(index, 1)
+}
+
+
 </script>

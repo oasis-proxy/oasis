@@ -10,7 +10,7 @@
 
 /* Dark Mode Variables Override */
 .dark {
-  --bs-body-bg: #0f172a; /* slate-900 */
+  --bs-body-bg: #020617; /* slate-950 */
   --bs-body-color: #f8fafc; /* slate-50 */
 }
 
@@ -210,7 +210,7 @@ body {
   background-color: transparent !important;
 }
 .dark .ui-button-icon:hover {
-  background-color: rgba(255, 255, 255, 0.05) !important;
+  background-color: transparent !important;
 }
 .ui-button-dashed:hover {
   background-color: #ffffff !important;
@@ -297,7 +297,7 @@ body {
 .bg-gray-50 { background-color: #f9fafb !important; }
 
 /* Dark Mode Backgrounds */
-.dark .dark\:bg-background-dark { background-color: #121212 !important; }
+.dark .dark\:bg-background-dark { background-color: #020617 !important; }
 .dark .dark\:bg-sidebar-dark { background-color: #1e1e1e !important; }
 .dark .dark\:bg-card-dark { background-color: #252525 !important; }
 .dark .dark\:bg-input-dark { background-color: #2d2d2d !important; }
@@ -479,6 +479,7 @@ ul { padding: 0; margin: 0; list-style: none; }
 /* Color Input Overrides */
 input[type="color"].border-0 {
   -webkit-appearance: none;
+  appearance: none;
   border: none !important;
   background: none !important;
   padding: 0 !important;
@@ -497,4 +498,18 @@ input[type="color"].border-0::-webkit-color-swatch {
   font-size: 18px !important;
   font-weight: 600 !important;
   line-height: 1.25 !important;
+}
+
+/* Dark Mode Switch Override */
+.dark .form-check-input {
+    background-color: #374151 !important; /* gray-700 */
+    border-color: #4b5563 !important; /* gray-600 */
+}
+.dark .form-check-input:checked {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}
+.dark .form-check-input:focus {
+    border-color: var(--bs-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(19, 127, 236, 0.25) !important;
 }

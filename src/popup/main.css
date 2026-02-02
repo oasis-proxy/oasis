@@ -28,7 +28,7 @@ body {
 }
 
 .dark #app {
-  background: #0f1419;
+  background: #020617;
 }
 
 /* Header */
@@ -201,4 +201,18 @@ body {
 }
 .dark .profile-radio {
     border-color: #475569;
+}
+
+/* Dark Mode Switch Override */
+.dark .form-check-input {
+    background-color: #374151 !important; /* gray-700 */
+    border-color: #4b5563 !important; /* gray-600 */
+}
+.dark .form-check-input:checked {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}
+.dark .form-check-input:focus {
+    border-color: var(--bs-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(19, 127, 236, 0.25) !important;
 }

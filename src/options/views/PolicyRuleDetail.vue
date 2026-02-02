@@ -92,8 +92,8 @@
               <button @click="showBatchReplaceModal = true" class="ui-button-tertiary px-2 py-1 rounded-lg text-[10px] transition-colors">
                 <i class="bi bi-arrow-left-right me-1" style="font-size: 10px;"></i>Batch Replace
               </button>
-              <button @click="addRule" class="ui-button-tertiary px-2 py-1.5 rounded-lg d-flex align-items-center justify-content-center transition-colors">
-                <i class="bi bi-plus-lg" style="font-size: 14px;"></i>
+              <button @click="addRule" class="ui-button-icon" title="Add Rule">
+                <i class="bi bi-plus-lg text-sm"></i>
               </button>
             </div>
           </div>
@@ -158,14 +158,14 @@
                     <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class="dark:border-slate-600"></div>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
-                    <button @click="insertRuleBelow(index)" class="ui-button-icon" title="Add rule below" style="font-size: 10px; padding: 2px;">
-                      <i class="bi bi-plus-lg"></i>
+                    <button @click="insertRuleBelow(index)" class="ui-button-icon" title="Add rule below">
+                      <i class="bi bi-plus-lg text-xs"></i>
                     </button>
-                    <button @click="insertDividerBelow(index)" class="ui-button-icon" title="Add divider below" style="font-size: 10px; padding: 2px;">
-                      <i class="bi bi-dash-lg"></i>
+                    <button @click="insertDividerBelow(index)" class="ui-button-icon" title="Add divider below">
+                      <i class="bi bi-dash-lg text-xs"></i>
                     </button>
-                    <button @click="deleteRule(index)" class="ui-button-icon" title="Delete" style="font-size: 10px; padding: 2px;">
-                      <i class="bi bi-trash"></i>
+                    <button @click="deleteRule(index)" class="ui-button-icon" title="Delete">
+                      <i class="bi bi-trash text-xs"></i>
                     </button>
                   </div>
                 </div>
@@ -252,14 +252,14 @@
                     </select>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
-                    <button @click="insertRuleBelow(index)" class="ui-button-icon" title="Add rule below" style="font-size: 12px; padding: 2px 4px;">
-                      <i class="bi bi-plus"></i>
+                    <button @click="insertRuleBelow(index)" class="ui-button-icon" title="Add rule below">
+                      <i class="bi bi-plus-lg text-xs"></i>
                     </button>
-                    <button @click="insertDividerBelow(index)" class="ui-button-icon p-0.5" title="Add divider" style="font-size: 12px;">
-                      <i class="bi bi-dash-lg"></i>
+                    <button @click="insertDividerBelow(index)" class="ui-button-icon p-0.5" title="Add divider">
+                      <i class="bi bi-dash-lg text-xs"></i>
                     </button>
-                    <button @click="deleteRule(index)" class="ui-button-icon p-0.5" title="Delete" style="font-size: 12px;">
-                      <i class="bi bi-trash"></i>
+                    <button @click="deleteRule(index)" class="ui-button-icon p-0.5" title="Delete">
+                      <i class="bi bi-trash text-xs"></i>
                     </button>
                   </div>
                 </div>
@@ -302,8 +302,8 @@
         <section>
           <div class="d-flex align-items-center justify-content-between mb-3">
             <h3 class="text-sm font-semibold ui-text-primary m-0 uppercase tracking-wide">Reject Rules</h3>
-            <button @click="addRejectRule" class="ui-button-tertiary px-2 py-1.5 rounded-lg d-flex align-items-center justify-content-center transition-colors">
-              <i class="bi bi-plus-lg" style="font-size: 14px;"></i>
+            <button @click="addRejectRule" class="ui-button-icon" title="Add Reject Rule">
+              <i class="bi bi-plus-lg text-sm"></i>
             </button>
           </div>
 
@@ -366,14 +366,14 @@
                     <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class="dark:border-slate-600"></div>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
-                    <button @click="insertRejectRuleBelow(index)" class="ui-button-icon" title="Add rule below" style="font-size: 10px; padding: 2px;">
-                      <i class="bi bi-plus-lg"></i>
+                    <button @click="insertRejectRuleBelow(index)" class="ui-button-icon" title="Add rule below">
+                      <i class="bi bi-plus-lg text-xs"></i>
                     </button>
-                    <button @click="insertRejectDividerBelow(index)" class="ui-button-icon" title="Add divider below" style="font-size: 10px; padding: 2px;">
-                      <i class="bi bi-dash-lg"></i>
+                    <button @click="insertRejectDividerBelow(index)" class="ui-button-icon" title="Add divider below">
+                      <i class="bi bi-dash-lg text-xs"></i>
                     </button>
-                    <button @click="deleteRejectRule(index)" class="ui-button-icon" title="Delete" style="font-size: 10px; padding: 2px;">
-                      <i class="bi bi-trash"></i>
+                    <button @click="deleteRejectRule(index)" class="ui-button-icon" title="Delete">
+                      <i class="bi bi-trash text-xs"></i>
                     </button>
                   </div>
                 </div>
@@ -430,14 +430,14 @@
                   </div>
                 </div>
                 <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
-                  <button @click="insertRejectRuleBelow(index)" class="ui-button-icon" title="Add rule below" style="font-size: 12px; padding: 2px 4px;">
-                    <i class="bi bi-plus"></i>
+                  <button @click="insertRejectRuleBelow(index)" class="ui-button-icon" title="Add rule below">
+                    <i class="bi bi-plus-lg text-xs"></i>
                   </button>
-                  <button @click="insertRejectDividerBelow(index)" class="ui-button-icon p-0.5" title="Add divider" style="font-size: 12px;">
-                    <i class="bi bi-dash-lg"></i>
+                  <button @click="insertRejectDividerBelow(index)" class="ui-button-icon p-0.5" title="Add divider">
+                    <i class="bi bi-dash-lg text-xs"></i>
                   </button>
-                  <button @click="deleteRejectRule(index)" class="ui-button-icon p-0.5" title="Delete" style="font-size: 12px;">
-                    <i class="bi bi-trash"></i>
+                  <button @click="deleteRejectRule(index)" class="ui-button-icon p-0.5" title="Delete">
+                    <i class="bi bi-trash text-xs"></i>
                   </button>
                 </div>
               </div>

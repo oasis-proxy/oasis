@@ -88,8 +88,7 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 
 **Add Buttons** (+ icons):
 
-- Size: `ui-button-icon`
-- **Icon Size: `text-xs` (12px)**
+- Standard: **Icon Button** (see below)
 - Position: Right side of section header
 
 **Status Indicators**:
@@ -135,7 +134,13 @@ This skill provides the mandatory design specifications for the **Oasis** projec
   - Light: `bg-white border border-slate-300 text-slate-600`.
   - Dark: `bg-slate-700/800 border-transparent text-slate-300`.
 - **Danger**: `.ui-button-danger`
-- **Dashed (Add)**: `.ui-button-dashed` (`border-dashed w-full`)
+
+- **Icon Button**:
+  - **Class**: `.ui-button-icon`
+  - **Scope**: Auto policy rule actions, Sidebar add buttons.
+  - **Visual**: No border, no background in default state.
+  - **Hover**: Icon/Text color changes (e.g., to Primary color). No background change.
+  - **Sizes**: `text-sm` (14px) or `text-xs` (12px).
 
 #### Inputs & Selects
 
@@ -147,7 +152,8 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 #### Section Labels
 
 - **Style**: `text-sm font-semibold settings-label mb-4 flex items-center gap-2`
-- **Icon**: `text-[20px]` text-primary
+
+- **Icon**: None.
 
 #### Grid Layouts (Forms)
 
@@ -175,7 +181,8 @@ Use these classes instead of raw Tailwind utilities for settings pages:
 | **Primary Text**   | `.ui-text-primary`   | Slate-900                 | White                              |
 | **Secondary Text** | `.ui-text-secondary` | Slate-500                 | Slate-400                          |
 | **Icons**          | `.ui-icon-{color}`   | `bg-{color}-50`           | `rgba({color}, 0.2)` (Transparent) |
-| **Dashed Button**  | `.ui-button-dashed`  | Transparent Border        | Transparent White-05 Hover         |
+
+| **Switch** | `.form-switch` | Bootstrap Default | **Start Color**: `#4b5563` (Gray-600) / **Checked**: Primary |
 
 **Implementation Rule**:
 
@@ -191,36 +198,21 @@ Use these classes instead of raw Tailwind utilities for settings pages:
 </div>
 ```
 
-## 3. CSS Utilities (Tailwind-Compatibility)
-
-The project uses standard CSS that _mimics_ Tailwind classes.
-
-- **Do not assume all Tailwind classes exist.**
-- **Safe List**: `flex`, `flex-col`, `items-center`, `justify-between`, `gap-1` to `gap-4`, `p-4`, `px-8`, `rounded-lg`, `rounded-xl`, `w-full`, `h-full`.
-- **Custom**: `custom-scrollbar`, `size-5` (1.25rem), `size-7` (1.75rem).
-
-## 4. Implementation Workflow
-
-1. **Check Reference**: Look at `stitch_oasis_proxy` HTML files for structure.
-2. **Adapt Icons**: Replace any `<span class="material-symbols-...">` with `<i class="bi bi-...">`.
-3. **Verify Fonts**: Ensure `text-[10px]` or `text-xs` are used exactly as in the reference.
 4. **Use Shared CSS**: Ensure `main.css` is imported.
+
+### 2.6 Form Components (Bootstrap)
+
+#### Switches (Toggles)
+
+- **Class**: `.form-check .form-switch`
+- **Dark Mode**:
+  - **Unchecked**: Background `#4b5563` (Gray-600) (NOT Black).
+  - **Checked**: Primary Color.
+  - **Knob**: White / Light Gray.
 
 ---
 
 **Usage**: Read this file before creating or modifying any Vue components or HTML files to ensure UI consistency.
-
-## 5. Workflow Automation
-
-### 5.1 Build Process
-
-- **Mandatory Build**: After **EVERY** set of modifications to Vue files, CSS, or build configurations, you **MUST** run `npm run build` to ensure the extension is correctly compiled.
-- **Verification**: Check the build output for errors.
-
-### 5.2 Version Control
-
-- **No Manual Staging**: Do **NOT** automatically run `git add` or `git commit` after changes unless the user **EXPLICITLY** requests it.
-- **Usage**: Leave the staging area management to the user. Only modify the files and build.
 
 ### 2.8 Toast Notifications
 
