@@ -12,7 +12,7 @@
              style="width: 24px; height: 24px; min-width: 24px;"
              title="Choose color"
           />
-          <h2 class="text-[22px] font-bold ui-text-primary tracking-tight m-0">
+          <h2 class="fs-4 font-bold ui-text-primary tracking-tight m-0">
             {{ policy.name || 'Auto Policy' }}
           </h2>
         </div>
@@ -89,8 +89,8 @@
           <div class="d-flex align-items-center justify-content-between mb-3">
             <h3 class="text-sm font-semibold ui-text-primary m-0 uppercase tracking-wide">Normal Rules</h3>
             <div class="d-flex align-items-center gap-2">
-              <button @click="showBatchReplaceModal = true" class="ui-button-tertiary px-2 py-1 rounded-lg text-[10px] transition-colors">
-                <i class="bi bi-arrow-left-right me-1" style="font-size: 10px;"></i>Batch Replace
+              <button @click="showBatchReplaceModal = true" class="ui-button-tertiary px-2 py-1 rounded-lg text-xs transition-colors d-flex align-items-center gap-2">
+                <i class="bi bi-arrow-left-right" style="font-size: 10px;"></i> Batch Replace
               </button>
               <button @click="addRule" class="ui-button-icon" title="Add Rule">
                 <i class="bi bi-plus-lg text-sm"></i>
@@ -101,7 +101,7 @@
 
           <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden">
             <!-- Table Header -->
-            <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-[10px] font-semibold ui-text-secondary uppercase tracking-wider">
+            <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-xs font-semibold ui-text-secondary uppercase tracking-wider">
               <div style="width: 4%;" class="text-center"></div>
               <div style="width: 16%;">Type</div>
               <div style="width: 52%;">Pattern</div>
@@ -138,7 +138,7 @@
                     <span 
                       v-if="editingDividerIndex !== index"
                       @dblclick="startEditDivider(index, rule.label)"
-                      class="text-[10px] font-semibold ui-text-secondary uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-1"
+                      class="text-xs font-semibold ui-text-secondary uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-2"
                       style="user-select: none; line-height: 1;"
                       title="Double-click to edit section name"
                     >
@@ -152,7 +152,7 @@
                       @blur="saveDividerLabel(index)"
                       @keyup.enter="saveDividerLabel(index)"
                       @keyup.esc="cancelEditDivider"
-                      class="form-control text-[10px] font-semibold uppercase tracking-widest text-center"
+                      class="form-control text-xs font-semibold uppercase tracking-widest text-center"
                       style="width: 150px; height: 18px; padding: 2px 8px;"
                     />
                     <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class="dark:border-slate-600"></div>
@@ -193,7 +193,7 @@
                   <div style="width: 16%;">
                     <select 
                       v-model="rule.ruleType" 
-                      class="form-select ui-input w-100 rounded border text-[10px] py-0 px-1.5" 
+                      class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
                       style="height: 28px; max-width: none;"
                       @change="handleRuleTypeChange(index, rule)"
                     >
@@ -210,7 +210,7 @@
                         v-model="rule.pattern" 
                         type="text" 
                         placeholder="Enter RuleSet URL..." 
-                        class="form-control ui-input w-100 mw-100 rounded text-[10px] py-0 font-mono"
+                        class="form-control ui-input w-100 mw-100 rounded text-xs py-0 font-mono"
                         :style="`height: 28px; padding-left: 8px; padding-right: 28px;${duplicateIndices.has(index) ? ' border-color: var(--bs-primary) !important;' : (validationErrors[index] ? ' border-color: #dc3545 !important;' : '')}`"
                         @focus="focusedIndex = index"
                         @blur="focusedIndex = null; validateRule(index, rule); fetchRuleSetContent(index, rule.pattern)"
@@ -233,7 +233,7 @@
                       v-model="rule.pattern" 
                       type="text" 
                       placeholder="Pattern..." 
-                      class="form-control ui-input w-100 mw-100 rounded text-[10px] py-0 px-2 font-mono"
+                      class="form-control ui-input w-100 mw-100 rounded text-xs py-0 px-2 font-mono"
                       :style="`height: 28px;${duplicateIndices.has(index) ? ' border-color: var(--bs-primary) !important;' : (validationErrors[index] ? ' border-color: #dc3545 !important;' : '')}`"
                       @focus="focusedIndex = index"
                       @blur="focusedIndex = null; validateRule(index, rule)"
@@ -242,7 +242,7 @@
                   <div style="width: 20%;">
                     <select 
                       v-model="rule.proxyId" 
-                      class="form-select ui-input w-100 rounded border text-[10px] py-0 px-1.5" 
+                      class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
                       style="height: 28px; max-width: none;"
                     >
                       <option value="direct">Direct</option>
@@ -268,7 +268,7 @@
 
             <!-- Empty State -->
             <div v-else class="p-2 d-flex align-items-center justify-content-center" style="min-height: 44px;">
-              <p class="text-[10px] ui-text-secondary m-0">No rules defined. Click "+" to get started.</p>
+              <p class="text-xs ui-text-secondary m-0">No rules defined. Click "+" to get started.</p>
             </div>
 
 
@@ -277,14 +277,14 @@
               <div style="width: 4%;"></div>
               <div style="width: 16%;"></div>
               <div style="width: 52%;" class="d-flex align-items-center justify-content-end px-2">
-                 <div class="d-flex align-items-center gap-2 text-[10px] font-semibold ui-text-secondary uppercase tracking-widest whitespace-nowrap">
+                 <div class="d-flex align-items-center gap-2 text-xs font-semibold ui-text-secondary uppercase tracking-widest whitespace-nowrap">
                    <i class="bi bi-arrow-return-right"></i> Default Strategy
                 </div>
               </div>
               <div style="width: 20%;">
                 <select 
                     v-model="policy.defaultProfileId"
-                    class="form-select ui-input w-100 rounded border text-[10px] py-0 px-1.5" 
+                    class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
                     style="height: 28px; max-width: none;"
                 >
                     <option value="direct">Direct</option>
@@ -309,7 +309,7 @@
 
           <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden">
             <!-- Table Header -->
-            <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-[10px] font-semibold ui-text-secondary uppercase tracking-wider">
+            <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-xs font-semibold ui-text-secondary uppercase tracking-wider">
               <div style="width: 4%;" class="text-center"></div>
               <div style="width: 16%;">Type</div>
               <div style="width: 52%;">Pattern</div>
@@ -346,7 +346,7 @@
                     <span 
                       v-if="editingRejectDividerIndex !== index"
                       @dblclick="startEditRejectDivider(index, rule.label)"
-                      class="text-[10px] font-semibold ui-text-secondary uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-1"
+                      class="text-xs font-semibold ui-text-secondary uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-1"
                       style="user-select: none; line-height: 1;"
                       title="Double-click to edit section name"
                     >
@@ -360,7 +360,7 @@
                       @blur="saveRejectDividerLabel(index)"
                       @keyup.enter="saveRejectDividerLabel(index)"
                       @keyup.esc="cancelEditRejectDivider"
-                      class="form-control text-[10px] font-semibold uppercase tracking-widest text-center"
+                      class="form-control text-xs font-semibold uppercase tracking-widest text-center"
                       style="width: 150px; height: 18px; padding: 2px 8px;"
                     />
                     <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class="dark:border-slate-600"></div>
@@ -401,7 +401,7 @@
                 <div style="width: 16%;">
                   <select 
                     v-model="rule.ruleType" 
-                    class="form-select ui-input w-100 rounded border text-[10px] py-0 px-1.5" 
+                    class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
                     style="height: 28px; max-width: none;"
                     @change="handleRuleTypeChange(index, rule); validateRejectRule(index, rule)"
                   >
@@ -416,7 +416,7 @@
                     v-model="rule.pattern" 
                     type="text" 
                     placeholder="Pattern..." 
-                    class="form-control ui-input w-100 mw-100 rounded border text-[10px] py-0 px-2 font-mono"
+                    class="form-control ui-input w-100 mw-100 rounded border text-xs py-0 px-2 font-mono"
                     :style="`height: 28px;${rejectValidationErrors[index] ? ' border-color: #dc3545 !important;' : ''}`"
                     @focus="focusedIndex = index"
                     @blur="focusedIndex = null; validateRejectRule(index, rule)"
@@ -424,7 +424,7 @@
 
                 </div>
                 <div style="width: 20%;">
-                  <div class="w-100 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-[10px] px-2 d-flex align-items-center gap-2 cursor-not-allowed" style="user-select: none; height: 28px;">
+                  <div class="w-100 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-xs px-2 d-flex align-items-center gap-2 cursor-not-allowed" style="user-select: none; height: 28px;">
                     <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
                     REJECT
                   </div>
@@ -446,7 +446,7 @@
 
             <!-- Empty State -->
             <div v-else class="p-2 d-flex align-items-center justify-content-center" style="min-height: 44px;">
-              <p class="text-[10px] ui-text-secondary m-0">No reject rules defined.</p>
+              <p class="text-xs ui-text-secondary m-0">No reject rules defined.</p>
             </div>
           </div>
         </section>

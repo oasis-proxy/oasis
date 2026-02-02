@@ -35,6 +35,21 @@
           </router-link>
 
           <router-link 
+            to="/sync" 
+            custom 
+            v-slot="{ navigate, isActive }"
+          >
+            <button 
+              @click="navigate"
+              class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-all border group"
+              :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
+            >
+              <i class="bi bi-cloud text-base"></i>
+              <span class="text-xs">Data Synchronization</span>
+            </button>
+          </router-link>
+
+          <router-link 
             to="/temp-rules" 
             custom 
             v-slot="{ navigate, isActive }"

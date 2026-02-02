@@ -4,6 +4,7 @@ import TempRules from '../views/TempRules.vue'
 import ProxyHostDetail from '../views/ProxyHostDetail.vue'
 import PolicyRuleDetail from '../views/PolicyRuleDetail.vue'
 import PacScriptDetail from '../views/PacScriptDetail.vue'
+import DataSync from '../views/DataSync.vue'
 
 const routes = [
   {
@@ -14,6 +15,11 @@ const routes = [
     path: '/settings',
     name: 'GeneralSettings',
     component: GeneralSettings
+  },
+  {
+    path: '/sync',
+    name: 'DataSync',
+    component: DataSync
   },
   {
     path: '/temp-rules',

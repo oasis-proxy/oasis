@@ -12,8 +12,6 @@ export const ProxyProtocol = {
 
 // Auto Switch Rule Types
 export const RuleType = {
-  DOMAIN_SUFFIX: 'domainSuffix', // e.g. google.com matches www.google.com
-  DOMAIN_KEYWORD: 'domainKeyword', // e.g. google matches www.google.com
   IP_CIDR: 'ipCIDR', // e.g. 192.168.1.0/24
   WILDCARD: 'wildcard', // e.g. *.google.com
   REGEX: 'regex', // e.g. ^https?://.*\.google\.com/
@@ -23,6 +21,7 @@ export const RuleType = {
 // Default Configuration Structure
 export const DEFAULT_CONFIG = {
   // --- General Settings (Storage Key: 'config') ---
+  version: 1, // Configuration version for sync
   activeProfileId: 'direct', // Only one active profile at a time
 
   ui: {

@@ -13,7 +13,7 @@
              style="width: 24px; height: 24px; min-width: 24px;"
              title="Choose color"
            />
-           <h1 class="text-[22px] font-bold ui-text-primary tracking-tight m-0">{{ pac.name || pac.url || 'Unnamed PAC' }}</h1>
+           <h1 class="fs-4 font-bold ui-text-primary tracking-tight m-0">{{ pac.name || pac.url || 'Unnamed PAC' }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
            
@@ -127,7 +127,7 @@
 
                     <!-- Refresh Button (2) -->
                     <div class="col-span-2 d-flex flex-column justify-content-end">
-                       <button @click="fetchPacContent" class="w-100 px-3 py-1 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none d-flex align-items-center justify-content-center gap-1 h-8">
+                       <button @click="fetchPacContent" class="w-100 px-3 py-1 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none d-flex align-items-center justify-content-center gap-2 h-8">
                            <i class="bi bi-arrow-clockwise"></i> Refresh
                        </button>
                     </div>
@@ -159,8 +159,8 @@
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <h3 class="text-sm font-semibold ui-text-primary m-0 uppercase tracking-wide">Script Content</h3>
                 <div>
-                    <span v-if="pac.mode === 'remote'" class="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-[10px] font-mono text-slate-600 dark:text-slate-300">Read Only</span>
-                    <span v-else class="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-[10px] font-mono text-slate-600 dark:text-slate-300">Editable</span>
+                    <span v-if="pac.mode === 'remote'" class="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-xs font-mono text-slate-600 dark:text-slate-300">Read Only</span>
+                    <span v-else class="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-xs font-mono text-slate-600 dark:text-slate-300">Editable</span>
                 </div>
             </div>
             <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden d-flex flex-column h-100 w-100 flex-1">

@@ -14,7 +14,7 @@
              style="width: 24px; height: 24px; background: none;"
              title="Choose color"
            />
-           <h1 class="text-[22px] font-bold ui-text-primary tracking-tight m-0">{{ proxy.label || proxy.host || 'Unnamed Proxy' }}</h1>
+           <h1 class="fs-4 font-bold ui-text-primary tracking-tight m-0">{{ proxy.label || proxy.host || 'Unnamed Proxy' }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
            

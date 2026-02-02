@@ -3,7 +3,7 @@
     <!-- Header -->
     <header class="h-24 px-5 d-flex align-items-center justify-content-between border-b border-slate-100 dark:border-slate-700 transition-colors">
       <div>
-        <h2 class="text-[22px] font-bold text-slate-900 dark:text-slate-50 m-0">General Settings</h2>
+        <h2 class="fs-4 font-bold text-slate-900 dark:text-slate-50 m-0">General Settings</h2>
         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 m-0">Configure global behavior for the extension.</p>
       </div>
     </header>
@@ -22,7 +22,7 @@
             <div class="d-flex align-items-center justify-content-between px-4 pt-4 pb-3 hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Theme Style</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">Theme</p>
                   <p class="text-xs ui-text-secondary mt-0.5 m-0">Choose your preferred visual theme.</p>
                 </div>
               </div>
@@ -44,52 +44,20 @@
               </select>
             </div>
 
-            <!-- Auto Refresh -->
+            <!-- Refresh On Switch -->
             <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Auto Refresh</p>
-                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Automatically refresh connections when idle.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">Refresh On Switch</p>
+                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Automatically refresh tab when switch proxy.</p>
                 </div>
               </div>
               <div class="form-check form-switch">
-                <input v-model="config.behavior.autoRefresh" class="form-check-input" type="checkbox" role="switch" id="autoRefreshSwitch">
+                <input v-model="config.behavior.refreshOnSwitch" class="form-check-input" type="checkbox" role="switch" id="refreshOnSwitchSwitch">
               </div>
             </div>
 
-            <!-- Auto Sync -->
-             <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Auto Sync</p>
-                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Synchronize settings across devices automatically.</p>
-                </div>
-              </div>
-              <div class="form-check form-switch">
-                <input v-model="config.sync.enabled" class="form-check-input" type="checkbox" role="switch" id="autoSyncSwitch">
-              </div>
-            </div>
 
-            <!-- Maintenance -->
-            <div class="d-flex align-items-center justify-content-between px-4 pt-3 pb-4 hover:bg-slate-50/50 transition-colors">
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Maintenance</p>
-                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Manage configuration data.</p>
-                </div>
-              </div>
-              <div class="d-flex gap-2">
-                <button class="px-3 py-2 text-xs font-medium ui-button-secondary border rounded-lg transition-colors d-flex align-items-center gap-1">
-                  <i class="bi bi-upload text-[14px]"></i> Import
-                </button>
-                <button class="px-3 py-2 text-xs font-medium ui-button-secondary border rounded-lg transition-colors d-flex align-items-center gap-1">
-                  <i class="bi bi-download text-[14px]"></i> Export
-                </button>
-                 <button class="px-3 py-2 text-xs font-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-1">
-                  <i class="bi bi-trash text-[14px]"></i> Clear
-                </button>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -111,12 +79,12 @@
               <input v-model.lazy="rejectAddress" type="text" placeholder="ip:port" class="form-control ui-input block w-48 rounded-lg border text-xs focus:border-primary focus:ring-primary placeholder:text-slate-400" />
             </div>
 
-             <!-- Connection Monitoring -->
+             <!-- Request Monitoring -->
             <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Connection Monitoring</p>
-                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Monitor and log connection attempts.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">Request Monitoring</p>
+                  <p class="text-xs ui-text-secondary mt-0.5 m-0">Monitor requests and their matching proxy rules.</p>
                 </div>
               </div>
               <div class="form-check form-switch">
@@ -156,7 +124,7 @@
                   
                   <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden">
                     <!-- Header -->
-                    <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-[10px] font-semibold ui-text-secondary uppercase tracking-wider">
+                    <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-xs font-semibold ui-text-secondary uppercase tracking-wider">
                       <div style="width: 50%;" class="px-2">IP Address</div>
                       <div style="width: 40%;" class="px-2">Tag Name</div>
                       <div style="width: 10%;" class="text-center">Action</div>
@@ -174,7 +142,7 @@
                             v-if="item.isEditing"
                             v-model="item.ip" 
                             type="text" 
-                            class="form-control ui-input w-100 rounded text-[10px] py-0 px-2 font-mono"
+                            class="form-control ui-input w-100 rounded text-xs py-0 px-2 font-mono"
                             style="height: 24px;"
                             :style="item.errors?.ip ? 'border-color: #dc3545 !important;' : ''"
                             placeholder="0.0.0.0" 
@@ -182,14 +150,14 @@
                             @keyup.esc="cancelEdit(index)"
                             @blur="validateItem(index)"
                           />
-                          <span v-else class="text-[10px] font-mono text-slate-700 dark:text-slate-300">{{ item.ip }}</span>
+                          <span v-else class="text-xs font-mono text-slate-700 dark:text-slate-300">{{ item.ip }}</span>
                         </div>
                         <div style="width: 40%;" class="px-2">
                            <input 
                             v-if="item.isEditing"
                             v-model="item.tag" 
                             type="text" 
-                            class="form-control ui-input w-100 rounded text-[10px] py-0 px-2"
+                            class="form-control ui-input w-100 rounded text-xs py-0 px-2"
                             style="height: 24px;"
                             :style="item.errors?.tag ? 'border-color: #dc3545 !important;' : ''"
                             placeholder="Tag Name" 
@@ -197,7 +165,7 @@
                             @keyup.esc="cancelEdit(index)"
                             @blur="validateItem(index)"
                           />
-                          <span v-else class="text-[10px] text-slate-700 dark:text-slate-300">{{ item.tag }}</span>
+                          <span v-else class="text-xs text-slate-700 dark:text-slate-300">{{ item.tag }}</span>
                         </div>
                         <div style="width: 10%;" class="d-flex align-items-center justify-content-center gap-1">
                             <template v-if="item.isEditing">
@@ -237,7 +205,7 @@
                     </div>
                      <!-- Empty State -->
                     <div v-else class="p-2 d-flex align-items-center justify-content-center" style="min-height: 44px;">
-                      <p class="text-[10px] ui-text-secondary m-0">No tags defined.</p>
+                      <p class="text-xs ui-text-secondary m-0">No tags defined.</p>
                     </div>
                   </div>
               </div>
@@ -379,7 +347,7 @@ const validateItem = (index) => {
 
     // Check duplicates (Tag Name uniqueness check as per user request)
     // "tagname needs to be confirmed not empty, and different from other tagnames"
-    const duplicateTag = Object.values(config.ipTags || {}).find(t => t === item.tag && item.originalIp && config.ipTags[item.originalIp] !== t)
+    
     // Note: Checking duplicates against config is tricky if we are editing.
     // We need to check against OTHER items.
     // More robust approach: Check against localIpTags (excluding self)

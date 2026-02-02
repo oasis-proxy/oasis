@@ -57,7 +57,7 @@
               <textarea 
                 :value="content"
                 readonly
-                class="w-100 rounded-lg border ui-input px-3 py-2 text-[10px] font-mono focus:outline-none custom-scrollbar bg-slate-50 dark:bg-white/5 ui-text-secondary"
+                class="w-100 rounded-lg border ui-input px-3 py-2 text-xs font-mono focus:outline-none custom-scrollbar bg-slate-50 dark:bg-white/5 ui-text-secondary"
                 style="min-height: 400px; max-height: 500px; resize: vertical;"
                 placeholder="No content available"
               ></textarea>

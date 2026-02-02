@@ -370,15 +370,10 @@ body {
 .space-y-8 > :not([hidden]) ~ :not([hidden]) { margin-top: 2rem !important; }
 
 /* Typography */
-.text-\[10px\] { font-size: 10px !important; line-height: 14px !important; }
 .text-xs { font-size: 12px !important; line-height: 16px !important; }
 .text-sm { font-size: 14px !important; line-height: 20px !important; }
 .text-base { font-size: 16px !important; line-height: 24px !important; }
 .text-xl { font-size: 20px !important; line-height: 28px !important; }
-.text-\[20px\] { font-size: 20px !important; }
-.text-\[18px\] { font-size: 18px !important; }
-.text-\[14px\] { font-size: 14px !important; }
-.text-\[22px\] { font-size: 22px !important; }
 .font-bold { font-weight: 700 !important; }
 .font-medium { font-weight: 500 !important; }
 .font-semibold { font-weight: 600 !important; }
@@ -405,6 +400,8 @@ body {
 .hover\:text-primary:hover { color: var(--bs-primary) !important; }
 .transition-colors { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke !important; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important; transition-duration: 150ms !important; }
 .group:hover .group-hover\:text-slate-600 { color: #475569 !important; }
+.group:hover .group-hover\:text-primary { color: var(--bs-primary) !important; }
+.dark .group:hover .dark\:group-hover\:text-slate-300 { color: #cbd5e1 !important; }
 
 /* Dark Mode Effects */
 .dark .dark\:hover\:bg-slate-700:hover { background-color: #334155 !important; }
