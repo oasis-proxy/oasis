@@ -282,19 +282,26 @@ const syncToLocal = () => {
     localIpTags.value = sortTags(tags)
 }
 
+// Initialize
+const isInitializing = ref(true)
+
 // Watch for external config changes
 watch(config, (newVal) => {
+    if (isInitializing.value) return
     saveGeneralSettings(newVal)
     // We do NOT sync to local here to avoid overwriting ongoing edits.
     // Local state is the source of truth for UI, Config is source of truth for Storage.
     // When we Save, we update Config.
 }, { deep: true })
 
-// Initialize
 onMounted(async () => {
     const loaded = await loadConfig()
     Object.assign(config, loaded)
     syncToLocal()
+    // Prevent immediate save triggered by Object.assign
+    setTimeout(() => {
+        isInitializing.value = false
+    }, 100)
 })
 
 const addTag = () => {

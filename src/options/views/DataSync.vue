@@ -65,13 +65,9 @@
             <!-- Local Version Card -->
             <div class="flex-1 ui-card rounded-xl border shadow-sm p-4 relative overflow-hidden group h-100">
                 <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
-                    <div class="p-2 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400">
-                        <i class="bi bi-laptop fs-5"></i>
-                    </div>
                     <div>
                         <div class="d-flex align-items-center gap-2">
                              <h3 class="text-sm font-semibold ui-text-primary m-0">Local Version</h3>
-                             <span v-if="localNewer" class="px-1.5 py-0.5 rounded-md bg-green-100 dark:bg-green-900/30 text-xs font-bold text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800">Newer</span>
                         </div>
                         <p class="text-xs ui-text-secondary m-0">This device</p>
                     </div>
@@ -126,7 +122,7 @@
             <div class="d-flex flex-column justify-content-center gap-3 flex-shrink-0 z-10">
                 <button @click="handleSyncToCloud" class="group d-flex align-items-center justify-content-between gap-3 w-40 px-3 py-3 ui-card rounded-lg border hover:border-primary hover:text-primary transition-all shadow-sm">
                     <div class="text-start">
-                        <span class="d-block text-xs font-bold">Sync to Cloud</span>
+                        <span class="d-block text-xs font-bold ui-text-primary group-hover:text-primary">Sync to Cloud</span>
                         <span class="d-block text-xs ui-text-secondary group-hover:text-primary/70">Local overwrites Cloud</span>
                     </div>
                     <i class="bi bi-arrow-right-circle-fill text-lg text-primary group-hover:translate-x-0.5 transition-transform"></i>
@@ -134,7 +130,7 @@
                  <button @click="handleSyncFromLocal" class="group d-flex align-items-center justify-content-between gap-3 w-40 px-3 py-3 ui-card rounded-lg border hover:border-primary hover:text-primary transition-all shadow-sm">
                     <i class="bi bi-arrow-left-circle-fill text-lg text-primary group-hover:-translate-x-0.5 transition-transform"></i>
                     <div class="text-end">
-                        <span class="d-block text-xs font-bold">Sync to Local</span>
+                        <span class="d-block text-xs font-bold ui-text-primary group-hover:text-primary">Sync to Local</span>
                         <span class="d-block text-xs ui-text-secondary group-hover:text-primary/70">Cloud overwrites Local</span>
                     </div>
                 </button>
@@ -143,13 +139,9 @@
             <!-- Cloud Version Card -->
             <div class="flex-1 ui-card rounded-xl border shadow-sm p-4 relative overflow-hidden group h-100">
                 <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
-                    <div class="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
-                         <i class="bi bi-cloud fs-5"></i>
-                    </div>
                     <div>
                         <div class="d-flex align-items-center gap-2">
                             <h3 class="text-sm font-semibold ui-text-primary m-0">Cloud Version</h3>
-                            <span v-if="cloudNewer" class="px-1.5 py-0.5 rounded-md bg-blue-100 dark:bg-blue-900/30 text-xs font-bold text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">Newer</span>
                         </div>
                         <p class="text-xs ui-text-secondary m-0">Remote repository</p>
                     </div>
@@ -230,7 +222,6 @@ const localLastModified = computed(() => {
     if (!config.updatedAt) return 'Unknown'
     return new Date(config.updatedAt).toLocaleString()
 })
-const localNewer = ref(false)
 const cloudNewer = ref(false)
 const softwareVersion = ref('Unknown')
 const showConflictModal = ref(false)
@@ -356,7 +347,7 @@ const compareVersions = () => {
     const localVer = config.version || 1
     const cloudVer = cloudConfig.value?.version || 0
     
-    localNewer.value = localVer > cloudVer || !cloudConfig.value
+    // Only used for conflict detection now
     cloudNewer.value = cloudVer > localVer
 }
 

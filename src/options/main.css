@@ -10,7 +10,7 @@
 
 /* Dark Mode Variables Override */
 .dark {
-  --bs-body-bg: #020617; /* slate-950 */
+  --bs-body-bg: #020617; /* slate-950 (Body Background) */
   --bs-body-color: #f8fafc; /* slate-50 */
 }
 
@@ -297,7 +297,7 @@ body {
 .bg-gray-50 { background-color: #f9fafb !important; }
 
 /* Dark Mode Backgrounds */
-.dark .dark\:bg-background-dark { background-color: #020617 !important; }
+.dark .dark\:bg-background-dark { background-color: #1a1a1a !important; }
 .dark .dark\:bg-sidebar-dark { background-color: #1e1e1e !important; }
 .dark .dark\:bg-card-dark { background-color: #252525 !important; }
 .dark .dark\:bg-input-dark { background-color: #2d2d2d !important; }

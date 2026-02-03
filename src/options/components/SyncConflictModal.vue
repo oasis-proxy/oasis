@@ -1,17 +1,24 @@
 <template>
-  <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" style="background-color: rgba(0,0,0,0.5)">
+  <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" style="background-color: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);">
     <div class="modal-dialog modal-dialog-centered" style="min-width: 680px; max-width: 800px">
       <div class="modal-content ui-card border shadow-lg rounded-2xl overflow-hidden">
         <!-- Header -->
-        <div class="modal-header p-4 bg-white dark:bg-slate-800 border-0">
-          <h5 class="modal-title font-bold text-slate-900 dark:text-slate-100 d-flex align-items-center gap-2">
+        <div class="modal-header p-4 border-0">
+          <h5 class="ui-modal-title ui-text-primary tracking-tight m-0 d-flex align-items-center gap-2">
             Sync Conflict Detected
           </h5>
-          <button type="button" class="btn-close" aria-label="Close" @click="$emit('cancel')"></button>
+          <button 
+            type="button"
+            class="p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
+            aria-label="Close"
+            @click="$emit('cancel')"
+          >
+            <i class="bi bi-x-lg text-lg"></i>
+          </button>
         </div>
 
         <!-- Body -->
-        <div class="modal-body px-4 pb-4 bg-slate-50/50 dark:bg-slate-900/50">
+        <div class="modal-body px-4 pb-4">
           <p class="text-sm text-slate-600 dark:text-slate-300 mb-4 text-center">
             The version in the cloud is newer than your local version. Please choose which version to keep.
           </p>
@@ -19,7 +26,7 @@
           <div class="row g-4">
              <!-- Local Version Card -->
              <div class="col-6">
-                 <div class="ui-card rounded-xl border shadow-sm p-4 relative overflow-hidden group h-100 bg-white dark:bg-slate-800">
+                 <div class="ui-card rounded-xl border shadow-sm p-4 relative overflow-hidden group h-100">
                     <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
                         <div>
                             <div class="d-flex align-items-center gap-2">
@@ -63,7 +70,7 @@
 
              <!-- Cloud Version Card -->
              <div class="col-6">
-                <div class="ui-card rounded-xl border shadow-sm p-4 relative overflow-hidden group h-100 bg-white dark:bg-slate-800">
+                <div class="ui-card rounded-xl border shadow-sm p-4 relative overflow-hidden group h-100">
                     <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
                         <div>
                             <div class="d-flex align-items-center gap-2">
@@ -106,7 +113,7 @@
         </div>
 
         <!-- Footer -->
-        <div class="modal-footer p-4 bg-white dark:bg-slate-800 d-flex justify-content-end gap-3 border-0">
+        <div class="modal-footer p-4 d-flex justify-content-end gap-3 border-0">
             <button type="button" class="btn ui-button-secondary h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="$emit('cancel')">
                 Cancel
             </button>
