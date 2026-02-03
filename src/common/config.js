@@ -36,8 +36,7 @@ export const DEFAULT_CONFIG = {
 
   behavior: {
     refreshOnSwitch: false,
-    connectionMonitoring: false,
-    autoRefresh: false
+    connectionMonitoring: false
   },
 
   sync: {
@@ -46,16 +45,47 @@ export const DEFAULT_CONFIG = {
 
   ipTags: {},
 
-
   // --- Profiles (Storage Keys: 'proxies', 'pacs', 'policies') ---
   
-  // Map of Proxy Servers (Key: ID)
+  // Map of Proxy Servers (Key: ID) 
   proxies: {},
 
   // Map of PAC Scripts (Key: ID)
   pacs: {},
 
-  // Map of Auto Policies (Key: ID)
+  /**
+   * Map of Auto Policies (Key: ID).
+   * 
+   * Schema:
+   * {
+   *   id: string,               // Unique ID
+   *   type: 'policy',           // Fixed type
+   *   name: string,             // Display name
+   *   color: string,            // UI color (hex)
+   *   defaultProfileId: string, // ID of profile to use if no rules match
+   *   
+   *   // Rules Lists (Ordered)
+   *   rules: Array<Rule>,       // Standard proxy rules
+   *   rejectRules: Array<Rule>, // Rejection/Blocking rules (Processed first)
+   * }
+   * 
+   * Rule Object Schema:
+   * {
+   *   type: 'rule' | 'divider', // 'divider' is a visual separator
+   *   ruleType: 'wildcard' | 'regex' | 'ip' | 'ruleset',
+   *   pattern: string,          // Matching pattern or RuleSet URL (Source of Truth)
+   *   proxyId: string,          // Target proxy ID
+   *   label: string,            // Optional label (for dividers)
+   *   
+   *   // RuleSet Cache (Populated by background script)
+   *   ruleSet: {
+   *     content: string,        // Raw content (stripped during cloud sync)
+   *     lastUpdated: number,    // Content timestamp
+   *     lastFetched: number,    // Fetch attempt timestamp
+   *     fetchError: string|null // Last fetch error
+   *   }
+   * }
+   */
   policies: {},
 
 

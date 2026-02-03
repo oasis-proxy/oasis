@@ -115,8 +115,9 @@ async function checkUpdates() {
 
         for (const rule of rules) {
             // Check if rule has a subscription URL (RuleSet)
-            if (rule.ruleSet && rule.ruleSet.url && rule.ruleSet.url.trim()) {
-                const url = rule.ruleSet.url.trim()
+            // Use rule.pattern as the source of truth for URL
+            if (rule.ruleType === 'ruleset' && rule.pattern && rule.pattern.trim()) {
+                const url = rule.pattern.trim()
                 
                 try {
                     console.log(`Oasis: Updating RuleSet for policy '${policyId}' from ${url}...`)
@@ -124,10 +125,8 @@ async function checkUpdates() {
                     if (!response.ok) throw new Error(`HTTP ${response.status}`)
                     const text = await response.text()
                     
-                    // Simple validation / processing
-                    // We just store the raw content, interpretation happens at parsing time (PAC gen)
-                    // But we might want to validate format here?
-                    // For now, mirroring frontend logic: fetch and store.
+                    // Initialize ruleSet object if missing (might be stripped by sync)
+                    if (!rule.ruleSet) rule.ruleSet = {}
                     
                     const now = Date.now()
                     rule.ruleSet.content = text
@@ -135,19 +134,17 @@ async function checkUpdates() {
                     rule.ruleSet.lastFetched = now
                     rule.ruleSet.fetchError = null
                     
-                    // Backward compatibility field
-                    rule.ruleSetContent = text
-                    
                     configChanged = true
                     console.log(`Oasis: Updated RuleSet in policy '${policyId}'. Size: ${text.length} chars.`)
                     
                 } catch (e) {
                     console.error(`Oasis: Failed to update RuleSet in policy '${policyId}':`, e)
-                    if (rule.ruleSet) {
-                         rule.ruleSet.fetchError = e.message
-                         rule.ruleSet.lastFetched = Date.now()
-                         configChanged = true // Save error state
-                    }
+                    // Ensure ruleSet object exists to store error
+                    if (!rule.ruleSet) rule.ruleSet = {}
+                    
+                    rule.ruleSet.fetchError = e.message
+                    rule.ruleSet.lastFetched = Date.now()
+                    configChanged = true // Save error state
                 }
             }
         }

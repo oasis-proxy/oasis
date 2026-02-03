@@ -666,7 +666,7 @@ const addRule = () => {
         ruleType: 'wildcard',
         pattern: '',
         proxyId: 'direct',
-        ruleSetContent: ''
+        ruleSet: {}
     }
     policy.value.rules.unshift(newRule)
     // Re-validate after adding
@@ -715,7 +715,7 @@ const insertRuleBelow = (index) => {
         ruleType: 'wildcard',
         pattern: '',
         proxyId: 'direct',
-        ruleSetContent: ''
+        ruleSet: {}
     }
     policy.value.rules.splice(index + 1, 0, newRule)
     // Re-validate after insertion
@@ -893,14 +893,13 @@ const fetchRuleSetContent = async (index, url) => {
       if (!rule.ruleSet) {
         rule.ruleSet = {}
       }
-      rule.ruleSet.url = url.trim()
+      
       rule.ruleSet.content = content
       rule.ruleSet.lastUpdated = now
       rule.ruleSet.lastFetched = now
       rule.ruleSet.fetchError = null
       
-      // Also update old field for backward compatibility
-      rule.ruleSetContent = content
+      
       
       console.log('RuleSet content saved:', content.substring(0, 100))
       
@@ -943,8 +942,8 @@ const openRuleSetModal = (rule, index) => {
     selectedRuleSetIndex.value = null
   } else {
     // New usage: openRuleSetModal(rule, index)
-    const content = rule.ruleSet?.content || rule.ruleSetContent || ''
-    const url = rule.ruleSet?.url || rule.pattern || ''
+    const content = rule.ruleSet?.content || ''
+    const url = rule.pattern || ''
     const lastUpdated = rule.ruleSet?.lastUpdated || null
     
     selectedRuleSetContent.value = content
@@ -962,7 +961,7 @@ const handleRuleSetUpdate = async () => {
     // Update modal content after fetch (originalPolicy is already synced in fetchRuleSetContent)
     const rule = policy.value.rules[selectedRuleSetIndex.value]
     if (rule) {
-      selectedRuleSetContent.value = rule.ruleSet?.content || rule.ruleSetContent || ''
+      selectedRuleSetContent.value = rule.ruleSet?.content || ''
       selectedRuleSetLastUpdated.value = rule.ruleSet?.lastUpdated || null
     }
   }

@@ -84,7 +84,9 @@ describe('generatePacScriptFromPolicy', () => {
                 { 
                     ruleType: 'ruleset', 
                     proxyId: 'proxy1',
-                    ruleSetContent: '||example.com\n@@||whitelist.com'
+                    ruleSet: {
+                        content: '||example.com\n@@||whitelist.com'
+                    }
                 }
             ]
         }, mockProxies)

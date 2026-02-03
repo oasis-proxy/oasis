@@ -117,7 +117,7 @@ export function generatePacScriptFromPolicy(policy, proxies) {
       
       // Handle RuleSet - expand into multiple rules
       if (rule.ruleType === 'ruleset') {
-        const ruleSetContent = rule.ruleSet?.content || rule.ruleSetContent || ''
+        const ruleSetContent = rule.ruleSet?.content || ''
         if (ruleSetContent) {
           try {
             const parsedRules = parseAutoProxyRules(ruleSetContent)
