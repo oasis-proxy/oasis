@@ -301,6 +301,10 @@ function startMonitoring() {
         onResponseStartedHandler,
         { urls: ["<all_urls>"] }
     )
+    chrome.webRequest.onErrorOccurred.addListener(
+        onErrorOccurredHandler,
+        { urls: ["<all_urls>"] }
+    )
     chrome.webNavigation.onBeforeNavigate.addListener(onBeforeNavigateHandler)
     chrome.tabs.onRemoved.addListener(onTabRemovedHandler)
     console.log("Oasis: Monitoring started.")
@@ -309,6 +313,9 @@ function startMonitoring() {
 function stopMonitoring() {
     if (chrome.webRequest.onResponseStarted.hasListener(onResponseStartedHandler)) {
         chrome.webRequest.onResponseStarted.removeListener(onResponseStartedHandler)
+    }
+    if (chrome.webRequest.onErrorOccurred.hasListener(onErrorOccurredHandler)) {
+        chrome.webRequest.onErrorOccurred.removeListener(onErrorOccurredHandler)
     }
     if (chrome.webNavigation.onBeforeNavigate.hasListener(onBeforeNavigateHandler)) {
         chrome.webNavigation.onBeforeNavigate.removeListener(onBeforeNavigateHandler)
@@ -330,7 +337,6 @@ function onResponseStartedHandler(details) {
         const url = new URL(details.url)
         const domain = url.hostname
         const ip = details.ip
-        const type = details.type // 'main_frame', 'xmlhttprequest', 'image', etc.
 
         // Store in memory
         let tabData = monitorMap.get(details.tabId)
@@ -341,25 +347,47 @@ function onResponseStartedHandler(details) {
 
         let domainData = tabData.get(domain)
         if (!domainData) {
-            domainData = { ips: new Set(), types: new Set() }
+            domainData = { ip: '', error: '' }
             tabData.set(domain, domainData)
         }
         
-        let changed = false
-        if (!domainData.ips.has(ip)) {
-            domainData.ips.add(ip)
-            changed = true
-        }
-        if (!domainData.types.has(type)) {
-            domainData.types.add(type)
-            changed = true
-        }
-
-        if (changed) {
+        // Update to latest IP, clear error if success
+        if (domainData.ip !== ip || domainData.error) {
+            domainData.ip = ip
+            domainData.error = ''
             scheduleSessionSync(details.tabId)
         }
     } catch (e) {
         // Ignore invalid URLs
+    }
+}
+
+function onErrorOccurredHandler(details) {
+    if (details.tabId === -1) return
+
+    try {
+        const url = new URL(details.url)
+        const domain = url.hostname
+        const error = details.error
+
+        let tabData = monitorMap.get(details.tabId)
+        if (!tabData) {
+            tabData = new Map()
+            monitorMap.set(details.tabId, tabData)
+        }
+
+        let domainData = tabData.get(domain)
+        if (!domainData) {
+            domainData = { ip: '', error: '' }
+            tabData.set(domain, domainData)
+        }
+
+        if (domainData.error !== error) {
+            domainData.error = error
+            scheduleSessionSync(details.tabId)
+        }
+    } catch (e) {
+        // Ignore
     }
 }
 
@@ -407,8 +435,8 @@ async function syncToSessionStorage() {
             for (const [domain, data] of tabData.entries()) {
                 list.push({ 
                     domain, 
-                    ips: Array.from(data.ips),
-                    types: Array.from(data.types)
+                    ip: data.ip,
+                    error: data.error
                 })
             }
             updates[key] = list

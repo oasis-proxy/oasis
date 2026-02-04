@@ -1,4 +1,11 @@
 <template>
+  <!-- Global Notifications -->
+  <div v-if="showCopied" class="position-fixed top-0 start-0 w-100 d-flex justify-content-center mt-4" style="z-index: 9999; pointer-events: none;">
+      <div class="badge bg-dark px-3 py-2 shadow-lg animate-fade-in" style="font-size: 13px; opacity: 0.95;">
+          <i class="bi bi-check2 me-1"></i> Copied to clipboard
+      </div>
+  </div>
+
   <!-- Header -->
   <header class="popup-header">
     <div class="header-tabs">
@@ -10,6 +17,7 @@
         Proxy
       </button>
       <button 
+        v-if="showMonitorTab"
         class="tab-btn" 
         :class="{ active: currentTab === 'monitor' }"
         @click="currentTab = 'monitor'"
@@ -33,7 +41,7 @@
     </div>
     
     <div class="header-actions">
-       <button @click="openMonitor" class="header-btn" title="Open Monitor">
+       <button v-if="showMonitorTab" @click="openMonitor" class="header-btn" title="Open Monitor">
         <i class="bi bi-activity" style="font-size: 18px;"></i>
       </button>
       <button @click="openOptions" class="header-btn" title="Options">
@@ -169,8 +177,8 @@
         </div>
       </div>
 
-      <!-- PLACEHOLDERS FOR OTHER TABS -->
-      <div v-if="currentTab === 'monitor'" class="d-flex flex-column h-100 bg-white dark:bg-background-dark">
+      <!-- MONITOR TAB -->
+      <div v-if="currentTab === 'monitor'" class="monitor-container d-flex flex-column h-100">
           <!-- Protocol Warning -->
           <div v-if="!isProtocolSupported" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
                <div class="text-center p-4">
@@ -192,23 +200,32 @@
           <!-- List -->
           <div v-else class="flex-1 overflow-y-auto custom-scrollbar p-0">
              <div v-for="(item, index) in monitorResult" :key="index" 
-                class="d-flex align-items-center py-3 border-bottom border-light dark:border-divider-dark hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+                class="monitor-item d-flex align-items-center py-3 border-bottom transition-colors"
                 style="padding-left: 0.75rem; padding-right: 0.75rem;"
              >
                  <!-- Domain Column (60%) -->
                  <div class="pe-3 overflow-hidden" style="flex: 0 0 60%;">
-                     <div class="fw-medium text-sm text-body text-truncate" :title="item.domain">
+                     <div 
+                        class="monitor-domain fw-medium text-truncate" 
+                        style="cursor: pointer; font-size: 12px;"
+                        :title="`Click to copy: ${item.domain}`"
+                        @click="copyDomain(item.domain)"
+                     >
                          {{ item.domain }}
                      </div>
                  </div>
                  
-                 <!-- IPs Column (40%) -->
+                 <!-- IP/Error Column (40%) -->
                  <div class="d-flex flex-wrap justify-content-end gap-1.5 overflow-hidden" style="flex: 0 0 40%;">
-                     <span v-for="ip in item.ips" :key="ip" 
-                        class="badge bg-light text-secondary border fw-normal font-mono max-w-full text-truncate"
-                        :title="ip"
+                     <span v-if="item.error" class="monitor-error text-danger text-truncate" style="font-size: 12px;" :title="item.error">
+                         {{ item.error }}
+                     </span>
+                     <span v-else-if="item.ip" 
+                        class="monitor-badge badge fw-normal font-mono max-w-full text-truncate"
+                        style="font-size: 12px;"
+                        :title="item.ip"
                      >
-                         {{ formatIp(ip) }}
+                         {{ formatIp(item.ip) }}
                      </span>
                  </div>
              </div>
@@ -243,6 +260,8 @@ const currentTab = ref('proxy') // proxy, monitor, quick, info
 const monitorResult = ref([])
 const activeTabId = ref(null)
 const currentTabUrl = ref('')
+const showCopied = ref(false)
+let copiedTimer = null
 
 // Load configuration
 onMounted(async () => {
@@ -259,8 +278,8 @@ onMounted(async () => {
       currentTabUrl.value = tabs[0].url
   }
 
-  // Auto-switch to monitor if enabled
-  if (config.value.behavior?.connectionMonitoring) {
+  // Auto-switch to monitor if enabled and supported
+  if (showMonitorTab.value) {
       currentTab.value = 'monitor'
       loadMonitorData()
       chrome.storage.onChanged.addListener(storageListener)
@@ -370,12 +389,22 @@ const openOptions = () => {
 }
 
 const openMonitor = () => {
-   currentTab.value = 'monitor'
+   if (showMonitorTab.value) {
+       currentTab.value = 'monitor'
+   }
 }
 
 // --- Monitor Logic ---
+const isMonitoringConfigEnabled = computed(() => {
+    return !!config.value?.behavior?.connectionMonitoring
+})
+
 const isProtocolSupported = computed(() => {
     return /^https?:/.test(currentTabUrl.value)
+})
+
+const showMonitorTab = computed(() => {
+    return isMonitoringConfigEnabled.value && isProtocolSupported.value
 })
 
 const loadMonitorData = async () => {
@@ -403,6 +432,17 @@ const formatIp = (ip) => {
         return config.value.ipTags[ip]
     }
     return ip
+}
+
+// Copy to clipboard
+const copyDomain = (domain) => {
+    navigator.clipboard.writeText(domain).then(() => {
+        showCopied.value = true
+        if (copiedTimer) clearTimeout(copiedTimer)
+        copiedTimer = setTimeout(() => {
+            showCopied.value = false
+        }, 2000)
+    })
 }
 
 

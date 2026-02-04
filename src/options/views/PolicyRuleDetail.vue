@@ -581,6 +581,14 @@ const loadPolicyData = async () => {
     if (config.value?.policies?.[id]) {
         policy.value = JSON.parse(JSON.stringify(config.value.policies[id]))
         
+        // Reset UI states when loading new policy
+        validationErrors.value = {}
+        rejectValidationErrors.value = {}
+        focusedIndex.value = null
+        editingDividerIndex.value = null
+        editingRejectDividerIndex.value = null
+        fetchingRuleSetIndex.value = null
+
         // Ensure defaults - defensive initialization
         if (!Array.isArray(policy.value.rules)) {
             policy.value.rules = []
