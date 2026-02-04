@@ -189,6 +189,14 @@ async function applyProxySettings(config) {
         // Apply to Chrome
         await chrome.proxy.settings.set({ value: proxyConfig, scope: 'regular' })
         console.log('Oasis: Proxy settings applied successfully.', proxyConfig)
+        
+        // Update Extension Badge
+        const name = profile.name || profile.label || profile.id
+        const shortName = name.length > 3 ? name.substring(0, 3) + '..' : name
+        const color = profile.color || '#4b5563' // Default gray
+        
+        await chrome.action.setBadgeText({ text: shortName })
+        await chrome.action.setBadgeBackgroundColor({ color: color })
 
     } catch (err) {
         console.error('Oasis: Failed to apply proxy settings:', err)

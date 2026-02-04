@@ -18,7 +18,7 @@ body {
 }
 
 #app {
-  width: 320px;
+  width: 360px;
   height: 450px;
   background: white;
   overflow: hidden;
@@ -40,14 +40,58 @@ body {
   justify-content: space-between;
   padding: 0 0.75rem;
   flex-shrink: 0;
+  gap: 10px;
 }
 
-.popup-header h2 {
-  font-size: 0.875rem;
-  font-weight: 700;
-  margin: 0;
+/* Header Tab Nav */
+.header-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
   color: #111418;
-  letter-spacing: -0.015em;
+}
+
+.tab-btn.active {
+  background-color: rgba(0, 0, 0, 0.05); /* or primary tint? */
+  color: var(--bs-primary);
+  font-weight: 600;
+}
+
+.dark .tab-btn {
+  color: #94a3b8;
+}
+.dark .tab-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+}
+.dark .tab-btn.active {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--bs-primary);
+}
+
+
+/* Header Actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 /* Header buttons */
@@ -67,7 +111,14 @@ body {
 
 .header-btn:hover {
   background-color: rgba(0, 0, 0, 0.05);
+  color: var(--bs-primary);
 }
+
+.dark .header-btn:hover {
+   background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ... existing styles ... */
 
 /* Main content */
 .popup-main {
@@ -183,9 +234,6 @@ body {
 }
 .dark .header-btn {
     color: #94a3b8;
-}
-.dark .header-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
 }
 .dark .section-heading {
     color: #94a3b8;

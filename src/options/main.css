@@ -510,3 +510,13 @@ input[type="color"].border-0::-webkit-color-swatch {
     border-color: var(--bs-primary) !important;
     box-shadow: 0 0 0 0.25rem rgba(19, 127, 236, 0.25) !important;
 }
+
+/* Display Utilities (Tailwind Compat) */
+.hidden { display: none !important; }
+.block { display: block !important; }
+.dark .dark\:hidden { display: none !important; }
+.dark .dark\:block { display: block !important; }
+
+/* Object Fit */
+.object-contain { object-fit: contain !important; }
+.object-cover { object-fit: cover !important; }

@@ -1,13 +1,9 @@
 <template>
   <aside class="w-72 bg-slate-50 dark:bg-sidebar-dark border-r border-slate-200 dark:border-divider-dark d-flex flex-column shrink-0 transition-colors">
     <!-- Logo / Brand -->
-    <div class="h-24 d-flex align-items-center px-4 border-b border-slate-100 dark:border-divider-dark transition-colors">
-      <div class="d-flex align-items-center gap-3 text-slate-900 dark:text-white">
-        <div class="size-8 bg-primary rounded-lg d-flex align-items-center justify-content-center text-white shadow-lg shadow-primary/30" style="width: 32px; height: 32px;">
-          <i class="bi bi-router text-base"></i>
-        </div>
-        <h1 class="text-base font-bold tracking-tight m-0">Oasis Proxy</h1>
-      </div>
+    <div class="h-24 d-flex align-items-center justify-content-center px-4 border-b border-slate-100 dark:border-divider-dark transition-colors bg-white dark:bg-sidebar-dark">
+      <img src="../../assets/img/banner-light.png" alt="Oasis Proxy" class="object-contain dark:hidden block" style="width: 240px; height: auto;">
+      <img src="../../assets/img/banner-dark.png" alt="Oasis Proxy" class="object-contain hidden dark:block" style="width: 240px; height: auto;">
     </div>
 
     <!-- Navigation -->
