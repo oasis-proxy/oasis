@@ -10,23 +10,13 @@
       <!-- Modal Card -->
       <div 
         class="ui-card w-100 d-flex flex-column overflow-hidden rounded-xl shadow-lg"
-        style="max-width: 720px; transition: transform 0.3s ease;"
+        style="max-width: 720px; height: 600px; max-height: 90vh; transition: transform 0.3s ease;"
         :style="{ transform: visible ? 'scale(1)' : 'scale(0.95)' }"
       >
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <div class="flex-1">
-            <h3 class="ui-text-primary ui-modal-title tracking-tight m-0">RuleSet Content</h3>
-            <div v-if="url" class="mt-2 d-flex flex-column gap-1">
-              <p class="text-xs ui-text-secondary m-0">
-                <i class="bi bi-link-45deg"></i> {{ url }}
-              </p>
-              <p v-if="lastUpdated" class="text-xs ui-text-secondary m-0">
-                <i class="bi bi-clock"></i> Last Updated: {{ formattedTime }}
-              </p>
-            </div>
-          </div>
+          <h3 class="ui-text-primary ui-modal-title tracking-tight m-0">RuleSet Content</h3>
           <button 
             @click="emit('close')" 
             class="-mr-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
@@ -36,32 +26,52 @@
         </div>
 
         <!-- Modal Body -->
-        <div class="px-4 pb-4 flex-1">
-          <div class="d-flex flex-column gap-3">
+        <div class="px-4 pb-4 flex-1 overflow-hidden d-flex flex-column">
+          <div class="d-flex flex-column gap-4 h-100">
+            
+            <!-- URL Row -->
+            <div v-if="url">
+              <label class="d-flex flex-column gap-2 w-100 mb-0">
+                <span class="ui-text-primary text-xs font-medium leading-none">RuleSet URL</span>
+                <div class="px-3 py-2 rounded-lg border ui-input text-xs ui-text-secondary break-all font-mono" style="min-height: 32px;">
+                  {{ url }}
+                </div>
+              </label>
+            </div>
+
+            <!-- Last Updated Row -->
+            <div v-if="lastUpdated">
+               <label class="d-flex flex-column gap-2 w-100 mb-0">
+                <span class="ui-text-primary text-xs font-medium leading-none">Last Updated</span>
+                <div class="px-3 py-2 rounded-lg border ui-input text-xs ui-text-secondary" style="min-height: 32px;">
+                  {{ formattedTime }}
+                </div>
+              </label>
+            </div>
             
             <!-- Content Display -->
-            <div class="d-flex flex-column gap-2 w-100">
+            <label class="d-flex flex-column gap-2 w-100 mb-0 flex-1 overflow-hidden">
               <div class="d-flex justify-content-between align-items-center">
                 <span class="ui-text-primary text-xs font-medium leading-none">Downloaded Content</span>
                 <button 
                   v-if="url"
                   @click="handleUpdate"
                   :disabled="updating"
-                  class="px-2 py-1 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none d-flex align-items-center gap-1"
+                  class="px-2 py-1.5 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none d-flex align-items-center gap-1 border border-slate-200 dark:border-divider-dark"
                   :class="{ 'opacity-50 cursor-not-allowed': updating }"
                 >
                   <i class="bi bi-arrow-clockwise" :class="{ 'animate-spin': updating }"></i>
-                  {{ updating ? 'Updating...' : 'Manual Update' }}
+                  {{ updating ? 'Updating...' : 'Update' }}
                 </button>
               </div>
               <textarea 
                 :value="content"
                 readonly
-                class="w-100 rounded-lg border ui-input px-3 py-2 text-xs font-mono focus:outline-none custom-scrollbar bg-slate-50 dark:bg-white/5 ui-text-secondary"
-                style="min-height: 400px; max-height: 500px; resize: vertical;"
+                class="w-100 h-100 rounded-lg border ui-input px-3 py-2 text-xs font-mono focus:outline-none custom-scrollbar ui-text-secondary"
+                style="resize: none;"
                 placeholder="No content available"
               ></textarea>
-            </div>
+            </label>
 
           </div>
         </div>

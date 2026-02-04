@@ -89,7 +89,7 @@
           <div class="d-flex align-items-center justify-content-between mb-3">
             <h3 class="text-sm font-semibold ui-text-primary m-0 uppercase tracking-wide">Normal Rules</h3>
             <div class="d-flex align-items-center gap-2">
-              <button @click="showBatchReplaceModal = true" class="ui-button-tertiary px-2 py-1 rounded-lg text-xs transition-colors d-flex align-items-center gap-2">
+              <button @click="showBatchReplaceModal = true" class="ui-button-secondary px-2 py-1 rounded-lg text-xs transition-colors d-flex align-items-center gap-2">
                 <i class="bi bi-arrow-left-right" style="font-size: 10px;"></i> Batch Replace
               </button>
               <button @click="addRule" class="ui-button-icon" title="Add Rule">
@@ -941,13 +941,31 @@ const fetchRuleSetContent = async (index, url) => {
       
       console.log('RuleSet content saved:', content.substring(0, 100))
       
-      // Save to config immediately
-      config.value.policies[policy.value.id] = JSON.parse(JSON.stringify(policy.value))
-      await savePolicies(config.value.policies)
+      console.log('RuleSet content saved:', content.substring(0, 100))
       
-      // Update originalPolicy to prevent dirty state
-      // This ensures the "Save Changes" button doesn't activate after auto-save
-      originalPolicy.value = JSON.parse(JSON.stringify(policy.value))
+      // Determine if we should auto-save
+      // - If rule is new or pattern changed: Do NOT auto-save (User needs to confirm edit)
+      // - If rule is existing and pattern unchanged: Auto-save (Maintenance update)
+      let shouldAutoSave = false
+      if (originalPolicy.value && originalPolicy.value.rules) {
+          const originalRule = originalPolicy.value.rules.find(r => r.id === rule.id)
+          if (originalRule && originalRule.pattern === rule.pattern) {
+              shouldAutoSave = true
+          }
+      }
+
+      if (shouldAutoSave) {
+          // Save to config immediately
+          config.value.policies[policy.value.id] = JSON.parse(JSON.stringify(policy.value))
+          await savePolicies(config.value.policies)
+          
+          // Update originalPolicy to prevent dirty state
+          originalPolicy.value = JSON.parse(JSON.stringify(policy.value))
+          toast.success('RuleSet content updated.')
+      } else {
+          // Update local state only
+          toast.success('RuleSet content updated. Please save changes.')
+      }
     } else {
       console.error('Failed to fetch RuleSet:', response.error)
       // Save error to rule

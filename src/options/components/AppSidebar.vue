@@ -291,6 +291,10 @@ const handleCreatePolicy = async ({ name, type }) => {
     }
     
     // Navigation
-    router.push(`/policy/${id}`)
+    if (type === 'pac') {
+        router.push(`/pac/${id}`)
+    } else {
+        router.push(`/policy/${id}`)
+    }
 }
 </script>
