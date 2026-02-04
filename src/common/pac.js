@@ -9,7 +9,7 @@ import { parseAutoProxyRules, convertAutoProxyToInternalRules } from './autoprox
  * @param {Object} proxies - Proxies configuration object
  * @returns {string} The generated PAC script
  */
-export function generatePacScriptFromPolicy(policy, proxies) {
+export function generatePacScriptFromPolicy(policy, proxies, rejectConfig = null) {
   const policyName = policy.name || 'Auto Policy'
   const rules = policy.rules || []
   const rejectRules = policy.rejectRules || []
@@ -17,7 +17,14 @@ export function generatePacScriptFromPolicy(policy, proxies) {
   // Helper to convert proxy ID to PAC string
   const getProxyString = (proxyId) => {
     if (proxyId === 'direct') return 'DIRECT'
-    if (proxyId === 'reject') return 'PROXY 127.0.0.1:1'
+    if (proxyId === 'reject') {
+        if (rejectConfig && rejectConfig.host && rejectConfig.port) {
+            // User requested explicit HTTPS return string for reject
+            return `HTTPS ${rejectConfig.host}:${rejectConfig.port}`
+        }
+        // User requested override of classic PROXY 127.0.0.1:1
+        return 'HTTPS 127.0.0.1:443' 
+    }
     
     const proxy = proxies[proxyId]
     if (!proxy) return 'DIRECT'
@@ -72,10 +79,19 @@ export function generatePacScriptFromPolicy(policy, proxies) {
         return `shExpMatch(host, "${pattern}")`
       }
       case 'regex': {
-        // Only escape forward slashes (regex delimiters)
-        // Do NOT escape backslashes as they are part of the regex pattern (e.g. \. for literal dot)
-        const escapedPattern = rule.pattern
-            .replace(/\//g, '\\/')
+        const pattern = rule.pattern
+        
+        // Smart detection for URL matching vs Host matching
+        // If it starts with ^http, it is definitely a URL regex
+        const isUrlRegex = pattern.startsWith('^http')
+             
+        // Safely escape forward slashes that are NOT already escaped
+        // We use a safe replacement pattern compatible with older browsers (no lookbehind)
+        const escapedPattern = pattern.replace(/(\\)?\//g, ($0, $1) => $1 ? $0 : '\\/')
+        
+        if (isUrlRegex) {
+            return `/${escapedPattern}/.test(url)`
+        }
         return `/${escapedPattern}/.test(host)`
       }
       case 'ip':
@@ -99,11 +115,13 @@ export function generatePacScriptFromPolicy(policy, proxies) {
   // Add reject rules first
   if (rejectRules.length > 0) {
     pacContent += `  // Reject Rules\n`
+    const rejectStr = getProxyString('reject')
     rejectRules.forEach(rule => {
       if (rule.type === 'divider') return
+      if (rule.valid === false) return
       const condition = generateRuleCondition(rule)
       if (condition) {
-        pacContent += `  if (${condition}) return "PROXY 127.0.0.1:1";\n`
+        pacContent += `  if (${condition}) return "${rejectStr}";\n`
       }
     })
     pacContent += `\n`
@@ -114,6 +132,7 @@ export function generatePacScriptFromPolicy(policy, proxies) {
     pacContent += `  // Normal Rules\n`
     rules.forEach(rule => {
       if (rule.type === 'divider') return
+      if (rule.valid === false) return
       
       // Handle RuleSet - expand into multiple rules
       if (rule.ruleType === 'ruleset') {

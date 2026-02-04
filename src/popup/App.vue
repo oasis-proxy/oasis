@@ -227,6 +227,15 @@ const selectProfile = async (profileId) => {
   if (config.value) {
     config.value.activeProfileId = profileId
     await saveConfig(config.value)
+
+    // Handle Refresh on Switch
+    if (config.value.behavior?.refreshOnSwitch) {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0]?.id) {
+          chrome.tabs.reload(tabs[0].id)
+        }
+      })
+    }
   }
 }
 

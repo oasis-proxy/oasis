@@ -261,7 +261,7 @@ async function applyProxySettings(config) {
         else if (profile.rules || profile.defaultProfileId) {
              // Auto Policy
              // Generate PAC script from rules
-             const pacScriptData = generatePacScriptFromPolicy(profile, config.proxies || {}) 
+             const pacScriptData = generatePacScriptFromPolicy(profile, config.proxies || {}, config.reject) 
              proxyConfig.mode = 'pac_script'
              proxyConfig.pacScript = {
                  data: pacScriptData

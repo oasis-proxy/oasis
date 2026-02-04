@@ -103,8 +103,9 @@
             <!-- Table Header -->
             <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-xs font-semibold ui-text-secondary uppercase tracking-wider">
               <div style="width: 4%;" class="text-center"></div>
+              <div style="width: 8%;" class="text-center">Valid</div>
               <div style="width: 16%;">Type</div>
-              <div style="width: 52%;">Pattern</div>
+              <div style="width: 44%;">Pattern</div>
               <div style="width: 20%;">Proxy</div>
               <div style="width: 8%;" class="text-center">Action</div>
             </div>
@@ -175,7 +176,8 @@
                   v-else 
                   :class="[
                     'd-flex align-items-center gap-1 p-2 transition-colors',
-                    dragOverIndex === index ? 'border-t-2 border-primary bg-primary/5' : 'hover:bg-slate-50 dark:hover:bg-slate-800'
+                    dragOverIndex === index ? 'border-t-2 border-primary bg-primary/5' : 'hover:bg-slate-50 dark:hover:bg-slate-800',
+                    !rule.valid ? 'opacity-50' : ''
                   ]"
                   @dragover.prevent="handleDragOver($event, index)"
                   @drop="handleDrop($event, index)"
@@ -190,6 +192,16 @@
                       @dragend="handleDragEnd"
                     ></i>
                   </div>
+                  <div style="width: 8%;" class="d-flex justify-content-center">
+                    <div class="form-check form-switch m-0 d-flex align-items-center justify-content-center">
+                      <input 
+                        class="form-check-input cursor-pointer" 
+                        type="checkbox" 
+                        v-model="rule.valid"
+                        style="width: 28px; height: 16px;"
+                      >
+                    </div>
+                  </div>
                   <div style="width: 16%;">
                     <select 
                       v-model="rule.ruleType" 
@@ -203,7 +215,7 @@
                       <option value="ruleset">Rule Set</option>
                     </select>
                   </div>
-                  <div style="width: 52%;">
+                  <div style="width: 44%;">
                     <!-- RuleSet input -->
                     <div v-if="rule.ruleType === 'ruleset'" class="position-relative w-100">
                       <input 
@@ -275,8 +287,9 @@
             <!-- Default Strategy Footer -->
             <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-t border-slate-100 dark:border-divider-dark transition-colors">
               <div style="width: 4%;"></div>
+              <div style="width: 8%;"></div>
               <div style="width: 16%;"></div>
-              <div style="width: 52%;" class="d-flex align-items-center justify-content-end px-2">
+              <div style="width: 44%;" class="d-flex align-items-center justify-content-end px-2">
                  <div class="d-flex align-items-center gap-2 text-xs font-semibold ui-text-secondary uppercase tracking-widest whitespace-nowrap">
                    <i class="bi bi-arrow-return-right"></i> Default Strategy
                 </div>
@@ -311,8 +324,9 @@
             <!-- Table Header -->
             <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-xs font-semibold ui-text-secondary uppercase tracking-wider">
               <div style="width: 4%;" class="text-center"></div>
+              <div style="width: 8%;" class="text-center">Valid</div>
               <div style="width: 16%;">Type</div>
-              <div style="width: 52%;">Pattern</div>
+              <div style="width: 44%;">Pattern</div>
               <div style="width: 20%;">Proxy</div>
               <div style="width: 8%;" class="text-center">Action</div>
             </div>
@@ -383,7 +397,8 @@
                   v-else
                   :class="[
                   'd-flex align-items-center gap-1 p-2 transition-colors',
-                  dragOverRejectIndex === index ? 'border-t-2 border-primary bg-primary/5' : 'hover:bg-slate-50 dark:hover:bg-slate-800'
+                  dragOverRejectIndex === index ? 'border-t-2 border-primary bg-primary/5' : 'hover:bg-slate-50 dark:hover:bg-slate-800',
+                   !rule.valid ? 'opacity-50' : ''
                 ]"
                 @dragover.prevent="handleRejectDragOver($event, index)"
                 @drop="handleRejectDrop($event, index)"
@@ -398,6 +413,16 @@
                     @dragend="handleRejectDragEnd"
                   ></i>
                 </div>
+                <div style="width: 8%;" class="d-flex justify-content-center">
+                    <div class="form-check form-switch m-0 d-flex align-items-center justify-content-center">
+                      <input 
+                        class="form-check-input cursor-pointer" 
+                        type="checkbox" 
+                        v-model="rule.valid"
+                        style="width: 28px; height: 16px;"
+                      >
+                    </div>
+                  </div>
                 <div style="width: 16%;">
                   <select 
                     v-model="rule.ruleType" 
@@ -411,7 +436,7 @@
                     <option value="ruleset">Rule Set</option>
                   </select>
                 </div>
-                <div style="width: 52%;" class="position-relative">
+                <div style="width: 44%;" class="position-relative">
                   <input 
                     v-model="rule.pattern" 
                     type="text" 
@@ -557,6 +582,13 @@ const loadPolicyData = async () => {
         }
         if (!Array.isArray(policy.value.rejectRules)) {
             policy.value.rejectRules = []
+        } else {
+            // Initialize defaults for existing reject rules
+            policy.value.rejectRules.forEach(rule => {
+                if (rule.type !== 'divider' && rule.valid === undefined) {
+                    rule.valid = true
+                }
+            })
         }
         if (!policy.value.name) {
             policy.value.name = 'Auto Policy'
@@ -611,6 +643,7 @@ onMounted(() => {
       if (policy.value.rules) {
         policy.value.rules.forEach((rule, index) => {
           if (rule.type !== 'divider') {
+            if (rule.valid === undefined) rule.valid = true
             validateRule(index, rule)
           }
         })
@@ -665,6 +698,7 @@ const addRule = () => {
         type: 'rule',
         ruleType: 'wildcard',
         pattern: '',
+        valid: true,
         proxyId: 'direct',
         ruleSet: {}
     }
@@ -688,6 +722,7 @@ const addRejectRule = () => {
     const newRule = {
         id: `reject_${Date.now()}`,
         ruleType: 'wildcard',
+        valid: true,
         pattern: ''
     }
     policy.value.rejectRules.unshift(newRule)
@@ -714,6 +749,7 @@ const insertRuleBelow = (index) => {
         type: 'rule',
         ruleType: 'wildcard',
         pattern: '',
+        valid: true,
         proxyId: 'direct',
         ruleSet: {}
     }
@@ -765,6 +801,7 @@ const insertRejectRuleBelow = (index) => {
     const newRule = {
         id: `reject_${Date.now()}`,
         ruleType: 'wildcard',
+        valid: true,
         pattern: ''
     }
     policy.value.rejectRules.splice(index + 1, 0, newRule)
@@ -837,6 +874,7 @@ const revalidateAllRules = () => {
   if (policy.value.rules) {
     policy.value.rules.forEach((rule, index) => {
       if (rule.type !== 'divider') {
+        if (rule.valid === undefined) rule.valid = true
         validateRule(index, rule)
       }
     })
@@ -1067,7 +1105,7 @@ const handleExportPAC = () => {
   }
   
   // Generate PAC script using common module
-  const pacScript = generatePacScriptFromPolicy(policy.value, config.value.proxies || {})
+  const pacScript = generatePacScriptFromPolicy(policy.value, config.value.proxies || {}, config.value.reject)
   
   // Create download
   const blob = new Blob([pacScript], { type: 'application/x-ns-proxy-autoconfig' })

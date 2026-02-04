@@ -281,13 +281,13 @@ const loadCloudData = async () => {
     try {
         // 3. Load Cloud Config (Full Chunk Reassembly for Preview)
         try {
-            console.log('[DataSync] Starting cloud fetch (Full)...')
+
             // Get EVERYTHING from sync storage to find all chunks
             const result = await chrome.storage.sync.get(null) 
-            console.log('[DataSync] Raw keys fetched:', Object.keys(result))
+
             
             if (result.sync_meta) {
-                console.log('[DataSync] Found sync_meta. Reassembling chunks...', result.sync_meta)
+
                 const count = result.sync_meta.count
                 let combinedJson = ''
                 
@@ -311,7 +311,7 @@ const loadCloudData = async () => {
                          cloudConfig.value.timestamp = result.sync_meta.timestamp
                     }
                     
-                    console.log('[DataSync] Reassembled Full Cloud Config:', cloudConfig.value)
+
                 } catch (err) {
                     console.error('[DataSync] Reassembly failed:', err)
                     // If reassembly fails, we might still show meta version if possible, but safer to show null/error
@@ -319,10 +319,10 @@ const loadCloudData = async () => {
                 }
 
             } else if (result.config) {
-                console.log('[DataSync] Found legacy config')
+
                 cloudConfig.value = result.config
             } else {
-                console.log('[DataSync] No cloud data found')
+
                 cloudConfig.value = null
             }
         } catch (e) {

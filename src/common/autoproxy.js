@@ -64,6 +64,9 @@ export function parseAutoProxyRules(content) {
         // End anchor
         pattern = pattern.substring(0, pattern.length - 1);
         type = 'full_url_end'; // Special handling needed
+    } else if (pattern.startsWith('.')) {
+        // Treat .example.com as wildcard (supported by pac.js directly)
+        type = 'wildcard';
     } else {
         // Plain keyword or wildcard (if contains *)
         if (pattern.includes('*')) {
