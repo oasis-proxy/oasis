@@ -1,4 +1,5 @@
 import { DEFAULT_CONFIG } from './config'
+import { fetchRuleSetContent } from './ruleset'
 
 /**
  * Load configuration from storage.
@@ -439,10 +440,14 @@ async function hydrateConfig(config) {
                  policy.rules.forEach(rule => {
                     if (rule.ruleType === 'ruleset' && rule.ruleSet && rule.ruleSet.url && !rule.ruleSet.content) {
                         promises.push(
-                            fetch(rule.ruleSet.url)
-                                .then(res => res.text())
-                                .then(text => { rule.ruleSet.content = text })
-                                .catch(e => console.warn('Failed to hydrate ruleset', rule.ruleSet.url, e))
+                            fetchRuleSetContent(rule.ruleSet.url)
+                                .then(result => {
+                                    if (!result.fetchError) {
+                                        rule.ruleSet.content = result.content
+                                    } else {
+                                        console.warn('Failed to hydrate ruleset', rule.ruleSet.url, result.fetchError)
+                                    }
+                                })
                         )
                     }
                 })

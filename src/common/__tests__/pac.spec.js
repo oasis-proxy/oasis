@@ -111,13 +111,13 @@ describe('generatePacScriptFromPolicy', () => {
     it('should include regex check', () => {
         const script = generatePacScriptFromPolicy(mockPolicy, mockProxies)
         // Note: regex pattern escaping in JS string
-        expect(script).toContain('/^https?:\\/\\/.*\\.example\\.com\\//.test(host)')
+        expect(script).toContain('/^https?:\\/\\/.*\\.example\\.com\\//.test(url)')
     })
 
     it('should include reject rule check', () => {
         const script = generatePacScriptFromPolicy(mockPolicy, mockProxies)
         expect(script).toContain('host === "192.168.1.1"')
-        expect(script).toContain('PROXY 127.0.0.1:1') // Reject proxy
+        expect(script).toContain('HTTPS 127.0.0.1:443') // Reject proxy
     })
     
     it('should check reject rules before normal rules', () => {
