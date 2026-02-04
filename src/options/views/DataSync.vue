@@ -100,7 +100,8 @@
                              <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Proxy Hosts ({{ proxyCount }})</p>
                              <ul class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
                                 <li v-for="host in previewProxies" :key="host.id" class="text-xs ui-text-secondary d-flex align-items-center gap-1.5 truncate flex-row-reverse">
-                                    <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></span> {{ host.label }}
+                                    <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500 flex-shrink-0"></span> 
+                                    <span class="text-truncate" style="max-width: 150px;" :title="host.label">{{ host.label }}</span>
                                 </li>
                             </ul>
                         </div>
@@ -110,7 +111,8 @@
                              <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Policies ({{ policyCount }})</p>
                              <ul class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
                                 <li v-for="policy in previewPolicies" :key="policy.id" class="text-xs ui-text-secondary d-flex align-items-center gap-1.5 truncate flex-row-reverse">
-                                    <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></span> {{ policy.name }}
+                                    <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500 flex-shrink-0"></span> 
+                                    <span class="text-truncate" style="max-width: 150px;" :title="policy.name">{{ policy.name }}</span>
                                 </li>
                             </ul>
                         </div>
@@ -171,7 +173,8 @@
                                  <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Proxy Hosts ({{ cloudProxyCount }})</p>
                                  <ul v-if="cloudPreviewProxies.length > 0" class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
                                     <li v-for="host in cloudPreviewProxies" :key="host.id" class="text-xs ui-text-secondary d-flex align-items-center gap-1.5 truncate flex-row-reverse">
-                                        <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></span> {{ host.label }}
+                                        <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500 flex-shrink-0"></span> 
+                                        <span class="text-truncate" style="max-width: 150px;" :title="host.label">{{ host.label }}</span>
                                     </li>
                                 </ul>
                                 <span v-else class="text-xs ui-text-secondary">-</span>
@@ -182,7 +185,8 @@
                                  <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Policies ({{ cloudPolicyCount }})</p>
                                  <ul v-if="cloudPreviewPolicies.length > 0" class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
                                     <li v-for="policy in cloudPreviewPolicies" :key="policy.id" class="text-xs ui-text-secondary d-flex align-items-center gap-1.5 truncate flex-row-reverse">
-                                        <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500"></span> {{ policy.name }}
+                                        <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500 flex-shrink-0"></span> 
+                                        <span class="text-truncate" style="max-width: 150px;" :title="policy.name">{{ policy.name }}</span>
                                     </li>
                                 </ul>
                                 <span v-else class="text-xs ui-text-secondary">-</span>

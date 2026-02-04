@@ -231,35 +231,41 @@ const applyTheme = (mode) => {
 // Compute grouped profiles
 const hostProxies = computed(() => {
   if (!config.value?.proxies) return []
-  return Object.values(config.value.proxies).map(proxy => ({
-    id: proxy.id,
-    name: proxy.label || proxy.host || 'Unnamed Proxy',
-    icon: 'bi-hdd-network',
-    color: proxy.color,
-    type: 'proxy'
-  }))
+  return Object.values(config.value.proxies)
+    .filter(p => (p.showInPopup !== false) || isActive(p.id))
+    .map(proxy => ({
+      id: proxy.id,
+      name: proxy.label || proxy.host || 'Unnamed Proxy',
+      icon: 'bi-pc-display',
+      color: proxy.color,
+      type: 'proxy'
+    }))
 })
 
 const pacScripts = computed(() => {
   if (!config.value?.pacs) return []
-  return Object.values(config.value.pacs).map(pac => ({
-    id: pac.id,
-    name: pac.name || pac.url || 'Unnamed PAC',
-    icon: 'bi-file-earmark-code',
-    color: pac.color,
-    type: 'pac'
-  }))
+  return Object.values(config.value.pacs)
+    .filter(p => (p.showInPopup !== false) || isActive(p.id))
+    .map(pac => ({
+      id: pac.id,
+      name: pac.name || pac.url || 'Unnamed PAC',
+      icon: 'bi-file-earmark-code',
+      color: pac.color,
+      type: 'pac'
+    }))
 })
 
 const autoPolicies = computed(() => {
   if (!config.value?.policies) return []
-  return Object.values(config.value.policies).map(policy => ({
-    id: policy.id,
-    name: policy.name || policy.id,
-    icon: 'bi-diagram-3',
-    color: policy.color,
-    type: 'policy'
-  }))
+  return Object.values(config.value.policies)
+    .filter(p => (p.showInPopup !== false) || isActive(p.id))
+    .map(policy => ({
+      id: policy.id,
+      name: policy.name || policy.id,
+      icon: 'bi-signpost-split-fill',
+      color: policy.color,
+      type: 'policy'
+    }))
 })
 
 const isActive = (id) => {

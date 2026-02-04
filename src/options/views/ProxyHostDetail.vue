@@ -14,9 +14,14 @@
              style="width: 24px; height: 24px; background: none;"
              title="Choose color"
            />
-           <h1 class="fs-4 font-bold ui-text-primary tracking-tight m-0">{{ proxy.label || proxy.host || 'Unnamed Proxy' }}</h1>
+           <h1 class="fs-4 font-bold ui-text-primary tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="proxy.label || proxy.host">{{ proxy.label || proxy.host || 'Unnamed Proxy' }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
+           <!-- Show in Popup Switch -->
+           <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
+              <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="showInPopup" v-model="proxy.showInPopup">
+              <label class="form-check-label text-xs font-medium ui-text-secondary cursor-pointer" for="showInPopup">Show in Popup</label>
+           </div>
            
            <button 
              @click="resetChanges"
@@ -386,6 +391,7 @@ import ProxyDeleteModal from '../components/ProxyDeleteModal.vue'
 const getEmptyProxyState = () => ({
   id: '',
   label: '',
+  showInPopup: true,
   scheme: 'http',
   host: '',
   port: null,
@@ -507,6 +513,8 @@ const loadProxyData = async () => {
     if (!proxy.value.overrides.ftp) proxy.value.overrides.ftp = { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
     // Ensure default color
     if (!proxy.value.color) proxy.value.color = '#137fec' // Default Primary Blue
+    // Ensure showInPopup default
+    if (proxy.value.showInPopup === undefined) proxy.value.showInPopup = true
 
     // Store original state for dirty checking
     originalProxy.value = JSON.parse(JSON.stringify(proxy.value))
@@ -703,8 +711,4 @@ const handleDelete = async () => {
   showDeleteModal.value = false
 }
 </script>
-
-<style scoped>
-/* Scoped styles removed as they are now handled by main.css (ui-* classes) */
-</style>
 

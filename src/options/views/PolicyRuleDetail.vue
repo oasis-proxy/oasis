@@ -12,12 +12,17 @@
              style="width: 24px; height: 24px; min-width: 24px;"
              title="Choose color"
           />
-          <h2 class="fs-4 font-bold ui-text-primary tracking-tight m-0">
+          <h2 class="fs-4 font-bold ui-text-primary tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="policy.name">
             {{ policy.name || 'Auto Policy' }}
           </h2>
         </div>
       </div>
       <div class="d-flex align-items-center gap-3">
+        <!-- Show in Popup Switch -->
+        <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
+           <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="showInPopup" v-model="policy.showInPopup">
+           <label class="form-check-label text-xs font-medium ui-text-secondary cursor-pointer" for="showInPopup">Show in Popup</label>
+        </div>
         <button 
           @click="resetChanges"
           :disabled="!isDirty"
@@ -163,7 +168,7 @@
                       <i class="bi bi-plus-lg text-xs"></i>
                     </button>
                     <button @click="insertDividerBelow(index)" class="ui-button-icon" title="Add divider below">
-                      <i class="bi bi-dash-lg text-xs"></i>
+                      <i class="bi bi-inboxes-fill text-xs"></i>
                     </button>
                     <button @click="deleteRule(index)" class="ui-button-icon" title="Delete">
                       <i class="bi bi-trash text-xs"></i>
@@ -268,7 +273,7 @@
                       <i class="bi bi-plus-lg text-xs"></i>
                     </button>
                     <button @click="insertDividerBelow(index)" class="ui-button-icon p-0.5" title="Add divider">
-                      <i class="bi bi-dash-lg text-xs"></i>
+                      <i class="bi bi-inboxes-fill text-xs"></i>
                     </button>
                     <button @click="deleteRule(index)" class="ui-button-icon p-0.5" title="Delete">
                       <i class="bi bi-trash text-xs"></i>
@@ -384,7 +389,7 @@
                       <i class="bi bi-plus-lg text-xs"></i>
                     </button>
                     <button @click="insertRejectDividerBelow(index)" class="ui-button-icon" title="Add divider below">
-                      <i class="bi bi-dash-lg text-xs"></i>
+                      <i class="bi bi-inboxes-fill text-xs"></i>
                     </button>
                     <button @click="deleteRejectRule(index)" class="ui-button-icon" title="Delete">
                       <i class="bi bi-trash text-xs"></i>
@@ -459,7 +464,7 @@
                     <i class="bi bi-plus-lg text-xs"></i>
                   </button>
                   <button @click="insertRejectDividerBelow(index)" class="ui-button-icon p-0.5" title="Add divider">
-                    <i class="bi bi-dash-lg text-xs"></i>
+                    <i class="bi bi-inboxes-fill text-xs"></i>
                   </button>
                   <button @click="deleteRejectRule(index)" class="ui-button-icon p-0.5" title="Delete">
                     <i class="bi bi-trash text-xs"></i>
@@ -603,6 +608,7 @@ const loadPolicyData = async () => {
         if (!policy.value.defaultProfileId) {
             policy.value.defaultProfileId = 'direct'
         }
+        if (policy.value.showInPopup === undefined) policy.value.showInPopup = true
         
         originalPolicy.value = JSON.parse(JSON.stringify(policy.value))
     } else {
@@ -691,7 +697,6 @@ const saveChanges = async () => {
     await loadPolicyData()
 }
 
-// Rule Management
 const addRule = () => {
     const newRule = {
         id: `rule_${Date.now()}`,
@@ -702,7 +707,7 @@ const addRule = () => {
         proxyId: 'direct',
         ruleSet: {}
     }
-    policy.value.rules.unshift(newRule)
+    policy.value.rules = [newRule, ...policy.value.rules]
     // Re-validate after adding
     nextTick(() => revalidateAllRules())
 }
@@ -725,7 +730,7 @@ const addRejectRule = () => {
         valid: true,
         pattern: ''
     }
-    policy.value.rejectRules.unshift(newRule)
+    policy.value.rejectRules = [newRule, ...policy.value.rejectRules]
     // Re-validate after adding
     nextTick(() => revalidateAllRejectRules())
 }
@@ -941,32 +946,9 @@ const fetchRuleSetContent = async (index, url) => {
       
       console.log('RuleSet content saved:', content.substring(0, 100))
       
-      console.log('RuleSet content saved:', content.substring(0, 100))
+      // Notify user to save manually
+      toast.success('RuleSet content updated. Please save changes.')
       
-      // Determine if we should auto-save
-      // - If rule is new or pattern changed: Do NOT auto-save (User needs to confirm edit)
-      // - If rule is existing and pattern unchanged: Auto-save (Maintenance update)
-      let shouldAutoSave = false
-      if (originalPolicy.value && originalPolicy.value.rules) {
-          const originalRule = originalPolicy.value.rules.find(r => r.id === rule.id)
-          if (originalRule && originalRule.pattern === rule.pattern) {
-              shouldAutoSave = true
-          }
-      }
-
-      if (shouldAutoSave) {
-          // Save to config immediately
-          config.value.policies[policy.value.id] = JSON.parse(JSON.stringify(policy.value))
-          // Skip Sync (content is stripped anyway) AND Skip Touch (don't bump version)
-          await savePolicies(config.value.policies, true, true)
-          
-          // Update originalPolicy to prevent dirty state
-          originalPolicy.value = JSON.parse(JSON.stringify(policy.value))
-          toast.success('RuleSet content updated.')
-      } else {
-          // Update local state only
-          toast.success('RuleSet content updated. Please save changes.')
-      }
     } else {
       console.error('Failed to fetch RuleSet:', response.error)
       // Save error to rule

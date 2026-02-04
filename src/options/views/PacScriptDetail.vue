@@ -13,9 +13,14 @@
              style="width: 24px; height: 24px; min-width: 24px;"
              title="Choose color"
            />
-           <h1 class="fs-4 font-bold ui-text-primary tracking-tight m-0">{{ pac.name || pac.url || 'Unnamed PAC' }}</h1>
+           <h1 class="fs-4 font-bold ui-text-primary tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="pac.name || pac.url">{{ pac.name || pac.url || 'Unnamed PAC' }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
+           <!-- Show in Popup Switch -->
+           <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
+              <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="showInPopup" v-model="pac.showInPopup">
+              <label class="form-check-label text-xs font-medium ui-text-secondary cursor-pointer" for="showInPopup">Show in Popup</label>
+           </div>
            
            <button 
              @click="resetChanges"
@@ -232,7 +237,9 @@ const loadPacData = async () => {
         if (!pac.value.updateInterval) pac.value.updateInterval = 720
         if (!pac.value.url) pac.value.url = ''
         if (!pac.value.script) pac.value.script = ''
+        if (!pac.value.script) pac.value.script = ''
         if (!pac.value.color) pac.value.color = '#8b5cf6' // violet-500
+        if (pac.value.showInPopup === undefined) pac.value.showInPopup = true
 
         originalPac.value = JSON.parse(JSON.stringify(pac.value))
     } else {

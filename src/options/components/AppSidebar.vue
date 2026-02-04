@@ -26,7 +26,7 @@
               :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
             >
               <i class="bi bi-gear text-base"></i>
-              <span class="text-xs">General Settings</span>
+              <span class="text-xs text-truncate">General Settings</span>
             </button>
           </router-link>
 
@@ -41,7 +41,7 @@
               :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
             >
               <i class="bi bi-cloud text-base"></i>
-              <span class="text-xs">Data Synchronization</span>
+              <span class="text-xs text-truncate">Data Synchronization</span>
             </button>
           </router-link>
 
@@ -56,7 +56,7 @@
                :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
             >
               <i class="bi bi-clock-history text-base"></i>
-              <span class="text-xs">Temporary Rules</span>
+              <span class="text-xs text-truncate">Temporary Rules</span>
             </button>
           </router-link>
         </div>
@@ -87,7 +87,7 @@
                 :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
              >
                 <i :class="['bi text-base', host.icon, (isActive || host.color) ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: host.color ? host.color : undefined }"></i>
-                <span class="text-xs">{{ host.name }}</span>
+                <span class="text-xs text-truncate">{{ host.name }}</span>
                 <span v-if="host.status" :class="['ml-auto w-2 h-2 rounded-full', host.statusColor]"></span>
              </button>
           </router-link>
@@ -119,7 +119,7 @@
                 :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
              >
                 <i :class="['bi text-base', rule.icon, (isActive || rule.color) ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: rule.color ? rule.color : undefined }"></i>
-                <span class="text-xs">{{ rule.name }}</span>
+                <span class="text-xs text-truncate">{{ rule.name }}</span>
              </button>
           </router-link>
         </div>
@@ -163,7 +163,7 @@ const proxyHosts = computed(() => {
   return Object.values(config.value.proxies).map(p => ({
     id: p.id,
     name: p.label || p.host, // Fallback to host if label missing
-    icon: 'bi-hdd-network', // Static icon for now, could be dynamic based on type
+    icon: 'bi-pc-display', // Static icon for now, could be dynamic based on type
     color: p.color, // Custom color
     status: null // No real status checking yet
   }))
@@ -192,7 +192,7 @@ const policyRules = computed(() => {
             rules.push({
                 id: policy.id,
                 name: policy.name || policy.id, // Support 'name' property
-                icon: 'bi-diagram-3',
+                icon: 'bi-signpost-split-fill',
                 color: policy.color,
                 type: 'policy'
             })

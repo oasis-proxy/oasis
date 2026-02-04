@@ -41,6 +41,7 @@
                   style="min-width: 100%; width: 100%; max-width: 100% !important;" 
                   placeholder="Enter policy name..." 
                   type="text"
+                  maxlength="30"
                   @keydown.enter="handleConfirm"
                 />
               </div>
