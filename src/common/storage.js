@@ -70,15 +70,16 @@ export async function loadConfig() {
  * Splits the Runtime Config Object into top-level storage keys.
  * @param {typeof DEFAULT_CONFIG} config 
  * @param {boolean} skipSync - If true, do not trigger auto-sync
+ * @param {boolean} skipTouch - If true, do not update timestamp/version logic (handled by caller or ignored)
  */
-export async function saveConfig(config, skipSync = false) {
+export async function saveConfig(config, skipSync = false, skipTouch = false) {
   // Ensure we don't double-touch if called recursively, but usually safe
   // Ideally, caller calls touchConfig if they modified logic, but `saveConfig` is often the final commit.
   // HOWEVER, saveConfig is also used by storage logic itself (syncToCloud).
   //syncToCloud calls saveConfig to update version.
   
   // Let's assume saveConfig is the low-level commit, but for general usage we want to ensure updatedAt is set.
-  if (!config.updatedAt) {
+  if (!skipTouch && !config.updatedAt) {
       config.updatedAt = Date.now()
   }
 
@@ -196,8 +197,9 @@ export async function saveProxies(proxies, skipSync = false) {
  * Save Policies Map ONLY.
  * @param {object} policies 
  * @param {boolean} skipSync
+ * @param {boolean} skipTouch - If true, do not increment version
  */
-export async function savePolicies(policies, skipSync = false) {
+export async function savePolicies(policies, skipSync = false, skipTouch = false) {
   // Load full config to update version/timestamp
   const fullConfig = await loadConfig()
   
@@ -205,7 +207,9 @@ export async function savePolicies(policies, skipSync = false) {
   fullConfig.policies = JSON.parse(JSON.stringify(policies || {}))
   
   // Touch & Save
-  touchConfig(fullConfig)
+  if (!skipTouch) {
+    touchConfig(fullConfig)
+  }
   
   await saveConfig(fullConfig, skipSync)
 }
@@ -372,6 +376,10 @@ export async function syncToCloud(config) {
     // 2. Strip Auto Sync setting (Keep local only)
     if (payload.sync) {
         delete payload.sync
+    }
+    // Strip activeProfileId (Local only)
+    if (payload.activeProfileId) {
+        delete payload.activeProfileId
     }
 
     // 3. Optimize Payload (Refactored)

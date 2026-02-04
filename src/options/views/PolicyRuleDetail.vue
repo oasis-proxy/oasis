@@ -957,7 +957,8 @@ const fetchRuleSetContent = async (index, url) => {
       if (shouldAutoSave) {
           // Save to config immediately
           config.value.policies[policy.value.id] = JSON.parse(JSON.stringify(policy.value))
-          await savePolicies(config.value.policies)
+          // Skip Sync (content is stripped anyway) AND Skip Touch (don't bump version)
+          await savePolicies(config.value.policies, true, true)
           
           // Update originalPolicy to prevent dirty state
           originalPolicy.value = JSON.parse(JSON.stringify(policy.value))

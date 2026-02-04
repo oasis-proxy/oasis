@@ -226,13 +226,15 @@ const selectProfile = async (profileId) => {
   // Save to config
   if (config.value) {
     config.value.activeProfileId = profileId
-    await saveConfig(config.value)
+    // Skip Sync (local only) AND Skip Touch (don't bump version)
+    await saveConfig(config.value, true, true)
 
     // Handle Refresh on Switch
     if (config.value.behavior?.refreshOnSwitch) {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs[0]?.id) {
-          chrome.tabs.reload(tabs[0].id)
+        const tab = tabs[0]
+        if (tab?.id && tab.url && /^https?:/.test(tab.url)) {
+          chrome.tabs.reload(tab.id)
         }
       })
     }
