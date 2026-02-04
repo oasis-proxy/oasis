@@ -32,6 +32,7 @@
     "webRequestAuthProvider",
     "unlimitedStorage",
     "storage",
-    "proxy"],
+    "proxy",
+    "webNavigation"],
   "host_permissions": ["*://*/*"]
 }

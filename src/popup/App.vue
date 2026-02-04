@@ -170,10 +170,48 @@
       </div>
 
       <!-- PLACEHOLDERS FOR OTHER TABS -->
-      <div v-if="currentTab === 'monitor'" class="d-flex align-items-center justify-content-center h-100 text-secondary">
-          <div class="text-center p-4">
-              <i class="bi bi-activity text-3xl mb-2 d-block"></i>
-              <p>Connection Monitor coming soon.</p>
+      <div v-if="currentTab === 'monitor'" class="d-flex flex-column h-100 bg-white dark:bg-background-dark">
+          <!-- Protocol Warning -->
+          <div v-if="!isProtocolSupported" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
+               <div class="text-center p-4">
+                   <i class="bi bi-shield-exclamation text-3xl mb-2 d-block opacity-50"></i>
+                   <p class="text-sm">Monitoring not available.</p>
+                   <p class="text-xs text-muted">Only HTTP/HTTPS pages are supported.</p>
+               </div>
+          </div>
+
+          <!-- Empty State -->
+          <div v-else-if="monitorResult.length === 0" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
+             <div class="text-center p-4">
+                 <i class="bi bi-activity text-3xl mb-2 d-block opacity-50"></i>
+                 <p class="text-sm">No requests recorded.</p>
+                 <p class="text-xs text-muted">Refresh the page to capture traffic.</p>
+             </div>
+          </div>
+          
+          <!-- List -->
+          <div v-else class="flex-1 overflow-y-auto custom-scrollbar p-0">
+             <div v-for="(item, index) in monitorResult" :key="index" 
+                class="d-flex align-items-center py-3 border-bottom border-light dark:border-divider-dark hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+                style="padding-left: 0.75rem; padding-right: 0.75rem;"
+             >
+                 <!-- Domain Column (60%) -->
+                 <div class="pe-3 overflow-hidden" style="flex: 0 0 60%;">
+                     <div class="fw-medium text-sm text-body text-truncate" :title="item.domain">
+                         {{ item.domain }}
+                     </div>
+                 </div>
+                 
+                 <!-- IPs Column (40%) -->
+                 <div class="d-flex flex-wrap justify-content-end gap-1.5 overflow-hidden" style="flex: 0 0 40%;">
+                     <span v-for="ip in item.ips" :key="ip" 
+                        class="badge bg-light text-secondary border fw-normal font-mono max-w-full text-truncate"
+                        :title="ip"
+                     >
+                         {{ formatIp(ip) }}
+                     </span>
+                 </div>
+             </div>
           </div>
       </div>
 
@@ -202,6 +240,9 @@ import { loadConfig, saveConfig } from '../common/storage'
 const config = ref(null)
 const activeProfileId = ref('direct')
 const currentTab = ref('proxy') // proxy, monitor, quick, info
+const monitorResult = ref([])
+const activeTabId = ref(null)
+const currentTabUrl = ref('')
 
 // Load configuration
 onMounted(async () => {
@@ -210,6 +251,26 @@ onMounted(async () => {
   
   // Apply theme based on config
   applyTheme(config.value.ui?.theme || 'auto')
+
+  // Get current tab info
+  const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
+  if (tabs.length > 0) {
+      activeTabId.value = tabs[0].id
+      currentTabUrl.value = tabs[0].url
+  }
+
+  // Auto-switch to monitor if enabled
+  if (config.value.behavior?.connectionMonitoring) {
+      currentTab.value = 'monitor'
+      loadMonitorData()
+      chrome.storage.onChanged.addListener(storageListener)
+  }
+})
+
+import { onUnmounted } from 'vue'
+
+onUnmounted(() => {
+    chrome.storage.onChanged.removeListener(storageListener)
 })
 
 const applyTheme = (mode) => {
@@ -309,8 +370,40 @@ const openOptions = () => {
 }
 
 const openMonitor = () => {
-    // Open options page, assuming monitor will be there or create a new tab
-    // For now, just open options page as placeholder or append hash
-   chrome.runtime.openOptionsPage() 
+   currentTab.value = 'monitor'
 }
+
+// --- Monitor Logic ---
+const isProtocolSupported = computed(() => {
+    return /^https?:/.test(currentTabUrl.value)
+})
+
+const loadMonitorData = async () => {
+    if (activeTabId.value) {
+        const key = `monitor_${activeTabId.value}`
+        const storage = await chrome.storage.session.get(key)
+        monitorResult.value = storage[key] || []
+    }
+}
+
+// Listener for Monitor updates
+const storageListener = (changes, area) => {
+    if (area === 'session' && activeTabId.value) {
+        const key = `monitor_${activeTabId.value}`
+        if (changes[key]) {
+            monitorResult.value = changes[key].newValue || []
+        }
+    }
+}
+
+// Helper to format types
+// Helper to format IPs (check tags)
+const formatIp = (ip) => {
+    if (config.value?.ipTags && config.value.ipTags[ip]) {
+        return config.value.ipTags[ip]
+    }
+    return ip
+}
+
+
 </script>

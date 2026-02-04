@@ -12,7 +12,24 @@ export async function fetchRuleSetContent(url) {
   try {
     const response = await fetch(url)
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
-    const text = await response.text()
+    let text = await response.text()
+    
+    // Process content based on format (Base64 detection)
+    try {
+      const cleanContent = text.replace(/[\r\n]/g, '')
+      // Simple base64 regex (matches if the whole content looks like base64)
+      const base64Pattern = /^[A-Za-z0-9+/]+=*$/
+      if (base64Pattern.test(cleanContent)) {
+        try {
+          const decoded = atob(cleanContent)
+          text = decoded
+        } catch (e) {
+          // Ignore, treat as plain text
+        }
+      }
+    } catch (e) {
+      // Ignore
+    }
     
     const now = Date.now()
     return {
