@@ -433,7 +433,7 @@
                     v-model="rule.ruleType" 
                     class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
                     style="height: 28px; max-width: none;"
-                    @change="handleRuleTypeChange(index, rule); validateRejectRule(index, rule)"
+                    @change="handleRejectRuleTypeChange(index, rule)"
                   >
                     <option value="wildcard">Wildcard</option>
                     <option value="regex">Regex</option>
@@ -568,6 +568,50 @@ const editingRejectDividerIndex = ref(null)
 const editingRejectDividerLabel = ref('')
 const rejectDividerInput = ref(null)
 
+// Pattern validation (using common/validation.js)
+const validationErrors = ref({})
+const rejectValidationErrors = ref({})
+
+const validateRule = (index, rule) => {
+  const result = validatePattern(rule.ruleType, rule.pattern)
+  if (result.valid) {
+    delete validationErrors.value[index]
+  } else {
+    validationErrors.value[index] = result.message
+  }
+}
+
+const validateRejectRule = (index, rule) => {
+  const result = validatePattern(rule.ruleType, rule.pattern)
+  if (result.valid) {
+    delete rejectValidationErrors.value[index]
+  } else {
+    rejectValidationErrors.value[index] = result.message
+  }
+}
+
+// Re-validate all rules (used after load/add/delete/drag operations)
+const revalidateAllRules = () => {
+  if (policy.value.rules) {
+    policy.value.rules.forEach((rule, index) => {
+      if (rule.type !== 'divider') {
+        if (rule.valid === undefined) rule.valid = true
+        validateRule(index, rule)
+      }
+    })
+  }
+}
+
+const revalidateAllRejectRules = () => {
+  if (policy.value.rejectRules) {
+    policy.value.rejectRules.forEach((rule, index) => {
+      if (rule.type !== 'divider') {
+        validateRejectRule(index, rule)
+      }
+    })
+  }
+}
+
 // Proxy options for dropdown
 const proxyOptions = computed(() => {
   if (!config.value || !config.value.proxies) return []
@@ -619,6 +663,12 @@ const loadPolicyData = async () => {
         if (policy.value.showInPopup === undefined) policy.value.showInPopup = true
         
         originalPolicy.value = JSON.parse(JSON.stringify(policy.value))
+        
+        // Trigger initial validation
+        nextTick(() => {
+            revalidateAllRules()
+            revalidateAllRejectRules()
+        })
     } else {
         router.push('/settings')
     }
@@ -652,17 +702,7 @@ const duplicateIndices = computed(() => {
 })
 
 onMounted(() => {
-    loadPolicyData().then(() => {
-      // Validate all rules on load
-      if (policy.value.rules) {
-        policy.value.rules.forEach((rule, index) => {
-          if (rule.type !== 'divider') {
-            if (rule.valid === undefined) rule.valid = true
-            validateRule(index, rule)
-          }
-        })
-      }
-    })
+    loadPolicyData()
 })
 
 // Register unsaved changes checker
@@ -729,6 +769,11 @@ const handleRuleTypeChange = (index, rule) => {
   if (rule.ruleType === 'ruleset' && rule.pattern && rule.pattern.trim()) {
     fetchRuleSetContent(index, rule.pattern)
   }
+}
+
+const handleRejectRuleTypeChange = (index, rule) => {
+  // Validate the rule
+  validateRejectRule(index, rule)
 }
 
 const addRejectRule = () => {
@@ -858,48 +903,6 @@ const saveRejectDividerLabel = (index) => {
 const cancelEditRejectDivider = () => {
   editingRejectDividerIndex.value = null
   editingRejectDividerLabel.value = ''
-}
-
-// Pattern validation (using common/validation.js)
-const validationErrors = ref({})
-const rejectValidationErrors = ref({})
-
-const validateRule = (index, rule) => {
-  const result = validatePattern(rule.ruleType, rule.pattern)
-  if (result.valid) {
-    delete validationErrors.value[index]
-  } else {
-    validationErrors.value[index] = result.message
-  }
-}
-
-const validateRejectRule = (index, rule) => {
-  const result = validatePattern(rule.ruleType, rule.pattern)
-  if (result.valid) {
-    delete rejectValidationErrors.value[index]
-  } else {
-    rejectValidationErrors.value[index] = result.message
-  }
-}
-
-// Re-validate all rules (used after add/delete/drag operations)
-const revalidateAllRules = () => {
-  if (policy.value.rules) {
-    policy.value.rules.forEach((rule, index) => {
-      if (rule.type !== 'divider') {
-        if (rule.valid === undefined) rule.valid = true
-        validateRule(index, rule)
-      }
-    })
-  }
-}
-
-const revalidateAllRejectRules = () => {
-  if (policy.value.rejectRules) {
-    policy.value.rejectRules.forEach((rule, index) => {
-      validateRejectRule(index, rule)
-    })
-  }
 }
 
 // RuleSet content fetching
@@ -1103,7 +1106,10 @@ const handlePolicyMerge = (options) => {
   showPolicyMergeModal.value = false
   toast.success('Rules merged successfully')
   // Re-validate after merge
-  nextTick(() => revalidateAllRules())
+  nextTick(() => {
+    revalidateAllRules()
+    revalidateAllRejectRules()
+  })
 }
 
 // PAC Script Export
