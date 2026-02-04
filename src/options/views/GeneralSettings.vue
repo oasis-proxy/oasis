@@ -242,7 +242,6 @@ const updateIntervals = [
   { label: '12h', value: 720 },
   { label: '1h', value: 60 },
   { label: '15min', value: 15 },
-  { label: 'Never', value: 0 },
   { label: 'Manual', value: -1 }
 ]
 

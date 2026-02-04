@@ -101,16 +101,41 @@ async function setupUpdateAlarm(intervalMinutes) {
     }
 }
 
-
-
 /**
- * Check and update external rule sets.
+ * Check and update external rule sets and PAC scripts.
  */
 async function checkUpdates() {
     const config = await loadConfig()
     let configChanged = false
     
-    // Iterate all policies
+    // 1. Update Remote PAC Scripts
+    if (config.pacs) {
+        for (const pac of Object.values(config.pacs)) {
+            if (!pac) continue
+            // Only update remote PACs with a valid URL
+            if (pac.mode === 'remote' && pac.url) {
+                try {
+                    console.log(`Oasis: Updating PAC script '${pac.name}' from ${pac.url}`)
+                    const response = await fetch(pac.url)
+                    if (response.ok) {
+                        const text = await response.text()
+                        if (text && text !== pac.script) {
+                            pac.script = text
+                            // pac.lastUpdated = Date.now() // Ideally we should track this
+                            configChanged = true
+                            console.log(`Oasis: PAC script '${pac.name}' updated.`)
+                        }
+                    } else {
+                        console.error(`Oasis: Failed to fetch PAC '${pac.name}': HTTP ${response.status}`)
+                    }
+                } catch (e) {
+                    console.error(`Oasis: Error updating PAC '${pac.name}':`, e)
+                }
+            }
+        }
+    }
+
+    // 2. Update Policy RuleSets
     if (config.policies) {
         for (const policy of Object.values(config.policies)) {
             if (!policy) continue
@@ -132,6 +157,9 @@ async function checkUpdates() {
     if (configChanged) {
         await saveConfig(config)
         // saveConfig triggers onChanged -> applyProxySettings
+        console.log('Oasis: Updates applied successfully.')
+    } else {
+        console.log('Oasis: No updates found.')
     }
 }
 
