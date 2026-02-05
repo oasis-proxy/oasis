@@ -133,7 +133,7 @@ async function updateContextMenus(config) {
 }
 
 // Handle Context Menu Clicks
-chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+chrome.contextMenus.onClicked.addListener(async (info) => {
     if (info.menuItemId === 'oasis-quick-add') {
         let targetUrl = ''
         

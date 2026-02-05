@@ -23,7 +23,7 @@
   - Color: `text-slate-900` (`dark:text-slate-50`)
 - **Header Description**:
   - Size: `text-xs` (12px)
-  - Color: `text-slate-500` (`dark:text-slate-400`)
+  - Color: `text-slate-500` (`dark:text-slate-400`/`#94a3b8`)
   - Margin: `mt-1`
 - **Section Label**:
   - Size: `text-sm` (14px)
@@ -33,15 +33,22 @@
 - **Card Item Title**:
   - Size: `text-sm` (14px)
   - Weight: `font-medium`
-  - Color: `.settings-text-primary` (`slate-900` / `slate-50`)
+  - Color: `.settings-text-primary` (`slate-900` / `dark:text-slate-100` `#f1f5f9`)
 - **Card Item Description**:
   - Size: `text-xs` (12px)
-  - Color: `.settings-text-secondary` (`slate-500` / `slate-400`)
+  - Color: `.settings-text-secondary` (`slate-500` / `dark:text-slate-400` `#94a3b8`)
   - Margin: `mt-0.5`
+
+### Dark Mode Text Summary
+
+- **Primary Text**: `slate-100` (`#f1f5f9`)
+- **Secondary/Muted**: `slate-400` (`#94a3b8`)
+- **Headings**: `slate-50` (`#f8fafc`)
 
 ## 3. Colors
 
 - **Primary**: `#137fec` (var(--bs-primary))
+- **Primary (Dark)**: `#3b82f6` (blue-500) or `#60a5fa` (blue-400) for better contrast.
 - **Backgrounds**:
   - Body: `#f3f4f6` (`slate-50` equiv) / Dark: `#0f172a` (`slate-900`)
   - Card: `#ffffff` / Dark: `#252525`
@@ -51,6 +58,13 @@
   - Dark: `#333333`
 - **Hovers**:
   - List Items: `hover:bg-slate-50/50` / Dark: `hover:bg-slate-700/30`
+
+### Semantic Status Colors (Dark Mode)
+
+- **Success**: `#4ade80` (green-400)
+- **Danger**: `#f87171` (red-400)
+- **Info**: `#38bdf8` (sky-400)
+- **Warning**: `#fbbf24` (amber-400)
 
 ## 4. Components
 
@@ -88,6 +102,9 @@
 - Radius: `rounded-lg`
 - Border: `border`
 - Text: `text-xs` (12px)
+- **Text Color**:
+  - Light: Default
+  - Dark: White (`#ffffff`) or Slate-50 (`#f8fafc`)
 - Border: `border`
 - Text: `text-xs` (12px)
 - Focus: `focus:border-primary focus:ring-primary`
@@ -110,6 +127,7 @@
   - Size: `px-2.5 py-1.5 text-[11px] font-medium` (smaller than primary/secondary)
   - Style: `bg-primary/10 no-border rounded-lg`
   - Usage: "Add Rule", "Add Item" buttons
+  - Dark Mode: No border. Text matches semantic color if applicable.
 - **Danger (Delete/Clear)**:
   - Class: `.settings-button-danger`
 - **Dashed (Add New)**:
@@ -119,6 +137,8 @@
   - Class: `.ui-button-icon`
   - Style: `bg-transparent border-0 p-1 rounded text-slate-400 hover:text-primary transition-colors`
   - Hover Bg: `hover:bg-transparent` (Light) / `dark:hover:bg-white/5` (Dark)
+  - Default Color (Dark): `text-slate-400` (`#94a3b8`)
+  - Hover Color: Matches Primary or Semantic Danger/Success.
 
 ### Toggles (Switches)
 
@@ -271,7 +291,7 @@ toast.info('Loading data...')
 
 ## 11. Button Border Specifications
 
-- **Primary Button**: No border ().
+- **Primary Button**: No border.
 - **Secondary Button**:
   - **Light Mode**: 1px solid slate-300 (`#cbd5e1`).
   - **Dark Mode**: No visible border (`border-color: transparent`).

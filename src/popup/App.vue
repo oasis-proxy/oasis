@@ -35,6 +35,9 @@
     </div>
     
     <div class="header-actions">
+       <button @click="openSidePanel" class="header-btn" title="Open Downloads">
+        <i class="bi bi-layout-sidebar-reverse" style="font-size: 18px;"></i>
+      </button>
        <button v-if="showMonitorTab" @click="openMonitor" class="header-btn" title="Open Monitor">
         <i class="bi bi-activity" style="font-size: 18px;"></i>
       </button>
@@ -445,6 +448,14 @@ const openOptions = () => {
   chrome.runtime.openOptionsPage()
 }
 
+const openSidePanel = async () => {
+  const windowId = (await chrome.windows.getCurrent()).id
+  if (chrome.sidePanel && chrome.sidePanel.open) {
+      chrome.sidePanel.open({ windowId })
+      window.close() // Close popup
+  }
+}
+
 const openMonitor = () => {
    if (showMonitorTab.value) {
        currentTab.value = 'monitor'
@@ -461,7 +472,7 @@ const isProtocolSupported = computed(() => {
 })
 
 const showMonitorTab = computed(() => {
-    return isMonitoringConfigEnabled.value && isProtocolSupported.value
+    return isMonitoringConfigEnabled.value
 })
 
 const loadMonitorData = async () => {

@@ -18,17 +18,37 @@ body {
 }
 
 #app {
-  width: 360px;
-  height: 450px;
+  min-width: 360px;
+  width: 100%;
+  height: 100vh;
   background: white;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
 }
 
 .dark #app {
-  background: #101922;
+  background: #252525; /* Card Dark (Neutral) */
+  color: #f1f5f9; /* slate-100 */
+}
+
+/* Ensure global text visibility in dark mode */
+.dark body {
+  color: #f1f5f9;
+}
+
+.dark .text-secondary {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
+/* ... existing code ... */
+
+/* Semantic Backgrounds */
+.bg-surface {
+  background-color: #ffffff !important;
+}
+.dark .bg-surface {
+  background-color: #252525 !important; /* Card Dark */
 }
 
 /* Header */
@@ -133,9 +153,13 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #6b7280;
+  color: #64748b; /* slate-500 */
   padding: 0.375rem 0.75rem;
   margin: 0 0 0.25rem 0;
+}
+
+.dark .section-heading {
+    color: #94a3b8; /* slate-400 - Lighter for dark mode */
 }
 
 .ui-text-tiny {
@@ -231,9 +255,10 @@ body {
 
 /* Dark Mode Overrides */
 .dark .popup-header {
-    border-bottom-color: #334155;
+    border-bottom-color: #333333;
+    color: #f8fafc;
 }
-.dark .popup-header h2 {
+.dark h3, .dark h4, .dark h5, .dark h6 {
     color: #f8fafc;
 }
 .dark .header-btn {
@@ -400,6 +425,20 @@ body {
   cursor: not-allowed;
 }
 
+.dark #app {
+  background: #101922; /* bg-background-dark */
+  color: #f1f5f9; /* slate-100 */
+}
+
+/* Ensure global text visibility in dark mode */
+.dark body {
+  color: #f1f5f9;
+}
+
+.dark .text-secondary {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
 .ui-button-secondary {
   background-color: white;
   border: 1px solid #cbd5e1; /* slate-300 */
@@ -411,6 +450,28 @@ body {
 .ui-button-secondary:hover {
   background-color: #f8fafc; /* slate-50 */
   color: #1e293b; /* slate-800 */
+}
+
+/* Icon Button (Design System) */
+.ui-button-icon {
+  background-color: transparent;
+  border: none;
+  padding: 0.25rem; /* p-1 equiv ~ 4px */
+  border-radius: 0.25rem; /* rounded */
+  color: #94a3b8; /* slate-400 */
+  transition: all 0.2s;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ui-button-icon:hover {
+  color: var(--bs-primary);
+  background-color: transparent;
+}
+.dark .ui-button-icon:hover {
+  background-color: transparent !important; /* Match Options Page: No bg hover */
 }
 
 .dark .ui-button-secondary {
@@ -490,5 +551,5 @@ body {
   background-color: #ffffff !important;
 }
 .dark .bg-surface {
-  background-color: #020617 !important; /* slate-950 */
+  background-color: #0f172a !important; /* slate-900 */
 }
