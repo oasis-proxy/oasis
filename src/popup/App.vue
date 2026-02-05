@@ -1,8 +1,8 @@
 <template>
   <!-- Global Notifications -->
-  <div v-if="showCopied" class="position-fixed top-0 start-0 w-100 d-flex justify-content-center mt-4" style="z-index: 9999; pointer-events: none;">
+  <div v-if="showNotification" class="position-fixed top-0 start-0 w-100 d-flex justify-content-center mt-4" style="z-index: 9999; pointer-events: none;">
       <div class="badge bg-dark px-3 py-2 shadow-lg animate-fade-in" style="font-size: 13px; opacity: 0.95;">
-          <i class="bi bi-check2 me-1"></i> Copied to clipboard
+          <i class="bi bi-check2 me-1"></i> {{ notificationText }}
       </div>
   </div>
 
@@ -25,18 +25,12 @@
         Monitor
       </button>
       <button 
+        v-if="showQuickTab"
         class="tab-btn" 
         :class="{ active: currentTab === 'quick' }"
         @click="currentTab = 'quick'"
       >
         Quick
-      </button>
-      <button 
-        class="tab-btn" 
-        :class="{ active: currentTab === 'info' }"
-        @click="currentTab = 'info'"
-      >
-        Info
       </button>
     </div>
     
@@ -232,26 +226,66 @@
           </div>
       </div>
 
-       <div v-if="currentTab === 'quick'" class="d-flex align-items-center justify-content-center h-100 text-secondary">
-          <div class="text-center p-4">
-              <i class="bi bi-lightning-charge text-3xl mb-2 d-block"></i>
-              <p>Quick Add coming soon.</p>
+       <!-- QUICK TAB -->
+       <div v-if="currentTab === 'quick'" class="monitor-container d-flex flex-column h-100" style="font-size: 12px;">
+          <p class="py-2 text-xs m-0 ui-text-primary bg-surface z-10 sticky-top flex-shrink-0" style="padding-left: 0.75rem; padding-right: 0.75rem;">Select domains to proxy from current page</p>
+          
+          <div v-if="failedDomains.length === 0" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
+             <div class="text-center p-4">
+                 <i class="bi bi-check-circle text-3xl mb-2 d-block opacity-50 text-success"></i>
+                 <p class="text-xs">No failed requests.</p>
+                 <p class="text-xs text-muted">Page is working correctly.</p>
+             </div>
           </div>
-      </div>
 
-       <div v-if="currentTab === 'info'" class="d-flex align-items-center justify-content-center h-100 text-secondary">
-          <div class="text-center p-4">
-              <i class="bi bi-info-circle text-3xl mb-2 d-block"></i>
-              <p class="mb-1 fw-bold">Oasis Proxy</p>
-              <p class="small text-muted">Version 1.0.0</p>
+          <div v-else class="flex-1 d-flex flex-column min-h-0">
+            <div class="flex-1 overflow-y-auto custom-scrollbar">
+              <div class="pb-2">
+                <label 
+                  v-for="domain in failedDomains" 
+                  :key="domain"
+                  class="quick-item"
+                >
+                  <input 
+                    type="checkbox" 
+                    v-model="selectedDomains" 
+                    :value="domain"
+                    class="form-check-input"
+                  />
+                  <span class="text-truncate text-xs">{{ domain }}</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Proxy Host Section -->
+            <div class="quick-section">
+              <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">Proxy Host</label>
+              <select v-model="quickProxyId" class="form-select ui-input border text-xs cursor-pointer" style="height: 28px; width: 100px; padding: 0 6px; border-radius: 6px; font-size: 12px !important;">
+                <option v-for="proxy in proxyOptionsArray" :key="proxy.id" :value="proxy.id">
+                    {{ proxy.label }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Actions Section -->
+            <div class="quick-section justify-content-end gap-2 pb-3"> 
+              <button @click="currentTab = 'proxy'" class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all">
+                Cancel
+              </button>
+              <button @click="confirmQuickAdd" :disabled="selectedDomains.length === 0" class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg shadow-primary/30 transition-colors border-0">
+                Confirm
+              </button>
+            </div>
           </div>
-      </div>
+       </div>
+
+
 
     </main>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { loadConfig, saveConfig } from '../common/storage'
 
 const config = ref(null)
@@ -260,8 +294,14 @@ const currentTab = ref('proxy') // proxy, monitor, quick, info
 const monitorResult = ref([])
 const activeTabId = ref(null)
 const currentTabUrl = ref('')
-const showCopied = ref(false)
-let copiedTimer = null
+const showNotification = ref(false)
+const notificationText = ref('')
+let notificationTimer = null
+
+// Quick Add State
+const selectedDomains = ref([])
+const quickProxyId = ref('direct')
+const contextMenuDomain = ref(null)
 
 // Load configuration
 onMounted(async () => {
@@ -271,6 +311,23 @@ onMounted(async () => {
   // Apply theme based on config
   applyTheme(config.value.ui?.theme || 'auto')
 
+  // Check Context Menu Intent (Quick Add)
+  try {
+      const session = await chrome.storage.session.get('quickAddIntent')
+      if (session && session.quickAddIntent) {
+          const intent = session.quickAddIntent
+          // Check if intent is recent (e.g., within 5 seconds) to avoid stale opens
+          if (Date.now() - intent.timestamp < 10000) {
+              contextMenuDomain.value = intent.domain
+              currentTab.value = 'quick'
+              // Clear immediately
+              await chrome.storage.session.remove('quickAddIntent')
+          }
+      }
+  } catch (e) {
+      console.warn('Failed to check context intent', e)
+  }
+
   // Get current tab info
   const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
   if (tabs.length > 0) {
@@ -278,8 +335,8 @@ onMounted(async () => {
       currentTabUrl.value = tabs[0].url
   }
 
-  // Auto-switch to monitor if enabled and supported
-  if (showMonitorTab.value) {
+  // Auto-switch to monitor if enabled and supported (Only if NOT quick intent)
+  if (showMonitorTab.value && !contextMenuDomain.value) {
       currentTab.value = 'monitor'
       loadMonitorData()
       chrome.storage.onChanged.addListener(storageListener)
@@ -434,16 +491,123 @@ const formatIp = (ip) => {
     return ip
 }
 
-// Copy to clipboard
+// --- Quick Add Logic ---
+const isActiveProfilePolicy = computed(() => {
+    return !!config.value?.policies?.[activeProfileId.value]
+})
+
+const showQuickTab = computed(() => {
+    return isActiveProfilePolicy.value && (failedDomains.value.length > 0 || !!contextMenuDomain.value)
+})
+
+const failedDomains = computed(() => {
+    // Priority: Context Menu Intent
+    if (contextMenuDomain.value) {
+        return [contextMenuDomain.value]
+    }
+
+    const errorItems = monitorResult.value.filter(i => i.error)
+    if (errorItems.length === 0) return []
+
+    const domains = [...new Set(errorItems.map(i => i.domain))]
+    
+    // Grouping/Merging logic
+    const groups = {}
+    domains.forEach(domain => {
+        const parts = domain.split('.')
+        let root = domain
+        if (parts.length > 2) {
+            // Check for potential root (e.g. google.com for api.google.com)
+            root = parts.slice(-2).join('.')
+        }
+        if (!groups[root]) groups[root] = []
+        groups[root].push(domain)
+    })
+
+    const results = []
+    for (const root in groups) {
+        if (groups[root].length > 1 || domains.includes(root)) {
+            // Multiple subdomains or the root itself is present, suggest root wildcard
+            results.push(`.${root}`)
+        } else {
+            results.push(groups[root][0])
+        }
+    }
+    return results.sort()
+})
+
+// Sync selections with failedDomains by default
+watch(failedDomains, (newVal) => {
+    selectedDomains.value = [...newVal]
+}, { immediate: true })
+
+const proxyOptionsArray = computed(() => {
+  if (!config.value) return [{ id: 'direct', label: 'Direct' }]
+  const options = [{ id: 'direct', label: 'Direct' }]
+  if (config.value.proxies) {
+    Object.values(config.value.proxies).forEach(p => {
+      options.push({ id: p.id, label: p.label || p.name })
+    })
+  }
+  return options
+})
+
+// Removed isAllSelected as per user request (Select All header removed)
+// Removed toggleSelectAll as per user request (Select All header removed)
+
+const confirmQuickAdd = async () => {
+    if (selectedDomains.value.length === 0) return
+    
+    const policy = config.value.policies[activeProfileId.value]
+    if (!policy) return
+
+    if (!Array.isArray(policy.rules)) policy.rules = []
+
+    const newRules = selectedDomains.value.map(pattern => ({
+        id: `rule_quick_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+        type: 'rule',
+        ruleType: 'wildcard',
+        pattern: pattern,
+        valid: true,
+        proxyId: quickProxyId.value,
+        ruleSet: {}
+    }))
+
+    // Prepend new rules
+    policy.rules = [...newRules, ...policy.rules]
+
+    // Save
+    await saveConfig(config.value)
+    
+    // Clear selection and switch back
+    selectedDomains.value = []
+    currentTab.value = 'proxy'
+    
+    toast.success(`${newRules.length} rules added to ${policy.name}`)
+}
+
+const showToast = (text, duration = 2000) => {
+    notificationText.value = text
+    showNotification.value = true
+    if (notificationTimer) clearTimeout(notificationTimer)
+    notificationTimer = setTimeout(() => {
+        showNotification.value = false
+    }, duration)
+}
+
 const copyDomain = (domain) => {
     navigator.clipboard.writeText(domain).then(() => {
-        showCopied.value = true
-        if (copiedTimer) clearTimeout(copiedTimer)
-        copiedTimer = setTimeout(() => {
-            showCopied.value = false
-        }, 2000)
+        showToast('Copied to clipboard')
     })
 }
+
+// ... Quick Add Helper ...
+const toast = {
+    success: (msg) => {
+        showToast(msg)
+    }
+}
+
 
 
 </script>

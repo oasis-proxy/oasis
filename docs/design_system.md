@@ -128,21 +128,35 @@
 
 - **Overlay**:
   - Class: `position-fixed top-0 start-0 w-100 h-100`
-  - Style: `d-flex align-items-center justify-content-center`
-  - Background: `rgba(15, 23, 42, 0.5)` + `backdrop-filter: blur(4px)`
+  - **Background**: `rgba(15, 23, 42, 0.5)` (Slate-900 @ 50%)
+  - **Effect**: `backdrop-filter: blur(4px)`
   - Z-Index: `1050`
-- **Container**:
+
+- **Container (Card)**:
   - Class: `.ui-card`
+  - **Background**:
+    - Light: `#ffffff` (White)
+    - Dark: `#252525` (Card Dark)
   - Radius: `rounded-xl`
   - Shadow: `shadow-lg`
-  - Width: `w-100` with `max-width` constraint (e.g. 480px, 600px)
+  - Width: `w-100` with `max-width` constraint
+
 - **Header**:
+  - **Background**: Transparent (Inherits Container)
+  - **Border Bottom**:
+    - Light: `#f1f5f9` (Slate-100)
+    - Dark: `#333333` (Divider Dark)
   - Padding: `p-4`
   - Title: `.ui-modal-title` (18px, font-semibold, ui-text-primary)
+
 - **Body**:
+  - **Background**: Transparent (Inherits Container)
   - Padding: `px-4`
   - Spacing: `gap-3` (vertical stack)
+
 - **Footer**:
+  - **Background**: Transparent (Inherits Container)
+  - **Border Top**: Same as Header
   - Padding: `p-4`
   - Alignment: `d-flex justify-content-end gap-3`
 
@@ -258,14 +272,6 @@ toast.info('Loading data...')
 ## 11. Button Border Specifications
 
 - **Primary Button**: No border ().
-- **Secondary Button**:
-  - **Light Mode**: 1px solid slate-300 (`#cbd5e1`).
-  - **Dark Mode**: No visible border (`border-color: transparent`).
-- **Tertiary / Icon Button**: No border.
-
-## 11. Button Border Specifications
-
-- **Primary Button**: No border (`border: none`).
 - **Secondary Button**:
   - **Light Mode**: 1px solid slate-300 (`#cbd5e1`).
   - **Dark Mode**: No visible border (`border-color: transparent`).

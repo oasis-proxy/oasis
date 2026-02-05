@@ -533,6 +533,7 @@ import { ref, computed, onMounted, watch, nextTick, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '../router'
 import { loadConfig, savePolicies } from '../../common/storage'
+import { decodeRuleSetContent } from '../../common/ruleset'
 import { generatePacScriptFromPolicy } from '../../common/pac'
 import { validatePattern } from '../../common/validation'
 import { useDragDrop } from '../../common/dragDrop'
@@ -927,19 +928,10 @@ const fetchRuleSetContent = async (index, url) => {
       console.log('Raw content:', content.substring(0, 100))
       
       // Process content based on format (Base64 detection)
-      try {
-        const cleanContent = content.replace(/[\r\n]/g, '')
-        const base64Pattern = /^[A-Za-z0-9+/]+=*$/
-        if (base64Pattern.test(cleanContent)) {
-          try {
-            content = atob(cleanContent)
-            console.log('Decoded Base64 RuleSet content')
-          } catch (e) {
-            console.log('Base64 decode failed, treating as plain text')
-          }
-        }
-      } catch (e) {
-        console.warn('Error processing RuleSet content format:', e)
+      const decoded = decodeRuleSetContent(content)
+      if (decoded !== content) {
+          content = decoded
+          console.log('Decoded Base64 RuleSet content')
       }
       
       // Update to new structure (with backward compatibility)
@@ -1113,14 +1105,32 @@ const handlePolicyMerge = (options) => {
 }
 
 // PAC Script Export
-const handleExportPAC = () => {
+const handleExportPAC = async () => {
   if (!policy.value || !policy.value.name) {
     console.error('Policy data not loaded')
     return
   }
+
+  // Fetch temporary rules (if this is the active policy, or just include them anyway?)
+  // The requirement says "active auto policy exporting... should include temporary rules".
+  // We can check if this policy ID matches active ID, or just include all.
+  // Generally, temp rules are session-bound and apply to the "current context".
+  // If the user exports a *different* policy than active, should temp rules apply? Probably not?
+  // But let's check activeProfileId.
+  let tempRules = []
+  try {
+      if (config.value && config.value.activeProfileId === policy.value.id) {
+           const sessionData = await chrome.storage.session.get('tempRules')
+           if (sessionData && sessionData.tempRules) {
+               tempRules = sessionData.tempRules
+           }
+      }
+  } catch (e) {
+      console.warn('Failed to fetch temp rules for export:', e)
+  }
   
   // Generate PAC script using common module
-  const pacScript = generatePacScriptFromPolicy(policy.value, config.value.proxies || {}, config.value.reject)
+  const pacScript = generatePacScriptFromPolicy(policy.value, config.value.proxies || {}, config.value.reject, tempRules)
   
   // Create download
   const blob = new Blob([pacScript], { type: 'application/x-ns-proxy-autoconfig' })

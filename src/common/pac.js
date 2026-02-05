@@ -9,7 +9,7 @@ import { parseAutoProxyRules, convertAutoProxyToInternalRules } from './autoprox
  * @param {Object} proxies - Proxies configuration object
  * @returns {string} The generated PAC script
  */
-export function generatePacScriptFromPolicy(policy, proxies, rejectConfig = null) {
+export function generatePacScriptFromPolicy(policy, proxies, rejectConfig = null, tempRules = []) {
   const policyName = policy.name || 'Auto Policy'
   const rules = policy.rules || []
   const rejectRules = policy.rejectRules || []
@@ -125,6 +125,22 @@ export function generatePacScriptFromPolicy(policy, proxies, rejectConfig = null
       }
     })
     pacContent += `\n`
+  }
+  
+  // Add Temporary Rules
+  if (tempRules && tempRules.length > 0) {
+      pacContent += `  // Temporary Rules\n`
+      tempRules.forEach(rule => {
+          if (rule.valid === false) return
+          // Skip complex types if not expected, but user can create Wildcard/Regex/IP/RuleSet in TempRules
+          
+          const condition = generateRuleCondition(rule)
+          const proxyStr = getProxyString(rule.proxyId)
+          if (condition) {
+             pacContent += `  if (${condition}) return "${proxyStr}";\n`
+          }
+      })
+      pacContent += `\n`
   }
   
   // Add normal rules

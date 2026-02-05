@@ -8,6 +8,30 @@
  * @param {string} url - The URL to fetch.
  * @returns {Promise<{content: string, lastUpdated: number, lastFetched: number, fetchError: null}|{fetchError: string, lastFetched: number}>}
  */
+
+/**
+ * Try to decode content if it looks like Base64.
+ * @param {string} text 
+ * @returns {string} Decoded text or original text
+ */
+export function decodeRuleSetContent(text) {
+  try {
+    const cleanContent = text.replace(/[\r\n]/g, '')
+    // Simple base64 regex (matches if the whole content looks like base64)
+    const base64Pattern = /^[A-Za-z0-9+/]+=*$/
+    if (base64Pattern.test(cleanContent)) {
+      try {
+        return atob(cleanContent)
+      } catch (e) {
+        // Ignore, treat as plain text
+      }
+    }
+  } catch (e) {
+    // Ignore
+  }
+  return text
+}
+
 export async function fetchRuleSetContent(url) {
   try {
     const response = await fetch(url)
@@ -15,21 +39,7 @@ export async function fetchRuleSetContent(url) {
     let text = await response.text()
     
     // Process content based on format (Base64 detection)
-    try {
-      const cleanContent = text.replace(/[\r\n]/g, '')
-      // Simple base64 regex (matches if the whole content looks like base64)
-      const base64Pattern = /^[A-Za-z0-9+/]+=*$/
-      if (base64Pattern.test(cleanContent)) {
-        try {
-          const decoded = atob(cleanContent)
-          text = decoded
-        } catch (e) {
-          // Ignore, treat as plain text
-        }
-      }
-    } catch (e) {
-      // Ignore
-    }
+    text = decodeRuleSetContent(text)
     
     const now = Date.now()
     return {
@@ -45,6 +55,7 @@ export async function fetchRuleSetContent(url) {
     }
   }
 }
+
 
 /**
  * Update RuleSets for a given policy.

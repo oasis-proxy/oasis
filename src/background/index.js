@@ -25,6 +25,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   
   // Apply settings immediately
   await applyProxySettings(config)
+  await updateContextMenus(config)
   await updateMonitoringState()
 })
 
@@ -32,6 +33,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 chrome.runtime.onStartup.addListener(async () => {
     const config = await loadConfig()
     await applyProxySettings(config)
+    await updateContextMenus(config)
     await updateMonitoringState()
 })
 
@@ -63,8 +65,26 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
             // Implementation can be re-added later.
         }
 
+        // Clear temporary rules when active profile changes (detected by re-application)
+        // Wait, 'changes' object only tells us what CHANGED. 
+        // If activeProfileId changed, we should clear it.
+        // We can check if `config.activeProfileId` was part of the change?
+        // Let's look at `changes` argument.
+        // But `changes` is not available inside `applyProxySettings`.
+        // We are inside `onChanged` here.
+        if (changes.config && changes.config.newValue && changes.config.oldValue) {
+             if (changes.config.newValue.activeProfileId !== changes.config.oldValue.activeProfileId) {
+                 await chrome.storage.session.remove('tempRules')
+                 console.log('Oasis: Active profile changed, cleared temporary rules.')
+             }
+        }
+
+
         // 3. Update Monitoring State
         await updateMonitoringState()
+
+        // 4. Update Context Menus
+        await updateContextMenus(config)
 
         // 3. Handle Auto Sync (Local -> Sync)
         if (config.sync && config.sync.enabled) {
@@ -87,6 +107,70 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     if (alarm.name === 'updateRules') {
         console.log('Oasis: Update alarm triggered.')
         await checkUpdates()
+    }
+})
+
+// --- Context Menu Logic ---
+
+/**
+ * Update Context Menus based on configuration.
+ * @param {object} config 
+ */
+async function updateContextMenus(config) {
+    // Always clear first to avoid duplicates or stale state
+    await chrome.contextMenus.removeAll()
+
+    if (config.ui && config.ui.showContextMenu) {
+        chrome.contextMenus.create({
+            id: 'oasis-quick-add',
+            title: 'Add domain to Oasis',
+            contexts: ['page', 'link']
+        })
+        console.log('Oasis: Context menu enabled.')
+    } else {
+        console.log('Oasis: Context menu disabled.')
+    }
+}
+
+// Handle Context Menu Clicks
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+    if (info.menuItemId === 'oasis-quick-add') {
+        let targetUrl = ''
+        
+        // Prioritize link URL, fallback to page URL
+        if (info.linkUrl) {
+            targetUrl = info.linkUrl
+        } else if (info.pageUrl) {
+            targetUrl = info.pageUrl
+        }
+
+        if (targetUrl) {
+            try {
+                const url = new URL(targetUrl)
+                const domain = url.hostname
+                
+                // Store intent
+                await chrome.storage.session.set({
+                    quickAddIntent: {
+                        domain: domain,
+                        timestamp: Date.now()
+                    }
+                })
+                
+                // Open Popup (MV3)
+                // Note: requires Chrome 99+
+                try {
+                    await chrome.action.openPopup()
+                } catch (e) {
+                    console.warn('Oasis: Failed to open popup programmatically (might require user gesture or newer Chrome):', e)
+                    // Fallback could be creating a window, but standard flow usually assumes user clicks extension icon if this fails
+                    // or we notify via badge? User requested "popup".
+                }
+
+            } catch (e) {
+                console.warn('Oasis: Invalid URL in context menu action:', targetUrl)
+            }
+        }
     }
 })
 
@@ -197,6 +281,20 @@ async function applyProxySettings(config) {
         console.warn(`Oasis: Active profile '${activeId}' not found. Falling back to system.`)
         await chrome.proxy.settings.set({ value: { mode: 'system' }, scope: 'regular' })
         return
+    }
+
+    // Checking if it's an Auto Policy (implicit type check)
+    // Same check as in createProxyConfig: profile.rules || profile.defaultProfileId
+    if (profile.rules || profile.defaultProfileId) {
+        try {
+            const sessionData = await chrome.storage.session.get('tempRules')
+            if (sessionData && sessionData.tempRules) {
+                profile.tempRules = sessionData.tempRules
+                console.log(`Oasis: Injected ${profile.tempRules.length} temporary rules into policy.`)
+            }
+        } catch (e) {
+            console.warn('Oasis: Failed to load temporary rules:', e)
+        }
     }
     
     // Use helper to generate proxy config
