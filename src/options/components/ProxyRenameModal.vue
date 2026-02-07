@@ -16,10 +16,10 @@
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <h3 class="ui-text-primary ui-modal-title tracking-tight m-0">Rename Proxy</h3>
+          <h3 class="ui-text-primary modal-header tracking-tight m-0">Rename Proxy</h3>
           <button 
             @click="emit('close')" 
-            class="-mr-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
+            class="modal-close-button"
           >
             <i class="bi bi-x-lg text-lg"></i>
           </button>
@@ -32,7 +32,7 @@
             <!-- Original Name (Readonly) -->
             <label class="d-flex flex-column gap-2 w-100">
               <span class="ui-text-primary text-xs font-medium leading-none">Original Name</span>
-              <div class="px-3 py-2 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs ui-text-secondary">
+              <div class="px-3 py-2 rounded-lg bg-subtle  border border-subtle  text-xs text-slate-500">
                 {{ currentName }}
               </div>
             </label>
@@ -62,7 +62,7 @@
         <div class="d-flex justify-content-end gap-3 p-4">
           <button 
             @click="emit('close')"
-            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none"
+            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
             Cancel
           </button>

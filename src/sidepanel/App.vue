@@ -1,8 +1,8 @@
 <template>
-  <div class="d-flex flex-column vh-100 bg-surface text-body font-sans" style="min-width: 360px;">
+  <div class="d-flex flex-column vh-100 text-body font-sans" style="min-width: 360px;">
     
     <!-- Header -->
-    <div class="flex-shrink-0 bg-surface z-sticky top-0 pt-3 px-3 shadow-sm">
+    <div class="flex-shrink-0 z-sticky top-0 pt-3 px-3 shadow-sm" style="background-color: var(--ui-bg-card);">
       <div class="pb-3 d-flex align-items-center">
         <h2 class="fs-4 fw-bold m-0 tracking-tight">Downloads</h2>
       </div>
@@ -217,7 +217,6 @@ const onErased = (id) => {
 const storageListener = async (changes, area) => {
     if (area === 'local' && changes.config) {
         config.value = await loadConfig()
-        applyTheme(config.value.ui?.theme || 'auto')
     }
 }
 
@@ -228,9 +227,8 @@ onMounted(async () => {
     chrome.downloads.onErased.addListener(onErased)
     chrome.storage.onChanged.addListener(storageListener)
     
-    // Load config and apply theme
+    // Load config (Theme logic removed)
     config.value = await loadConfig()
-    applyTheme(config.value.ui?.theme || 'auto')
 })
 
 onUnmounted(() => {
@@ -240,22 +238,7 @@ onUnmounted(() => {
     chrome.storage.onChanged.removeListener(storageListener)
 })
 
-// Theme Logic
-const applyTheme = (mode) => {
-  const html = document.documentElement
-  if (mode === 'dark') {
-    html.classList.add('dark')
-  } else if (mode === 'light') {
-    html.classList.remove('dark')
-  } else {
-    // Auto mode
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      html.classList.add('dark')
-    } else {
-      html.classList.remove('dark')
-    }
-  }
-}
+// Theme Logic REMOVED
 
 // Computed
 const filteredDownloads = computed(() => {
@@ -362,194 +345,4 @@ const showNotification = (title, message) => {
 
 </script>
 
-<style scoped>
-/* Scoped variables if needed, but relying on main.css globals where possible */
 
-/* Custom Classes not in Bootstrap */
-.bg-surface {
-  background-color: #f8fafc; /* slate-50 */
-}
-.dark .bg-surface {
-  background-color: #020617; /* slate-950 */
-}
-
-/* Text overrides */
-.text-body {
-  color: #0f172a; /* slate-900 */
-}
-.dark .text-body {
-  color: #f1f5f9; /* slate-100 */
-}
-
-/* Sticky Header */
-.z-sticky {
-  position: sticky;
-  z-index: 1000;
-}
-
-/* Search input overrides */
-.form-control:focus {
-  border-color: var(--bs-primary);
-  box-shadow: 0 0 0 0.25rem rgba(19, 127, 236, 0.25);
-}
-.dark .form-control {
-  background-color: #1e293b !important;
-  border-color: #334155 !important;
-  color: #f1f5f9 !important;
-}
-.dark .form-control::placeholder {
-  color: #94a3b8; /* slate-400 */
-}
-
-/* Borders */
-.border-bottom {
-  border-bottom: 1px solid #e2e8f0 !important;
-}
-.dark .border-bottom {
-  border-color: #1e293b !important; /* slate-800 */
-}
-
-/* Lighter Divider */
-.border-bottom-light {
-    border-bottom: 1px solid rgba(0,0,0,0.04);
-}
-.dark .border-bottom-light {
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-
-/* Download Item */
-.download-item:hover {
-  background-color: #f1f5f9; /* slate-100 */
-}
-.dark .download-item:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.download-item:hover .opacity-50 {
-  opacity: 1 !important;
-}
-
-/* Action Buttons */
-.action-btn {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: transparent;
-  border-radius: 6px;
-  transition: all 0.2s;
-  padding: 0;
-}
-.action-btn:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  color: var(--bs-primary) !important;
-}
-.dark .action-btn {
-  color: #94a3b8 !important; /* slate-400 */
-}
-.dark .action-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white !important;
-}
-
-/* Hover variants */
-.action-btn.hover-danger:hover {
-  color: #dc3545 !important;
-}
-.action-btn.hover-primary:hover {
-  color: var(--bs-primary) !important;
-}
-
-/* Notification Bar */
-.notification-bar {
-  background-color: #0f172a; /* slate-900 */
-  color: white;
-  border: 1px solid #1e293b;
-}
-.dark .notification-bar {
-  background-color: black;
-  border-color: #1e293b;
-}
-
-/* Custom Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 3px;
-}
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #475569;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in-up {
-    animation: fadeInUp 0.3s ease-out forwards;
-}
-
-/* Helper for icons */
-.bi::before {
-  vertical-align: 0; /* Align icons better */
-}
-
-/* Badge / Tag Styles (Bootstrap-ish) */
-.bg-primary-subtle {
-    background-color: #e0f2fe; /* cyan-100/blue-100 */
-}
-.text-primary {
-    color: var(--bs-primary) !important;
-}
-.border-primary-subtle {
-    border-color: #bae6fd !important;
-}
-
-.bg-danger-subtle {
-    background-color: #fee2e2; /* red-100 */
-}
-.text-danger {
-    color: #dc2626 !important;
-}
-.border-danger-subtle {
-    border-color: #fecaca !important;
-}
-
-.bg-success-subtle {
-    background-color: #dcfce7; /* green-100 */
-}
-.text-success {
-    color: #16a34a !important;
-}
-.border-success-subtle {
-    border-color: #bbf7d0 !important;
-}
-
-.bg-info-subtle {
-    background-color: #e0f2fe; /* sky-100 */
-}
-.text-info {
-    color: #0284c7 !important; /* sky-600 */
-}
-.border-info-subtle {
-    border-color: #bae6fd !important; /* sky-200 */
-}
-
-/* Dark Mode Badges */
-.dark .bg-primary-subtle { background-color: rgba(19, 127, 236, 0.15); border-color: rgba(19, 127, 236, 0.3) !important; }
-.dark .bg-danger-subtle { background-color: rgba(220, 38, 38, 0.15); border-color: rgba(220, 38, 38, 0.3) !important; }
-.dark .bg-success-subtle { background-color: rgba(22, 163, 74, 0.15); border-color: rgba(22, 163, 74, 0.3) !important; }
-.dark .bg-info-subtle { background-color: rgba(2, 132, 199, 0.15); border-color: rgba(2, 132, 199, 0.3) !important; }
-
-.dark .text-danger { color: #f87171 !important; }
-.dark .text-success { color: #4ade80 !important; }
-.dark .text-info { color: #38bdf8 !important; }
-</style>

@@ -1,0 +1,82 @@
+/* -------------------------------------------------------------------------- */
+/* Input & Form Components                                                    */
+/* -------------------------------------------------------------------------- */
+
+.ui-input {
+  background-color: var(--ui-bg-white) !important; /* bg-slate-50 */
+  border-color: var(--ui-border) !important; /* border-default */
+  color: var(--ui-text-primary) !important;
+}
+
+.ui-input:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  background-color: var(--ui-bg-hover) !important; /* slate-100 */
+  border-color: var(--ui-border-subtle) !important; /* slate-200 */
+  color: var(--ui-text-tertiary) !important; /* slate-400 */
+  cursor: not-allowed !important;
+  opacity: 0.7;
+}
+
+
+input[type="text"],
+input[type="password"],
+input[type="number"] {
+  max-width: 200px;
+  height: 32px; /* standard input height */
+}
+select {
+  max-width: 100px;
+  height: 32px; /* standard input height */
+}
+
+/* Search input overrides */
+.form-control:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* Color Input Overrides */
+input[type="color"].border-0 {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none !important;
+  background: none !important;
+  padding: 0 !important;
+}
+input[type="color"].border-0::-webkit-color-swatch-wrapper {
+  padding: 0 !important; 
+}
+input[type="color"].border-0::-webkit-color-swatch {
+  border: none !important;
+  border-radius: 8px !important; /* rounded-lg */
+  padding: 0 !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Form Group                                                                 */
+/* -------------------------------------------------------------------------- */
+
+.ui-form-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important; /* gap-2 */
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.ui-form-group label,
+.ui-form-group > span.ui-text-primary,
+.ui-form-group > span:first-child {
+  font-size: 14px !important;
+}
+
+.ui-form-group p,
+.ui-form-group .description,
+.ui-form-group > span:last-child:not(:first-child) {
+  font-size: 12px !important;
+}
+
+

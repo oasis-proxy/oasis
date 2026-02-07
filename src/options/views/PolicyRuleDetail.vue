@@ -1,18 +1,18 @@
 <template>
-  <div class="h-100 d-flex flex-column bg-white dark:bg-background-dark relative transition-colors">
+  <div class="h-100 d-flex flex-column bg-white  position-relative transition-colors">
     
     <!-- Header -->
-    <header class="h-24 px-5 d-flex align-items-center justify-content-between border-b border-slate-100 dark:border-divider-dark transition-colors">
+    <header class="h-24 px-5 d-flex align-items-center justify-content-between border-light  transition-colors">
       <div>
         <div class="d-flex align-items-center gap-3">
           <input 
              type="color" 
              v-model="policy.color"
-             class="p-0 border-0 rounded-lg overflow-hidden shadow-sm cursor-pointer transition-transform hover:scale-110"
-             style="width: 24px; height: 24px; min-width: 24px;"
+             class="p-0 border-0 rounded-lg overflow-hidden shadow-sm transition-transform"
+             style="width: 24px; height: 24px; min-width: 24px; cursor: pointer;"
              title="Choose color"
           />
-          <h2 class="fs-4 font-bold ui-text-primary tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="policy.name">
+          <h2 class="fs-4 font-bold text-slate-900 tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="policy.name">
             {{ policy.name || 'Auto Policy' }}
           </h2>
         </div>
@@ -20,8 +20,8 @@
       <div class="d-flex align-items-center gap-3">
         <!-- Show in Popup Switch -->
         <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
-           <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="showInPopup" v-model="policy.showInPopup">
-           <label class="form-check-label text-xs font-medium ui-text-secondary cursor-pointer" for="showInPopup">Show in Popup</label>
+           <input class="form-check-input" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="policy.showInPopup">
+           <label class="form-check-label text-xs font-medium text-slate-500" style="cursor: pointer;" for="showInPopup">Show in Popup</label>
         </div>
         <button 
           @click="resetChanges"
@@ -34,10 +34,9 @@
         <button 
           @click="saveChanges"
           :disabled="!isDirty"
-          class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg shadow-primary/30 transition-colors d-flex align-items-center gap-2"
+          class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
         >
-          <i class="bi bi-check-lg text-lg"></i>
-          <span>Save Changes</span>
+          <span>Save</span>
         </button>
 
         <!-- Action Menu -->
@@ -54,29 +53,29 @@
            <!-- Dropdown Menu -->
            <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                <li>
-                 <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
+                 <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
                      <i class="bi bi-pencil text-slate-400"></i> Rename
                  </button>
                </li>
                <li>
-                 <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
+                 <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
                      <i class="bi bi-files text-slate-400"></i> Clone
                  </button>
                </li>
                 <li>
-                  <button @click="showPolicyMergeModal = true" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
-                      <i class="bi bi-arrow-down-up text-slate-400"></i> Merge Policy
+                  <button @click="showPolicyMergeModal = true" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
+                      <i class="bi bi-diagram-3-fill text-slate-400"></i> Merge Policy
                   </button>
                 </li>
                 <li>
-                  <button @click="handleExportPAC" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
+                  <button @click="handleExportPAC" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
                       <i class="bi bi-download text-slate-400"></i> Export PAC
                   </button>
                 </li>
 
-               <li><hr class="dropdown-divider my-1 border-slate-200 dark:border-divider-dark"></li>
+               <li><hr class="dropdown-divider my-1 border-subtle "></li>
                <li>
-                 <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-red-600 dark:text-red-400 rounded-md transition-colors d-flex align-items-center gap-2">
+                 <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-danger  rounded-md transition-colors d-flex align-items-center gap-2">
                      <i class="bi bi-trash"></i> Delete
                  </button>
                </li>
@@ -86,27 +85,27 @@
     </header>
 
     <!-- Content -->
-    <div class="flex-1 overflow-y-auto custom-scrollbar px-5 pt-4 pb-5 scroll-smooth">
+    <div class="flex-1 overflow-y-auto custom-scrollbar px-5 pt-4 pb-5">
       <div v-if="policy" class="max-w-6xl mx-auto d-flex flex-column gap-4 pb-5">
         
         <!-- Normal Rules Section -->
         <section>
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <h3 class="text-sm font-semibold ui-text-primary m-0 uppercase tracking-wide">Normal Rules</h3>
+          <div class="ui-card-label">
+            <span class="label-text">Normal Rules</span>
             <div class="d-flex align-items-center gap-2">
-              <button @click="showBatchReplaceModal = true" class="ui-button-secondary px-2 py-1 rounded-lg text-xs transition-colors d-flex align-items-center gap-2">
-                <i class="bi bi-arrow-left-right" style="font-size: 10px;"></i> Batch Replace
+              <button @click="showBatchReplaceModal = true" class="ui-button-icon sm" title="Batch Replace">
+                <i class="bi bi-list-check" style="font-size: 14px;"></i>
               </button>
-              <button @click="addRule" class="ui-button-icon" title="Add Rule">
+              <button @click="addRule" class="ui-button-icon sm" title="Add Rule">
                 <i class="bi bi-plus-lg text-sm"></i>
               </button>
             </div>
           </div>
 
 
-          <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden">
+          <div class="ui-card rounded-xl border shadow-sm overflow-hidden">
             <!-- Table Header -->
-            <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-xs font-semibold ui-text-secondary uppercase tracking-wider">
+            <div class="ui-card-header">
               <div style="width: 4%;" class="text-center"></div>
               <div style="width: 8%;" class="text-center">Valid</div>
               <div style="width: 16%;">Type</div>
@@ -123,7 +122,7 @@
                   v-if="rule.type === 'divider'" 
                   :class="[
                     'd-flex align-items-center gap-1 transition-colors',
-                    dragOverIndex === index ? 'border-t-2 border-primary bg-primary/5' : 'hover:bg-slate-50 dark:hover:bg-slate-800'
+                    dragOverIndex === index ? 'border-top border-2 border-primary bg-primary-subtle' : 'hover:bg-slate-50'
                   ]"
                   style="padding: 0px 8px; min-height: 20px;"
                   @dragover.prevent="handleDragOver($event, index)"
@@ -132,19 +131,19 @@
                 >
                   <div style="width: 4%;" class="d-flex justify-content-center">
                     <i 
-                      class="bi bi-grip-vertical cursor-grab text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" 
-                      style="font-size: 12px;"
+                      class="bi bi-grip-vertical text-slate-400 transition-colors" 
+                      style="font-size: 12px; cursor: grab;"
                       draggable="true"
                       @dragstart="handleDragStart($event, index)" 
                       @dragend="handleDragEnd"
                     ></i>
                   </div>
                   <div class="flex-1 d-flex align-items-center gap-2">
-                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class="dark:border-slate-600"></div>
+                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class=""></div>
                     <span 
                       v-if="editingDividerIndex !== index"
                       @dblclick="startEditDivider(index, rule.label)"
-                      class="text-xs font-semibold ui-text-secondary uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-2"
+                      class="text-xs font-semibold text-slate-500 uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-2"
                       style="user-select: none; line-height: 1;"
                       title="Double-click to edit section name"
                     >
@@ -161,7 +160,7 @@
                       class="form-control text-xs font-semibold uppercase tracking-widest text-center"
                       style="width: 150px; height: 18px; padding: 2px 8px;"
                     />
-                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class="dark:border-slate-600"></div>
+                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class=""></div>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
                     <button @click="insertRuleBelow(index)" class="ui-button-icon" title="Add rule below">
@@ -181,7 +180,7 @@
                   v-else 
                   :class="[
                     'd-flex align-items-center gap-1 p-2 transition-colors',
-                    dragOverIndex === index ? 'border-t-2 border-primary bg-primary/5' : 'hover:bg-slate-50 dark:hover:bg-slate-800',
+                    dragOverIndex === index ? 'border-top border-2 border-primary bg-primary-subtle' : 'hover:bg-slate-50',
                     !rule.valid ? 'opacity-50' : ''
                   ]"
                   @dragover.prevent="handleDragOver($event, index)"
@@ -190,8 +189,8 @@
                 >
                   <div style="width: 4%;" class="d-flex justify-content-center">
                     <i 
-                      class="bi bi-grip-vertical cursor-grab text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" 
-                      style="font-size: 14px;"
+                      class="bi bi-grip-vertical text-slate-400 transition-colors" 
+                      style="font-size: 14px; cursor: grab;"
                       draggable="true"
                       @dragstart="handleDragStart($event, index)" 
                       @dragend="handleDragEnd"
@@ -200,10 +199,10 @@
                   <div style="width: 8%;" class="d-flex justify-content-center">
                     <div class="form-check form-switch m-0 d-flex align-items-center justify-content-center">
                       <input 
-                        class="form-check-input cursor-pointer" 
+                        class="form-check-input" 
+                        style="cursor: pointer;"
                         type="checkbox" 
                         v-model="rule.valid"
-                        style="width: 28px; height: 16px;"
                       >
                     </div>
                   </div>
@@ -235,7 +234,7 @@
                       <button 
                         @click="openRuleSetModal(rule, index)"
                         :disabled="fetchingRuleSetIndex === index"
-                        class="position-absolute bg-transparent border-0 p-0 ui-text-secondary hover:text-primary transition-colors"
+                        class="position-absolute bg-transparent border-0 p-0 text-slate-500 hover:text-primary transition-colors"
                         :class="{ 'cursor-not-allowed': fetchingRuleSetIndex === index }"
                         title="View RuleSet Content"
                         style="right: 6px; top: 50%; transform: translateY(-50%); font-size: 12px;"
@@ -285,17 +284,15 @@
 
             <!-- Empty State -->
             <div v-else class="p-2 d-flex align-items-center justify-content-center" style="min-height: 44px;">
-              <p class="text-xs ui-text-secondary m-0">No rules defined. Click "+" to get started.</p>
+              <p class="text-xs text-slate-500 m-0">No rules defined. Click "+" to get started.</p>
             </div>
-
-
             <!-- Default Strategy Footer -->
-            <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-t border-slate-100 dark:border-divider-dark transition-colors">
+            <div class="ui-card-footer">
               <div style="width: 4%;"></div>
               <div style="width: 8%;"></div>
               <div style="width: 16%;"></div>
               <div style="width: 44%;" class="d-flex align-items-center justify-content-end px-2">
-                 <div class="d-flex align-items-center gap-2 text-xs font-semibold ui-text-secondary uppercase tracking-widest whitespace-nowrap">
+                 <div class="d-flex align-items-center gap-2 whitespace-nowrap">
                    <i class="bi bi-arrow-return-right"></i> Default Strategy
                 </div>
               </div>
@@ -318,16 +315,16 @@
 
         <!-- Reject Rules Section -->
         <section>
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <h3 class="text-sm font-semibold ui-text-primary m-0 uppercase tracking-wide">Reject Rules</h3>
-            <button @click="addRejectRule" class="ui-button-icon" title="Add Reject Rule">
+          <div class="ui-card-label">
+            <span class="label-text">Reject Rules</span>
+            <button @click="addRejectRule" class="ui-button-icon sm" title="Add Reject Rule">
               <i class="bi bi-plus-lg text-sm"></i>
             </button>
           </div>
 
-          <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden">
+          <div class="ui-card rounded-xl border shadow-sm overflow-hidden">
             <!-- Table Header -->
-            <div class="d-flex gap-1 px-2 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-xs font-semibold ui-text-secondary uppercase tracking-wider">
+            <div class="ui-card-header">
               <div style="width: 4%;" class="text-center"></div>
               <div style="width: 8%;" class="text-center">Valid</div>
               <div style="width: 16%;">Type</div>
@@ -344,7 +341,7 @@
                   v-if="rule.type === 'divider'" 
                   :class="[
                     'd-flex align-items-center gap-1 transition-colors',
-                    dragOverRejectIndex === index ? 'border-t-2 border-primary bg-primary/5' : 'hover:bg-slate-50 dark:hover:bg-slate-800'
+                    dragOverRejectIndex === index ? 'border-top border-2 border-primary bg-primary-subtle' : 'hover:bg-slate-50' 
                   ]"
                   style="padding: 0px 8px; min-height: 20px;"
                   @dragover.prevent="handleRejectDragOver($event, index)"
@@ -353,19 +350,19 @@
                 >
                   <div style="width: 4%;" class="d-flex justify-content-center">
                     <i 
-                      class="bi bi-grip-vertical cursor-grab text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" 
-                      style="font-size: 12px;"
+                      class="bi bi-grip-vertical text-slate-400 transition-colors" 
+                      style="font-size: 12px; cursor: grab;"
                       draggable="true"
                       @dragstart="handleRejectDragStart($event, index)" 
                       @dragend="handleRejectDragEnd"
                     ></i>
                   </div>
                   <div class="flex-1 d-flex align-items-center gap-2">
-                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class="dark:border-slate-600"></div>
+                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class=""></div>
                     <span 
                       v-if="editingRejectDividerIndex !== index"
                       @dblclick="startEditRejectDivider(index, rule.label)"
-                      class="text-xs font-semibold ui-text-secondary uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-1"
+                      class="text-xs font-semibold text-slate-500 uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-1"
                       style="user-select: none; line-height: 1;"
                       title="Double-click to edit section name"
                     >
@@ -382,7 +379,7 @@
                       class="form-control text-xs font-semibold uppercase tracking-widest text-center"
                       style="width: 150px; height: 18px; padding: 2px 8px;"
                     />
-                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class="dark:border-slate-600"></div>
+                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class=""></div>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
                     <button @click="insertRejectRuleBelow(index)" class="ui-button-icon" title="Add rule below">
@@ -402,7 +399,7 @@
                   v-else
                   :class="[
                   'd-flex align-items-center gap-1 p-2 transition-colors',
-                  dragOverRejectIndex === index ? 'border-t-2 border-primary bg-primary/5' : 'hover:bg-slate-50 dark:hover:bg-slate-800',
+                  dragOverRejectIndex === index ? 'border-top border-2 border-primary bg-primary-subtle' : 'hover:bg-slate-50',
                    !rule.valid ? 'opacity-50' : ''
                 ]"
                 @dragover.prevent="handleRejectDragOver($event, index)"
@@ -411,8 +408,8 @@
               >
                 <div style="width: 4%;" class="d-flex justify-content-center">
                   <i 
-                    class="bi bi-grip-vertical cursor-grab text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" 
-                    style="font-size: 14px;"
+                    class="bi bi-grip-vertical text-slate-400 transition-colors" 
+                    style="font-size: 14px; cursor: grab;"
                     draggable="true"
                     @dragstart="handleRejectDragStart($event, index)"
                     @dragend="handleRejectDragEnd"
@@ -421,10 +418,10 @@
                 <div style="width: 8%;" class="d-flex justify-content-center">
                     <div class="form-check form-switch m-0 d-flex align-items-center justify-content-center">
                       <input 
-                        class="form-check-input cursor-pointer" 
+                        class="form-check-input" 
+                        style="cursor: pointer;"
                         type="checkbox" 
                         v-model="rule.valid"
-                        style="width: 28px; height: 16px;"
                       >
                     </div>
                   </div>
@@ -454,8 +451,8 @@
 
                 </div>
                 <div style="width: 20%;">
-                  <div class="w-100 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-xs px-2 d-flex align-items-center gap-2 cursor-not-allowed" style="user-select: none; height: 28px;">
-                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                  <div class="w-100 rounded border border-subtle  bg-slate-50  text-slate-400  text-xs px-2 d-flex align-items-center gap-2 cursor-not-allowed" style="user-select: none; height: 28px;">
+                    <span class="w-1.5 h-1.5 rounded-full bg-danger"></span>
                     REJECT
                   </div>
                 </div>
@@ -476,7 +473,7 @@
 
             <!-- Empty State -->
             <div v-else class="p-2 d-flex align-items-center justify-content-center" style="min-height: 44px;">
-              <p class="text-xs ui-text-secondary m-0">No reject rules defined.</p>
+              <p class="text-xs text-slate-500 m-0">No reject rules defined.</p>
             </div>
           </div>
         </section>
@@ -1228,18 +1225,4 @@ const handleDelete = async () => {
 }
 </script>
 
-<style>
-/* RuleSet loading animation - not scoped to avoid conflicts */
-@keyframes ruleset-spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
-.bi-arrow-repeat[style*="animation"] {
-  display: inline-block !important;
-}
-</style>

@@ -16,10 +16,10 @@
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <h3 class="ui-text-primary ui-modal-title tracking-tight m-0">RuleSet Content</h3>
+          <h3 class="ui-text-primary modal-header tracking-tight m-0">RuleSet Content</h3>
           <button 
             @click="emit('close')" 
-            class="-mr-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
+            class="modal-close-button"
           >
             <i class="bi bi-x-lg text-lg"></i>
           </button>
@@ -33,7 +33,7 @@
             <div v-if="url">
               <label class="d-flex flex-column gap-2 w-100 mb-0">
                 <span class="ui-text-primary text-xs font-medium leading-none">RuleSet URL</span>
-                <div class="px-3 py-2 rounded-lg border ui-input text-xs ui-text-secondary break-all font-mono" style="min-height: 32px;">
+                <div class="px-3 py-2 rounded-lg border ui-input text-xs text-slate-500 break-all font-mono" style="min-height: 32px;">
                   {{ url }}
                 </div>
               </label>
@@ -43,7 +43,7 @@
             <div v-if="lastUpdated">
                <label class="d-flex flex-column gap-2 w-100 mb-0">
                 <span class="ui-text-primary text-xs font-medium leading-none">Last Updated</span>
-                <div class="px-3 py-2 rounded-lg border ui-input text-xs ui-text-secondary" style="min-height: 32px;">
+                <div class="px-3 py-2 rounded-lg border ui-input text-xs text-slate-500" style="min-height: 32px;">
                   {{ formattedTime }}
                 </div>
               </label>
@@ -57,7 +57,7 @@
                   v-if="url"
                   @click="handleUpdate"
                   :disabled="updating"
-                  class="px-2 py-1.5 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none d-flex align-items-center gap-1 border border-slate-200 dark:border-divider-dark"
+                  class="px-2 py-1.5 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none d-flex align-items-center gap-1 border border-subtle "
                   :class="{ 'opacity-50 cursor-not-allowed': updating }"
                 >
                   <i class="bi bi-arrow-clockwise" :class="{ 'animate-spin': updating }"></i>
@@ -67,7 +67,7 @@
               <textarea 
                 :value="content"
                 readonly
-                class="w-100 h-100 rounded-lg border ui-input px-3 py-2 text-xs font-mono focus:outline-none custom-scrollbar ui-text-secondary"
+                class="w-100 h-100 rounded-lg border ui-input px-3 py-2 text-xs font-mono focus:outline-none custom-scrollbar text-slate-500"
                 style="resize: none;"
                 placeholder="No content available"
               ></textarea>
@@ -80,7 +80,7 @@
         <div class="d-flex justify-content-end gap-3 p-4">
           <button 
             @click="emit('close')"
-            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none"
+            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
             Close
           </button>
@@ -149,17 +149,4 @@ watch(() => props.show, async (newVal) => {
 })
 </script>
 
-<style scoped>
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-</style>

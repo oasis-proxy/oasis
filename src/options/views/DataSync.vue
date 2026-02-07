@@ -1,42 +1,39 @@
 <template>
   <div class="h-100 d-flex flex-column">
     <!-- Header -->
-    <header class="h-24 px-5 d-flex align-items-center justify-content-between border-b border-slate-100 dark:border-slate-700 transition-colors">
+    <header class="h-24 px-5 d-flex align-items-center justify-content-between border-light  transition-colors">
       <div>
-        <h2 class="fs-4 font-bold text-slate-900 dark:text-slate-50 m-0">Data Synchronization</h2>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 m-0">Manage cloud synchronization and version comparison.</p>
+        <h2 class="fs-4 font-bold text-slate-900  m-0">Data Synchronization</h2>
       </div>
     </header>
 
     <div class="flex-1 overflow-y-auto custom-scrollbar px-5 pt-4 pb-5">
       <div class="max-w-5xl mx-auto">
-        
         <!-- Maintenance Operations -->
         <section class="mb-5">
-             <h3 class="text-sm font-semibold ui-label mb-4 m-0">
-                Maintenance Operations
-            </h3>
-            <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-slate-700 shadow-sm transition-colors">
+             <div class="ui-card-label">
+                <span class="label-text">Maintenance Operations</span>
+            </div>
+            <div class="ui-card rounded-xl border shadow-sm transition-colors">
                 
                 <!-- Auto Sync -->
-                 <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50/50 transition-colors">
+                 <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors">
                   <div class="d-flex items-start">
                     <div>
-                      <p class="text-sm font-medium ui-text-primary m-0">Auto Sync</p>
-                      <p class="text-xs ui-text-secondary mt-0.5 m-0">Synchronize settings across devices automatically.</p>
+                      <p class="text-sm font-medium text-slate-900 m-0">Auto Sync</p>
+                      <p class="text-xs text-slate-500 mt-1 m-0">Synchronize settings across devices automatically.</p>
                     </div>
                   </div>
                   <div class="form-check form-switch">
                     <input :checked="config.sync.enabled" @change="toggleAutoSync" class="form-check-input" type="checkbox" role="switch" id="autoSyncSwitch">
                   </div>
                 </div>
-
-                <!-- Maintenance Buttons -->
-                <div class="d-flex align-items-center justify-content-between px-4 pt-3 pb-4 hover:bg-slate-50/50 transition-colors">
+            <!-- Maintenance Buttons -->
+                <div class="d-flex align-items-center justify-content-between px-4 pt-3 pb-4 hover:bg-slate-50 transition-colors">
                   <div class="d-flex items-start">
                     <div>
-                      <p class="text-sm font-medium ui-text-primary m-0">Maintenance</p>
-                      <p class="text-xs ui-text-secondary mt-0.5 m-0">Manage configuration data.</p>
+                      <p class="text-sm font-medium text-slate-900 m-0">Maintenance</p>
+                      <p class="text-xs text-slate-500 mt-1 m-0">Manage configuration data.</p>
                     </div>
                   </div>
                   <div class="d-flex gap-2">
@@ -63,44 +60,44 @@
         <div class="d-flex align-items-center justify-content-center gap-4">
             
             <!-- Local Version Card -->
-            <div class="flex-1 ui-card rounded-xl border shadow-sm p-4 relative overflow-hidden group h-100">
-                <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
+            <div class="flex-1 ui-card rounded-xl border shadow-sm p-4 position-relative overflow-hidden h-100">
+                <div class="d-flex align-items-center gap-3 mb-4 position-relative" style="z-index: 10;">
                     <div>
                         <div class="d-flex align-items-center gap-2">
-                             <h3 class="text-sm font-semibold ui-text-primary m-0">Local Version</h3>
+                             <h3 class="text-sm font-semibold text-slate-900 m-0">Local Version</h3>
                         </div>
-                        <p class="text-xs ui-text-secondary m-0">This device</p>
+                        <p class="text-xs text-slate-500 m-0">This device</p>
                     </div>
                 </div>
                 
-                <div class="d-flex flex-column gap-3 position-relative z-10">
+                <div class="d-flex flex-column gap-3 position-relative" style="z-index: 10;">
                     <!-- Last Modified -->
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0">Last Modified</p>
-                        <p class="text-xs font-mono ui-text-primary m-0 text-end">
+                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
+                        <p class="text-xs font-mono text-slate-900 m-0 text-end">
                             {{ localLastModified || 'Unknown' }}
                         </p>
                     </div>
                     
                     <!-- Config Version -->
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0">Config Ver.</p>
-                        <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ configVersion }}</p>
+                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
+                        <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ configVersion }}</p>
                     </div>
 
                     <!-- Software Version -->
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0">Software Ver.</p>
-                        <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ softwareVersion }}</p>
+                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Software Ver.</p>
+                        <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ softwareVersion }}</p>
                     </div>
                     
-                    <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50 d-flex flex-column gap-3">
+                    <div class="pt-3 border-t border-light d-flex flex-column gap-3">
                         <!-- Proxy Hosts -->
                         <div class="d-flex justify-content-between align-items-start">
-                             <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Proxy Hosts ({{ proxyCount }})</p>
+                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-1">Proxy Hosts ({{ proxyCount }})</p>
                              <ul class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
-                                <li v-for="host in previewProxies" :key="host.id" class="text-xs ui-text-secondary d-flex align-items-center gap-1.5 truncate flex-row-reverse">
-                                    <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500 flex-shrink-0"></span> 
+                                <li v-for="host in previewProxies" :key="host.id" class="text-xs text-slate-500 d-flex align-items-center gap-2 truncate flex-row-reverse">
+                                    <span class="d-inline-block w-1 h-1 rounded-full bg-secondary flex-shrink-0"></span> 
                                     <span class="text-truncate" style="max-width: 150px;" :title="host.label">{{ host.label }}</span>
                                 </li>
                             </ul>
@@ -108,10 +105,10 @@
 
                         <!-- Policies -->
                         <div class="d-flex justify-content-between align-items-start">
-                             <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Policies ({{ policyCount }})</p>
+                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-1">Policies ({{ policyCount }})</p>
                              <ul class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
-                                <li v-for="policy in previewPolicies" :key="policy.id" class="text-xs ui-text-secondary d-flex align-items-center gap-1.5 truncate flex-row-reverse">
-                                    <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500 flex-shrink-0"></span> 
+                                <li v-for="policy in previewPolicies" :key="policy.id" class="text-xs text-slate-500 d-flex align-items-center gap-2 truncate flex-row-reverse">
+                                    <span class="d-inline-block w-1 h-1 rounded-full bg-secondary flex-shrink-0"></span> 
                                     <span class="text-truncate" style="max-width: 150px;" :title="policy.name">{{ policy.name }}</span>
                                 </li>
                             </ul>
@@ -121,75 +118,75 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="d-flex flex-column justify-content-center gap-3 flex-shrink-0 z-10">
-                <button @click="handleSyncToCloud" class="group d-flex align-items-center justify-content-between gap-3 w-40 px-3 py-3 ui-card rounded-lg border hover:border-primary hover:text-primary transition-all shadow-sm">
+            <div class="d-flex flex-column justify-content-center gap-3 flex-shrink-0" style="z-index: 10;">
+                <button @click="handleSyncToCloud" class="d-flex align-items-center justify-content-between gap-3 px-3 py-3 ui-card rounded-lg border transition-all shadow-sm" style="width: 10rem;">
                     <div class="text-start">
-                        <span class="d-block text-xs font-bold ui-text-primary group-hover:text-primary">Sync to Cloud</span>
-                        <span class="d-block text-xs ui-text-secondary group-hover:text-primary/70">Local overwrites Cloud</span>
+                        <span class="d-block text-xs font-bold text-slate-900">Sync to Cloud</span>
+                        <span class="d-block text-xs text-slate-500">Local overwrites Cloud</span>
                     </div>
-                    <i class="bi bi-arrow-right-circle-fill text-lg text-primary group-hover:translate-x-0.5 transition-transform"></i>
+                    <i class="bi bi-arrow-right-circle-fill fs-5 text-primary"></i>
                 </button>
-                 <button @click="handleSyncFromLocal" class="group d-flex align-items-center justify-content-between gap-3 w-40 px-3 py-3 ui-card rounded-lg border hover:border-primary hover:text-primary transition-all shadow-sm">
-                    <i class="bi bi-arrow-left-circle-fill text-lg text-primary group-hover:-translate-x-0.5 transition-transform"></i>
+                 <button @click="handleSyncFromLocal" class="d-flex align-items-center justify-content-between gap-3 px-3 py-3 ui-card rounded-lg border transition-all shadow-sm" style="width: 10rem;">
+                    <i class="bi bi-arrow-left-circle-fill fs-5 text-primary"></i>
                     <div class="text-end">
-                        <span class="d-block text-xs font-bold ui-text-primary group-hover:text-primary">Sync to Local</span>
-                        <span class="d-block text-xs ui-text-secondary group-hover:text-primary/70">Cloud overwrites Local</span>
+                        <span class="d-block text-xs font-bold text-slate-900">Sync to Local</span>
+                        <span class="d-block text-xs text-slate-500">Cloud overwrites Local</span>
                     </div>
                 </button>
             </div>
 
             <!-- Cloud Version Card -->
-            <div class="flex-1 ui-card rounded-xl border shadow-sm p-4 relative overflow-hidden group h-100">
-                <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
+            <div class="flex-1 ui-card rounded-xl border shadow-sm p-4 position-relative overflow-hidden h-100">
+                <div class="d-flex align-items-center gap-3 mb-4 position-relative" style="z-index: 10;">
                     <div>
                         <div class="d-flex align-items-center gap-2">
-                            <h3 class="text-sm font-semibold ui-text-primary m-0">Cloud Version</h3>
+                            <h3 class="text-sm font-semibold text-slate-900 m-0">Cloud Version</h3>
                         </div>
-                        <p class="text-xs ui-text-secondary m-0">Remote repository</p>
+                        <p class="text-xs text-slate-500 m-0">Remote repository</p>
                     </div>
                 </div>
 
-                <div class="d-flex flex-column gap-3 position-relative z-10">
+                <div class="d-flex flex-column gap-3 position-relative" style="z-index: 10;">
                      <!-- Last Modified -->
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0">Last Modified</p>
-                        <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ cloudLastModified }}</p>
+                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
+                        <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ cloudLastModified }}</p>
                     </div>
                     
                     <!-- Config Version -->
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0">Config Ver.</p>
-                        <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ cloudConfigVersion }}</p>
+                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
+                        <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ cloudConfigVersion }}</p>
                     </div>
 
-                    <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50">
+                    <div class="pt-3 border-t border-light">
                         <div v-if="!cloudConfig" class="d-flex flex-column align-items-center justify-content-center py-4 text-slate-400">
-                            <i class="bi bi-cloud-slash text-3xl mb-2"></i>
+                            <i class="bi bi-cloud-slash fs-2 mb-2"></i>
                             <span class="text-xs">No cloud data found</span>
                         </div>
                         <div v-else class="d-flex flex-column gap-3">
                              <!-- Proxy Hosts -->
                             <div class="d-flex justify-content-between align-items-start">
-                                 <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Proxy Hosts ({{ cloudProxyCount }})</p>
+                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-1">Proxy Hosts ({{ cloudProxyCount }})</p>
                                  <ul v-if="cloudPreviewProxies.length > 0" class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
-                                    <li v-for="host in cloudPreviewProxies" :key="host.id" class="text-xs ui-text-secondary d-flex align-items-center gap-1.5 truncate flex-row-reverse">
-                                        <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500 flex-shrink-0"></span> 
+                                    <li v-for="host in cloudPreviewProxies" :key="host.id" class="text-xs text-slate-500 d-flex align-items-center gap-2 truncate flex-row-reverse">
+                                        <span class="d-inline-block w-1 h-1 rounded-full bg-secondary flex-shrink-0"></span> 
                                         <span class="text-truncate" style="max-width: 150px;" :title="host.label">{{ host.label }}</span>
                                     </li>
                                 </ul>
-                                <span v-else class="text-xs ui-text-secondary">-</span>
+                                <span v-else class="text-xs text-slate-500">-</span>
                             </div>
 
                             <!-- Policies -->
                             <div class="d-flex justify-content-between align-items-start">
-                                 <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Policies ({{ cloudPolicyCount }})</p>
+                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-1">Policies ({{ cloudPolicyCount }})</p>
                                  <ul v-if="cloudPreviewPolicies.length > 0" class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
-                                    <li v-for="policy in cloudPreviewPolicies" :key="policy.id" class="text-xs ui-text-secondary d-flex align-items-center gap-1.5 truncate flex-row-reverse">
-                                        <span class="d-inline-block w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-500 flex-shrink-0"></span> 
+                                    <li v-for="policy in cloudPreviewPolicies" :key="policy.id" class="text-xs text-slate-500 d-flex align-items-center gap-2 truncate flex-row-reverse">
+                                        <span class="d-inline-block w-1 h-1 rounded-full bg-secondary flex-shrink-0"></span> 
                                         <span class="text-truncate" style="max-width: 150px;" :title="policy.name">{{ policy.name }}</span>
                                     </li>
                                 </ul>
-                                <span v-else class="text-xs ui-text-secondary">-</span>
+                                <span v-else class="text-xs text-slate-500">-</span>
                             </div>
                         </div>
                     </div>

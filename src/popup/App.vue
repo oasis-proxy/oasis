@@ -1,7 +1,7 @@
 <template>
   <!-- Global Notifications -->
   <div v-if="showNotification" class="position-fixed top-0 start-0 w-100 d-flex justify-content-center mt-4" style="z-index: 9999; pointer-events: none;">
-      <div class="badge bg-dark px-3 py-2 shadow-lg animate-fade-in" style="font-size: 13px; opacity: 0.95;">
+      <div class="badge bg-secondary px-3 py-2 shadow-lg animate-fade-in" style="font-size: 13px; opacity: 0.95;">
           <i class="bi bi-check2 me-1"></i> {{ notificationText }}
       </div>
   </div>
@@ -35,13 +35,13 @@
     </div>
     
     <div class="header-actions">
-       <button @click="openSidePanel" class="header-btn" title="Open Downloads">
+       <button @click="openSidePanel" class="ui-button-icon" title="Open Downloads">
         <i class="bi bi-layout-sidebar-reverse" style="font-size: 18px;"></i>
       </button>
-       <button v-if="showMonitorTab" @click="openMonitor" class="header-btn" title="Open Monitor">
+       <button v-if="showMonitorTab" @click="openMonitor" class="ui-button-icon" title="Open Monitor">
         <i class="bi bi-activity" style="font-size: 18px;"></i>
       </button>
-      <button @click="openOptions" class="header-btn" title="Options">
+      <button @click="openOptions" class="ui-button-icon" title="Options">
         <i class="bi bi-gear" style="font-size: 18px;"></i>
       </button>
     </div>
@@ -231,7 +231,7 @@
 
        <!-- QUICK TAB -->
        <div v-if="currentTab === 'quick'" class="monitor-container d-flex flex-column h-100" style="font-size: 12px;">
-          <p class="py-2 text-xs m-0 ui-text-primary bg-surface z-10 sticky-top flex-shrink-0" style="padding-left: 0.75rem; padding-right: 0.75rem;">Select domains to proxy from current page</p>
+          <p class="py-2 text-xs m-0 ui-text-primary z-10 sticky-top flex-shrink-0" style="padding-left: 0.75rem; padding-right: 0.75rem; background-color: var(--ui-bg-card);">Select domains to proxy from current page</p>
           
           <div v-if="failedDomains.length === 0" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
              <div class="text-center p-4">
@@ -311,8 +311,9 @@ onMounted(async () => {
   config.value = await loadConfig()
   activeProfileId.value = config.value.activeProfileId || 'direct'
   
-  // Apply theme based on config
-  applyTheme(config.value.ui?.theme || 'auto')
+  // Apply theme based on config - REMOVED (Light mode only)
+  // applyTheme(config.value.ui?.theme || 'auto')
+  document.documentElement.classList.remove('dark') // Force ensure light mode
 
   // Check Context Menu Intent (Quick Add)
   try {
@@ -352,21 +353,7 @@ onUnmounted(() => {
     chrome.storage.onChanged.removeListener(storageListener)
 })
 
-const applyTheme = (mode) => {
-  const html = document.documentElement
-  if (mode === 'dark') {
-    html.classList.add('dark')
-  } else if (mode === 'light') {
-    html.classList.remove('dark')
-  } else {
-    // Auto mode
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      html.classList.add('dark')
-    } else {
-      html.classList.remove('dark')
-    }
-  }
-}
+// Theme Logic REMOVED
 
 // Compute grouped profiles
 const hostProxies = computed(() => {

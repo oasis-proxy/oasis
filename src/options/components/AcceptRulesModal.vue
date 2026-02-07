@@ -15,11 +15,11 @@
       >
         
         <!-- Modal Header -->
-        <div class="p-4 d-flex justify-content-between align-items-center border-b border-slate-100 dark:border-divider-dark">
-          <h3 class="ui-text-primary ui-modal-title tracking-tight m-0">Accept Rules</h3>
+        <div class="p-4 d-flex justify-content-between align-items-center border-b border-light ">
+          <h3 class="ui-text-primary modal-header tracking-tight m-0">Accept Rules</h3>
           <button 
             @click="emit('close')" 
-            class="-mr-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
+            class="modal-close-button"
           >
             <i class="bi bi-x-lg text-lg"></i>
           </button>
@@ -29,7 +29,7 @@
         <div class="px-4 flex-1">
           <div class="d-flex flex-column gap-3">
             
-            <p class="text-sm ui-text-secondary m-0">
+            <p class="text-sm text-slate-500 m-0">
               You are about to add <strong class="text-primary">{{ ruleCount }}</strong> rules to a permanent policy.
             </p>
 
@@ -39,7 +39,7 @@
               <select 
                 v-model="targetPolicyId"
                 :disabled="!!forcedTargetId"
-                :class="{'bg-slate-50 dark:bg-slate-800 text-slate-500 cursor-not-allowed': !!forcedTargetId}"
+                :class="{'bg-slate-50  text-slate-500 cursor-not-allowed': !!forcedTargetId}"
                 class="form-select ui-input w-100 rounded-lg border h-8 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
                 style="max-width: 100%;"
               >
@@ -58,13 +58,13 @@
                 <!-- Ignore Option -->
                 <label 
                   class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
-                  :class="conflictMode === 'ignore' ? 'border-primary bg-blue-50/50 dark:bg-primary/10' : 'ui-card hover:border-slate-300 dark:hover:border-slate-600'"
+                  :class="conflictMode === 'ignore' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
                 >
                   <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="ignore"/>
                   <span class="d-flex flex-1">
                     <span class="d-flex flex-column">
                       <span class="block text-xs font-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">Ignore</span>
-                      <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">Keep existing</span>
+                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Keep existing</span>
                     </span>
                   </span>
                   <i v-if="conflictMode === 'ignore'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -73,13 +73,13 @@
                 <!-- Overwrite Option -->
                 <label 
                   class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
-                  :class="conflictMode === 'overwrite' ? 'border-primary bg-blue-50/50 dark:bg-primary/10' : 'ui-card hover:border-slate-300 dark:hover:border-slate-600'"
+                  :class="conflictMode === 'overwrite' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
                 >
                   <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="overwrite"/>
                   <span class="d-flex flex-1">
                     <span class="d-flex flex-column">
                       <span class="block text-xs font-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">Overwrite</span>
-                      <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">Replace existing</span>
+                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Replace existing</span>
                     </span>
                   </span>
                   <i v-if="conflictMode === 'overwrite'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -92,10 +92,10 @@
         </div>
 
         <!-- Modal Footer -->
-        <div class="p-4 d-flex justify-content-end align-items-center gap-3 border-t border-slate-100 dark:border-divider-dark">
+        <div class="p-4 d-flex justify-content-end align-items-center gap-3 border-t border-light ">
           <button 
             @click="emit('close')"
-            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none"
+            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
             Cancel
           </button>

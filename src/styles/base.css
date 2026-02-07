@@ -1,0 +1,21 @@
+/* -------------------------------------------------------------------------- */
+/* Base Resets & Global Styles                                                */
+/* -------------------------------------------------------------------------- */
+
+html {
+  font-size: 16px; /* Critical Design System Rule: 1rem = 16px */
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Reset Lists */
+ul { padding: 0; margin: 0; list-style: none; }
+
+/* Display Utilities (Tailwind Compat) */
+.hidden { display: none !important; }
+.block { display: block !important; }

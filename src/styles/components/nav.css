@@ -1,0 +1,20 @@
+/* -------------------------------------------------------------------------- */
+/* Navigation Components                                                      */
+/* -------------------------------------------------------------------------- */
+
+/* Nav Item (Card-like behavior in lists) */
+.nav-item-active {
+  background-color: var(--ui-bg-card) !important;
+  color: var(--bs-primary) !important;
+  border: 0 !important;
+}
+
+.nav-item-inactive {
+  background-color: transparent !important;
+  color: var(--ui-text-secondary) !important; /* slate-500 */
+  border: 0 !important;
+}
+.nav-item-inactive:hover {
+  background-color: var(--ui-bg-hover) !important; /* slate-100 */
+  color: var(--ui-text-primary) !important; /* slate-900 */
+}

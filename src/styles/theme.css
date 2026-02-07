@@ -1,0 +1,70 @@
+/* -------------------------------------------------------------------------- */
+/* Theme Variables (Light Mode Default)                                       */
+/* -------------------------------------------------------------------------- */
+
+:root {
+  /* Brand Colors */
+  --bs-primary: #137fec;
+  --bs-primary-rgb: 19, 127, 236;
+  --bs-primary-hover: #1170cf;
+  --bs-primary-subtle: #e0f2fe;    /* e.g. cyan-100/blue-100 equivalent */
+  --bs-primary-border-subtle: #bae6fd;
+  
+  /* Base Colors */
+  --bs-body-bg: #f3f4f6;          /* bg-background-light */
+  --bs-body-color: #0f172a;       /* slate-900 */
+  
+  /* Semantic Backgrounds */
+  --ui-bg-card: #ffffff;
+  --ui-bg-default: #f3f4f6;       /* bg-background-light */
+  --ui-bg-subtle: #f8fafc;        /* slate-50 */
+  --ui-bg-hover: #f1f5f9;         /* slate-100 */
+  --ui-bg-active: #e2e8f0;        /* slate-200 */
+  
+  /* Semantic Text */
+  --ui-text-primary: #0f172a;     /* slate-900 */
+  --ui-text-secondary: #64748b;   /* slate-500 */
+  --ui-text-tertiary: #94a3b8;    /* slate-400 */
+  --ui-text-inverse: #ffffff;
+  
+  /* Borders */
+  --ui-border: #cbd5e1;           /* slate-300 */
+  --ui-border-subtle: #e2e8f0;    /* slate-200 */
+  --ui-border-light: #f1f5f9;     /* slate-100 */
+  
+  /* Status Colors */
+  --ui-success: #10b981;
+  --ui-success-bg: #dcfce7;
+  --ui-success-border: #bbf7d0;
+  
+  --ui-danger: #ef4444;           /* or red-600 #dc2626? */
+  --ui-danger-hover: #b91c1c;
+  --ui-danger-bg: #fee2e2;
+  --ui-danger-border: #fecaca;
+  --ui-danger-text: #dc2626;
+
+  --ui-warning: #f59e0b;
+  --ui-warning-bg: #fef3c7;       /* amber-100 (approx) */
+  --ui-warning-border: #fde68a;
+  
+  --ui-info: #3b82f6;
+  --ui-info-bg: #e0f2fe;
+  --ui-info-border: #bae6fd;
+  --ui-info-border: #bae6fd;
+
+  /* Typography */
+  --font-xs: 12px;
+  --font-sm: 14px;
+  --font-base: 16px;
+  --font-lg: 18px;
+  --font-xl: 20px;
+  --font-2xl: 24px;
+  --font-3xl: 30px;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+

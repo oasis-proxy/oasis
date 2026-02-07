@@ -16,10 +16,10 @@
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <h3 class="ui-text-primary ui-modal-title tracking-tight m-0">Create New Policy</h3>
+          <h3 class="ui-text-primary modal-header tracking-tight m-0">Create New Policy</h3>
           <button 
             @click="emit('close')" 
-            class="-mr-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
+            class="modal-close-button"
           >
             <i class="bi bi-x-lg text-lg"></i>
           </button>
@@ -45,7 +45,7 @@
                   @keydown.enter="handleConfirm"
                 />
               </div>
-              <p class="text-xs ui-text-secondary m-0">This name will be used to identify your policy.</p>
+              <p class="text-xs text-slate-500 m-0">This name will be used to identify your policy.</p>
             </label>
 
             <!-- Type Selector -->
@@ -54,13 +54,13 @@
               <!-- Auto Policy Option -->
               <label 
                 class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
-                :class="type === 'policy' ? 'border-primary bg-blue-50/50 dark:bg-primary/10' : 'ui-card hover:border-slate-300 dark:hover:border-slate-600'"
+                :class="type === 'policy' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
               >
                 <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="policy"/>
                 <span class="d-flex flex-1">
                   <span class="d-flex flex-column">
                     <span class="block text-xs font-medium mb-1" :class="type === 'policy' ? 'text-primary' : 'ui-text-primary'">Auto Policy</span>
-                    <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">Flexible rule sets</span>
+                    <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Flexible rule sets</span>
                   </span>
                 </span>
                 <i v-if="type === 'policy'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -69,13 +69,13 @@
               <!-- PAC Script Option -->
               <label 
                 class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
-                :class="type === 'pac' ? 'border-primary bg-blue-50/50 dark:bg-primary/10' : 'ui-card hover:border-slate-300 dark:hover:border-slate-600'"
+                :class="type === 'pac' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
               >
                 <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="pac"/>
                 <span class="d-flex flex-1">
                   <span class="d-flex flex-column">
                     <span class="block text-xs font-medium mb-1" :class="type === 'pac' ? 'text-primary' : 'ui-text-primary'">PAC Script</span>
-                    <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">Custom JS script</span>
+                    <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Custom JS script</span>
                   </span>
                 </span>
                 <i v-if="type === 'pac'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -89,7 +89,7 @@
         <div class="d-flex justify-content-end gap-3 p-4">
           <button 
             @click="emit('close')"
-            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none"
+            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
             Cancel
           </button>

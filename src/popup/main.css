@@ -1,14 +1,21 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
-/* CSS Variables */
-:root {
-  --bs-primary: #137fec;
-  --surface-dark: #1e293b;
-}
+/* Shared Modular Styles */
+@import "../styles/theme.css";
+@import "../styles/base.css";
+@import "../styles/components/buttons.css";
+@import "../styles/components/inputs.css";
+@import "../styles/components/cards.css";
+@import "../styles/components/nav.css";
+@import "../styles/components/utils.css";
+
+/* -------------------------------------------------------------------------- */
+/* Popup Specific Styles                                                      */
+/* -------------------------------------------------------------------------- */
 
 html { 
-  font-size: 14px;
+  font-size: var(--font-sm); /* 14px */
 }
 
 body {
@@ -20,21 +27,17 @@ body {
 #app {
   width: 360px;
   height: 450px;
-  background: white;
+  background: var(--ui-bg-card);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
 }
 
-.dark #app {
-  background: #101922;
-}
-
 /* Header */
 .popup-header {
   height: 52px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--ui-border-light);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -54,9 +57,10 @@ body {
 .tab-btn {
   background: transparent;
   border: none;
-  font-size: 13px;
-  font-weight: 500;
-  color: #6b7280;
+  font-size: 13px; /* var(--font-sm) is 14. Keep 13px? Let's strictly move to 14px to be consistent with sidepanel. */
+  font-size: var(--font-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--ui-text-secondary);
   padding: 4px 8px;
   border-radius: 6px;
   cursor: pointer;
@@ -64,28 +68,15 @@ body {
 }
 
 .tab-btn:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: #111418;
+  background-color: var(--ui-bg-hover);
+  color: var(--ui-text-primary);
 }
 
 .tab-btn.active {
-  background-color: rgba(0, 0, 0, 0.05); /* or primary tint? */
+  background-color: var(--ui-bg-hover);
   color: var(--bs-primary);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
-
-.dark .tab-btn {
-  color: #94a3b8;
-}
-.dark .tab-btn:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #f8fafc;
-}
-.dark .tab-btn.active {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--bs-primary);
-}
-
 
 /* Header Actions */
 .header-actions {
@@ -95,30 +86,7 @@ body {
 }
 
 /* Header buttons */
-.header-btn {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.375rem;
-  background: transparent;
-  border: none;
-  color: #6b7280;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
 
-.header-btn:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: var(--bs-primary);
-}
-
-.dark .header-btn:hover {
-   background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* ... existing styles ... */
 
 /* Main content */
 .popup-main {
@@ -130,10 +98,10 @@ body {
 /* Section heading */
 .section-heading {
   font-size: 10px;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #6b7280;
+  color: var(--ui-text-secondary);
   padding: 0.375rem 0.75rem;
   margin: 0 0 0.25rem 0;
 }
@@ -155,11 +123,11 @@ body {
 }
 
 .profile-item:hover:not(.active) {
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: var(--ui-bg-hover);
 }
 
 .profile-item.active {
-  background-color: rgba(19, 127, 236, 0.1);
+  background-color: rgba(var(--bs-primary-rgb), 0.1);
 }
 
 .profile-icon {
@@ -169,7 +137,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 0.25rem;
-  color: #4b5563;
+  color: var(--ui-text-secondary);
 }
 
 .profile-item.active .profile-icon {
@@ -179,18 +147,18 @@ body {
 .profile-name {
   flex: 1;
   min-width: 0;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-sm); /* 0.875rem */
+  font-weight: var(--font-weight-medium);
   line-height: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #111418;
+  color: var(--ui-text-primary);
   margin: 0;
 }
 
 .profile-item.active .profile-name {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--bs-primary);
 }
 
@@ -198,7 +166,7 @@ body {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--ui-border);
   transition: all 0.2s;
 }
 
@@ -211,113 +179,27 @@ body {
   color: white;
 }
 
-/* Custom scrollbar */
-.popup-main::-webkit-scrollbar {
-  width: 6px;
-}
-
-.popup-main::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.popup-main::-webkit-scrollbar-thumb {
-  background-color: rgba(156, 163, 175, 0.5);
-  border-radius: 20px;
-}
-
-.popup-main::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(156, 163, 175, 0.7);
-}
-
-/* Dark Mode Overrides */
-.dark .popup-header {
-    border-bottom-color: #334155;
-}
-.dark .popup-header h2 {
-    color: #f8fafc;
-}
-.dark .header-btn {
-    color: #94a3b8;
-}
-.dark .section-heading {
-    color: #94a3b8;
-}
-.dark .profile-item:hover:not(.active) {
-    background-color: rgba(255, 255, 255, 0.05);
-}
-.dark .profile-name {
-    color: #f1f5f9;
-}
-.dark .profile-icon {
-    color: #94a3b8;
-}
-.dark .profile-radio {
-    border-color: #475569;
-}
-
-/* Dark Mode Switch Override */
-.dark .form-check-input {
-    background-color: #374151 !important; /* gray-700 */
-    border-color: #4b5563 !important; /* gray-600 */
-}
-.dark .form-check-input:checked {
-    background-color: var(--bs-primary) !important;
-    border-color: var(--bs-primary) !important;
-}
-.dark .form-check-input:focus {
-    border-color: var(--bs-primary) !important;
-    box-shadow: 0 0.25rem rgba(19, 127, 236, 0.25) !important;
-}
-
-.dark .form-select {
-  background-color: #1e293b;
-  border-color: #334155;
-  color: #f1f5f9;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-}
-
-.dark .btn-outline-secondary {
-  color: #94a3b8;
-  border-color: #475569;
-}
-
-.dark .btn-outline-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #f8fafc;
-  border-color: #64748b;
-}
-
-/* Animations */
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out forwards;
-}
+/* Custom scrollbar override */
+.popup-main::-webkit-scrollbar { width: 6px; }
+.popup-main::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; }
+.popup-main::-webkit-scrollbar-thumb:hover { background-color: rgba(156, 163, 175, 0.7); }
 
 /* Monitor Tab Styles */
 .monitor-container {
-  background-color: white;
-  color: #111418;
-}
-
-.dark .monitor-container {
-  background-color: #020617;
-  color: #f1f5f9;
+  background-color: var(--ui-bg-card);
+  color: var(--ui-text-primary);
 }
 
 .monitor-item {
-  border-bottom-color: #f3f4f6; /* border-light */
+  border-bottom-color: var(--ui-bg-hover); 
 }
 
 .monitor-item:hover {
-  background-color: #f8fafc; /* hover:bg-slate-50 */
+  background-color: var(--ui-bg-hover);
 }
 
 .monitor-domain {
-  color: #111418;
+  color: var(--ui-text-primary);
 }
 
 .monitor-domain:hover {
@@ -325,32 +207,9 @@ body {
 }
 
 .monitor-badge {
-  background-color: #f8fafc;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
-}
-
-/* Dark Mode Overrides for Monitor */
-.dark .monitor-item {
-  border-bottom-color: #1e293b !important;
-}
-
-.dark .monitor-item:hover {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-}
-
-.dark .monitor-domain {
-  color: #e2e8f0;
-}
-
-.dark .monitor-badge {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #94a3b8;
-  border-color: #334155;
-}
-
-.dark .monitor-error {
-  color: #f87171 !important; /* light red for dark mode */
+  background-color: var(--ui-bg-hover);
+  color: var(--ui-text-secondary);
+  border: 1px solid var(--ui-border-subtle);
 }
 
 /* Quick Add Styles */
@@ -358,70 +217,17 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
-  background-color: white;
+  background-color: var(--ui-bg-card);
   padding: 0.75rem;
-  border-bottom: 1px solid #f3f4f6;
-}
-
-.dark .quick-sticky-header {
-  background-color: #020617;
-  border-bottom-color: #1e293b;
+  border-bottom: 1px solid var(--ui-bg-hover);
 }
 
 .quick-section {
   padding: 0.75rem;
-  background-color: white;
+  background-color: var(--ui-bg-card);
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.dark .quick-section {
-  background-color: #020617;
-  border-color: #1e293b;
-}
-
-/* UI Buttons (Popup Specific Definitions) */
-.ui-button-primary {
-  background-color: var(--bs-primary);
-  color: white;
-  border: none;
-  border-radius: 8px; /* rounded-lg */
-  transition: background-color 0.2s;
-}
-
-.ui-button-primary:hover {
-  background-color: #1170cf; /* Darker shade */
-  color: white;
-}
-
-.ui-button-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.ui-button-secondary {
-  background-color: white;
-  border: 1px solid #cbd5e1; /* slate-300 */
-  border-radius: 8px; /* rounded-lg */
-  color: #475569; /* slate-600 */
-  transition: all 0.2s;
-}
-
-.ui-button-secondary:hover {
-  background-color: #f8fafc; /* slate-50 */
-  color: #1e293b; /* slate-800 */
-}
-
-.dark .ui-button-secondary {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: transparent;
-  color: #cbd5e1; /* slate-300 */
-}
-
-.dark .ui-button-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
 }
 
 .quick-proxy-row {
@@ -438,10 +244,6 @@ body {
   margin-top: 1rem;
 }
 
-.dark .monitor-container .text-muted {
-  color: #94a3b8 !important;
-}
-
 .quick-item {
   padding: 0.375rem 0.75rem;
   display: flex;
@@ -450,45 +252,16 @@ body {
   cursor: pointer;
   border-radius: 6px;
   transition: all 0.2s;
-  color: #4b5563;
+  color: var(--ui-text-secondary);
 }
 
 .quick-item:hover {
-  background-color: #f8fafc;
+  background-color: var(--ui-bg-hover);
   color: var(--bs-primary);
-}
-
-.dark .quick-item {
-  color: #94a3b8;
-}
-
-.dark .quick-item:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #f8fafc;
 }
 
 .quick-item .form-check-input {
   width: 14px;
   height: 14px;
   margin: 0;
-}
-
-/* UI Input (Copied from Options) */
-.ui-input {
-  background-color: #f8fafc !important; /* bg-slate-50 */
-  border-color: #cbd5e1 !important; /* border-slate-300 */
-  color: #0f172a !important;
-}
-.dark .ui-input {
-  background-color: #2d2d2d !important;
-  border-color: #333333 !important;
-  color: #ffffff !important;
-}
-
-/* Semantic Backgrounds */
-.bg-surface {
-  background-color: #ffffff !important;
-}
-.dark .bg-surface {
-  background-color: #020617 !important; /* slate-950 */
 }

@@ -1,0 +1,55 @@
+/* -------------------------------------------------------------------------- */
+/* Card & Surface Components                                                  */
+/* -------------------------------------------------------------------------- */
+
+.ui-card {
+  background-color: var(--ui-bg-card) !important;
+  border-color: var(--ui-border-subtle) !important;
+}
+
+.ui-card-label {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-end !important;
+  margin-bottom: 0.75rem !important; /* mb-3 */
+  width: 100%;
+}
+
+.ui-card-label .label-text {
+  color: var(--ui-text-primary) !important; /* slate-900 */
+  font-size: var(--font-sm) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  margin: 0 !important;
+  line-height: normal !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important; /* tracking-wide */
+}
+
+.ui-card-header {
+  display: flex !important;
+  gap: 0.25rem !important;
+  padding: 0.5rem !important;
+  background-color: var(--ui-bg-subtle) !important;
+  border-bottom: 1px solid var(--ui-border-light) !important;
+  font-size: var(--font-xs) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  color: var(--ui-text-secondary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important; /* tracking-wider */
+}
+
+.ui-card-footer {
+  display: flex !important;
+  gap: 0.25rem !important;
+  padding: 0.5rem !important;
+  background-color: var(--ui-bg-subtle) !important;
+  border-top: 1px solid var(--ui-border-light) !important;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  
+  /* Typography matching header */
+  font-size: var(--font-xs) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  color: var(--ui-text-secondary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}

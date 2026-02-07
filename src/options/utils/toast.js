@@ -1,5 +1,5 @@
 import { createApp, h } from 'vue'
-import Toast from '../components/Toast.vue'
+import AppToast from '../components/AppToast.vue'
 
 let toastInstance = null
 let toastContainer = null
@@ -35,7 +35,7 @@ export function showToast(options) {
   // Create toast instance
   toastInstance = createApp({
     render() {
-      return h(Toast, {
+      return h(AppToast, {
         message,
         type,
         duration,

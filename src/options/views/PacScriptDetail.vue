@@ -1,25 +1,26 @@
 <template>
-  <div class="h-100 d-flex flex-column bg-white dark:bg-background-dark relative transition-colors">
+  <div class="h-100 d-flex flex-column bg-white  position-relative transition-colors">
     
     <!-- Header -->
-    <header class="h-24 px-5 d-flex align-items-center justify-content-between border-b border-slate-100 dark:border-divider-dark transition-colors">
+    <!-- Header -->
+    <header class="h-24 px-5 d-flex align-items-center justify-content-between border-light  transition-colors">
       <!-- Header / Actions -->
       <div class="d-flex align-items-center justify-content-between w-100">
         <div class="d-flex align-items-center gap-3">
            <input 
              type="color" 
              v-model="pac.color"
-             class="p-0 border-0 rounded-lg overflow-hidden shadow-sm cursor-pointer transition-transform hover:scale-110"
-             style="width: 24px; height: 24px; min-width: 24px;"
+             class="p-0 border-0 rounded-lg overflow-hidden shadow-sm transition-transform"
+             style="width: 24px; height: 24px; min-width: 24px; cursor: pointer;"
              title="Choose color"
            />
-           <h1 class="fs-4 font-bold ui-text-primary tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="pac.name || pac.url">{{ pac.name || pac.url || 'Unnamed PAC' }}</h1>
+           <h1 class="fs-4 font-bold text-slate-900 tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="pac.name || pac.url">{{ pac.name || pac.url || 'Unnamed PAC' }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
            <!-- Show in Popup Switch -->
            <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
-              <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="showInPopup" v-model="pac.showInPopup">
-              <label class="form-check-label text-xs font-medium ui-text-secondary cursor-pointer" for="showInPopup">Show in Popup</label>
+               <input class="form-check-input" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="pac.showInPopup">
+               <label class="form-check-label text-xs font-medium text-slate-500" style="cursor: pointer;" for="showInPopup">Show in Popup</label>
            </div>
            
            <button 
@@ -33,19 +34,18 @@
            <button 
              @click="saveChanges"
              :disabled="!isDirty"
-             class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg shadow-primary/30 transition-colors d-flex align-items-center gap-2"
+             class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
            >
-             <i class="bi bi-check-lg text-lg"></i>
-             <span>Save Changes</span>
+             <span>Save</span>
            </button>
 
            <!-- Action Menu -->
            <div class="dropdown">
               <button 
                    class="ui-button-icon d-flex align-items-center justify-content-center"
-                  type="button" 
-                  data-bs-toggle="dropdown" 
-                  aria-expanded="false"
+                   type="button" 
+                   data-bs-toggle="dropdown" 
+                   aria-expanded="false"
               >
                   <i class="bi bi-three-dots-vertical text-lg"></i>
               </button>
@@ -53,18 +53,18 @@
               <!-- Dropdown Menu -->
               <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                   <li>
-                    <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-pencil text-slate-400"></i> Rename
+                    <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
+                        <i class="bi bi-pencil text-muted"></i> Rename
                     </button>
                   </li>
                   <li>
-                    <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-files text-slate-400"></i> Clone
+                    <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
+                        <i class="bi bi-files text-muted"></i> Clone
                     </button>
                   </li>
-                  <li><hr class="dropdown-divider my-1 border-slate-200 dark:border-divider-dark"></li>
+                  <li><hr class="dropdown-divider my-1 border-subtle "></li>
                   <li>
-                    <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-red-600 dark:text-red-400 rounded-md transition-colors d-flex align-items-center gap-2">
+                    <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-danger  rounded-md transition-colors d-flex align-items-center gap-2">
                         <i class="bi bi-trash"></i> Delete
                     </button>
                   </li>
@@ -75,83 +75,72 @@
     </header>
 
     <!-- Content -->
-    <div class="flex-1 overflow-y-auto custom-scrollbar px-5 pt-4 pb-5 scroll-smooth">
+    <div class="flex-1 overflow-y-auto custom-scrollbar px-5 pt-4 pb-5">
       <div v-if="pac" class="max-w-3xl mx-auto d-flex flex-column gap-4 pb-5">
         
         <!-- Source Settings -->
         <section>
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <h3 class="text-sm font-semibold ui-text-primary m-0">Source Settings</h3>
+          <div class="ui-card-label">
+            <span class="label-text">PAC Source</span>
           </div>
           
-          <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden">
-             <!-- Header -->
-             <div class="px-4 pt-4 pb-3 border-b border-slate-100 dark:border-divider-dark">
-                <h3 class="text-sm font-medium ui-text-primary d-flex align-items-center gap-2 mb-1">
-                  <span>PAC Source</span>
-                </h3>
-                <p class="text-xs ui-text-secondary m-0">Choose how the PAC script is sourced and updated.</p>
-             </div>
-
+          <div class="ui-card rounded-xl border shadow-sm overflow-hidden">
              <!-- Body -->
-             <div class="px-4 pt-3 pb-4 d-flex flex-column gap-4">
-                
-                <!-- Source Method Radio -->
-                <div>
-                   <label class="block text-xs font-medium ui-text-secondary mb-2">Source Method</label>
-                   <div class="d-flex align-items-center gap-4">
-                      <label class="d-flex align-items-center gap-2 cursor-pointer group">
-                         <input type="radio" value="remote" v-model="pac.mode" class="form-check-input mt-0" />
-                         <span class="text-xs ui-text-primary group-hover:text-primary transition-colors">Remote URL</span>
-                      </label>
-                      <label class="d-flex align-items-center gap-2 cursor-pointer group">
-                         <input type="radio" value="manual" v-model="pac.mode" class="form-check-input mt-0" />
-                         <span class="text-xs ui-text-primary group-hover:text-primary transition-colors">Manual Script</span>
-                      </label>
-                   </div>
-                </div>
-
-                <hr class="border-slate-100 dark:border-divider-dark m-0"/>
-
-                <!-- Remote URL Input -->
+             <div class="px-4 pt-4 pb-4 d-flex flex-column gap-4">
+                                <!-- Source Method Radio -->
+                 <div class="ui-form-group">
+                    <span class="ui-text-primary text-xs font-medium leading-none">Source Method</span>
+                    <div class="d-flex align-items-center gap-4">
+                       <label class="d-flex align-items-center gap-2" style="cursor: pointer;">
+                          <input type="radio" value="remote" v-model="pac.mode" class="form-check-input mt-0" />
+                          <span class="text-xs text-slate-900 transition-colors">Remote URL</span>
+                       </label>
+                       <label class="d-flex align-items-center gap-2" style="cursor: pointer;">
+                          <input type="radio" value="manual" v-model="pac.mode" class="form-check-input mt-0" />
+                          <span class="text-xs text-slate-900 transition-colors">Manual Script</span>
+                       </label>
+                    </div>
+                 </div>
                 <!-- Remote URL Input -->
                 <div v-if="pac.mode === 'remote'" class="grid grid-cols-12 gap-4">
-                    <!-- URL Input (7) -->
-                    <div class="col-span-7">
-                       <label class="block text-xs font-medium ui-text-secondary mb-1.5">PAC URL</label>
-                       <div class="position-relative">
-                           <input 
-                             type="text" 
-                             v-model="pac.url"
-                             @blur="fetchPacContent"
-                             placeholder="https://example.com/proxy.pac"
-                             class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3 placeholder:text-slate-400"
-                           />
-                       </div>
-                    </div>
+                     <!-- URL Input (7) -->
+                     <div class="col-span-7">
+                        <label class="ui-form-group">
+                          <span class="ui-text-primary text-xs font-medium leading-none">PAC URL</span>
+                          <input 
+                            type="text" 
+                            v-model="pac.url"
+                            @blur="fetchPacContent"
+                            placeholder="https://example.com/proxy.pac"
+                            class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
+                          />
+                        </label>
+                     </div>
 
                     <!-- Refresh Button (2) -->
                     <div class="col-span-2 d-flex flex-column justify-content-end">
-                       <button @click="fetchPacContent" class="w-100 px-3 py-1 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none d-flex align-items-center justify-content-center gap-2 h-8">
+                       <button @click="fetchPacContent" class="w-100 px-3 py-1 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors d-flex align-items-center justify-content-center gap-2 h-8">
                            <i class="bi bi-arrow-clockwise"></i> Refresh
                        </button>
                     </div>
 
-                    <!-- Update Frequency (3) -->
-                    <div class="col-span-3">
-                       <label class="block text-xs font-medium ui-text-secondary mb-1.5">Update Frequency</label>
-                       <select v-model="pac.updateInterval" class="form-select ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3">
-                          <option :value="60">Every 1 hour</option>
-                          <option :value="360">Every 6 hours</option>
-                          <option :value="720">Every 12 hours</option>
-                          <option :value="1440">Every 24 hours</option>
-                          <option :value="0">Never</option>
-                       </select>
-                    </div>
+                     <!-- Update Frequency (3) -->
+                     <div class="col-span-3">
+                        <label class="ui-form-group">
+                          <span class="ui-text-primary text-xs font-medium leading-none">Update Frequency</span>
+                          <select v-model="pac.updateInterval" class="form-select ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3">
+                             <option :value="60">Every 1 hour</option>
+                             <option :value="360">Every 6 hours</option>
+                             <option :value="720">Every 12 hours</option>
+                             <option :value="1440">Every 24 hours</option>
+                             <option :value="0">Never</option>
+                          </select>
+                        </label>
+                     </div>
                 </div>
 
                 <!-- Manual Mode Hint -->
-                <div v-else class="text-xs ui-text-secondary">
+                <div v-else class="text-xs text-slate-500">
                     <i class="bi bi-info-circle me-1"></i> You can edit the script content directly below.
                 </div>
 
@@ -161,19 +150,20 @@
 
         <!-- Script Content -->
         <section class="d-flex flex-column" style="height: 600px;">
-            <div class="d-flex align-items-center justify-content-between mb-3">
-                <h3 class="text-sm font-semibold ui-text-primary m-0 uppercase tracking-wide">Script Content</h3>
-                <div>
-                    <span v-if="pac.mode === 'remote'" class="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-xs font-mono text-slate-600 dark:text-slate-300">Read Only</span>
-                    <span v-else class="px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-xs font-mono text-slate-600 dark:text-slate-300">Editable</span>
-                </div>
+            <div class="ui-card-label">
+                <span class="label-text">Script Content</span>
             </div>
-            <div class="ui-card rounded-xl border divide-y divide-slate-100 dark:divide-divider-dark shadow-sm overflow-hidden d-flex flex-column h-100 w-100 flex-1">
+            <div class="ui-card rounded-xl border shadow-sm overflow-hidden d-flex flex-column h-100 w-100 flex-1">
+                <div class="ui-card-header justify-content-end">
+                    <span v-if="pac.mode === 'remote'" class="px-2 py-1 rounded bg-hover  text-xs font-mono text-slate-600 ">Read Only</span>
+                    <span v-else class="px-2 py-1 rounded bg-hover  text-xs font-mono text-slate-600 ">Editable</span>
+                </div>
                 <div class="flex-1 position-relative">
                     <textarea 
                         v-model="pac.script"
                         :readonly="pac.mode === 'remote'"
-                        class="form-control w-100 h-100 p-4 font-mono text-xs leading-relaxed custom-scrollbar bg-white dark:bg-background-dark ui-text-primary border-0 focus:ring-0 resize-none rounded-0"
+                        class="form-control w-100 h-100 p-4 font-mono text-xs custom-scrollbar bg-white  text-slate-900 border-0 rounded-0"
+                        style="resize: none;"
                         spellcheck="false"
                         placeholder="function FindProxyForURL(url, host) { ... }"
                     ></textarea>

@@ -3,13 +3,13 @@
     <div class="modal-dialog modal-dialog-centered" style="min-width: 680px; max-width: 800px">
       <div class="modal-content ui-card border shadow-lg rounded-2xl overflow-hidden">
         <!-- Header -->
-        <div class="modal-header p-4 border-0">
-          <h5 class="ui-modal-title ui-text-primary tracking-tight m-0 d-flex align-items-center gap-2">
+        <div class="d-flex justify-content-between align-items-center p-4 border-0">
+          <h5 class="modal-header ui-text-primary tracking-tight m-0 d-flex align-items-center gap-2">
             Sync Conflict Detected
           </h5>
           <button 
             type="button"
-            class="p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
+            class="modal-close-button"
             aria-label="Close"
             @click="$emit('cancel')"
           >
@@ -19,7 +19,7 @@
 
         <!-- Body -->
         <div class="modal-body px-4 pb-4">
-          <p class="text-sm text-slate-600 dark:text-slate-300 mb-4 text-center">
+          <p class="text-sm text-slate-600  mb-4 text-center">
             The version in the cloud is newer than your local version. Please choose which version to keep.
           </p>
 
@@ -32,14 +32,14 @@
                             <div class="d-flex align-items-center gap-2">
                                     <h3 class="text-sm font-semibold ui-text-primary m-0">Local Version</h3>
                             </div>
-                            <p class="text-xs ui-text-secondary m-0">This device</p>
+                            <p class="text-xs text-slate-500 m-0">This device</p>
                         </div>
                     </div>
                     
                     <div class="d-flex flex-column gap-3 position-relative z-10">
                         <!-- Last Modified -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0">Last Modified</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
                             <p class="text-xs font-mono ui-text-primary m-0 text-end">
                                 {{ localLastModified }}
                             </p>
@@ -47,20 +47,20 @@
                         
                         <!-- Config Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0">Config Ver.</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
                             <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ configVersion }}</p>
                         </div>
 
-                        <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50 d-flex flex-column gap-3">
+                        <div class="pt-3 border-t border-light  d-flex flex-column gap-3">
                              <!-- Proxy Hosts -->
                             <div class="d-flex justify-content-between align-items-start">
-                                    <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Proxy Hosts</p>
+                                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">Proxy Hosts</p>
                                     <span class="text-xs font-mono ui-text-primary">{{ proxyCount }}</span>
                             </div>
 
                             <!-- Policies -->
                             <div class="d-flex justify-content-between align-items-start">
-                                    <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Policies</p>
+                                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">Policies</p>
                                     <span class="text-xs font-mono ui-text-primary">{{ policyCount }}</span>
                             </div>
                         </div>
@@ -76,33 +76,33 @@
                             <div class="d-flex align-items-center gap-2">
                                 <h3 class="text-sm font-semibold ui-text-primary m-0">Cloud Version</h3>
                             </div>
-                            <p class="text-xs ui-text-secondary m-0">Remote repository</p>
+                            <p class="text-xs text-slate-500 m-0">Remote repository</p>
                         </div>
                     </div>
 
                     <div class="d-flex flex-column gap-3 position-relative z-10">
                             <!-- Last Modified -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0">Last Modified</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
                             <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ cloudLastModified }}</p>
                         </div>
                         
                         <!-- Config Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0">Config Ver.</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
                             <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ cloudConfigVersion }}</p>
                         </div>
 
-                        <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50 d-flex flex-column gap-3">
+                        <div class="pt-3 border-t border-light  d-flex flex-column gap-3">
                              <!-- Proxy Hosts -->
                              <div class="d-flex justify-content-between align-items-start">
-                                <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Proxy Hosts</p>
+                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">Proxy Hosts</p>
                                 <span class="text-xs font-mono ui-text-primary">{{ cloudProxyCount }}</span>
                             </div>
 
                             <!-- Policies -->
                             <div class="d-flex justify-content-between align-items-start">
-                                <p class="text-xs font-medium ui-text-secondary uppercase tracking-wider m-0 mt-0.5">Policies</p>
+                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">Policies</p>
                                 <span class="text-xs font-mono ui-text-primary">{{ cloudPolicyCount }}</span>
                             </div>
                         </div>
@@ -161,9 +161,4 @@ const cloudPolicyCount = computed(() => Object.keys(props.cloudConfig?.policies 
 
 </script>
 
-<style scoped>
-/* Ensure modal overlay is on top */
-.modal {
-  z-index: 1050;
-}
-</style>
+

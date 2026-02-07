@@ -1,0 +1,50 @@
+/* -------------------------------------------------------------------------- */
+/* Modal Components                                                           */
+/* -------------------------------------------------------------------------- */
+
+/* Center Modals */
+.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - 3.5rem);
+}
+
+.modal-header {
+  color: var(--ui-text-primary) !important; /* slate-900 */
+  font-weight: var(--font-weight-semibold) !important;
+  font-size: var(--font-lg) !important;
+}
+
+.modal-close-button {
+  background-color: transparent !important;
+  border: 0 !important;
+  color: var(--ui-text-tertiary) !important;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  padding: 0.25rem; /* nice to have */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem; /* rounded-md */
+}
+
+.modal-close-button:hover {
+  background-color: transparent !important;
+  color: var(--ui-text-secondary) !important;
+}
+
+
+/* Modal Content overrides if necessary, usually Bootstrap classes handled well but colors might need enforcing */
+.modal-content {
+  background-color: var(--ui-bg-card);
+  border-color: var(--ui-border-subtle);
+  color: var(--ui-text-primary);
+}
+
+.modal-footer {
+  border-top-color: var(--ui-border-subtle);
+}
+
+.modal-backdrop.show {
+  opacity: 0.5; /* Default bootstrap is decent, but ensure consistency */
+  background-color: #000;
+}

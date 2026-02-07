@@ -1,0 +1,87 @@
+/* -------------------------------------------------------------------------- */
+/* Button Components                                                          */
+/* -------------------------------------------------------------------------- */
+
+.ui-button-primary {
+  background-color: var(--bs-primary) !important;
+  border: none !important;
+  color: var(--ui-text-inverse) !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 12px !important;
+}
+.ui-button-primary:hover {
+  background-color: var(--bs-primary-hover) !important; /* Darker Blue */
+}
+.ui-button-primary:disabled {
+  background-color: var(--ui-border-subtle) !important; /* slate-200 */
+  color: var(--ui-text-tertiary) !important; /* slate-400 */
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+
+.ui-button-secondary {
+  background-color: var(--ui-bg-card) !important;
+  border: 1px solid var(--ui-border) !important; /* Light Gray Border */
+  color: var(--ui-text-secondary) !important; /* slate-600 */
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 12px !important;
+}
+.ui-button-secondary:hover {
+  background-color: var(--ui-bg-subtle) !important;
+  border-color: var(--ui-text-tertiary) !important; /* Darker on hover */
+}
+.ui-button-secondary:disabled {
+  background-color: var(--ui-bg-hover) !important; /* slate-100 */
+  border-color: var(--ui-border-subtle) !important; /* slate-200 */
+  color: var(--ui-border) !important; /* slate-300 */
+  cursor: not-allowed !important;
+}
+
+.ui-button-danger {
+  background-color: var(--ui-danger) !important; /* red-600 */
+  border: none !important;
+  color: var(--ui-text-inverse) !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 12px !important;
+}
+.ui-button-danger:hover {
+  background-color: var(--ui-danger-hover) !important; /* red-700 */
+}
+.ui-button-danger:disabled {
+  background-color: var(--ui-danger-bg) !important; /* red-100 */
+  color: var(--ui-danger-border) !important; /* red-300 */
+  cursor: not-allowed !important;
+}
+
+.ui-button-icon {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0.25rem !important; /* p-1 */
+  border-radius: 0.5rem !important; /* rounded-lg to match others */
+  color: var(--ui-text-tertiary) !important; /* text-slate-400 */
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.ui-button-icon:hover {
+  color: var(--bs-primary) !important;
+  background-color: transparent !important;
+}
+
+.ui-button-icon.sm {
+  width: 16px !important;
+  height: 16px !important;
+  padding: 0 !important;
+}

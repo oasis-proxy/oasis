@@ -1,9 +1,8 @@
 <template>
-  <aside class="w-72 bg-slate-50 dark:bg-sidebar-dark border-r border-slate-200 dark:border-divider-dark d-flex flex-column shrink-0 transition-colors">
+  <aside class="w-72 bg-white border-end border-subtle d-flex flex-column shrink-0 transition-colors">
     <!-- Logo / Brand -->
-    <div class="h-24 d-flex align-items-center justify-content-center px-4 border-b border-slate-100 dark:border-divider-dark transition-colors bg-white dark:bg-sidebar-dark">
-      <img src="../../assets/img/banner-light.png" alt="Oasis Proxy" class="object-contain dark:hidden block" style="width: 240px; height: auto;">
-      <img src="../../assets/img/banner-dark.png" alt="Oasis Proxy" class="object-contain hidden dark:block" style="width: 240px; height: auto;">
+    <div class="h-24 d-flex align-items-center justify-content-center px-4 transition-colors bg-white">
+      <img src="../../assets/img/banner-light.png" alt="Oasis Proxy" class="object-contain block" style="width: 240px; height: auto;">
     </div>
 
     <!-- Navigation -->
@@ -11,7 +10,7 @@
       
       <!-- Fixed: Configuration -->
       <div>
-        <div class="px-2 mb-2 d-flex align-items-center justify-content-between group cursor-pointer">
+        <div class="mb-2 d-flex align-items-center justify-content-between group cursor-pointer">
           <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">Configuration</h3>
         </div>
         <div class="d-flex flex-column gap-1">
@@ -22,8 +21,8 @@
           >
             <button 
               @click="navigate"
-              class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-all border group"
-              :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
+              class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-all group"
+              :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
             >
               <i class="bi bi-gear text-base"></i>
               <span class="text-xs text-truncate">General Settings</span>
@@ -37,8 +36,8 @@
           >
             <button 
               @click="navigate"
-              class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-all border group"
-              :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
+              class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-all group"
+              :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
             >
               <i class="bi bi-cloud text-base"></i>
               <span class="text-xs text-truncate">Data Synchronization</span>
@@ -52,8 +51,8 @@
           >
             <button 
                @click="navigate"
-               class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors border group"
-               :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
+               class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors group"
+               :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
             >
               <i class="bi bi-clock-history text-base"></i>
               <span class="text-xs text-truncate">Temporary Rules</span>
@@ -64,8 +63,8 @@
 
       <!-- Variable: Proxy Hosts -->
       <div>
-        <div class="px-2 mb-2 d-flex align-items-center justify-content-between group">
-          <h3 class="text-xs font-semibold text-slate-400 dark:text-slate-500 tracking-wider m-0">Proxy Hosts</h3>
+        <div class="mb-2 d-flex align-items-center justify-content-between group">
+          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">Proxy Hosts</h3>
           <button 
             @click="showProxyModal = true"
             class="ui-button-icon"
@@ -83,10 +82,10 @@
           >
              <button 
                 @click="navigate"
-                class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors border group"
-                :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
+                class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors group"
+                :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
              >
-                <i :class="['bi text-base', host.icon, (isActive || host.color) ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: host.color ? host.color : undefined }"></i>
+                <i :class="['bi text-base', host.icon, (isActive || host.color) ? '' : 'text-slate-400 group-hover:text-slate-600']" :style="{ color: host.color ? host.color : undefined }"></i>
                 <span class="text-xs text-truncate">{{ host.name }}</span>
                 <span v-if="host.status" :class="['ml-auto w-2 h-2 rounded-full', host.statusColor]"></span>
              </button>
@@ -96,8 +95,8 @@
 
       <!-- Variable: Policy Rules -->
       <div>
-        <div class="px-2 mb-2 d-flex align-items-center justify-content-between group">
-          <h3 class="text-xs font-semibold text-slate-400 dark:text-slate-500 tracking-wider m-0">Policy Rules</h3>
+        <div class="mb-2 d-flex align-items-center justify-content-between group">
+          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">Policy Rules</h3>
           <button 
             @click="showPolicyModal = true"
             class="ui-button-icon"
@@ -115,10 +114,10 @@
           >
              <button 
                 @click="navigate"
-                class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors border group"
-                :class="isActive ? 'nav-item-active shadow-sm border-slate-100 dark:border-divider-dark text-primary font-medium' : 'border-transparent text-slate-600 dark:text-slate-400 nav-item-hover'"
+                class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors group"
+                :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
              >
-                <i :class="['bi text-base', rule.icon, (isActive || rule.color) ? '' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300']" :style="{ color: rule.color ? rule.color : undefined }"></i>
+                <i :class="['bi text-base', rule.icon, (isActive || rule.color) ? '' : 'text-slate-400 group-hover:text-slate-600']" :style="{ color: rule.color ? rule.color : undefined }"></i>
                 <span class="text-xs text-truncate">{{ rule.name }}</span>
              </button>
           </router-link>

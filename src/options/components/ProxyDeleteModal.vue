@@ -16,10 +16,10 @@
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <h3 class="ui-modal-title tracking-tight text-red-600 dark:text-red-400 m-0">Delete Proxy Host</h3>
+          <h3 class="modal-header tracking-tight text-red-600  m-0">Delete Proxy Host</h3>
           <button 
             @click="emit('close')" 
-            class="-mr-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
+            class="modal-close-button"
           >
             <i class="bi bi-x-lg text-lg"></i>
           </button>
@@ -28,12 +28,12 @@
         <!-- Modal Body -->
         <div class="px-4 flex-1">
           <div class="d-flex flex-column gap-4">
-            <div class="d-flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-                <i class="bi bi-exclamation-triangle-fill text-xl text-red-600 dark:text-red-400 shrink-0"></i>
+            <div class="d-flex items-start gap-3 text-sm text-slate-600 ">
+                <i class="bi bi-exclamation-triangle-fill text-xl text-red-600  shrink-0"></i>
                 <div>
-                    <p class="font-bold mb-1 text-red-600 dark:text-red-400">Warning: Destructive Action</p>
+                    <p class="font-bold mb-1 text-red-600 ">Warning: Destructive Action</p>
                     <p class="opacity-90 leading-relaxed m-0">
-                        Are you sure you want to delete <span class="font-bold underline text-slate-900 dark:text-white">{{ proxyName }}</span>? 
+                        Are you sure you want to delete <span class="font-bold underline text-slate-900 ">{{ proxyName }}</span>? 
                         This action cannot be undone and will permanently remove this proxy configuration.
                     </p>
                 </div>
@@ -45,7 +45,7 @@
         <div class="d-flex justify-content-end gap-3 p-4">
           <button 
             @click="emit('close')"
-            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none"
+            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
             Cancel
           </button>

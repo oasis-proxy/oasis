@@ -15,28 +15,28 @@
       >
         
         <!-- Modal Header -->
-        <div class="p-4 d-flex justify-content-between align-items-center border-b border-slate-100 dark:border-divider-dark">
-          <h3 class="ui-text-primary ui-modal-title tracking-tight m-0">Merge Rules</h3>
+        <div class="p-4 d-flex justify-content-between align-items-center border-b border-light ">
+          <h3 class="ui-text-primary modal-header tracking-tight m-0">Merge Rules</h3>
           <button 
             @click="emit('close')" 
-            class="-mr-2 p-2 bg-transparent hover:bg-transparent ui-text-secondary hover:text-slate-600 dark:hover:text-slate-300 transition-colors border-0"
+            class="modal-close-button"
           >
             <i class="bi bi-x-lg text-lg"></i>
           </button>
         </div>
 
         <!-- Modal Body (Scrollable) -->
-        <div class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50/50 dark:bg-slate-900/50">
+        <div class="flex-1 overflow-y-auto custom-scrollbar bg-subtle/50 ">
           <div class="px-4 d-flex flex-column gap-4">
 
             <!-- Section 1: Target Policy -->
             <section>
-               <h4 class="text-xs font-bold ui-text-secondary uppercase tracking-wider mb-2">Target Policy</h4>
+               <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Policy</h4>
                <label class="d-flex flex-column gap-2 w-100">
                   <select 
                     v-model="targetPolicyId"
                     :disabled="!!forcedTargetId"
-                    :class="{'bg-slate-50 dark:bg-slate-800 text-slate-500 cursor-not-allowed': !!forcedTargetId}"
+                    :class="{'bg-subtle  text-slate-500 cursor-not-allowed': !!forcedTargetId}"
                     class="form-select ui-input w-100 rounded-lg border h-8 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
                     style="max-width: 100%;"
                   >
@@ -51,47 +51,47 @@
              <!-- Section 2: Source Rules (Read-only) -->
             <section>
                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h4 class="text-xs font-bold ui-text-secondary uppercase tracking-wider m-0">Source Rules</h4>
+                  <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider m-0">Source Rules</h4>
                   <span class="text-xs ui-button-secondary px-2 py-0.5 rounded-full">{{ sourceRules.length }} rules</span>
                </div>
                
-               <div class="rounded-lg border border-slate-100 dark:border-divider-dark overflow-hidden shadow-sm">
-                   <div class="d-grid gap-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark px-3 py-2 text-xs font-semibold ui-text-secondary" style="grid-template-columns: 3fr 5fr 2fr;">
-                       <div>Type</div>
-                       <div>Pattern</div>
-                       <div>Proxy</div>
+               <div class="rounded-lg border border-light  overflow-hidden shadow-sm">
+                   <div class="ui-card-header">
+                       <div style="width: 30%;">Type</div>
+                       <div style="width: 50%;">Pattern</div>
+                       <div style="width: 20%;">Proxy</div>
                    </div>
-                   <div class="max-h-48 overflow-y-auto custom-scrollbar bg-white dark:bg-card-dark divide-y divide-slate-100 dark:divide-divider-dark">
-                       <div v-for="(rule, idx) in sourceRules" :key="idx" class="d-grid gap-2 align-items-center px-3 py-2 opacity-70" style="grid-template-columns: 3fr 5fr 2fr;">
-                           <div>
+                   <div class="max-h-48 overflow-y-auto custom-scrollbar bg-white  divide-y divide-slate-100 ">
+                       <div v-for="(rule, idx) in sourceRules" :key="idx" class="d-flex align-items-center gap-2 px-3 py-2 opacity-70">
+                           <div style="width: 30%;">
                                <input 
                                 type="text" 
-                                class="form-control ui-input w-100 rounded border text-xs py-0 px-2 bg-slate-50 dark:bg-slate-800" 
+                                class="form-control ui-input w-100 rounded border text-xs py-0 px-2 bg-subtle " 
                                 :value="rule.ruleType" 
                                 readonly 
                                 style="height: 28px; max-width: 100%;"
                                />
                            </div>
-                           <div>
+                           <div style="width: 50%;">
                                <input 
                                 type="text" 
-                                class="form-control ui-input w-100 rounded border text-xs py-0 px-2 font-mono bg-slate-50 dark:bg-slate-800" 
+                                class="form-control ui-input w-100 rounded border text-xs py-0 px-2 font-mono bg-subtle " 
                                 :value="rule.pattern" 
                                 readonly 
                                 style="height: 28px; max-width: 100%;"
                                />
                            </div>
-                           <div>
+                           <div style="width: 20%;">
                                <input 
                                 type="text" 
-                                class="form-control ui-input w-100 rounded border text-xs py-0 px-2 text-muted bg-slate-50 dark:bg-slate-800" 
+                                class="form-control ui-input w-100 rounded border text-xs py-0 px-2 text-muted bg-subtle " 
                                 :value="getProxyLabel(rule.proxyId)" 
                                 readonly 
                                 style="height: 28px; max-width: 100%;"
                                />
                            </div>
                        </div>
-                       <div v-if="sourceRules.length === 0" class="p-4 text-center text-xs ui-text-secondary">No rules selected.</div>
+                       <div v-if="sourceRules.length === 0" class="p-4 text-center text-xs text-slate-500">No rules selected.</div>
                    </div>
                </div>
             </section>
@@ -99,18 +99,18 @@
             <!-- Section 3: Merged Preview (Optimization) -->
             <section>
                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h4 class="text-xs font-bold ui-text-secondary uppercase tracking-wider m-0">Merged Preview</h4>
+                  <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider m-0">Merged Preview</h4>
                    <div class="d-flex align-items-center gap-2">
-                       <span class="text-xs ui-text-secondary" v-if="mergedRules.length < sourceRules.length">
+                       <span class="text-xs text-slate-500" v-if="mergedRules.length < sourceRules.length">
                            Optimized: <span class="text-green-600 font-bold">-{{ sourceRules.length - mergedRules.length }}</span> rules
                        </span>
                        <span class="text-xs ui-button-secondary px-2 py-0.5 rounded-full">{{ mergedRules.length }} rules</span>
                    </div>
                </div>
 
-               <div class="rounded-lg border border-slate-100 dark:border-divider-dark overflow-hidden shadow-sm">
+               <div class="rounded-lg border border-light  overflow-hidden shadow-sm">
                    <!-- Header -->
-                   <div class="d-flex gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-divider-dark text-xs font-semibold ui-text-secondary uppercase tracking-wider">
+                   <div class="ui-card-header">
                        <div style="width: 30%;">Type</div>
                        <div style="width: 42%;">Pattern</div>
                        <div style="width: 20%;">Proxy</div>
@@ -118,8 +118,8 @@
                    </div>
                    
                    <!-- List -->
-                    <div class="max-h-64 overflow-y-auto custom-scrollbar bg-white dark:bg-card-dark divide-y divide-slate-100 dark:divide-divider-dark">
-                       <div v-for="(rule, idx) in mergedRules" :key="idx" class="d-flex align-items-center gap-2 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group">
+                    <div class="max-h-64 overflow-y-auto custom-scrollbar bg-white  divide-y divide-slate-100 ">
+                       <div v-for="(rule, idx) in mergedRules" :key="idx" class="d-flex align-items-center gap-2 px-3 py-2 hover:bg-subtle  transition-colors group">
                            
                            <!-- Type -->
                            <div style="width: 30%;">
@@ -159,36 +159,36 @@
                            <div style="width: 8%;" class="d-flex align-items-center justify-content-center">
                                <button 
                                  @click="removeMergedRule(idx)" 
-                                 class="ui-button-icon p-0.5 transition-colors text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20" 
+                                 class="ui-button-icon p-0.5 transition-colors text-red-500 hover:bg-red-50 " 
                                  title="Remove"
                                >
                                    <i class="bi bi-trash text-xs"></i>
                                </button>
                            </div>
                        </div>
-                        <div v-if="mergedRules.length === 0" class="p-4 text-center text-xs ui-text-secondary">No rules to merge.</div>
+                        <div v-if="mergedRules.length === 0" class="p-4 text-center text-xs text-slate-500">No rules to merge.</div>
                    </div>
                </div>
-               <p class="text-xs ui-text-secondary mt-2 mb-0">
+               <p class="text-xs text-slate-500 mt-2 mb-0">
                    Rules have been automatically optimized. You can further edit them here before merging.
                </p>
             </section>
 
              <!-- Section 4: Conflict Resolution -->
             <section>
-                <h4 class="text-xs font-bold ui-text-secondary uppercase tracking-wider mb-2">Conflict Resolution</h4>
+                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Conflict Resolution</h4>
                 <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr;">
                 
                 <!-- Ignore Option -->
                 <label 
                   class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
-                  :class="conflictMode === 'ignore' ? 'border-primary bg-blue-50/50 dark:bg-primary/10' : 'ui-card hover:border-slate-300 dark:hover:border-slate-600'"
+                  :class="conflictMode === 'ignore' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
                 >
                   <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="ignore"/>
                   <span class="d-flex flex-1">
                     <span class="d-flex flex-column">
                       <span class="block text-xs font-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">Ignore Duplicates</span>
-                      <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">Keep existing rules</span>
+                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Keep existing rules</span>
                     </span>
                   </span>
                   <i v-if="conflictMode === 'ignore'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -197,13 +197,13 @@
                 <!-- Overwrite Option -->
                 <label 
                   class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
-                  :class="conflictMode === 'overwrite' ? 'border-primary bg-blue-50/50 dark:bg-primary/10' : 'ui-card hover:border-slate-300 dark:hover:border-slate-600'"
+                  :class="conflictMode === 'overwrite' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
                 >
                   <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="overwrite"/>
                   <span class="d-flex flex-1">
                     <span class="d-flex flex-column">
                       <span class="block text-xs font-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">Overwrite</span>
-                      <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">Update existing rules</span>
+                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Update existing rules</span>
                     </span>
                   </span>
                   <i v-if="conflictMode === 'overwrite'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -216,10 +216,10 @@
         </div>
 
         <!-- Modal Footer -->
-        <div class="p-4 d-flex justify-content-end align-items-center gap-3 border-t border-slate-100 dark:border-divider-dark">
+        <div class="p-4 d-flex justify-content-end align-items-center gap-3 border-t border-light ">
           <button 
             @click="emit('close')"
-            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover:bg-slate-100 dark:hover:bg-white/5 transition-colors focus:outline-none"
+            class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
             Cancel
           </button>
