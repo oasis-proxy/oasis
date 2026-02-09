@@ -1,0 +1,117 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* Shared Modular Styles */
+@import "../styles/theme.css";
+@import "../styles/base.css";
+@import "../styles/components/buttons.css";
+@import "../styles/components/inputs.css";
+@import "../styles/components/dropdowns.css";
+@import "../styles/components/cards.css";
+@import "../styles/components/nav.css";
+@import "../styles/components/tags.css";
+@import "../styles/components/utils.css";
+
+/* -------------------------------------------------------------------------- */
+/* Monitor Page Specific Styles                                               */
+/* -------------------------------------------------------------------------- */
+
+html, body {
+  height: 100vh;
+  width: 100%;
+  min-width: 1200px;
+  overflow: hidden;
+  font-size: var(--font-sm);
+  background: var(--ui-bg);
+}
+
+.text-xxs {
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+#app {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* overflow: hidden; Removed to allow width expansion */
+}
+
+/* Override Bootstrap border colors to use theme variable */
+.border-bottom,
+.border-top,
+.border-end,
+.border-start,
+.border {
+  border-color: var(--ui-border);
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--ui-border);
+  border-radius: 20px;
+}
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--ui-text-secondary);
+}
+
+/* Tab list item */
+.tab-item {
+  cursor: pointer;
+  border-left: 4px solid transparent;
+  transition: all 0.15s ease;
+}
+.tab-item:hover {
+  background: var(--ui-bg-subtle);
+  border-left-color: var(--ui-border);
+}
+.tab-item.active {
+  background: var(--bs-primary-subtle);
+  border-left-color: var(--bs-primary);
+}
+
+/* Active state text overrides */
+.tab-item.active .ui-text-primary {
+  color: var(--bs-primary-text-emphasis) !important;
+}
+.tab-item.active .ui-text-secondary,
+.tab-item.active .ui-text-tertiary {
+  color: var(--bs-primary) !important;
+  opacity: 0.75;
+}
+
+/* Active state tag override */
+.tab-item.active .ui-tag {
+  background-color: rgba(255, 255, 255, 0.6);
+  color: var(--bs-primary);
+  border-color: transparent;
+}
+
+/* Request row */
+.request-row {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.request-row:hover {
+  background: var(--ui-bg-subtle);
+}
+.request-row:hover .request-url {
+  color: var(--bs-primary);
+}
+
+/* Live indicator */
+.live-indicator {
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

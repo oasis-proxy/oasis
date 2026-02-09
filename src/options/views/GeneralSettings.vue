@@ -292,6 +292,7 @@ const config = reactive(JSON.parse(JSON.stringify(DEFAULT_CONFIG)))
 // Config Options
 const styleOptions = [
   { label: 'Light', value: 'light' },
+  { label: 'Dark', value: 'dark' },
   { label: 'System', value: 'auto' }
 ]
 

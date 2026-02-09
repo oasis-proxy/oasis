@@ -36,13 +36,13 @@
     
     <div class="header-actions">
        <button @click="openSidePanel" class="ui-button-icon" title="Open Downloads">
-        <i class="bi bi-layout-sidebar-reverse" style="font-size: 18px;"></i>
+        <i class="bi bi-layout-sidebar-reverse" style="font-size: 16px;"></i>
       </button>
        <button v-if="showMonitorTab" @click="openMonitor" class="ui-button-icon" title="Open Monitor">
-        <i class="bi bi-activity" style="font-size: 18px;"></i>
+        <i class="bi bi-activity" style="font-size: 16px;"></i>
       </button>
       <button @click="openOptions" class="ui-button-icon" title="Options">
-        <i class="bi bi-gear" style="font-size: 18px;"></i>
+        <i class="bi bi-gear" style="font-size: 16px;"></i>
       </button>
     </div>
   </header>
@@ -65,8 +65,11 @@
                 <i class="bi bi-lightning" style="font-size: 18px;"></i>
               </div>
               <p class="profile-name">Direct Connect</p>
-              <div class="profile-radio">
-                <i v-if="isActive('direct')" class="bi bi-check" style="font-size: 10px;"></i>
+              <div 
+                v-if="isActive('direct')"
+                class="text-primary"
+              >
+                <i class="bi bi-check-circle-fill" style="font-size: 18px;"></i>
               </div>
             </label>
 
@@ -79,8 +82,11 @@
                 <i class="bi bi-globe" style="font-size: 18px;"></i>
               </div>
               <p class="profile-name">System Proxy</p>
-              <div class="profile-radio">
-                <i v-if="isActive('system')" class="bi bi-check" style="font-size: 10px;"></i>
+              <div 
+                v-if="isActive('system')"
+                class="text-primary"
+              >
+                <i class="bi bi-check-circle-fill" style="font-size: 18px;"></i>
               </div>
             </label>
           </div>
@@ -110,7 +116,6 @@
               >
                 <i class="bi bi-check-circle-fill" style="font-size: 18px;"></i>
               </div>
-              <div v-else class="profile-radio"></div>
             </label>
           </div>
         </div>
@@ -139,7 +144,6 @@
               >
                 <i class="bi bi-check-circle-fill" style="font-size: 18px;"></i>
               </div>
-              <div v-else class="profile-radio"></div>
             </label>
           </div>
         </div>
@@ -168,7 +172,6 @@
               >
                 <i class="bi bi-check-circle-fill" style="font-size: 18px;"></i>
               </div>
-              <div v-else class="profile-radio"></div>
             </label>
           </div>
         </div>
@@ -218,8 +221,7 @@
                          {{ item.error }}
                      </span>
                      <span v-else-if="item.ip" 
-                        class="monitor-badge badge fw-normal font-mono max-w-full text-truncate"
-                        style="font-size: 12px;"
+                        class="ui-tag fw-normal font-mono max-w-full text-truncate"
                         :title="item.ip"
                      >
                          {{ formatIp(item.ip) }}
@@ -270,6 +272,15 @@
               </select>
             </div>
 
+            <!-- Destination Section -->
+            <div class="quick-section">
+              <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">Add To</label>
+              <select v-model="quickDestination" class="form-select ui-input border text-xs cursor-pointer" style="height: 28px; width: 120px; padding: 0 6px; border-radius: 6px; font-size: 12px !important;">
+                <option value="policy">Current Policy</option>
+                <option value="temporary">Temporary Rules</option>
+              </select>
+            </div>
+
             <!-- Actions Section -->
             <div class="quick-section justify-content-end gap-2 pb-3"> 
               <button @click="currentTab = 'proxy'" class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all">
@@ -304,16 +315,53 @@ let notificationTimer = null
 // Quick Add State
 const selectedDomains = ref([])
 const quickProxyId = ref('direct')
+const quickDestination = ref('policy')
 const contextMenuDomain = ref(null)
 
 // Load configuration
+const mediaQuery = ref(null)
+
+const applyTheme = (theme) => {
+  const root = document.documentElement
+  root.classList.remove('dark')
+  
+  if (theme === 'auto') {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    if (prefersDark) {
+      root.classList.add('dark')
+    }
+  } else if (theme === 'dark') {
+    root.classList.add('dark')
+  }
+  // 'light' is default, no class needed
+}
+
+const handleSystemThemeChange = () => {
+  if (config.value?.ui?.theme === 'auto') {
+    applyTheme('auto')
+  }
+}
+
 onMounted(async () => {
   config.value = await loadConfig()
   activeProfileId.value = config.value.activeProfileId || 'direct'
   
-  // Apply theme based on config - REMOVED (Light mode only)
-  // applyTheme(config.value.ui?.theme || 'auto')
-  document.documentElement.classList.remove('dark') // Force ensure light mode
+  // Apply theme based on config
+  applyTheme(config.value.ui?.theme || 'light')
+  
+  // Listen for system theme changes
+  mediaQuery.value = window.matchMedia('(prefers-color-scheme: dark)')
+  mediaQuery.value.addEventListener('change', handleSystemThemeChange)
+  
+  // Listen for config changes from storage
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local' && changes.config) {
+      const newConfig = changes.config.newValue
+      if (newConfig?.ui?.theme) {
+        applyTheme(newConfig.ui.theme)
+      }
+    }
+  })
 
   // Check Context Menu Intent (Quick Add)
   try {
@@ -351,6 +399,9 @@ import { onUnmounted } from 'vue'
 
 onUnmounted(() => {
     chrome.storage.onChanged.removeListener(storageListener)
+    if (mediaQuery.value) {
+        mediaQuery.value.removeEventListener('change', handleSystemThemeChange)
+    }
 })
 
 // Theme Logic REMOVED
@@ -431,8 +482,17 @@ const selectProfile = async (profileId) => {
   }
 }
 
+// Navigation
 const openOptions = () => {
-  chrome.runtime.openOptionsPage()
+    if (chrome.runtime.openOptionsPage) {
+        chrome.runtime.openOptionsPage()
+    } else {
+        window.open(chrome.runtime.getURL('options.html'))
+    }
+}
+
+const openMonitor = () => {
+    window.open(chrome.runtime.getURL('src/monitor/index.html'))
 }
 
 const openSidePanel = async () => {
@@ -443,11 +503,6 @@ const openSidePanel = async () => {
   }
 }
 
-const openMonitor = () => {
-   if (showMonitorTab.value) {
-       currentTab.value = 'monitor'
-   }
-}
 
 // --- Monitor Logic ---
 const isMonitoringConfigEnabled = computed(() => {
@@ -556,11 +611,6 @@ const proxyOptionsArray = computed(() => {
 const confirmQuickAdd = async () => {
     if (selectedDomains.value.length === 0) return
     
-    const policy = config.value.policies[activeProfileId.value]
-    if (!policy) return
-
-    if (!Array.isArray(policy.rules)) policy.rules = []
-
     const newRules = selectedDomains.value.map(pattern => ({
         id: `rule_quick_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
         type: 'rule',
@@ -571,17 +621,40 @@ const confirmQuickAdd = async () => {
         ruleSet: {}
     }))
 
-    // Prepend new rules
-    policy.rules = [...newRules, ...policy.rules]
+    if (quickDestination.value === 'temporary') {
+        // Add to temporary rules
+        if (!Array.isArray(config.value.temporaryRules)) {
+            config.value.temporaryRules = []
+        }
+        config.value.temporaryRules = [...newRules, ...config.value.temporaryRules]
+        
+        // Save
+        await saveConfig(config.value)
+        
+        // Clear selection and switch back
+        selectedDomains.value = []
+        currentTab.value = 'proxy'
+        
+        toast.success(`${newRules.length} rules added to Temporary Rules`)
+    } else {
+        // Add to current policy
+        const policy = config.value.policies[activeProfileId.value]
+        if (!policy) return
 
-    // Save
-    await saveConfig(config.value)
-    
-    // Clear selection and switch back
-    selectedDomains.value = []
-    currentTab.value = 'proxy'
-    
-    toast.success(`${newRules.length} rules added to ${policy.name}`)
+        if (!Array.isArray(policy.rules)) policy.rules = []
+
+        // Prepend new rules
+        policy.rules = [...newRules, ...policy.rules]
+
+        // Save
+        await saveConfig(config.value)
+        
+        // Clear selection and switch back
+        selectedDomains.value = []
+        currentTab.value = 'proxy'
+        
+        toast.success(`${newRules.length} rules added to ${policy.name}`)
+    }
 }
 
 const showToast = (text, duration = 2000) => {

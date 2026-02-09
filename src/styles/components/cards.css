@@ -25,17 +25,25 @@
   letter-spacing: 0.05em !important; /* tracking-wide */
 }
 
-.ui-card-header {
-  display: flex !important;
-  gap: 0.25rem !important;
-  padding: 0.5rem !important;
-  background-color: var(--ui-bg-subtle) !important;
-  border-bottom: 1px solid var(--ui-border-light) !important;
+.ui-card-header,
+.ui-card-header h1,
+.ui-card-header h2,
+.ui-card-header h3,
+.ui-card-header h4,
+.ui-card-header span {
   font-size: var(--font-xs) !important;
   font-weight: var(--font-weight-semibold) !important;
   color: var(--ui-text-secondary) !important;
   text-transform: uppercase !important;
   letter-spacing: 0.05em !important; /* tracking-wider */
+}
+
+.ui-card-header {
+  display: flex !important;
+  gap: 0.25rem !important;
+  padding: 0.5rem !important;
+  background-color: var(--ui-bg-card-header) !important;
+  border-bottom: 1px solid var(--ui-border-light) !important;
 }
 
 .ui-card-footer {

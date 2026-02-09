@@ -4,7 +4,7 @@
     <!-- Header -->
     <div class="flex-shrink-0 z-sticky top-0 pt-3 px-3 shadow-sm" style="background-color: var(--ui-bg-card);">
       <div class="pb-3 d-flex align-items-center">
-        <h2 class="fs-4 fw-bold m-0 tracking-tight">Downloads</h2>
+        <h2 class="fs-4 fw-bold m-0 tracking-tight" style="color: var(--ui-text-primary);">Downloads</h2>
       </div>
       
       <!-- Search -->
@@ -12,7 +12,8 @@
         <div class="position-relative">
             <input 
                 type="text" 
-                class="form-control form-control-sm ui-input ps-3" 
+                class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
+                style="min-width: 100%; width: 100%; max-width: 100% !important;" 
                 placeholder="Search files or links"
                 v-model="searchQuery"
             >
@@ -36,7 +37,7 @@
         <div class="d-flex flex-column justify-content-center pe-3 flex-grow-1 min-w-0">
             <!-- Filename -->
             <div class="py-1">
-                <h3 class="m-0 fw-medium text-truncate" style="font-size: 13px; line-height: 1.2;" :title="item.filename">
+                <h3 class="m-0 fw-medium text-truncate" style="font-size: 13px; line-height: 1.2; color: var(--ui-text-primary);" :title="item.filename">
                     {{ truncateMiddle(getFilename(item.filename), 28) }}
                 </h3>
             </div>
@@ -57,22 +58,19 @@
                  <!-- Status Tags -->
                  <span 
                     v-if="item.state === 'in_progress'"
-                    class="badge bg-info-subtle text-info border border-info-subtle fw-normal"
-                    style="font-size: 9px; padding: 2px 6px;"
+                    class="ui-tag ui-tag-info"
                  >
                     In Progress {{ Math.round((item.bytesReceived / item.totalBytes) * 100) }}%
                  </span>
                  <span 
                     v-else-if="item.state === 'interrupted'"
-                    class="badge bg-danger-subtle text-danger border border-danger-subtle fw-normal"
-                    style="font-size: 9px; padding: 2px 6px;"
+                    class="ui-tag ui-tag-danger"
                  >
                     Failed
                  </span>
                  <span 
                     v-else-if="item.state === 'complete'"
-                    class="badge bg-primary-subtle text-primary border border-primary-subtle fw-normal"
-                    style="font-size: 9px; padding: 2px 6px;"
+                    class="ui-tag ui-tag-primary"
                  >
                     Completed
                  </span>
@@ -135,12 +133,12 @@
 
     <!-- Notification Area (Bottom) -->
     <div v-if="notification" class="position-absolute bottom-0 start-0 w-100 p-3" style="z-index: 20;">
-      <div class="notification-bar d-flex align-items-center justify-content-between p-3 rounded shadow-lg animate-fade-in-up">
+      <div class="notification-bar d-flex align-items-center justify-content-between p-3 rounded shadow-lg animate-fade-in-up" style="background-color: var(--ui-notification-bg);">
         <div class="d-flex align-items-center gap-3">
           <i class="bi bi-check-circle-fill text-success" style="font-size: 1.25rem;"></i>
           <div style="font-size: 12px;">
-            <span class="fw-bold d-block mb-1">{{ notification.title }}</span>
-            <p class="m-0 text-white-50 text-truncate" style="max-width: 200px;">{{ notification.message }}</p>
+            <span class="fw-bold d-block mb-1" style="color: white;">{{ notification.title }}</span>
+            <p class="m-0 text-white-50">{{ notification.message }}</p>
           </div>
         </div>
         <button @click="notification = null" class="btn btn-link link-light p-0 border-0">
@@ -217,7 +215,35 @@ const onErased = (id) => {
 const storageListener = async (changes, area) => {
     if (area === 'local' && changes.config) {
         config.value = await loadConfig()
+        // Apply theme when config changes
+        if (changes.config.newValue?.ui?.theme) {
+            applyTheme(changes.config.newValue.ui.theme)
+        }
     }
+}
+
+// Theme management
+const mediaQuery = ref(null)
+
+const applyTheme = (theme) => {
+  const root = document.documentElement
+  root.classList.remove('dark')
+  
+  if (theme === 'auto') {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    if (prefersDark) {
+      root.classList.add('dark')
+    }
+  } else if (theme === 'dark') {
+    root.classList.add('dark')
+  }
+  // 'light' is default, no class needed
+}
+
+const handleSystemThemeChange = () => {
+  if (config.value?.ui?.theme === 'auto') {
+    applyTheme('auto')
+  }
 }
 
 onMounted(async () => {
@@ -227,8 +253,13 @@ onMounted(async () => {
     chrome.downloads.onErased.addListener(onErased)
     chrome.storage.onChanged.addListener(storageListener)
     
-    // Load config (Theme logic removed)
+    // Load config and apply theme
     config.value = await loadConfig()
+    applyTheme(config.value.ui?.theme || 'light')
+    
+    // Listen for system theme changes
+    mediaQuery.value = window.matchMedia('(prefers-color-scheme: dark)')
+    mediaQuery.value.addEventListener('change', handleSystemThemeChange)
 })
 
 onUnmounted(() => {
@@ -236,9 +267,10 @@ onUnmounted(() => {
     chrome.downloads.onChanged.removeListener(onChanged)
     chrome.downloads.onErased.removeListener(onErased)
     chrome.storage.onChanged.removeListener(storageListener)
+    if (mediaQuery.value) {
+        mediaQuery.value.removeEventListener('change', handleSystemThemeChange)
+    }
 })
-
-// Theme Logic REMOVED
 
 // Computed
 const filteredDownloads = computed(() => {
@@ -287,7 +319,11 @@ const formatTime = (isoString) => {
 // Actions
 const openQuickAdd = async (item) => {
     const domain = getDomain(item.url)
-    if (!domain) return
+    
+    if (!domain) {
+        showNotification('Not Supported', 'Only HTTP/HTTPS links are supported')
+        return
+    }
     
     // Set Intent
     await chrome.storage.session.set({
@@ -299,8 +335,14 @@ const openQuickAdd = async (item) => {
     
     // Open Popup
     try {
-        await chrome.action.openPopup()
+        const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
+        if (tabs.length > 0) {
+            await chrome.action.openPopup({ windowId: tabs[0].windowId })
+        } else {
+            await chrome.action.openPopup()
+        }
     } catch(e) {
+        console.error('Failed to open popup:', e)
         showNotification('Error', 'Failed to open Quick Add popup')
     }
 }

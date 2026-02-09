@@ -57,139 +57,130 @@
         </section>
 
         <!-- Sync Status Section -->
-        <div class="d-flex align-items-center justify-content-center gap-4">
-            
-            <!-- Local Version Card -->
-            <div class="flex-1 ui-card rounded-xl border shadow-sm p-4 position-relative overflow-hidden h-100">
-                <div class="d-flex align-items-center gap-3 mb-4 position-relative" style="z-index: 10;">
-                    <div>
-                        <div class="d-flex align-items-center gap-2">
-                             <h3 class="text-sm font-semibold text-slate-900 m-0">Local Version</h3>
-                        </div>
-                        <p class="text-xs text-slate-500 m-0">This device</p>
-                    </div>
-                </div>
+        <div class="d-flex flex-column gap-4">
+            <!-- Cards Row -->
+            <div class="d-flex align-items-stretch justify-content-center gap-4">
                 
-                <div class="d-flex flex-column gap-3 position-relative" style="z-index: 10;">
-                    <!-- Last Modified -->
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
-                        <p class="text-xs font-mono text-slate-900 m-0 text-end">
-                            {{ localLastModified || 'Unknown' }}
-                        </p>
+                <!-- Local Version Card -->
+                <div class="flex-1 ui-card rounded-xl border shadow-sm position-relative overflow-hidden d-flex flex-column">
+                    <div class="ui-card-header px-4 py-3 border-bottom d-flex align-items-center justify-content-between" style="padding-left: 1.5rem !important">
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                 <h3 class="m-0">Local Version</h3>
+                            </div>
+                        </div>
                     </div>
                     
-                    <!-- Config Version -->
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
-                        <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ configVersion }}</p>
-                    </div>
+                    <div class="d-flex flex-column gap-3 position-relative px-4 py-4 flex-grow-1" style="z-index: 10;">
+                        <!-- Last Modified -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
+                            <p class="text-xs font-mono text-slate-900 m-0 text-end">
+                                {{ formattedLocalLastModified || 'Unknown' }}
+                            </p>
+                        </div>
+                        
+                        <!-- Config Version -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
+                            <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ configVersion }}</p>
+                        </div>
 
-                    <!-- Software Version -->
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Software Ver.</p>
-                        <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ softwareVersion }}</p>
-                    </div>
-                    
-                    <div class="pt-3 border-t border-light d-flex flex-column gap-3">
+                        <!-- Software Version -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Software Ver.</p>
+                            <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ softwareVersion }}</p>
+                        </div>
+                        
                         <!-- Proxy Hosts -->
-                        <div class="d-flex justify-content-between align-items-start">
-                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-1">Proxy Hosts ({{ proxyCount }})</p>
-                             <ul class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
-                                <li v-for="host in previewProxies" :key="host.id" class="text-xs text-slate-500 d-flex align-items-center gap-2 truncate flex-row-reverse">
-                                    <span class="d-inline-block w-1 h-1 rounded-full bg-secondary flex-shrink-0"></span> 
-                                    <span class="text-truncate" style="max-width: 150px;" :title="host.label">{{ host.label }}</span>
-                                </li>
-                            </ul>
+                        <div class="d-flex flex-column gap-2">
+                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Proxy Hosts ({{ proxyCount }})</p>
+                             <div class="d-flex flex-wrap gap-2">
+                                <span v-for="host in previewProxies" :key="host.id" class="ui-tag" :title="host.label">
+                                    {{ truncate(host.label, 20) }}
+                                </span>
+                            </div>
                         </div>
 
                         <!-- Policies -->
-                        <div class="d-flex justify-content-between align-items-start">
-                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-1">Policies ({{ policyCount }})</p>
-                             <ul class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
-                                <li v-for="policy in previewPolicies" :key="policy.id" class="text-xs text-slate-500 d-flex align-items-center gap-2 truncate flex-row-reverse">
-                                    <span class="d-inline-block w-1 h-1 rounded-full bg-secondary flex-shrink-0"></span> 
-                                    <span class="text-truncate" style="max-width: 150px;" :title="policy.name">{{ policy.name }}</span>
-                                </li>
-                            </ul>
+                        <div class="d-flex flex-column gap-2">
+                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Policies ({{ policyCount }})</p>
+                             <div class="d-flex flex-wrap gap-2">
+                                <span v-for="policy in previewPolicies" :key="policy.id" class="ui-tag ui-tag-primary" :title="policy.name">
+                                    {{ truncate(policy.name, 20) }}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Action Buttons -->
-            <div class="d-flex flex-column justify-content-center gap-3 flex-shrink-0" style="z-index: 10;">
-                <button @click="handleSyncToCloud" class="d-flex align-items-center justify-content-between gap-3 px-3 py-3 ui-card rounded-lg border transition-all shadow-sm" style="width: 10rem;">
-                    <div class="text-start">
-                        <span class="d-block text-xs font-bold text-slate-900">Sync to Cloud</span>
-                        <span class="d-block text-xs text-slate-500">Local overwrites Cloud</span>
-                    </div>
-                    <i class="bi bi-arrow-right-circle-fill fs-5 text-primary"></i>
-                </button>
-                 <button @click="handleSyncFromLocal" class="d-flex align-items-center justify-content-between gap-3 px-3 py-3 ui-card rounded-lg border transition-all shadow-sm" style="width: 10rem;">
-                    <i class="bi bi-arrow-left-circle-fill fs-5 text-primary"></i>
-                    <div class="text-end">
-                        <span class="d-block text-xs font-bold text-slate-900">Sync to Local</span>
-                        <span class="d-block text-xs text-slate-500">Cloud overwrites Local</span>
-                    </div>
-                </button>
-            </div>
-
-            <!-- Cloud Version Card -->
-            <div class="flex-1 ui-card rounded-xl border shadow-sm p-4 position-relative overflow-hidden h-100">
-                <div class="d-flex align-items-center gap-3 mb-4 position-relative" style="z-index: 10;">
-                    <div>
-                        <div class="d-flex align-items-center gap-2">
-                            <h3 class="text-sm font-semibold text-slate-900 m-0">Cloud Version</h3>
+                <!-- Cloud Version Card -->
+                <div class="flex-1 ui-card rounded-xl border shadow-sm position-relative overflow-hidden d-flex flex-column">
+                    <div class="ui-card-header px-4 py-3 border-bottom d-flex align-items-center justify-content-between" style="padding-left: 1.5rem !important">
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h3 class="m-0">Cloud Version</h3>
+                            </div>
                         </div>
-                        <p class="text-xs text-slate-500 m-0">Remote repository</p>
-                    </div>
-                </div>
-
-                <div class="d-flex flex-column gap-3 position-relative" style="z-index: 10;">
-                     <!-- Last Modified -->
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
-                        <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ cloudLastModified }}</p>
-                    </div>
-                    
-                    <!-- Config Version -->
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
-                        <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ cloudConfigVersion }}</p>
                     </div>
 
-                    <div class="pt-3 border-t border-light">
-                        <div v-if="!cloudConfig" class="d-flex flex-column align-items-center justify-content-center py-4 text-slate-400">
+                    <div class="d-flex flex-column gap-3 position-relative px-4 py-4 flex-grow-1" style="z-index: 10;">
+                         <!-- Last Modified -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
+                            <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ formattedCloudLastModified }}</p>
+                        </div>
+                        
+                        <!-- Config Version -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
+                            <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ cloudConfigVersion }}</p>
+                        </div>
+
+                        <div v-if="!cloudConfig" class="d-flex flex-column align-items-center justify-content-center py-4 text-slate-400 flex-grow-1">
                             <i class="bi bi-cloud-slash fs-2 mb-2"></i>
                             <span class="text-xs">No cloud data found</span>
                         </div>
                         <div v-else class="d-flex flex-column gap-3">
                              <!-- Proxy Hosts -->
-                            <div class="d-flex justify-content-between align-items-start">
-                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-1">Proxy Hosts ({{ cloudProxyCount }})</p>
-                                 <ul v-if="cloudPreviewProxies.length > 0" class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
-                                    <li v-for="host in cloudPreviewProxies" :key="host.id" class="text-xs text-slate-500 d-flex align-items-center gap-2 truncate flex-row-reverse">
-                                        <span class="d-inline-block w-1 h-1 rounded-full bg-secondary flex-shrink-0"></span> 
-                                        <span class="text-truncate" style="max-width: 150px;" :title="host.label">{{ host.label }}</span>
-                                    </li>
-                                </ul>
+                            <div class="d-flex flex-column gap-2">
+                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Proxy Hosts ({{ cloudProxyCount }})</p>
+                                 <div v-if="cloudPreviewProxies.length > 0" class="d-flex flex-wrap gap-2">
+                                    <span v-for="host in cloudPreviewProxies" :key="host.id" class="ui-tag" :title="host.label">
+                                        {{ truncate(host.label, 20) }}
+                                    </span>
+                                </div>
                                 <span v-else class="text-xs text-slate-500">-</span>
                             </div>
 
                             <!-- Policies -->
-                            <div class="d-flex justify-content-between align-items-start">
-                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-1">Policies ({{ cloudPolicyCount }})</p>
-                                 <ul v-if="cloudPreviewPolicies.length > 0" class="d-flex flex-column gap-1 m-0 p-0 text-end align-items-end">
-                                    <li v-for="policy in cloudPreviewPolicies" :key="policy.id" class="text-xs text-slate-500 d-flex align-items-center gap-2 truncate flex-row-reverse">
-                                        <span class="d-inline-block w-1 h-1 rounded-full bg-secondary flex-shrink-0"></span> 
-                                        <span class="text-truncate" style="max-width: 150px;" :title="policy.name">{{ policy.name }}</span>
-                                    </li>
-                                </ul>
+                            <div class="d-flex flex-column gap-2">
+                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Policies ({{ cloudPolicyCount }})</p>
+                                 <div v-if="cloudPreviewPolicies.length > 0" class="d-flex flex-wrap gap-2">
+                                    <span v-for="policy in cloudPreviewPolicies" :key="policy.id" class="ui-tag ui-tag-primary" :title="policy.name">
+                                        {{ truncate(policy.name, 20) }}
+                                    </span>
+                                </div>
                                 <span v-else class="text-xs text-slate-500">-</span>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons Row -->
+            <div class="d-flex justify-content-center gap-4">
+                <div class="flex-1 d-flex justify-content-center">
+                    <button @click="handleSyncToCloud" class="d-flex align-items-center gap-2 px-4 py-2 ui-button-secondary rounded-lg border transition-all">
+                        <i class="bi bi-cloud-upload" style="font-size: 14px;"></i>
+                        <span class="text-xs font-semibold">Push to Cloud</span>
+                    </button>
+                </div>
+                <div class="flex-1 d-flex justify-content-center">
+                    <button @click="handleSyncFromLocal" class="d-flex align-items-center gap-2 px-4 py-2 ui-button-secondary rounded-lg border transition-all">
+                        <i class="bi bi-cloud-download" style="font-size: 14px;"></i>
+                        <span class="text-xs font-semibold">Pull from Cloud</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -216,12 +207,30 @@ import { DEFAULT_CONFIG } from '../../common/config'
 import { toast } from '../utils/toast'
 import SyncConflictModal from '../components/SyncConflictModal.vue'
 
+// Helpers
+const formatDate = (timestamp) => {
+    if (!timestamp) return 'Unknown'
+    const d = new Date(timestamp)
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    const hours = String(d.getHours()).padStart(2, '0')
+    const minutes = String(d.getMinutes()).padStart(2, '0')
+    const seconds = String(d.getSeconds()).padStart(2, '0')
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
+
+const truncate = (text, length) => {
+    if (!text) return ''
+    if (text.length <= length) return text
+    return text.substring(0, length) + '...'
+}
+
 // State
 const config = reactive(JSON.parse(JSON.stringify(DEFAULT_CONFIG)))
 const cloudConfig = ref(null)
-const localLastModified = computed(() => {
-    if (!config.updatedAt) return 'Unknown'
-    return new Date(config.updatedAt).toLocaleString()
+const formattedLocalLastModified = computed(() => {
+    return formatDate(config.updatedAt)
 })
 const cloudNewer = ref(false)
 const softwareVersion = ref('Unknown')
@@ -231,9 +240,8 @@ const showConflictModal = ref(false)
 // Computed
 const configVersion = computed(() => config.version ? `v${config.version}` : 'v1')
 const cloudConfigVersion = computed(() => cloudConfig.value?.version ? `v${cloudConfig.value.version}` : '-')
-const cloudLastModified = computed(() => {
-    if (!cloudConfig.value?.timestamp) return 'Unknown'
-    return new Date(cloudConfig.value.timestamp).toLocaleString()
+const formattedCloudLastModified = computed(() => {
+    return formatDate(cloudConfig.value?.timestamp)
 })
 
 const proxyCount = computed(() => Object.keys(config.proxies || {}).length)

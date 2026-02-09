@@ -65,6 +65,70 @@
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+  
+  /* Component Specific */
+  --ui-bg-card-header: #f8fafc;    /* Slightly different from card body */
+  --ui-radio-border: #cbd5e1;      /* Radio button border */
+  --ui-nav-active-bg: #e0f2fe;     /* Navigation active background (light blue) */
+  --ui-notification-bg: #1e293b;   /* Notification background (dark slate) */
 }
 
+/* -------------------------------------------------------------------------- */
+/* Theme Variables (Dark Mode)                                                */
+/* -------------------------------------------------------------------------- */
 
+:root.dark {
+  /* Brand Colors */
+  --bs-primary: #3b9eff;
+  --bs-primary-rgb: 59, 158, 255;
+  --bs-primary-hover: #5aadff;
+  --bs-primary-subtle: #1e3a5f;
+  --bs-primary-border-subtle: #2c5282;
+  
+  /* Base Colors */
+  --bs-body-bg: #0f172a;
+  --bs-body-color: #f1f5f9;
+  
+  /* Semantic Backgrounds */
+  --ui-bg-card: #1e293b;
+  --ui-bg-default: #0f172a;
+  --ui-bg-subtle: #1e293b;
+  --ui-bg-hover: #334155;
+  --ui-bg-active: #475569;
+  
+  /* Semantic Text */
+  --ui-text-primary: #f1f5f9;
+  --ui-text-secondary: #94a3b8;
+  --ui-text-tertiary: #64748b;
+  --ui-text-inverse: #0f172a;
+  
+  /* Borders */
+  --ui-border: #475569;
+  --ui-border-subtle: #334155;
+  --ui-border-light: #1e293b;
+  
+  /* Status Colors */
+  --ui-success: #34d399;
+  --ui-success-bg: #064e3b;
+  --ui-success-border: #047857;
+  
+  --ui-danger: #f87171;
+  --ui-danger-hover: #ef4444;
+  --ui-danger-bg: #450a0a;
+  --ui-danger-border: #7f1d1d;
+  --ui-danger-text: #fca5a5;
+
+  --ui-warning: #fbbf24;
+  --ui-warning-bg: #451a03;
+  --ui-warning-border: #78350f;
+  
+  --ui-info: #60a5fa;
+  --ui-info-bg: #172554;
+  --ui-info-border: #1e3a8a;
+  
+  /* Component Specific */
+  --ui-bg-card-header: #475569;    /* Distinct from card body in dark mode */
+  --ui-radio-border: #64748b;      /* More visible radio border in dark */
+  --ui-nav-active-bg: #1e3a5f;     /* Navigation active background (dark blue) */
+  --ui-notification-bg: #1e293b;   /* Notification background (dark slate) */
+}

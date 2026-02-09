@@ -6,6 +6,7 @@
   background-color: var(--ui-bg-white) !important; /* bg-slate-50 */
   border-color: var(--ui-border) !important; /* border-default */
   color: var(--ui-text-primary) !important;
+  border-radius: 8px !important; /* rounded-lg */
 }
 
 .ui-input:disabled,
@@ -79,4 +80,71 @@ input[type="color"].border-0::-webkit-color-swatch {
   font-size: 12px !important;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Switcher / Toggle                                                          */
+/* -------------------------------------------------------------------------- */
 
+.form-check-input[type="checkbox"][role="switch"] {
+  background-color: var(--ui-bg-active); /* Default off state background */
+  border-color: var(--ui-border);
+}
+
+.form-check-input[type="checkbox"][role="switch"]:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.form-check-input[type="checkbox"][role="switch"]:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* Dark mode specific adjustments for better visibility */
+/* :root.dark .form-check-input[type="checkbox"][role="switch"] {
+  background-color: var(--ui-bg-active); 
+  border-color: var(--ui-border);
+}
+
+:root.dark .form-check-input[type="checkbox"][role="switch"]:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Radio Buttons                                                              */
+/* -------------------------------------------------------------------------- */
+
+.form-check-input[type="radio"] {
+  border-color: var(--ui-radio-border);
+}
+
+.form-check-input[type="radio"]:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.form-check-input[type="radio"]:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* Dark mode radio background fix */
+:root.dark .form-check-input[type="radio"]:not(:checked) {
+  background-color: var(--ui-bg-card);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Placeholder Styles                                                         */
+/* -------------------------------------------------------------------------- */
+
+/* Light mode placeholder */
+::placeholder {
+  color: var(--ui-text-tertiary);
+  opacity: 0.6;
+}
+
+/* Dark mode placeholder - lighter for better visibility */
+:root.dark ::placeholder {
+  color: var(--ui-text-secondary);
+  opacity: 0.5;
+}

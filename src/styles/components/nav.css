@@ -4,7 +4,7 @@
 
 /* Nav Item (Card-like behavior in lists) */
 .nav-item-active {
-  background-color: var(--ui-bg-card) !important;
+  background-color: var(--ui-nav-active-bg) !important;
   color: var(--bs-primary) !important;
   border: 0 !important;
 }

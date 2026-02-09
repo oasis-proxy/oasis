@@ -54,6 +54,12 @@
 .text-primary { color: var(--bs-primary) !important; }
 .text-white { color: var(--ui-text-inverse) !important; }
 
+/* UI Text Colors (Global) */
+.ui-text-primary { color: var(--ui-text-primary) !important; }
+.ui-text-secondary { color: var(--ui-text-secondary) !important; }
+.ui-text-tertiary { color: var(--ui-text-tertiary) !important; }
+.ui-text-inverse { color: var(--ui-text-inverse) !important; }
+
 /* Borders */
 .border-light { border-color: var(--ui-border-light) !important; }
 .border-subtle { border-color: var(--ui-border-subtle) !important; }

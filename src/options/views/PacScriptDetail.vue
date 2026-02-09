@@ -54,12 +54,12 @@
               <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                   <li>
                     <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-pencil text-muted"></i> Rename
+                        <i class="bi bi-pencil text-slate-400"></i> Rename
                     </button>
                   </li>
                   <li>
                     <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-files text-muted"></i> Clone
+                        <i class="bi bi-files text-slate-400"></i> Clone
                     </button>
                   </li>
                   <li><hr class="dropdown-divider my-1 border-subtle "></li>

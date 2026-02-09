@@ -9,7 +9,6 @@ html {
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--bs-body-bg);
-  color: var(--bs-body-color);
   -webkit-font-smoothing: antialiased;
 }
 

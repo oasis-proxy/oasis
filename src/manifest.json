@@ -6,9 +6,9 @@
     "default_popup": "src/popup/index.html"
   },
   "icons": {
-    "16": "src/assets/icons/logo.png",
-    "48": "src/assets/icons/logo.png",
-    "128": "src/assets/icons/logo-128.png"
+    "16": "src/assets/icons/light/ripple-icon-16x16.png",
+    "48": "src/assets/icons/light/ripple-icon-64x64.png",
+    "128": "src/assets/icons/light/ripple-icon-128x128.png"
   },
   "options_ui": {
     "page": "src/options/index.html",
@@ -28,6 +28,7 @@
     "alarms",
     "contextMenus",
     "downloads",
+    "tabs",
     "webRequest",
     "webRequestAuthProvider",
     "unlimitedStorage",

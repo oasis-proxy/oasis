@@ -15,14 +15,58 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import Sidebar from './components/AppSidebar.vue'
 import { loadConfig } from '../common/storage'
 
+// Theme management
+const mediaQuery = ref(null)
+
+const applyTheme = (theme) => {
+  const root = document.documentElement
+  root.classList.remove('dark')
+  
+  if (theme === 'auto') {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    if (prefersDark) {
+      root.classList.add('dark')
+    }
+  } else if (theme === 'dark') {
+    root.classList.add('dark')
+  }
+  // 'light' is default, no class needed
+}
+
+const handleSystemThemeChange = () => {
+  loadConfig().then(config => {
+    if (config.ui?.theme === 'auto') {
+      applyTheme('auto')
+    }
+  })
+}
+
 onMounted(async () => {
-    // Just load config for other needs if any, but no theme application
-    await loadConfig()
-    // Force remove dark class in case it was persisted
-    document.documentElement.classList.remove('dark')
+  const config = await loadConfig()
+  applyTheme(config.ui?.theme || 'light')
+  
+  // Listen for system theme changes
+  mediaQuery.value = window.matchMedia('(prefers-color-scheme: dark)')
+  mediaQuery.value.addEventListener('change', handleSystemThemeChange)
+  
+  // Listen for config changes from storage
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local' && changes.config) {
+      const newConfig = changes.config.newValue
+      if (newConfig?.ui?.theme) {
+        applyTheme(newConfig.ui.theme)
+      }
+    }
+  })
+})
+
+onUnmounted(() => {
+  if (mediaQuery.value) {
+    mediaQuery.value.removeEventListener('change', handleSystemThemeChange)
+  }
 })
 </script>

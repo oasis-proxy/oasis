@@ -1,0 +1,55 @@
+/* -------------------------------------------------------------------------- */
+/* Dropdown Components                                                        */
+/* -------------------------------------------------------------------------- */
+
+/* Dropdown Menu */
+.dropdown-menu {
+  background-color: var(--ui-bg-card) !important;
+  border-color: var(--ui-border-subtle) !important;
+  color: var(--ui-text-primary) !important;
+}
+
+/* Dropdown Items */
+.dropdown-item {
+  color: var(--ui-text-primary) !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--ui-bg-hover) !important;
+  color: var(--ui-text-primary) !important;
+}
+
+.dropdown-item:active {
+  background-color: var(--ui-bg-active) !important;
+  color: var(--ui-text-primary) !important;
+}
+
+.dropdown-item.active {
+  background-color: var(--bs-primary) !important;
+  color: var(--ui-text-inverse) !important;
+}
+
+/* Dropdown Divider */
+.dropdown-divider {
+  border-color: var(--ui-border-subtle) !important;
+}
+
+/* Select Dropdown */
+.form-select {
+  background-color: var(--ui-bg-card) !important;
+  border-color: var(--ui-border) !important;
+  color: var(--ui-text-primary) !important;
+}
+
+.form-select:focus {
+  border-color: var(--bs-primary) !important;
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25) !important;
+}
+
+.form-select:disabled {
+  background-color: var(--ui-bg-hover) !important;
+  border-color: var(--ui-border-subtle) !important;
+  color: var(--ui-text-tertiary) !important;
+  opacity: 0.7;
+}
