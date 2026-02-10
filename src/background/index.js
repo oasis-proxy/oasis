@@ -153,6 +153,7 @@ chrome.contextMenus.onClicked.addListener(async (info) => {
                 await chrome.storage.session.set({
                     quickAddIntent: {
                         domain: domain,
+                        source: 'context-menu',
                         timestamp: Date.now()
                     }
                 })

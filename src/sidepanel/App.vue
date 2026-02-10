@@ -318,7 +318,9 @@ const formatTime = (isoString) => {
 
 // Actions
 const openQuickAdd = async (item) => {
-    const domain = getDomain(item.url)
+    // Prefer finalUrl if available (e.g. after redirects)
+    const urlToUse = item.finalUrl || item.url
+    const domain = getDomain(urlToUse)
     
     if (!domain) {
         showNotification('Not Supported', 'Only HTTP/HTTPS links are supported')
@@ -329,6 +331,7 @@ const openQuickAdd = async (item) => {
     await chrome.storage.session.set({
         quickAddIntent: {
             domain: domain,
+            source: 'sidepanel',
             timestamp: Date.now()
         }
     })

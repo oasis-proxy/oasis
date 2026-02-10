@@ -232,7 +232,7 @@
 
        <!-- QUICK TAB -->
        <div v-if="currentTab === 'quick'" class="monitor-container d-flex flex-column h-100" style="font-size: 12px;">
-          <p class="py-2 text-xs m-0 ui-text-primary z-10 sticky-top flex-shrink-0" style="padding-left: 0.75rem; padding-right: 0.75rem; background-color: var(--ui-bg-card);">Select domains to proxy from current page</p>
+          <p class="py-2 text-sm m-0 ui-text-primary z-10 sticky-top flex-shrink-0" style="padding-left: 0.75rem; padding-right: 0.75rem; background-color: var(--ui-bg-card);">Select domains to proxy from current page</p>
           
           <div v-if="failedDomains.length === 0" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
              <div class="text-center p-4">
@@ -261,23 +261,26 @@
               </div>
             </div>
 
-            <!-- Proxy Host Section -->
-            <div class="quick-section">
-              <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">Proxy Host</label>
-              <select v-model="quickProxyId" class="form-select ui-input border text-xs cursor-pointer" style="height: 28px; width: 100px; padding: 0 6px; border-radius: 6px; font-size: 12px !important;">
-                <option v-for="proxy in proxyOptionsArray" :key="proxy.id" :value="proxy.id">
-                    {{ proxy.label }}
-                </option>
-              </select>
-            </div>
+            <!-- Options Section (Side-by-Side) -->
+            <div class="d-flex gap-3 pb-2 px-2">
+                <!-- Proxy Host -->
+                <div class="flex-1 d-flex flex-column gap-1">
+                  <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">Proxy Host</label>
+                  <select v-model="quickProxyId" class="form-select ui-input border text-xs cursor-pointer w-100" style="height: 28px; padding: 0 6px; border-radius: 6px; font-size: 12px !important; max-width: none !important;">
+                    <option v-for="proxy in proxyOptionsArray" :key="proxy.id" :value="proxy.id">
+                        {{ proxy.label }}
+                    </option>
+                  </select>
+                </div>
 
-            <!-- Destination Section -->
-            <div class="quick-section">
-              <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">Add To</label>
-              <select v-model="quickDestination" class="form-select ui-input border text-xs cursor-pointer" style="height: 28px; width: 120px; padding: 0 6px; border-radius: 6px; font-size: 12px !important;">
-                <option value="policy">Current Policy</option>
-                <option value="temporary">Temporary Rules</option>
-              </select>
+                <!-- Add To Destination -->
+                <div class="flex-1 d-flex flex-column gap-1">
+                  <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">Add To</label>
+                  <select v-model="quickDestination" class="form-select ui-input border text-xs cursor-pointer w-100" style="height: 28px; padding: 0 6px; border-radius: 6px; font-size: 12px !important; max-width: none !important;">
+                    <option value="policy">Current Policy</option>
+                    <option value="temporary">Temporary (Session)</option>
+                  </select>
+                </div>
             </div>
 
             <!-- Actions Section -->
@@ -371,6 +374,12 @@ onMounted(async () => {
           if (Date.now() - intent.timestamp < 10000) {
               contextMenuDomain.value = intent.domain
               currentTab.value = 'quick'
+              
+              // Default to Temporary for Sidepanel and Context Menu actions
+              if (intent.source === 'sidepanel' || intent.source === 'context-menu') {
+                  quickDestination.value = 'temporary'
+              }
+              
               // Clear immediately
               await chrome.storage.session.remove('quickAddIntent')
           }
@@ -544,12 +553,22 @@ const formatIp = (ip) => {
 }
 
 // --- Quick Add Logic ---
-const isActiveProfilePolicy = computed(() => {
-    return !!config.value?.policies?.[activeProfileId.value]
+const showQuickTab = computed(() => {
+    // 1. Connection Monitoring must be enabled
+    if (!config.value?.behavior?.connectionMonitoring) return false
+
+    // 2. Active Profile must be Auto Policy
+    return isActiveProfilePolicy.value && (failedDomains.value.length > 0 || !!contextMenuDomain.value)
 })
 
-const showQuickTab = computed(() => {
-    return isActiveProfilePolicy.value && (failedDomains.value.length > 0 || !!contextMenuDomain.value)
+const isActiveProfilePolicy = computed(() => {
+    const activeId = activeProfileId.value
+    const policy = config.value?.policies?.[activeId]
+    // Check if it's a policy (has rules or defaultProfileId)
+    if (policy && (policy.rules || policy.defaultProfileId)) {
+        return true
+    }
+    return false
 })
 
 const failedDomains = computed(() => {
@@ -558,8 +577,20 @@ const failedDomains = computed(() => {
         return [contextMenuDomain.value]
     }
 
+    // Since we only show Quick Add if monitoring is enabled, we can use monitorResult
     const errorItems = monitorResult.value.filter(i => i.error)
-    if (errorItems.length === 0) return []
+    if (errorItems.length === 0) {
+        // Fallback: If no errors, suggest current tab domain if available
+        if (currentTabUrl.value) {
+             try {
+                 const url = new URL(currentTabUrl.value)
+                 if (url.hostname) return [url.hostname]
+             } catch (e) {
+                 // Ignore invalid URLs
+             }
+        }
+        return []
+    }
 
     const domains = [...new Set(errorItems.map(i => i.domain))]
     
@@ -595,7 +626,11 @@ watch(failedDomains, (newVal) => {
 
 const proxyOptionsArray = computed(() => {
   if (!config.value) return [{ id: 'direct', label: 'Direct' }]
-  const options = [{ id: 'direct', label: 'Direct' }]
+  const options = [] // Default is empty, user picks explicit proxy
+  
+  // Add Direct (Reject removed as per request)
+  options.push({ id: 'direct', label: 'Direct' })
+
   if (config.value.proxies) {
     Object.values(config.value.proxies).forEach(p => {
       options.push({ id: p.id, label: p.label || p.name })
@@ -604,56 +639,56 @@ const proxyOptionsArray = computed(() => {
   return options
 })
 
-// Removed isAllSelected as per user request (Select All header removed)
-// Removed toggleSelectAll as per user request (Select All header removed)
 
 const confirmQuickAdd = async () => {
     if (selectedDomains.value.length === 0) return
     
-    const newRules = selectedDomains.value.map(pattern => ({
-        id: `rule_quick_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-        type: 'rule',
-        ruleType: 'wildcard',
-        pattern: pattern,
-        valid: true,
-        proxyId: quickProxyId.value,
-        ruleSet: {}
-    }))
+    const newRules = selectedDomains.value.map(pattern => {
+        return {
+            id: `rule_quick_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+            type: 'rule',
+            ruleType: 'wildcard', 
+            pattern: pattern,
+            proxyId: quickProxyId.value,
+            valid: true,
+            // ruleSet: {} // Not needed for simple rules
+        }
+    })
 
     if (quickDestination.value === 'temporary') {
-        // Add to temporary rules
-        if (!Array.isArray(config.value.temporaryRules)) {
-            config.value.temporaryRules = []
-        }
-        config.value.temporaryRules = [...newRules, ...config.value.temporaryRules]
+        // Add to temporary rules (Session)
+        // Note: 'tempRules' in session storage, injected by background
+        // We need to store in chrome.storage.session
+        const sessionData = await chrome.storage.session.get('tempRules')
+        let tempRules = sessionData.tempRules || []
+        tempRules = [...newRules, ...tempRules]
         
-        // Save
-        await saveConfig(config.value)
+        await chrome.storage.session.set({ tempRules })
         
-        // Clear selection and switch back
-        selectedDomains.value = []
-        currentTab.value = 'proxy'
+        // Notify Background to re-apply if currently active
+        // Actually background detects session changes to tempRules and re-applies!
         
-        toast.success(`${newRules.length} rules added to Temporary Rules`)
+        toast.success(`${newRules.length} rules added to Session (Temp)`)
     } else {
-        // Add to current policy
-        const policy = config.value.policies[activeProfileId.value]
-        if (!policy) return
+        // Add to current policy (Persistent)
+        const policyId = activeProfileId.value
+        // Verify it exists in config
+        if (!config.value.policies[policyId]) return
 
-        if (!Array.isArray(policy.rules)) policy.rules = []
-
-        // Prepend new rules
-        policy.rules = [...newRules, ...policy.rules]
-
-        // Save
+        if (!Array.isArray(config.value.policies[policyId].rules)) {
+            config.value.policies[policyId].rules = []
+        }
+        
+        // Prepend logic
+        config.value.policies[policyId].rules = [...newRules, ...config.value.policies[policyId].rules]
+        
         await saveConfig(config.value)
-        
-        // Clear selection and switch back
-        selectedDomains.value = []
-        currentTab.value = 'proxy'
-        
-        toast.success(`${newRules.length} rules added to ${policy.name}`)
+        toast.success(`${newRules.length} rules added to ${config.value.policies[policyId].name || 'Policy'}`)
     }
+    
+    // Clear selection and switch back
+    selectedDomains.value = []
+    currentTab.value = 'proxy'
 }
 
 const showToast = (text, duration = 2000) => {
