@@ -40,6 +40,11 @@ const routes = [
     path: '/pac/:id',
     name: 'PacScript',
     component: PacScriptDetail
+  },
+  {
+    path: '/group/:id',
+    name: 'ProxyGroup',
+    component: () => import('../views/ProxyGroupDetail.vue') // Lazy load
   }
 ]
 

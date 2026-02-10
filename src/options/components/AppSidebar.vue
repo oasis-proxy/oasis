@@ -113,6 +113,37 @@
         </div>
       </div>
 
+      <!-- Variable: Proxy Host Groups -->
+      <div>
+        <div class="mb-2 d-flex align-items-center justify-content-between group">
+          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">Proxy Host Groups</h3>
+          <button 
+            @click="showGroupModal = true"
+            class="ui-button-icon"
+          >
+            <i class="bi bi-plus-lg text-sm"></i>
+          </button>
+        </div>
+        <div class="d-flex flex-column gap-1">
+          <router-link 
+            v-for="group in proxyGroupsList" 
+            :key="group.id"
+            :to="`/group/${group.id}`"
+            custom 
+            v-slot="{ navigate, isActive }"
+          >
+             <button 
+                @click="navigate"
+                class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors group"
+                :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
+             >
+                <i class="bi bi-layers-half text-base" :class="[(isActive || group.color) ? '' : 'text-slate-400 group-hover:text-slate-600']" :style="{ color: group.color ? group.color : undefined }"></i>
+                <span class="text-xs text-truncate">{{ group.name }}</span>
+             </button>
+          </router-link>
+        </div>
+      </div>
+
       <!-- Variable: Policy Rules -->
       <div>
         <div class="mb-2 d-flex align-items-center justify-content-between group">
@@ -159,22 +190,29 @@
       @close="showProxyModal = false"
       @create="handleCreateProxy"
     />
+    <ProxyGroupCreationModal
+      :visible="showGroupModal"
+      @close="showGroupModal = false"
+      @create="handleCreateProxyGroup"
+    />
   </aside>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { loadConfig, saveProxies, savePolicies, savePacs } from '../../common/storage'
+import { loadConfig, saveProxies, savePolicies, savePacs, saveProxyGroups } from '../../common/storage'
 import { hasUnsavedChanges } from '../router'
 import { toast } from '../utils/toast'
 import PolicyCreationModal from './PolicyCreationModal.vue'
 import ProxyCreationModal from './ProxyCreationModal.vue'
+import ProxyGroupCreationModal from './ProxyGroupCreationModal.vue'
 
 const router = useRouter()
 const config = ref(null)
 const showPolicyModal = ref(false)
 const showProxyModal = ref(false)
+const showGroupModal = ref(false)
 
 // Computed lists for sidebar
 const proxyHosts = computed(() => {
@@ -186,6 +224,16 @@ const proxyHosts = computed(() => {
     color: p.color, // Custom color
     status: null // No real status checking yet
   }))
+})
+
+const proxyGroupsList = computed(() => {
+    if (!config.value?.proxyGroups) return []
+    return Object.values(config.value.proxyGroups).map(g => ({
+        id: g.id,
+        name: g.name || 'Unnamed Group',
+        color: g.color,
+        type: 'group'
+    }))
 })
 
 const policyRules = computed(() => {
@@ -311,6 +359,29 @@ const handleCreatePolicy = async ({ name, type }) => {
     } else {
         router.push(`/policy/${id}`)
     }
+}
+
+const handleCreateProxyGroup = async ({ name }) => {
+    const unsaved = hasUnsavedChanges()
+    if (unsaved) return
+
+    const latestConfig = await loadConfig()
+    const id = `group_${Date.now()}`
+    
+    if (!latestConfig.proxyGroups || typeof latestConfig.proxyGroups !== 'object') latestConfig.proxyGroups = {}
+    
+    latestConfig.proxyGroups[id] = {
+        id: id,
+        type: 'group',
+        name: name,
+        proxies: [], // Ordered list of proxy IDs
+        fallback: { type: 'direct' }
+    }
+    
+    await saveProxyGroups(latestConfig.proxyGroups)
+    toast.success('Proxy group created successfully')
+    showGroupModal.value = false
+    router.push(`/group/${id}`)
 }
 
 // Open Request Monitor in new tab

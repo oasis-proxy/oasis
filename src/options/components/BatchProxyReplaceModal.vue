@@ -39,9 +39,11 @@
               >
                 <option value="" disabled>-- Select Source Proxy --</option>
                 <option value="direct">DIRECT</option>
-                <option v-for="proxy in proxyOptions" :key="proxy.id" :value="proxy.id">
-                  {{ proxy.label }}
-                </option>
+                <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
+                  <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
+                    {{ proxy.label }}
+                  </option>
+                </optgroup>
               </select>
               <p class="text-xs text-slate-500 m-0">Rules using this proxy will be replaced.</p>
             </label>
@@ -56,9 +58,11 @@
               >
                 <option value="" disabled>-- Select Target Proxy --</option>
                 <option value="direct">DIRECT</option>
-                <option v-for="proxy in proxyOptions" :key="proxy.id" :value="proxy.id">
-                  {{ proxy.label }}
-                </option>
+                <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
+                  <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
+                    {{ proxy.label }}
+                  </option>
+                </optgroup>
               </select>
               <p class="text-xs text-slate-500 m-0">Rules will be changed to use this proxy.</p>
             </label>

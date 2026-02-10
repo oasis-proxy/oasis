@@ -7,7 +7,7 @@ import { fetchRuleSetContent } from './ruleset'
  * @returns {Promise<typeof DEFAULT_CONFIG>}
  */
 export async function loadConfig() {
-  const keys = ['config', 'proxies', 'pacs', 'policies', 'system', 'direct', 'reject']
+  const keys = ['config', 'proxies', 'proxyGroups', 'pacs', 'policies', 'system', 'direct', 'reject']
   const result = await chrome.storage.local.get(keys)
 
   // Start with default structure
@@ -33,6 +33,7 @@ export async function loadConfig() {
 
   // 2. Load Profiles (Arrays) - Overwrite defaults if present in storage
   if (result.proxies) runtimeConfig.proxies = result.proxies
+  if (result.proxyGroups) runtimeConfig.proxyGroups = result.proxyGroups
   if (result.pacs) runtimeConfig.pacs = result.pacs
   if (result.policies) {
     runtimeConfig.policies = result.policies
@@ -104,6 +105,7 @@ export async function saveConfig(config, skipSync = false, skipTouch = false) {
   const storageData = {
       config: configData,
       proxies: JSON.parse(JSON.stringify(config.proxies || {})),
+      proxyGroups: JSON.parse(JSON.stringify(config.proxyGroups || {})),
       pacs: JSON.parse(JSON.stringify(config.pacs || {})),
       policies: JSON.parse(JSON.stringify(config.policies || {})),
       system: JSON.parse(JSON.stringify(config.system)),
@@ -238,10 +240,28 @@ export async function savePacs(pacs, skipSync = false) {
 }
 
 /**
+ * Save Proxy Groups Map ONLY.
+ * @param {object} proxyGroups 
+ * @param {boolean} skipSync
+ */
+export async function saveProxyGroups(proxyGroups, skipSync = false) {
+  // Load full config to update version/timestamp
+  const fullConfig = await loadConfig()
+  
+  // Assign new proxyGroups
+  fullConfig.proxyGroups = JSON.parse(JSON.stringify(proxyGroups || {}))
+  
+  // Touch & Save
+  touchConfig(fullConfig)
+  
+  await saveConfig(fullConfig, skipSync)
+}
+
+/**
  * Clear all configuration and reset to defaults.
  */
 export async function clearConfig() {
-    const keys = ['config', 'proxies', 'pacs', 'policies', 'system', 'direct', 'reject']
+    const keys = ['config', 'proxies', 'proxyGroups', 'pacs', 'policies', 'system', 'direct', 'reject']
     await chrome.storage.local.remove(keys)
     await clearSessionRules()
 }

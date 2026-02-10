@@ -258,15 +258,17 @@
                     />
                   </div>
                   <div style="width: 20%;">
-                    <select 
+                     <select 
                       v-model="rule.proxyId" 
                       class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
                       style="height: 28px; max-width: none;"
                     >
                       <option value="direct">Direct</option>
-                      <option v-for="proxy in proxyOptions" :key="proxy.id" :value="proxy.id">
-                        {{ proxy.label }}
-                      </option>
+                      <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
+                        <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
+                          {{ proxy.label }}
+                        </option>
+                      </optgroup>
                     </select>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
@@ -305,9 +307,11 @@
                     style="height: 28px; max-width: none;"
                 >
                     <option value="direct">Direct</option>
-                    <option v-for="proxy in proxyOptions" :key="proxy.id" :value="proxy.id">
-                        {{ proxy.label }}
-                    </option>
+                    <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
+                        <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
+                          {{ proxy.label }}
+                        </option>
+                    </optgroup>
                 </select>
               </div>
               <div style="width: 8%;"></div>
@@ -612,10 +616,35 @@ const revalidateAllRejectRules = () => {
   }
 }
 
-// Proxy options for dropdown
+// Proxy options for dropdown (Grouped)
 const proxyOptions = computed(() => {
-  if (!config.value || !config.value.proxies) return []
-  return Object.values(config.value.proxies).map(p => ({ id: p.id, label: p.label || p.name }))
+  if (!config.value) return []
+  
+  const groups = []
+  
+  // Proxies
+  if (config.value.proxies) {
+      const proxies = Object.values(config.value.proxies)
+          .map(p => ({ id: p.id, label: p.label || p.name }))
+          .sort((a, b) => a.label.localeCompare(b.label))
+          
+      if (proxies.length > 0) {
+          groups.push({ label: 'Proxies', options: proxies })
+      }
+  }
+  
+  // Proxy Groups
+  if (config.value.proxyGroups) {
+      const proxyGroups = Object.values(config.value.proxyGroups)
+          .map(g => ({ id: g.id, label: g.name }))
+          .sort((a, b) => a.label.localeCompare(b.label))
+          
+      if (proxyGroups.length > 0) {
+          groups.push({ label: 'Proxy Groups', options: proxyGroups })
+      }
+  }
+  
+  return groups
 })
 
 // Load Logic

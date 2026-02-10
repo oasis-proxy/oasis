@@ -58,6 +58,10 @@ export const DEFAULT_CONFIG = {
   // Map of PAC Scripts (Key: ID)
   pacs: {},
 
+  // Map of Proxy Host Groups (Key: ID)
+  // Schema: { id, type: 'group', name, proxies: [id1, id2], fallback: { type: 'direct'|'reject'|'wait', value: string } }
+  proxyGroups: {},
+
   /**
    * Map of Auto Policies (Key: ID).
    * 

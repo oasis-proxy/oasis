@@ -1,4 +1,4 @@
-import { generatePacScriptFromPolicy } from './pac'
+import { generatePacScriptFromPolicy, generatePacScriptForGroup } from './pac'
 
 /**
  * Generate Chrome Proxy Config object for a given profile.
@@ -70,11 +70,19 @@ export function createProxyConfig(profile, config) {
     else if (profile.rules || profile.defaultProfileId) {
             // Auto Policy
             // Generate PAC script from rules
-            const pacScriptData = generatePacScriptFromPolicy(profile, config.proxies || {}, config.reject, profile.tempRules, config.rulePriority) 
+            const pacScriptData = generatePacScriptFromPolicy(profile, config.proxies || {}, config.reject, profile.tempRules, config.rulePriority, config.proxyGroups || {}) 
             proxyConfig.mode = 'pac_script'
             proxyConfig.pacScript = {
                 data: pacScriptData
             }
+    }
+    else if (profile.type === 'group') {
+        // Proxy Group (Failover)
+        const pacScriptData = generatePacScriptForGroup(profile, config.proxies || {}, config.reject)
+        proxyConfig.mode = 'pac_script'
+        proxyConfig.pacScript = {
+            data: pacScriptData
+        }
     }
     else {
         // Fallback
@@ -141,6 +149,22 @@ export function collectProxyCredentials(profile, config) {
                 }
             })
         }
+    } else if (profileType === 'group') {
+         // Proxy Group - collect all proxies in group
+         if (profile.proxies && Array.isArray(profile.proxies)) {
+             profile.proxies.forEach(pid => {
+                 if (config && config.proxies && config.proxies[pid]) {
+                     const proxy = config.proxies[pid]
+                     if (proxy && proxy.auth && proxy.auth.username) {
+                        const key = `${proxy.host}:${proxy.port}`
+                        proxyAuthMap[key] = {
+                            username: proxy.auth.username,
+                            password: proxy.auth.password || ''
+                        }
+                     }
+                 }
+             })
+         }
     }
 
     return proxyAuthMap
