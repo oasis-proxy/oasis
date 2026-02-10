@@ -25,7 +25,7 @@
                     </div>
                   </div>
                   <div class="form-check form-switch">
-                    <input :checked="config.sync.enabled" @change="toggleAutoSync" class="form-check-input" type="checkbox" role="switch" id="autoSyncSwitch">
+                    <input :checked="config.sync.enabled" @change="toggleAutoSync" class="form-check-input align-self-start" type="checkbox" role="switch" id="autoSyncSwitch">
                   </div>
                 </div>
             <!-- Maintenance Buttons -->

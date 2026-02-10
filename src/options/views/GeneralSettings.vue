@@ -121,7 +121,7 @@
               <div class="form-check form-switch">
                 <input
                   v-model="config.behavior.refreshOnSwitch"
-                  class="form-check-input"
+                  class="form-check-input align-self-start"
                   type="checkbox"
                   role="switch"
                   id="refreshOnSwitchSwitch"
@@ -173,7 +173,7 @@
               <div class="form-check form-switch">
                 <input
                   v-model="config.behavior.connectionMonitoring"
-                  class="form-check-input"
+                  class="form-check-input align-self-start"
                   type="checkbox"
                   role="switch"
                   id="connectionMonitoringSwitch"
@@ -196,7 +196,7 @@
               <div class="form-check form-switch">
                 <input
                   v-model="config.ui.showContextMenu"
-                  class="form-check-input"
+                  class="form-check-input align-self-start"
                   type="checkbox"
                   role="switch"
                   id="contextMenuSwitch"

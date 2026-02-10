@@ -254,7 +254,7 @@
                     type="checkbox" 
                     v-model="selectedDomains" 
                     :value="domain"
-                    class="form-check-input"
+                    class="form-check-input align-self-start"
                   />
                   <span class="text-truncate text-xs">{{ domain }}</span>
                 </label>

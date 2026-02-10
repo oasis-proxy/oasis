@@ -13,9 +13,10 @@
       <div class="d-flex align-items-center gap-3">
         <button 
           @click="loadData"
-          class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all"
+          class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
         >
-          Reset
+          <i class="bi bi-reply-fill"></i>
+          <span>Reset</span>
         </button>
 
         <button 
@@ -79,7 +80,7 @@
                   <div style="width: 8%;" class="d-flex justify-content-center">
                     <div class="form-check form-switch m-0 d-flex align-items-center justify-content-center">
                       <input 
-                        class="form-check-input" 
+                        class="form-check-input align-self-start" 
                         style="cursor: pointer;"
                         type="checkbox" 
                         v-model="rule.valid"
@@ -178,7 +179,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
+import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '../router'
 import { loadConfig, savePolicies } from '../../common/storage'
 import { validatePattern } from '../../common/validation'
 import { toast } from '../utils/toast'
@@ -396,6 +398,21 @@ const executeMerge = async (targetId, conflictMode, rulesToMerge) => {
 
 onMounted(() => {
     loadData()
+})
+
+// Register unsaved changes checker
+onMounted(() => {
+  registerUnsavedChangesChecker(() => {
+    if (isDirty.value) {
+      toast.warning('You have unsaved changes. Please save or reset before leaving.')
+      return true
+    }
+    return false
+  })
+})
+
+onBeforeUnmount(() => {
+  unregisterUnsavedChangesChecker()
 })
 
 const getPlaceholder = (type) => {

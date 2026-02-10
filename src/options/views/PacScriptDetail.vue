@@ -19,7 +19,7 @@
         <div class="d-flex align-items-center gap-3">
            <!-- Show in Popup Switch -->
            <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
-               <input class="form-check-input" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="pac.showInPopup">
+               <input class="form-check-input align-self-start" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="pac.showInPopup">
                <label class="form-check-label text-xs font-medium text-slate-500" style="cursor: pointer;" for="showInPopup">Show in Popup</label>
            </div>
            
@@ -200,8 +200,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '../router'
 import { loadConfig, savePacs } from '../../common/storage'
 import { toast } from '../utils/toast'
 import ProxyRenameModal from '../components/ProxyRenameModal.vue'
@@ -247,6 +248,21 @@ const isDirty = computed(() => {
 
 onMounted(() => {
     loadPacData()
+})
+
+// Register unsaved changes checker
+onMounted(() => {
+  registerUnsavedChangesChecker(() => {
+    if (isDirty.value) {
+      toast.warning('You have unsaved changes. Please save or reset before leaving.')
+      return true
+    }
+    return false
+  })
+})
+
+onBeforeUnmount(() => {
+  unregisterUnsavedChangesChecker()
 })
 
 watch(() => route.params.id, (newId, oldId) => {

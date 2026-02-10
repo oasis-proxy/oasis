@@ -19,7 +19,7 @@
         <div class="d-flex align-items-center gap-3">
            <!-- Show in Popup Switch -->
            <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
-              <input class="form-check-input" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="proxy.showInPopup">
+              <input class="form-check-input align-self-start" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="proxy.showInPopup">
               <label class="form-check-label text-xs font-medium text-slate-500" style="cursor: pointer;" for="showInPopup">Show in Popup</label>
            </div>
            

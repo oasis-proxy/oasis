@@ -20,7 +20,7 @@
       <div class="d-flex align-items-center gap-3">
         <!-- Show in Popup Switch -->
         <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
-           <input class="form-check-input" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="policy.showInPopup">
+           <input class="form-check-input align-self-start" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="policy.showInPopup">
            <label class="form-check-label text-xs font-medium text-slate-500" style="cursor: pointer;" for="showInPopup">Show in Popup</label>
         </div>
         <button 
@@ -201,7 +201,7 @@
                   <div style="width: 8%;" class="d-flex justify-content-center">
                     <div class="form-check form-switch m-0 d-flex align-items-center justify-content-center">
                       <input 
-                        class="form-check-input" 
+                        class="form-check-input align-self-start" 
                         style="cursor: pointer;"
                         type="checkbox" 
                         v-model="rule.valid"
@@ -420,7 +420,7 @@
                 <div style="width: 8%;" class="d-flex justify-content-center">
                     <div class="form-check form-switch m-0 d-flex align-items-center justify-content-center">
                       <input 
-                        class="form-check-input" 
+                        class="form-check-input align-self-start" 
                         style="cursor: pointer;"
                         type="checkbox" 
                         v-model="rule.valid"
