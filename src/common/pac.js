@@ -9,7 +9,7 @@ import { parseAutoProxyRules, convertAutoProxyToInternalRules } from './autoprox
  * @param {Object} proxies - Proxies configuration object
  * @returns {string} The generated PAC script
  */
-export function generatePacScriptFromPolicy(policy, proxies, rejectConfig = null, tempRules = []) {
+export function generatePacScriptFromPolicy(policy, proxies, rejectConfig = null, tempRules = [], rulePriority = ['reject', 'temp', 'normal']) {
   const policyName = policy.name || 'Auto Policy'
   const rules = policy.rules || []
   const rejectRules = policy.rejectRules || []
@@ -107,45 +107,42 @@ export function generatePacScriptFromPolicy(policy, proxies, rejectConfig = null
         return null
     }
   }
-  
-  let pacContent = `// PAC Script generated from Oasis Policy: ${policyName}\n`
-  pacContent += `// Generated on: ${new Date().toISOString()}\n\n`
-  pacContent += `function FindProxyForURL(url, host) {\n`
-  
-  // Add reject rules first
-  if (rejectRules.length > 0) {
-    pacContent += `  // Reject Rules\n`
+
+  // --- Rule category generators ---
+  const generateRejectBlock = () => {
+    if (rejectRules.length === 0) return ''
+    let block = `  // Reject Rules\n`
     const rejectStr = getProxyString('reject')
     rejectRules.forEach(rule => {
       if (rule.type === 'divider') return
       if (rule.valid === false) return
       const condition = generateRuleCondition(rule)
       if (condition) {
-        pacContent += `  if (${condition}) return "${rejectStr}";\n`
+        block += `  if (${condition}) return "${rejectStr}";\n`
       }
     })
-    pacContent += `\n`
+    block += `\n`
+    return block
   }
-  
-  // Add Temporary Rules
-  if (tempRules && tempRules.length > 0) {
-      pacContent += `  // Temporary Rules\n`
-      tempRules.forEach(rule => {
-          if (rule.valid === false) return
-          // Skip complex types if not expected, but user can create Wildcard/Regex/IP/RuleSet in TempRules
-          
-          const condition = generateRuleCondition(rule)
-          const proxyStr = getProxyString(rule.proxyId)
-          if (condition) {
-             pacContent += `  if (${condition}) return "${proxyStr}";\n`
-          }
-      })
-      pacContent += `\n`
+
+  const generateTempBlock = () => {
+    if (!tempRules || tempRules.length === 0) return ''
+    let block = `  // Temporary Rules\n`
+    tempRules.forEach(rule => {
+      if (rule.valid === false) return
+      const condition = generateRuleCondition(rule)
+      const proxyStr = getProxyString(rule.proxyId)
+      if (condition) {
+        block += `  if (${condition}) return "${proxyStr}";\n`
+      }
+    })
+    block += `\n`
+    return block
   }
-  
-  // Add normal rules
-  if (rules.length > 0) {
-    pacContent += `  // Normal Rules\n`
+
+  const generateNormalBlock = () => {
+    if (rules.length === 0) return ''
+    let block = `  // Normal Rules\n`
     rules.forEach(rule => {
       if (rule.type === 'divider') return
       if (rule.valid === false) return
@@ -163,7 +160,7 @@ export function generatePacScriptFromPolicy(policy, proxies, rejectConfig = null
             internalRules.filter(r => r.isWhitelist).forEach(expandedRule => {
                  const condition = generateRuleCondition(expandedRule)
                  if (condition) {
-                   pacContent += `  if (${condition}) return "DIRECT";\n`
+                   block += `  if (${condition}) return "DIRECT";\n`
                  }
             })
 
@@ -171,7 +168,7 @@ export function generatePacScriptFromPolicy(policy, proxies, rejectConfig = null
             internalRules.filter(r => !r.isWhitelist).forEach(expandedRule => {
               const condition = generateRuleCondition(expandedRule)
               if (condition) {
-                pacContent += `  if (${condition}) return "${proxyStr}";\n`
+                block += `  if (${condition}) return "${proxyStr}";\n`
               }
             })
           } catch (e) {
@@ -185,10 +182,30 @@ export function generatePacScriptFromPolicy(policy, proxies, rejectConfig = null
       const condition = generateRuleCondition(rule)
       const proxyStr = getProxyString(rule.proxyId)
       if (condition) {
-        pacContent += `  if (${condition}) return "${proxyStr}";\n`
+        block += `  if (${condition}) return "${proxyStr}";\n`
       }
     })
-    pacContent += `\n`
+    block += `\n`
+    return block
+  }
+
+  // --- Category map ---
+  const categoryGenerators = {
+    reject: generateRejectBlock,
+    temp: generateTempBlock,
+    normal: generateNormalBlock
+  }
+  
+  let pacContent = `// PAC Script generated from Oasis Policy: ${policyName}\n`
+  pacContent += `// Generated on: ${new Date().toISOString()}\n\n`
+  pacContent += `function FindProxyForURL(url, host) {\n`
+  
+  // Generate rule blocks in configured priority order
+  for (const category of rulePriority) {
+    const generator = categoryGenerators[category]
+    if (generator) {
+      pacContent += generator()
+    }
   }
   
   // Default

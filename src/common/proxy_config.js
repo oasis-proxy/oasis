@@ -70,7 +70,7 @@ export function createProxyConfig(profile, config) {
     else if (profile.rules || profile.defaultProfileId) {
             // Auto Policy
             // Generate PAC script from rules
-            const pacScriptData = generatePacScriptFromPolicy(profile, config.proxies || {}, config.reject, profile.tempRules) 
+            const pacScriptData = generatePacScriptFromPolicy(profile, config.proxies || {}, config.reject, profile.tempRules, config.rulePriority) 
             proxyConfig.mode = 'pac_script'
             proxyConfig.pacScript = {
                 data: pacScriptData

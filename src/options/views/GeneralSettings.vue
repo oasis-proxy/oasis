@@ -65,6 +65,47 @@
               </select>
             </div>
 
+            <!-- Rule Priority Order -->
+            <div
+              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+            >
+              <div class="d-flex items-start">
+                <div>
+                  <p class="text-sm font-medium text-slate-900 m-0">Rule Priority Order</p>
+                  <p class="text-xs text-slate-500 mt-1 m-0">
+                    Drag to reorder rule evaluation priority.
+                  </p>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <template v-for="(cat, idx) in localRulePriority" :key="cat">
+                  <span v-if="idx > 0" class="text-slate-300" style="font-size: 10px;"><i class="bi bi-chevron-right"></i></span>
+                  <div
+                    class="ui-tag cursor-move d-flex align-items-center gap-1"
+                    :class="priorityTagClass(cat)"
+                    draggable="true"
+                    @dragstart="onPriorityDragStart($event, idx)"
+                    @dragover.prevent="onPriorityDragOver($event, idx)"
+                    @drop.prevent="onPriorityDrop($event, idx)"
+                    @dragend="onPriorityDragEnd"
+                    :style="priorityDragOverIdx === idx ? 'opacity: 0.4;' : ''"
+                    style="padding: 3px 8px; font-size: 11px; cursor: grab;"
+                  >
+                    <i class="bi bi-grip-vertical" style="font-size: 10px;"></i>
+                    {{ priorityLabel(cat) }}
+                  </div>
+                </template>
+                <button
+                  class="ui-button-icon ms-1"
+                  title="Reset to Default"
+                  @click="resetRulePriority"
+                  :disabled="isDefaultPriority"
+                >
+                  <i class="bi bi-arrow-counterclockwise text-xs"></i>
+                </button>
+              </div>
+            </div>
+
             <!-- Refresh On Switch -->
             <div
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
@@ -296,6 +337,57 @@ const styleOptions = [
   { label: 'System', value: 'auto' }
 ]
 
+// Rule Priority Order
+const DEFAULT_PRIORITY = ['reject', 'temp', 'normal']
+const localRulePriority = ref([...DEFAULT_PRIORITY])
+const priorityDragIdx = ref(null)
+const priorityDragOverIdx = ref(null)
+
+const priorityLabel = (cat) => {
+  const labels = { reject: 'Reject', normal: 'Normal', temp: 'Temporary' }
+  return labels[cat] || cat
+}
+
+const priorityTagClass = (cat) => {
+  const classes = { reject: 'ui-tag-danger', normal: 'ui-tag-primary', temp: 'ui-tag-warning' }
+  return classes[cat] || 'ui-tag-default'
+}
+
+const isDefaultPriority = computed(() => {
+  return JSON.stringify(localRulePriority.value) === JSON.stringify(DEFAULT_PRIORITY)
+})
+
+const onPriorityDragStart = (e, idx) => {
+  priorityDragIdx.value = idx
+  e.dataTransfer.effectAllowed = 'move'
+}
+
+const onPriorityDragOver = (e, idx) => {
+  priorityDragOverIdx.value = idx
+}
+
+const onPriorityDrop = (e, targetIdx) => {
+  const sourceIdx = priorityDragIdx.value
+  if (sourceIdx === null || sourceIdx === targetIdx) return
+  const arr = [...localRulePriority.value]
+  const [moved] = arr.splice(sourceIdx, 1)
+  arr.splice(targetIdx, 0, moved)
+  localRulePriority.value = arr
+  config.rulePriority = [...arr]
+  priorityDragIdx.value = null
+  priorityDragOverIdx.value = null
+}
+
+const onPriorityDragEnd = () => {
+  priorityDragIdx.value = null
+  priorityDragOverIdx.value = null
+}
+
+const resetRulePriority = () => {
+  localRulePriority.value = [...DEFAULT_PRIORITY]
+  config.rulePriority = [...DEFAULT_PRIORITY]
+}
+
 const updateIntervals = [
   { label: '24h', value: 1440 },
   { label: '12h', value: 720 },
@@ -367,6 +459,10 @@ onMounted(async () => {
   const loaded = await loadConfig()
   Object.assign(config, loaded)
   syncToLocal()
+  // Sync rule priority from loaded config
+  if (config.rulePriority && Array.isArray(config.rulePriority)) {
+    localRulePriority.value = [...config.rulePriority]
+  }
   // Prevent immediate save triggered by Object.assign
   setTimeout(() => {
     isInitializing.value = false

@@ -663,7 +663,7 @@ const confirmQuickAdd = async () => {
         let tempRules = sessionData.tempRules || []
         tempRules = [...newRules, ...tempRules]
         
-        await chrome.storage.session.set({ tempRules })
+        await chrome.storage.session.set({ tempRules: JSON.parse(JSON.stringify(tempRules)) })
         
         // Notify Background to re-apply if currently active
         // Actually background detects session changes to tempRules and re-applies!

@@ -43,6 +43,11 @@ export const DEFAULT_CONFIG = {
     enabled: false
   },
 
+  // Rule priority order for PAC script generation
+  // Controls the order in which rule categories are evaluated
+  // Values: 'reject', 'temp', 'normal'
+  rulePriority: ['reject', 'temp', 'normal'],
+
   ipTags: {},
 
   // --- Profiles (Storage Keys: 'proxies', 'pacs', 'policies') ---

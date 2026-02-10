@@ -87,7 +87,9 @@ export async function saveConfig(config, skipSync = false, skipTouch = false) {
   // Extract keys to save to their respective storage locations
   
   // 1. Config (General Settings) - Strip out profiles
-  const configData = {
+  // Note: All values are deep-cloned via JSON to strip Vue Proxy wrappers,
+  // preventing arrays (e.g. rulePriority) from being serialized as objects.
+  const configData = JSON.parse(JSON.stringify({
       version: config.version || 1,
       updatedAt: config.updatedAt,
       activeProfileId: config.activeProfileId,
@@ -95,17 +97,18 @@ export async function saveConfig(config, skipSync = false, skipTouch = false) {
       update: config.update,
       behavior: config.behavior,
       sync: config.sync,
+      rulePriority: config.rulePriority,
       ipTags: config.ipTags
-  }
+  }))
 
   const storageData = {
       config: configData,
       proxies: JSON.parse(JSON.stringify(config.proxies || {})),
       pacs: JSON.parse(JSON.stringify(config.pacs || {})),
       policies: JSON.parse(JSON.stringify(config.policies || {})),
-      system: config.system,
-      direct: config.direct,
-      reject: config.reject
+      system: JSON.parse(JSON.stringify(config.system)),
+      direct: JSON.parse(JSON.stringify(config.direct)),
+      reject: JSON.parse(JSON.stringify(config.reject))
   }
   
   await chrome.storage.local.set(storageData)
@@ -131,12 +134,13 @@ export async function saveGeneralSettings(config, skipSync = false, skipTouch = 
   const fullConfig = await loadConfig()
   
   // Merge updates
-  fullConfig.version = config.version // Might have been touched by caller? No, usually UI just mutates props.
+  fullConfig.version = config.version
   fullConfig.activeProfileId = config.activeProfileId
   fullConfig.ui = config.ui
   fullConfig.update = config.update
   fullConfig.behavior = config.behavior
   fullConfig.sync = config.sync
+  fullConfig.rulePriority = config.rulePriority
   fullConfig.ipTags = config.ipTags
   fullConfig.system = config.system
   fullConfig.direct = config.direct

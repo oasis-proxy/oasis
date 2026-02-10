@@ -1127,7 +1127,7 @@ const handleExportPAC = async () => {
   }
   
   // Generate PAC script using common module
-  const pacScript = generatePacScriptFromPolicy(policy.value, config.value.proxies || {}, config.value.reject, tempRules)
+  const pacScript = generatePacScriptFromPolicy(policy.value, config.value.proxies || {}, config.value.reject, tempRules, config.value.rulePriority)
   
   // Create download
   const blob = new Blob([pacScript], { type: 'application/x-ns-proxy-autoconfig' })
