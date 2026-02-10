@@ -26,16 +26,7 @@ textarea:disabled {
 }
 
 
-input[type="text"],
-input[type="password"],
-input[type="number"] {
-  max-width: 200px;
-  height: 32px; /* standard input height */
-}
-select {
-  max-width: 100px;
-  height: 32px; /* standard input height */
-}
+
 
 /* Search input overrides */
 .form-control:focus {

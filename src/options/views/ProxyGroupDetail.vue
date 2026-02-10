@@ -185,9 +185,8 @@
                     <div class="d-flex align-items-center gap-3">
                         <div style="width: 120px;" :class="{ 'opacity-50 pointer-events-none': !fallbackEnabled }">
                             <select 
-                                style="min-width: 100%; width: 100%; max-width: 100% !important;"
                                 v-model="proxyGroup.fallback.type"
-                                class="form-select ui-input rounded-lg border text-xs h-9 py-0 px-3"
+                                class="form-select ui-input ui-input-sm rounded-lg border py-0 px-3 w-100"
                                 :disabled="!fallbackEnabled"
                             >
                                 <option value="direct">Direct</option>
@@ -215,6 +214,7 @@
     <!-- Modals -->
     <ProxyRenameModal 
       :visible="showRenameModal" 
+      title="Rename Proxy Group"
       :currentName="proxyGroup.name || ''" 
       @close="showRenameModal = false"
       @save="handleRename"
@@ -262,6 +262,8 @@ const router = useRouter()
 const config = ref(null)
 const proxyGroup = ref(getEmptyGroup())
 const originalGroup = ref(null)
+const showRenameModal = ref(false)
+const showDeleteModal = ref(false)
 
 
 

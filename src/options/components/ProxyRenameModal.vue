@@ -16,7 +16,7 @@
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <h3 class="ui-text-primary modal-header tracking-tight m-0">Rename Proxy</h3>
+          <h3 class="ui-text-primary modal-header tracking-tight m-0">{{ title }}</h3>
           <button 
             @click="emit('close')" 
             class="modal-close-button"
@@ -88,6 +88,10 @@ const props = defineProps({
   currentName: {
     type: String,
     default: ''
+  },
+  title: {
+    type: String,
+    default: 'Rename Proxy'
   }
 })
 
