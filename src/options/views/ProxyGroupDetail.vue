@@ -13,7 +13,7 @@
              style="width: 24px; height: 24px; background: none; cursor: pointer;"
              title="Choose color"
            />
-           <h1 class="fs-4 font-bold text-slate-900 tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="proxyGroup.name || 'Unnamed Group'">{{ proxyGroup.name || 'Unnamed Group' }}</h1>
+           <h1 class="fs-4 font-bold ui-text-primary tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="proxyGroup.name || 'Unnamed Group'">{{ proxyGroup.name || 'Unnamed Group' }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
            
@@ -50,7 +50,7 @@
               <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                   <li>
                     <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-pencil-square text-slate-400"></i> Rename
+                        <i class="bi bi-pencil-square ui-text-tertiary"></i> Rename
                     </button>
                   </li>
                   <li><hr class="dropdown-divider my-1 border-subtle "></li>
@@ -104,26 +104,26 @@
                     >
                         <div style="width: 4%;" class="d-flex justify-content-center">
                             <i 
-                              class="bi bi-grip-vertical text-slate-400 transition-colors" 
-                              style="font-size: 14px; cursor: grab;"
+                              class="bi bi-grip-vertical ui-text-tertiary transition-colors ui-icon-sm" 
+                              style="cursor: grab;"
                               draggable="true"
                               @dragstart="handleDragStart($event, index)" 
                               @dragend="handleDragEnd"
                             ></i>
                         </div>
-                        <div style="width: 8%;" class="text-xs text-slate-500 font-mono">
+                        <div style="width: 8%;" class="text-xs ui-text-secondary font-mono">
                             {{ index + 1 }}
                         </div>
                         <div style="width: 32%;" class="d-flex align-items-center gap-2">
                              <div class="w-2 h-2 rounded-full" :style="{ backgroundColor: getProxyColor(proxyId) }"></div>
                              <span class="text-xs font-medium text-slate-700 text-truncate">{{ getProxyName(proxyId) }}</span>
                         </div>
-                        <div style="width: 48%;" class="text-xs text-slate-500 font-mono text-truncate">
+                        <div style="width: 48%;" class="text-xs ui-text-secondary font-mono text-truncate">
                             {{ getProxyAddress(proxyId) }}
                         </div>
                         <div style="width: 8%;" class="d-flex align-items-center justify-content-center">
                             <button @click="removeProxy(index)" class="ui-button-icon p-0.5" title="Remove">
-                                <i class="bi bi-trash text-xs"></i>
+                                <i class="bi bi-trash ui-icon-sm"></i>
                             </button>
                         </div>
                     </div>
@@ -131,15 +131,15 @@
                      <!-- Editing/New Row -->
                      <div v-else class="d-flex align-items-center gap-1 p-2 bg-slate-50 border-bottom border-light">
                         <div style="width: 4%;" class="d-flex justify-content-center">
-                             <i class="bi bi-grip-vertical text-slate-300" style="font-size: 14px;"></i>
+                             <i class="bi bi-grip-vertical ui-text-tertiary opacity-50 ui-icon-sm"></i>
                         </div>
-                        <div style="width: 8%;" class="text-xs text-slate-500 font-mono">
+                        <div style="width: 8%;" class="text-xs ui-text-secondary font-mono">
                             {{ index + 1 }}
                         </div>
                         <div class="flex-1 px-2">
                             <select 
                                 style="min-width: 180px;max-width:180px !important;width:180px !important;"
-                                class="form-select ui-input w-100 rounded-lg border text-xs h-8 py-0 px-3"
+                                class="form-select ui-input ui-input-sm w-100 rounded-lg border py-0 px-3"
                                 @change="(e) => updateProxyAt(index, e.target.value)"
                             >
                                 <option value="" disabled selected>Select a proxy...</option>
@@ -154,7 +154,7 @@
                         </div>
                         <div style="width: 8%;" class="d-flex align-items-center justify-content-center">
                             <button @click="removeProxy(index)" class="ui-button-icon p-0.5 text-danger" title="Cancel">
-                                <i class="bi bi-x-lg text-xs"></i>
+                                <i class="bi bi-x-lg ui-icon-sm"></i>
                             </button>
                         </div>
                      </div>

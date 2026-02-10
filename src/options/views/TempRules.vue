@@ -5,7 +5,7 @@
     <header class="h-24 px-5 d-flex align-items-center justify-content-between border-light  transition-colors">
       <div>
         <div class="d-flex align-items-center gap-3">
-          <h2 class="fs-4 font-bold text-slate-900 tracking-tight m-0">
+          <h2 class="fs-4 font-bold ui-text-primary m-0">
             Temporary Rules
           </h2>
         </div>
@@ -49,7 +49,7 @@
                 <i class="bi bi-check-all" style="font-size: 16px;"></i>
               </button>
               <button @click="clearAll" :disabled="rules.length === 0" class="ui-button-icon sm" title="Clear All">
-                <i class="bi bi-trash" style="font-size: 14px;"></i>
+                <i class="bi bi-trash ui-icon-sm"></i>
               </button>
             </div>
           </div>
@@ -73,7 +73,7 @@
                 <div 
                   :class="[
                     'd-flex align-items-center gap-1 p-2 transition-colors',
-                    'hover:bg-slate-50',
+                    'hover:bg-hover',
                     !rule.valid ? 'opacity-50' : ''
                   ]"
                 >
@@ -105,7 +105,7 @@
                       v-model="rule.pattern" 
                       type="text" 
                       :placeholder="getPlaceholder(rule.ruleType)" 
-                      class="form-control ui-input w-100 mw-100 rounded text-xs py-0 px-2 font-mono"
+                      class="form-control ui-input ui-input-sm w-100 mw-100 rounded border py-0 px-2 font-mono"
                       :style="`height: 28px;${validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : ''}`"
                       @blur="validateRule(index, rule)"
                     />
@@ -124,10 +124,10 @@
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
                     <button @click="acceptRule(index)" class="ui-button-icon text-success hover:text-success" title="Accept (Move to Policy)">
-                      <i class="bi bi-check-lg text-xs"></i>
+                      <i class="bi bi-check-lg ui-icon-sm"></i>
                     </button>
                     <button @click="deleteRule(index)" class="ui-button-icon p-0.5" title="Delete">
-                      <i class="bi bi-trash text-xs"></i>
+                      <i class="bi bi-trash ui-icon-sm"></i>
                     </button>
                   </div>
                 </div>
@@ -136,8 +136,8 @@
 
             <!-- Empty State -->
             <div v-else class="p-2 d-flex flex-column align-items-center justify-content-center text-center">
-              <p class="text-sm font-medium text-slate-900 m-0">No temporary rules.</p>
-              <p class="text-xs text-slate-500 mt-1 max-w-xs m-0">Temporary rules created from the popup will appear here.</p>
+              <p class="text-sm font-medium ui-text-primary m-0">No temporary rules.</p>
+              <p class="text-xs ui-text-secondary mt-1 max-w-xs m-0">Temporary rules created from the popup will appear here.</p>
             </div>
           </div>
         </section>
@@ -145,8 +145,8 @@
 
 
         <section v-else class="text-center py-10">
-            <h3 class="text-lg font-semibold text-slate-900 mb-2">Temporary Rules Unavailable</h3>
-            <p class="text-sm text-slate-500">
+            <h3 class="text-lg font-semibold ui-text-primary mb-2">Temporary Rules Unavailable</h3>
+            <p class="text-sm ui-text-secondary">
                 Temporary rules are only available when the active profile is an Auto Policy.
             </p>
         </section>

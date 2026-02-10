@@ -14,13 +14,13 @@
              style="width: 24px; height: 24px; background: none; cursor: pointer;"
              title="Choose color"
            />
-           <h1 class="fs-4 font-bold text-slate-900 tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="proxy.label || proxy.host">{{ proxy.label || proxy.host || 'Unnamed Proxy' }}</h1>
+           <h1 class="fs-4 font-bold ui-text-primary tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="proxy.label || proxy.host">{{ proxy.label || proxy.host || 'Unnamed Proxy' }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
            <!-- Show in Popup Switch -->
            <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
               <input class="form-check-input align-self-start" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="proxy.showInPopup">
-              <label class="form-check-label text-xs font-medium text-slate-500" style="cursor: pointer;" for="showInPopup">Show in Popup</label>
+              <label class="form-check-label text-xs font-medium ui-text-secondary" style="cursor: pointer;" for="showInPopup">Show in Popup</label>
            </div>
            
            <button 
@@ -55,13 +55,13 @@
               <!-- Dropdown Menu -->
               <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                   <li>
-                    <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-pencil-square text-slate-400"></i> Rename
+                    <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
+                        <i class="bi bi-pencil-square ui-text-tertiary"></i> Rename
                     </button>
                   </li>
                   <li>
-                    <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-files text-slate-400"></i> Clone
+                    <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
+                        <i class="bi bi-files ui-text-tertiary"></i> Clone
                     </button>
                   </li>
                   <li><hr class="dropdown-divider my-1 border-subtle "></li>
@@ -100,7 +100,7 @@
                       <span class="ui-text-primary text-xs font-medium leading-none">Proxy Protocol</span>
                       <select 
                         v-model="proxy.scheme"
-                        class="form-select ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
+                        class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
                       >
                         <option value="http">HTTP</option>
                         <option value="https">HTTPS</option>
@@ -118,7 +118,7 @@
                         v-model="proxy.host"
                         type="text" 
                         placeholder="example.com or 1.2.3.4"
-                        class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
+                        class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
                       />
                     </label>
                   </div>
@@ -131,7 +131,7 @@
                         v-model="proxy.port"
                         type="number" 
                         :placeholder="getPortPlaceholder(proxy.scheme)"
-                        class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
+                        class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
                         min="1"
                         max="65535"
                         @blur="validatePort(proxy, 'port')"
@@ -143,9 +143,9 @@
 
               <!-- Authentication -->
               <div class="px-4 pt-3 pb-4 border-top border-light ">
-                <h4 class="text-sm font-medium text-slate-900 mb-4 d-flex align-items-center justify-content-between">
+                <h4 class="text-sm font-medium ui-text-primary mb-4 d-flex align-items-center justify-content-between">
                   Authentication (Optional)
-                  <span class="text-xs text-slate-500 font-normal">Leave blank if not required</span>
+                  <span class="text-xs ui-text-secondary font-normal">Leave blank if not required</span>
                 </h4>
                 <div class="grid grid-cols-2 gap-3">
                   <div>
@@ -155,7 +155,7 @@
                         v-model="authUsername"
                         type="text" 
                         placeholder="Optional"
-                        class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
+                        class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
                       />
                     </label>
                   </div>
@@ -166,7 +166,7 @@
                         v-model="authPassword"
                         type="password" 
                         placeholder="Optional"
-                        class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
+                        class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
                       />
                     </label>
                   </div>
@@ -190,7 +190,7 @@
                   placeholder="localhost&#10;127.0.0.1&#10;*.local"
                   class="form-control ui-input w-100 rounded-lg border text-xs font-mono py-2 px-3"
                 ></textarea>
-                <p class="text-xs text-slate-500 m-0">Requests to these domains or IPs will bypass the proxy. Supports wildcards (e.g. *.google.com).</p>
+                <p class="text-xs ui-text-secondary m-0">Requests to these domains or IPs will bypass the proxy. Supports wildcards (e.g. *.google.com).</p>
                </label>
             </div>
 
@@ -217,7 +217,7 @@
                       <div class="col-span-3">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Protocol</span>
-                          <select v-model="httpOverrideScheme" class="form-select ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3">
+                          <select v-model="httpOverrideScheme" class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3">
                             <option value="default">Default</option>
                             <option value="http">HTTP</option>
                             <option value="https">HTTPS</option>
@@ -230,13 +230,13 @@
                       <div class="col-span-7">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Host Address</span>
-                          <input v-model="proxy.overrides.http.host" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                          <input v-model="proxy.overrides.http.host" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                         </label>
                       </div>
                       <div class="col-span-2">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Port</span>
-                          <input v-model="proxy.overrides.http.port" type="number" min="1" max="65535" :placeholder="httpOverrideScheme === 'default' ? '' : getPortPlaceholder(httpOverrideScheme)" :disabled="httpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.http, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                          <input v-model="proxy.overrides.http.port" type="number" min="1" max="65535" :placeholder="httpOverrideScheme === 'default' ? '' : getPortPlaceholder(httpOverrideScheme)" :disabled="httpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.http, 'port')" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                         </label>
                       </div>
                     </div>
@@ -252,13 +252,13 @@
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Username</span>
-                                <input v-model="proxy.overrides.http.authUsername" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.http.authUsername" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Password</span>
-                                <input v-model="proxy.overrides.http.authPassword" type="password" :placeholder="httpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.http.authPassword" type="password" :placeholder="httpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                       </div>
@@ -275,7 +275,7 @@
                       <div class="col-span-3">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Protocol</span>
-                          <select v-model="httpsOverrideScheme" class="form-select ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3">
+                          <select v-model="httpsOverrideScheme" class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3">
                             <option value="default">Default</option>
                             <option value="http">HTTP</option>
                             <option value="https">HTTPS</option>
@@ -294,7 +294,7 @@
                       <div class="col-span-2">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Port</span>
-                          <input v-model="proxy.overrides.https.port" type="number" min="1" max="65535" :placeholder="httpsOverrideScheme === 'default' ? '' : getPortPlaceholder(httpsOverrideScheme)" :disabled="httpsOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.https, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                          <input v-model="proxy.overrides.https.port" type="number" min="1" max="65535" :placeholder="httpsOverrideScheme === 'default' ? '' : getPortPlaceholder(httpsOverrideScheme)" :disabled="httpsOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.https, 'port')" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                         </label>
                       </div>
                     </div>
@@ -310,13 +310,13 @@
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Username</span>
-                                <input v-model="proxy.overrides.https.authUsername" type="text" :placeholder="httpsOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.https.authUsername" type="text" :placeholder="httpsOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Password</span>
-                                <input v-model="proxy.overrides.https.authPassword" type="password" :placeholder="httpsOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.https.authPassword" type="password" :placeholder="httpsOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                       </div>
@@ -334,7 +334,7 @@
                       <div class="col-span-3">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Protocol</span>
-                          <select v-model="ftpOverrideScheme" class="form-select ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3">
+                          <select v-model="ftpOverrideScheme" class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3">
                             <option value="default">Default</option>
                             <option value="http">HTTP</option>
                             <option value="https">HTTPS</option>
@@ -347,13 +347,13 @@
                       <div class="col-span-7">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Host Address</span>
-                          <input v-model="proxy.overrides.ftp.host" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                          <input v-model="proxy.overrides.ftp.host" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                         </label>
                       </div>
                       <div class="col-span-2">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Port</span>
-                          <input v-model="proxy.overrides.ftp.port" type="number" min="1" max="65535" :placeholder="ftpOverrideScheme === 'default' ? '' : getPortPlaceholder(ftpOverrideScheme)" :disabled="ftpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.ftp, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                          <input v-model="proxy.overrides.ftp.port" type="number" min="1" max="65535" :placeholder="ftpOverrideScheme === 'default' ? '' : getPortPlaceholder(ftpOverrideScheme)" :disabled="ftpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.ftp, 'port')" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                         </label>
                       </div>
                     </div>
@@ -369,13 +369,13 @@
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Username</span>
-                                <input v-model="proxy.overrides.ftp.authUsername" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.ftp.authUsername" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Password</span>
-                                <input v-model="proxy.overrides.ftp.authPassword" type="password" :placeholder="ftpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.ftp.authPassword" type="password" :placeholder="ftpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                       </div>

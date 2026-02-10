@@ -36,6 +36,19 @@ body {
   margin: 0 auto;
 }
 
+/* Global Toast Container */
+.ui-toast-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  z-index: 9999;
+  pointer-events: none;
+}
+
 /* Header */
 .popup-header {
   height: 52px;
@@ -193,7 +206,26 @@ body {
 }
 
 .monitor-item {
-  border-bottom-color: var(--ui-bg-hover); 
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid var(--ui-border-light);
+}
+
+.monitor-col-domain {
+  flex: 0 0 60%;
+  overflow: hidden;
+  padding-right: 0.75rem;
+}
+
+.monitor-col-info {
+  flex: 0 0 40%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.375rem;
+  overflow: hidden;
 }
 
 .monitor-item:hover {
@@ -222,6 +254,18 @@ body {
   background-color: var(--ui-bg-card);
   padding: 0.75rem;
   border-bottom: 1px solid var(--ui-bg-hover);
+}
+
+.quick-title {
+  padding: 0.5rem 0.75rem;
+  font-size: var(--font-sm);
+  margin: 0;
+  color: var(--ui-text-primary);
+  z-index: 10;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  background-color: var(--ui-bg-card);
 }
 
 .quick-section {
@@ -266,4 +310,11 @@ body {
   width: 14px;
   height: 14px;
   margin: 0;
+}
+
+/* UI Input Sm Override for Popup */
+.ui-input-sm {
+  padding: 0 6px !important;
+  border-radius: 6px !important;
+  max-width: none !important;
 }

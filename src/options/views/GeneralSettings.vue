@@ -5,7 +5,7 @@
       class="h-24 px-5 d-flex align-items-center justify-content-between border-light transition-colors"
     >
       <div>
-        <h2 class="fs-4 font-bold text-slate-900 m-0">General Settings</h2>
+        <h2 class="fs-4 font-bold ui-text-primary m-0">General Settings</h2>
       </div>
     </header>
 
@@ -23,13 +23,13 @@
             >
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium text-slate-900 m-0">Theme</p>
-                  <p class="text-xs text-slate-500 mt-1 m-0">Choose your preferred visual theme.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">Theme</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">Choose your preferred visual theme.</p>
                 </div>
               </div>
               <select
                 v-model="config.ui.theme"
-                class="form-select ui-input block rounded-lg border text-xs h-8 py-0 ps-2 pe-4"
+                class="form-select ui-input ui-input-sm block rounded-lg border py-0 ps-2 pe-4"
                 style="width: 8rem"
               >
                 <option v-for="option in styleOptions" :key="option.value" :value="option.value">
@@ -44,8 +44,8 @@
             >
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium text-slate-900 m-0">External Policy Update Cycle</p>
-                  <p class="text-xs text-slate-500 mt-1 m-0">
+                  <p class="text-sm font-medium ui-text-primary m-0">External Policy Update Cycle</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">
                     Frequency of checking for policy updates.
                   </p>
                 </div>
@@ -71,8 +71,8 @@
             >
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium text-slate-900 m-0">Rule Priority Order</p>
-                  <p class="text-xs text-slate-500 mt-1 m-0">
+                  <p class="text-sm font-medium ui-text-primary m-0">Rule Priority Order</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">
                     Drag to reorder rule evaluation priority.
                   </p>
                 </div>
@@ -101,7 +101,7 @@
                   @click="resetRulePriority"
                   :disabled="isDefaultPriority"
                 >
-                  <i class="bi bi-arrow-counterclockwise text-xs"></i>
+                  <i class="bi bi-arrow-counterclockwise ui-icon-sm"></i>
                 </button>
               </div>
             </div>
@@ -112,8 +112,8 @@
             >
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium text-slate-900 m-0">Refresh On Switch</p>
-                  <p class="text-xs text-slate-500 mt-1 m-0">
+                  <p class="text-sm font-medium ui-text-primary m-0">Refresh On Switch</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">
                     Automatically refresh tab when switch proxy.
                   </p>
                 </div>
@@ -143,8 +143,8 @@
             >
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium text-slate-900 m-0">Reject Address</p>
-                  <p class="text-xs text-slate-500 mt-1 m-0">
+                  <p class="text-sm font-medium ui-text-primary m-0">Reject Address</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">
                     Connections to this address will be dropped immediately.
                   </p>
                 </div>
@@ -153,7 +153,7 @@
                 v-model.lazy="rejectAddress"
                 type="text"
                 placeholder="127.0.0.1:65535"
-                class="form-control ui-input block rounded-lg border text-xs"
+                class="form-control ui-input ui-input-sm block rounded-lg border"
                 style="width: 12rem"
               />
             </div>
@@ -164,8 +164,8 @@
             >
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium text-slate-900 m-0">Request Monitoring</p>
-                  <p class="text-xs text-slate-500 mt-1 m-0">
+                  <p class="text-sm font-medium ui-text-primary m-0">Request Monitoring</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">
                     Monitor requests and their matching proxy rules.
                   </p>
                 </div>
@@ -187,8 +187,8 @@
             >
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium text-slate-900 m-0">Context Menu</p>
-                  <p class="text-xs text-slate-500 mt-1 m-0">
+                  <p class="text-sm font-medium ui-text-primary m-0">Context Menu</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">
                     Show proxy options in the browser right-click menu.
                   </p>
                 </div>
@@ -208,19 +208,19 @@
               <div class="d-flex align-items-center justify-content-between mb-4">
                 <div class="d-flex items-start">
                   <div>
-                    <p class="text-sm font-medium text-slate-900 m-0">IP Tags</p>
-                    <p class="text-xs text-slate-500 mt-1 m-0">
+                    <p class="text-sm font-medium ui-text-primary m-0">IP Tags</p>
+                    <p class="text-xs ui-text-secondary mt-1 m-0">
                       Assign friendly names to IP addresses.
                     </p>
                   </div>
                 </div>
                 <button @click="addTag" class="ui-button-icon" title="Add Tag">
-                  <i class="bi bi-plus-lg text-xs"></i>
+                  <i class="bi bi-plus-lg ui-icon-sm"></i>
                 </button>
               </div>
 
               <div
-                class="ui-card rounded-xl border divide-y divide-slate-100 shadow-sm overflow-hidden"
+                class="ui-card rounded-xl border divide-y divide-border shadow-sm overflow-hidden"
               >
                 <!-- Header -->
                 <div class="ui-card-header">
@@ -241,7 +241,7 @@
                         v-if="item.isEditing"
                         v-model="item.ip"
                         type="text"
-                        class="form-control ui-input w-100 rounded text-xs py-0 px-2 font-mono"
+                        class="form-control ui-input ui-input-sm w-100 rounded py-0 px-2 font-mono"
                         style="height: 24px"
                         :style="item.errors?.ip ? 'border-color: var(--ui-danger) !important;' : ''"
                         placeholder="192.168.1.100"
@@ -249,14 +249,14 @@
                         @keyup.esc="cancelEdit(index)"
                         @blur="validateItem(index)"
                       />
-                      <span v-else class="text-xs font-mono text-slate-900">{{ item.ip }}</span>
+                      <span v-else class="text-xs font-mono ui-text-primary">{{ item.ip }}</span>
                     </div>
                     <div style="width: 40%" class="px-2">
                       <input
                         v-if="item.isEditing"
                         v-model="item.tag"
                         type="text"
-                        class="form-control ui-input w-100 rounded text-xs py-0 px-2"
+                        class="form-control ui-input ui-input-sm w-100 rounded py-0 px-2"
                         style="height: 24px"
                         :style="item.errors?.tag ? 'border-color: var(--ui-danger) !important;' : ''"
                         placeholder="e.g. vps, US vps"
@@ -264,7 +264,7 @@
                         @keyup.esc="cancelEdit(index)"
                         @blur="validateItem(index)"
                       />
-                      <span v-else class="text-xs text-slate-900">{{ item.tag }}</span>
+                      <span v-else class="text-xs ui-text-primary">{{ item.tag }}</span>
                     </div>
                     <div
                       style="width: 10%"
@@ -276,12 +276,12 @@
                           class="ui-button-icon"
                           title="Save"
                         >
-                          <i class="bi bi-floppy-fill text-xs"></i>
+                          <i class="bi bi-floppy-fill ui-icon-sm"></i>
                         </button>
 
                       </template>
                       <button v-else @click="editTag(index)" class="ui-button-icon" title="Edit">
-                        <i class="bi bi-pencil-square text-xs"></i>
+                        <i class="bi bi-pencil-square ui-icon-sm"></i>
                       </button>
 
                       <button
@@ -289,7 +289,7 @@
                         class="ui-button-icon"
                         title="Delete"
                       >
-                        <i class="bi bi-trash text-xs"></i>
+                        <i class="bi bi-trash ui-icon-sm"></i>
                       </button>
                     </div>
                   </div>

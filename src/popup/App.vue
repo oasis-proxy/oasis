@@ -1,7 +1,7 @@
 <template>
   <!-- Global Notifications -->
-  <div v-if="showNotification" class="position-fixed top-0 start-0 w-100 d-flex justify-content-center mt-4" style="z-index: 9999; pointer-events: none;">
-      <div class="badge bg-secondary px-3 py-2 shadow-lg animate-fade-in" style="font-size: 13px; opacity: 0.95;">
+  <div v-if="showNotification" class="ui-toast-container">
+      <div class="badge bg-secondary px-3 py-2 shadow-lg animate-fade-in text-xs opacity-95">
           <i class="bi bi-check2 me-1"></i> {{ notificationText }}
       </div>
   </div>
@@ -36,13 +36,13 @@
     
     <div class="header-actions">
        <button @click="openSidePanel" class="ui-button-icon" title="Open Downloads">
-        <i class="bi bi-layout-sidebar-reverse" style="font-size: 16px;"></i>
+        <i class="bi bi-layout-sidebar-reverse ui-icon-md"></i>
       </button>
        <button v-if="showMonitorTab" @click="openMonitor" class="ui-button-icon" title="Open Monitor">
-        <i class="bi bi-activity" style="font-size: 16px;"></i>
+        <i class="bi bi-activity ui-icon-md"></i>
       </button>
       <button @click="openOptions" class="ui-button-icon" title="Options">
-        <i class="bi bi-gear-wide-connected" style="font-size: 16px;"></i>
+        <i class="bi bi-gear-wide-connected ui-icon-md"></i>
       </button>
     </div>
   </header>
@@ -62,14 +62,14 @@
               @click="selectProfile('direct')"
             >
               <div class="profile-icon">
-                <i class="bi bi-power" style="font-size: 18px;"></i>
+                <i class="bi bi-power ui-icon-lg"></i>
               </div>
               <p class="profile-name">Direct Connect</p>
               <div 
                 v-if="isActive('direct')"
-                class="text-primary"
+                class="ui-text-primary"
               >
-                <i class="bi bi-check-circle-fill" style="font-size: 18px;"></i>
+                <i class="bi bi-check-circle-fill ui-icon-lg"></i>
               </div>
             </label>
 
@@ -79,14 +79,14 @@
               @click="selectProfile('system')"
             >
               <div class="profile-icon">
-                <i class="bi bi-globe" style="font-size: 18px;"></i>
+                <i class="bi bi-globe ui-icon-lg"></i>
               </div>
               <p class="profile-name">System Proxy</p>
               <div 
                 v-if="isActive('system')"
-                class="text-primary"
+                class="ui-text-primary"
               >
-                <i class="bi bi-check-circle-fill" style="font-size: 18px;"></i>
+                <i class="bi bi-check-circle-fill ui-icon-lg"></i>
               </div>
             </label>
           </div>
@@ -107,14 +107,14 @@
                 class="profile-icon"
                 :style="getIconStyle(profile)"
               >
-                <i :class="['bi', profile.icon]" style="font-size: 18px;"></i>
+                <i :class="['bi', profile.icon, 'ui-icon-lg']"></i>
               </div>
               <p class="profile-name">{{ profile.name }}</p>
               <div 
                 v-if="isActive(profile.id)"
-                class="text-primary"
+                class="ui-text-primary"
               >
-                <i class="bi bi-check-circle-fill" style="font-size: 18px;"></i>
+                <i class="bi bi-check-circle-fill ui-icon-lg"></i>
               </div>
             </label>
           </div>
@@ -135,14 +135,14 @@
                 class="profile-icon"
                 :style="getIconStyle(profile)"
               >
-                <i :class="['bi', profile.icon]" style="font-size: 18px;"></i>
+                <i :class="['bi', profile.icon, 'ui-icon-lg']"></i>
               </div>
               <p class="profile-name">{{ profile.name }}</p>
               <div 
                 v-if="isActive(profile.id)"
-                class="text-primary"
+                class="ui-text-primary"
               >
-                <i class="bi bi-check-circle-fill" style="font-size: 18px;"></i>
+                <i class="bi bi-check-circle-fill ui-icon-lg"></i>
               </div>
             </label>
           </div>
@@ -163,14 +163,14 @@
                 class="profile-icon"
                 :style="getIconStyle(profile)"
               >
-                <i :class="['bi', profile.icon]" style="font-size: 18px;"></i>
+                <i :class="['bi', profile.icon, 'ui-icon-lg']"></i>
               </div>
               <p class="profile-name">{{ profile.name }}</p>
               <div 
                 v-if="isActive(profile.id)"
-                class="text-primary"
+                class="ui-text-primary"
               >
-                <i class="bi bi-check-circle-fill" style="font-size: 18px;"></i>
+                <i class="bi bi-check-circle-fill ui-icon-lg"></i>
               </div>
             </label>
           </div>
@@ -199,14 +199,12 @@
           <!-- List -->
           <div v-else class="flex-1 overflow-y-auto custom-scrollbar p-0">
              <div v-for="(item, index) in monitorResult" :key="index" 
-                class="monitor-item d-flex align-items-center py-3 transition-colors"
-                style="padding-left: 0.75rem; padding-right: 0.75rem; border-bottom: 1px solid var(--ui-border);"
+                class="monitor-item d-flex align-items-center py-3 transition-colors px-3 border-b"
              >
                  <!-- Domain Column (60%) -->
-                 <div class="pe-3 overflow-hidden" style="flex: 0 0 60%;">
+                 <div class="monitor-col-domain">
                      <div 
-                        class="monitor-domain fw-medium text-truncate" 
-                        style="cursor: pointer; font-size: 12px;"
+                        class="monitor-domain fw-medium text-truncate text-xs cursor-pointer" 
                         :title="`Click to copy: ${item.domain}`"
                         @click="copyDomain(item.domain)"
                      >
@@ -215,8 +213,8 @@
                  </div>
                  
                  <!-- IP/Error Column (40%) -->
-                 <div class="d-flex flex-wrap justify-content-end gap-1.5 overflow-hidden" style="flex: 0 0 40%;">
-                     <span v-if="item.error" class="monitor-error text-danger text-truncate" style="font-size: 12px;" :title="item.error">
+                 <div class="monitor-col-info">
+                     <span v-if="item.error" class="monitor-error text-danger text-truncate text-xs" :title="item.error">
                          {{ item.error }}
                      </span>
                      <span v-else-if="item.ip" 
@@ -231,8 +229,8 @@
       </div>
 
        <!-- QUICK TAB -->
-       <div v-if="currentTab === 'quick'" class="monitor-container d-flex flex-column h-100" style="font-size: 12px;">
-          <p class="py-2 text-sm m-0 ui-text-primary z-10 sticky-top flex-shrink-0" style="padding-left: 0.75rem; padding-right: 0.75rem; background-color: var(--ui-bg-card);">Select domains to proxy from current page</p>
+       <div v-if="currentTab === 'quick'" class="monitor-container d-flex flex-column h-100 text-xs">
+          <p class="quick-title">Select domains to proxy from current page</p>
           
           <div v-if="failedDomains.length === 0" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
              <div class="text-center p-4">
@@ -265,8 +263,7 @@
             <div class="d-flex gap-3 pb-2 px-2">
                 <!-- Proxy Host -->
                 <div class="flex-1 d-flex flex-column gap-1">
-                  <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">Proxy Host</label>
-                  <select v-model="quickProxyId" class="form-select ui-input border text-xs cursor-pointer w-100" style="height: 28px; padding: 0 6px; border-radius: 6px; font-size: 12px !important; max-width: none !important;">
+                   <select v-model="quickProxyId" class="form-select ui-input ui-input-sm w-100 text-xs cursor-pointer">
                     <option v-for="proxy in proxyOptionsArray" :key="proxy.id" :value="proxy.id">
                         {{ proxy.label }}
                     </option>
@@ -276,7 +273,7 @@
                 <!-- Add To Destination -->
                 <div class="flex-1 d-flex flex-column gap-1">
                   <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">Add To</label>
-                  <select v-model="quickDestination" class="form-select ui-input border text-xs cursor-pointer w-100" style="height: 28px; padding: 0 6px; border-radius: 6px; font-size: 12px !important; max-width: none !important;">
+                  <select v-model="quickDestination" class="form-select ui-input ui-input-sm w-100 text-xs cursor-pointer">
                     <option value="policy">Current Policy</option>
                     <option value="temporary">Temporary (Session)</option>
                   </select>

@@ -9,6 +9,11 @@
   border-radius: 8px !important; /* rounded-lg */
 }
 
+.ui-input-sm {
+  height: 28px !important;
+  font-size: 12px !important;
+}
+
 .ui-input:disabled,
 input:disabled,
 select:disabled,
