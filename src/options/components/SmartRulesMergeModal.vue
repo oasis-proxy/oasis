@@ -257,6 +257,10 @@ const props = defineProps({
   proxies: {
       type: Object,
       default: () => ({})
+  },
+  domainOptimize: {
+      type: Boolean,
+      default: false
   }
 })
 
@@ -286,10 +290,55 @@ const getProxyLabel = (id) => {
     return p ? (p.label || p.name) : id
 }
 
+// Extract the registered domain (second-level domain) from a hostname
+// e.g., www.google.com → google.com, a.b.co.uk → b.co.uk
+const getRegisteredDomain = (hostname) => {
+    if (!hostname) return hostname
+    // Skip IPs
+    if (/^\d+\.\d+\.\d+\.\d+$/.test(hostname)) return hostname
+    // Strip leading dot for processing
+    const h = hostname.startsWith('.') ? hostname.substring(1) : hostname
+    const parts = h.split('.')
+    if (parts.length <= 2) return h
+
+    const twoPartTlds = new Set([
+        'co.uk', 'org.uk', 'ac.uk', 'gov.uk',
+        'com.au', 'net.au', 'org.au',
+        'com.cn', 'net.cn', 'org.cn',
+        'co.jp', 'or.jp', 'ne.jp',
+        'co.kr', 'or.kr',
+        'com.br', 'org.br',
+        'co.nz', 'org.nz',
+        'com.tw', 'org.tw',
+        'com.hk', 'org.hk',
+        'com.sg', 'org.sg',
+        'co.in', 'org.in', 'net.in',
+        'com.mx', 'org.mx',
+        'co.za', 'org.za'
+    ])
+
+    const lastTwo = parts.slice(-2).join('.')
+    if (twoPartTlds.has(lastTwo) && parts.length >= 3) {
+        return parts.slice(-3).join('.')
+    }
+    return parts.slice(-2).join('.')
+}
+
 // Optimization Logic
 const optimizeRules = (rules) => {
     // Deep copy
     let optimized = JSON.parse(JSON.stringify(rules))
+
+    // Domain optimization: convert wildcard patterns to .secondLevelDomain format
+    if (props.domainOptimize) {
+        optimized = optimized.map(r => {
+            if (r.ruleType === 'wildcard' && r.pattern) {
+                const registered = getRegisteredDomain(r.pattern)
+                return { ...r, pattern: '.' + registered }
+            }
+            return r
+        })
+    }
 
     // Group by Proxy
     const byProxy = {}

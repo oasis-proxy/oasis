@@ -46,5 +46,5 @@
 
 .modal-backdrop.show {
   opacity: 0.5; /* Default bootstrap is decent, but ensure consistency */
-  background-color: #000;
+  background-color: var(--ui-backdrop);
 }

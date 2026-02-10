@@ -91,13 +91,22 @@
             </h2>
             <span class="text-xs ui-text-tertiary">{{ filteredRequests.length }} requests</span>
           </div>
-          <!-- Delete button for selected tab or all -->
-          <button @click="clearCurrentRequests" 
-                  class="btn btn-sm d-flex align-items-center gap-1 ui-text-tertiary hover:text-danger"
-                  :title="selectedTabId ? 'Clear this tab' : 'Clear All'">
-            <i class="bi bi-trash"></i>
-            <span class="text-xs">{{ selectedTabId ? 'Clear Tab' : 'Clear All' }}</span>
-          </button>
+          <div class="d-flex align-items-center gap-2">
+            <!-- Add Tab Domains button (only when a single tab is selected) -->
+            <button v-if="selectedTabId"
+                    @click="openQuickAdd" 
+                    class="ui-button-icon d-flex align-items-center gap-1"
+                    :disabled="filteredRequests.length === 0"
+                    title="Add Tab Domains">
+              <i class="bi bi-plus-circle text-sm"></i>
+            </button>
+            <!-- Delete button for selected tab or all -->
+            <button @click="clearCurrentRequests" 
+                    class="ui-button-icon d-flex align-items-center gap-1"
+                    :title="selectedTabId ? 'Clear this tab' : 'Clear All'">
+              <i class="bi bi-trash text-sm"></i>
+            </button>
+          </div>
         </div>
 
         <!-- Table Container (Handles both X and Y scrolling) -->
@@ -180,12 +189,25 @@
         </div>
       </section>
     </main>
+
+    <!-- Quick Add Merge Modal -->
+    <SmartRulesMergeModal
+      :visible="showQuickAddModal"
+      :policies="configPolicies"
+      :sourceRules="quickAddSourceRules"
+      :proxies="configProxies"
+      :forcedTargetId="activeProfileId"
+      :domainOptimize="true"
+      @close="showQuickAddModal = false"
+      @merge="handleQuickAddMerge"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
-import { loadConfig } from '../common/storage'
+import { loadConfig, savePolicies } from '../common/storage'
+import SmartRulesMergeModal from '../options/components/SmartRulesMergeModal.vue'
 
 // Import logo assets
 import lightIconUrl from '../assets/icons/light/ripple-icon-64x64.png'
@@ -387,6 +409,13 @@ const selectedTabId = ref(null)
 const searchQuery = ref('')
 const historyLimit = ref(1000)
 
+// Quick Add modal state
+const showQuickAddModal = ref(false)
+const quickAddSourceRules = ref([])
+const configPolicies = ref({})
+const configProxies = ref({})
+const activeProfileId = ref('')
+
 // Computed
 const sortedTabs = computed(() => {
   return Object.values(tabs.value)
@@ -489,6 +518,77 @@ function clearCurrentRequests() {
     requests.value = []
     tabs.value = {}
   }
+}
+
+// Quick Add: extract unique domains from filtered requests and open merge modal
+async function openQuickAdd() {
+  // Extract unique domains from current filtered request list
+  const domains = new Set()
+  filteredRequests.value.forEach(r => {
+    if (r.domain) domains.add(r.domain)
+  })
+
+  // Convert to source rules (raw full domains)
+  quickAddSourceRules.value = Array.from(domains).sort().map(domain => ({
+    ruleType: 'wildcard',
+    pattern: domain,
+    proxyId: 'direct'
+  }))
+
+  // Reload config for fresh policies/proxies
+  const config = await loadConfig()
+  configPolicies.value = config.policies || {}
+  configProxies.value = config.proxies || {}
+  activeProfileId.value = config.activeProfileId || ''
+
+  showQuickAddModal.value = true
+}
+
+// Handle merge confirmation from modal
+async function handleQuickAddMerge({ targetId, conflictMode, rules: mergedRules }) {
+  const config = await loadConfig()
+  const targetPolicy = config.policies?.[targetId]
+  if (!targetPolicy) return
+
+  if (!targetPolicy.rules) targetPolicy.rules = []
+
+  let addedCount = 0
+  let updatedCount = 0
+  const newRulesToAdd = []
+
+  mergedRules.forEach(rule => {
+    const existingIndex = targetPolicy.rules.findIndex(r =>
+      r.type !== 'divider' &&
+      r.ruleType === rule.ruleType &&
+      r.pattern === rule.pattern
+    )
+
+    if (existingIndex !== -1) {
+      if (conflictMode === 'overwrite') {
+        targetPolicy.rules[existingIndex].proxyId = rule.proxyId
+        targetPolicy.rules[existingIndex].valid = rule.valid !== false
+        updatedCount++
+      }
+    } else {
+      newRulesToAdd.push({
+        ...rule,
+        id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+        type: 'rule',
+        valid: true
+      })
+      addedCount++
+    }
+  })
+
+  if (newRulesToAdd.length > 0) {
+    targetPolicy.rules.unshift(...newRulesToAdd)
+  }
+
+  config.policies[targetId] = targetPolicy
+  await savePolicies(config.policies)
+
+  showQuickAddModal.value = false
+  console.log(`Quick Add: merged ${addedCount} new, updated ${updatedCount} existing rules.`)
 }
 
 function addRequest(request) {

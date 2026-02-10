@@ -104,7 +104,7 @@
                       type="text" 
                       placeholder="Pattern..." 
                       class="form-control ui-input w-100 mw-100 rounded text-xs py-0 px-2 font-mono"
-                      :style="`height: 28px;${validationErrors[index] ? ' border-color: #dc3545 !important;' : ''}`"
+                      :style="`height: 28px;${validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : ''}`"
                       @blur="validateRule(index, rule)"
                     />
                   </div>
@@ -168,6 +168,7 @@
         :sourceRules="smartMergeRules"
         :proxies="config?.proxies || {}"
         :forcedTargetId="activeAutoPolicyId"
+        :domainOptimize="true"
         @close="showSmartMergeModal = false"
         @merge="handleSmartMergeConfirm"
     />

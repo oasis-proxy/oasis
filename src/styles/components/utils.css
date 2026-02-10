@@ -24,15 +24,15 @@
   color: var(--ui-text-secondary) !important;
 }
 
-.ui-icon-blue { background-color: var(--ui-info-bg) !important; color: #2563eb !important; }
-.ui-icon-indigo { background-color: #eef2ff !important; color: #4f46e5 !important; }
-.ui-icon-green { background-color: #f0fdf4 !important; color: #16a34a !important; }
-.ui-icon-purple { background-color: #faf5ff !important; color: #9333ea !important; }
-.ui-icon-orange { background-color: #fff7ed !important; color: #ea580c !important; }
-.ui-icon-red { background-color: #fef2f2 !important; color: #dc2626 !important; }
-.ui-icon-teal { background-color: #f0fdfa !important; color: #0d9488 !important; }
-.ui-icon-pink { background-color: #fdf2f8 !important; color: #db2777 !important; }
-.ui-icon-gray { background-color: #f9fafb !important; color: #4b5563 !important; }
+.ui-icon-blue { background-color: var(--ui-icon-blue-bg) !important; color: var(--ui-icon-blue-text) !important; }
+.ui-icon-indigo { background-color: var(--ui-icon-indigo-bg) !important; color: var(--ui-icon-indigo-text) !important; }
+.ui-icon-green { background-color: var(--ui-icon-green-bg) !important; color: var(--ui-icon-green-text) !important; }
+.ui-icon-purple { background-color: var(--ui-icon-purple-bg) !important; color: var(--ui-icon-purple-text) !important; }
+.ui-icon-orange { background-color: var(--ui-icon-orange-bg) !important; color: var(--ui-icon-orange-text) !important; }
+.ui-icon-red { background-color: var(--ui-icon-red-bg) !important; color: var(--ui-icon-red-text) !important; }
+.ui-icon-teal { background-color: var(--ui-icon-teal-bg) !important; color: var(--ui-icon-teal-text) !important; }
+.ui-icon-pink { background-color: var(--ui-icon-pink-bg) !important; color: var(--ui-icon-pink-text) !important; }
+.ui-icon-gray { background-color: var(--ui-icon-gray-bg) !important; color: var(--ui-icon-gray-text) !important; }
 
 /* Backgrounds */
 .bg-background-light { background-color: var(--ui-bg-default) !important; }
@@ -48,8 +48,8 @@
 .text-slate-300 { color: var(--ui-border) !important; }
 .text-slate-400 { color: var(--ui-text-tertiary) !important; }
 .text-slate-500 { color: var(--ui-text-secondary) !important; }
-.text-slate-600 { color: #475569 !important; }
-.text-slate-700 { color: #334155 !important; }
+.text-slate-600 { color: var(--color-slate-600) !important; }
+.text-slate-700 { color: var(--color-slate-700) !important; }
 .text-slate-900 { color: var(--ui-text-primary) !important; }
 .text-primary { color: var(--bs-primary) !important; }
 .text-white { color: var(--ui-text-inverse) !important; }

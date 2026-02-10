@@ -66,11 +66,36 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   
+  /* Palette (Icon Colors) */
+  --ui-icon-blue-bg: #eff6ff;
+  --ui-icon-blue-text: #2563eb;
+  --ui-icon-indigo-bg: #eef2ff;
+  --ui-icon-indigo-text: #4f46e5;
+  --ui-icon-green-bg: #f0fdf4;
+  --ui-icon-green-text: #16a34a;
+  --ui-icon-purple-bg: #faf5ff;
+  --ui-icon-purple-text: #9333ea;
+  --ui-icon-orange-bg: #fff7ed;
+  --ui-icon-orange-text: #ea580c;
+  --ui-icon-red-bg: #fef2f2;
+  --ui-icon-red-text: #dc2626;
+  --ui-icon-teal-bg: #f0fdfa;
+  --ui-icon-teal-text: #0d9488;
+  --ui-icon-pink-bg: #fdf2f8;
+  --ui-icon-pink-text: #db2777;
+  --ui-icon-gray-bg: #f9fafb;
+  --ui-icon-gray-text: #4b5563;
+
+  /* Additional Slate Colors */
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  
   /* Component Specific */
   --ui-bg-card-header: #f8fafc;    /* Slightly different from card body */
   --ui-radio-border: #cbd5e1;      /* Radio button border */
   --ui-nav-active-bg: #e0f2fe;     /* Navigation active background (light blue) */
   --ui-notification-bg: #1e293b;   /* Notification background (dark slate) */
+  --ui-backdrop: #000;             /* Modal backdrop */
 }
 
 /* -------------------------------------------------------------------------- */

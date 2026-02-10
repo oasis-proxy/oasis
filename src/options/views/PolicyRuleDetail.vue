@@ -139,7 +139,7 @@
                     ></i>
                   </div>
                   <div class="flex-1 d-flex align-items-center gap-2">
-                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class=""></div>
+                    <div style="flex: 1; height: 1px; border-top: 1px solid var(--ui-border);" class=""></div>
                     <span 
                       v-if="editingDividerIndex !== index"
                       @dblclick="startEditDivider(index, rule.label)"
@@ -160,7 +160,7 @@
                       class="form-control text-xs font-semibold uppercase tracking-widest text-center"
                       style="width: 150px; height: 18px; padding: 2px 8px;"
                     />
-                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class=""></div>
+                    <div style="flex: 1; height: 1px; border-top: 1px solid var(--ui-border);" class=""></div>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
                     <button @click="insertRuleBelow(index)" class="ui-button-icon" title="Add rule below">
@@ -227,7 +227,7 @@
                         type="text" 
                         placeholder="Enter RuleSet URL..." 
                         class="form-control ui-input w-100 mw-100 rounded text-xs py-0 font-mono"
-                        :style="`height: 28px; padding-left: 8px; padding-right: 28px;${duplicateIndices.has(index) ? ' border-color: var(--bs-primary) !important;' : (validationErrors[index] ? ' border-color: #dc3545 !important;' : '')}`"
+                        :style="`height: 28px; padding-left: 8px; padding-right: 28px;${duplicateIndices.has(index) ? ' border-color: var(--bs-primary) !important;' : (validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : '')}`"
                         @focus="focusedIndex = index"
                         @blur="focusedIndex = null; validateRule(index, rule); fetchRuleSetContent(index, rule.pattern)"
                       />
@@ -250,7 +250,7 @@
                       type="text" 
                       placeholder="Pattern..." 
                       class="form-control ui-input w-100 mw-100 rounded text-xs py-0 px-2 font-mono"
-                      :style="`height: 28px;${duplicateIndices.has(index) ? ' border-color: var(--bs-primary) !important;' : (validationErrors[index] ? ' border-color: #dc3545 !important;' : '')}`"
+                      :style="`height: 28px;${duplicateIndices.has(index) ? ' border-color: var(--bs-primary) !important;' : (validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : '')}`"
                       @focus="focusedIndex = index"
                       @blur="focusedIndex = null; validateRule(index, rule)"
                     />
@@ -358,7 +358,7 @@
                     ></i>
                   </div>
                   <div class="flex-1 d-flex align-items-center gap-2">
-                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class=""></div>
+                    <div style="flex: 1; height: 1px; border-top: 1px solid var(--ui-border);" class=""></div>
                     <span 
                       v-if="editingRejectDividerIndex !== index"
                       @dblclick="startEditRejectDivider(index, rule.label)"
@@ -379,7 +379,7 @@
                       class="form-control text-xs font-semibold uppercase tracking-widest text-center"
                       style="width: 150px; height: 18px; padding: 2px 8px;"
                     />
-                    <div style="flex: 1; height: 1px; border-top: 1px solid #cbd5e1;" class=""></div>
+                    <div style="flex: 1; height: 1px; border-top: 1px solid var(--ui-border);" class=""></div>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
                     <button @click="insertRejectRuleBelow(index)" class="ui-button-icon" title="Add rule below">
@@ -444,7 +444,7 @@
                     type="text" 
                     placeholder="Pattern..." 
                     class="form-control ui-input w-100 mw-100 rounded border text-xs py-0 px-2 font-mono"
-                    :style="`height: 28px;${rejectValidationErrors[index] ? ' border-color: #dc3545 !important;' : ''}`"
+                    :style="`height: 28px;${rejectValidationErrors[index] ? ' border-color: var(--ui-danger) !important;' : ''}`"
                     @focus="focusedIndex = index"
                     @blur="focusedIndex = null; validateRejectRule(index, rule)"
                   />
