@@ -182,7 +182,6 @@
           <!-- Protocol Warning -->
           <div v-if="!isProtocolSupported" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
                <div class="text-center p-4">
-                   <i class="bi bi-shield-exclamation text-3xl mb-2 d-block opacity-50"></i>
                    <p class="text-sm">Monitoring not available.</p>
                    <p class="text-xs text-muted">Only HTTP/HTTPS pages are supported.</p>
                </div>
@@ -200,8 +199,8 @@
           <!-- List -->
           <div v-else class="flex-1 overflow-y-auto custom-scrollbar p-0">
              <div v-for="(item, index) in monitorResult" :key="index" 
-                class="monitor-item d-flex align-items-center py-3 border-bottom transition-colors"
-                style="padding-left: 0.75rem; padding-right: 0.75rem;"
+                class="monitor-item d-flex align-items-center py-3 transition-colors"
+                style="padding-left: 0.75rem; padding-right: 0.75rem; border-bottom: 1px solid var(--ui-border);"
              >
                  <!-- Domain Column (60%) -->
                  <div class="pe-3 overflow-hidden" style="flex: 0 0 60%;">

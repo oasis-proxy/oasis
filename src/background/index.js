@@ -575,34 +575,40 @@ function initRequestMonitor() {
     console.log("Oasis: Request Monitor initialized (forward-only mode).")
 }
 
-// Check if current active profile is an Auto Policy
-async function isAutoPolicyActive() {
+// Check if we should monitor usage (Auto Policy Active AND Monitoring Enabled)
+async function shouldMonitorRequest() {
     try {
         const config = await loadConfig()
+        
+        // 1. Check if monitoring is enabled globally
+        if (!config.behavior?.connectionMonitoring) {
+            return { shouldMonitor: false }
+        }
+
         const activeId = config.activeProfileId
         
-        // Check if it's a policy (has rules or defaultProfileId)
+        // 2. Check if it's a policy (has rules or defaultProfileId)
         let profile = null
         if (config.policies) {
             profile = config.policies[activeId]
         }
         
         if (profile && (profile.rules || profile.defaultProfileId)) {
-            return { isAuto: true, policyId: activeId }
+            return { shouldMonitor: true, policyId: activeId }
         }
-        return { isAuto: false, policyId: null }
+        return { shouldMonitor: false, policyId: null }
     } catch (e) {
-        return { isAuto: false, policyId: null }
+        return { shouldMonitor: false, policyId: null }
     }
 }
 
-// Forward request start to Monitor page (only if auto policy active)
+// Forward request start to Monitor page (only if auto policy active and monitoring enabled)
 async function onRequestStartHandler(details) {
     if (details.tabId === -1) return
     if (!details.url.startsWith('http://') && !details.url.startsWith('https://')) return
     
-    const { isAuto } = await isAutoPolicyActive()
-    if (!isAuto) return
+    const { shouldMonitor } = await shouldMonitorRequest()
+    if (!shouldMonitor) return
     
     broadcastToMonitor({
         type: 'REQUEST_STARTED',
@@ -629,8 +635,8 @@ async function onRequestStartHandler(details) {
 async function onRequestCompletedHandler(details) {
     if (details.tabId === -1) return
     
-    const { isAuto } = await isAutoPolicyActive()
-    if (!isAuto) return
+    const { shouldMonitor } = await shouldMonitorRequest()
+    if (!shouldMonitor) return
     
     broadcastToMonitor({
         type: 'REQUEST_COMPLETED',
@@ -646,8 +652,8 @@ async function onRequestCompletedHandler(details) {
 async function onRequestRedirectHandler(details) {
     if (details.tabId === -1) return
     
-    const { isAuto } = await isAutoPolicyActive()
-    if (!isAuto) return
+    const { shouldMonitor } = await shouldMonitorRequest()
+    if (!shouldMonitor) return
     
     broadcastToMonitor({
         type: 'REQUEST_REDIRECTED',
@@ -660,8 +666,8 @@ async function onRequestRedirectHandler(details) {
 async function onRequestErrorHandler(details) {
     if (details.tabId === -1) return
     
-    const { isAuto } = await isAutoPolicyActive()
-    if (!isAuto) return
+    const { shouldMonitor } = await shouldMonitorRequest()
+    if (!shouldMonitor) return
     
     broadcastToMonitor({
         type: 'REQUEST_ERROR',

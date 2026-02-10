@@ -22,7 +22,7 @@ html, body {
   min-width: 1200px;
   overflow: hidden;
   font-size: var(--font-sm);
-  background: var(--ui-bg);
+  background: var(--bs-body-bg);
 }
 
 .text-xxs {
@@ -44,7 +44,7 @@ html, body {
 .border-end,
 .border-start,
 .border {
-  border-color: var(--ui-border);
+  border-color: var(--ui-border) !important;
 }
 
 /* Custom scrollbar */
@@ -66,33 +66,32 @@ html, body {
 /* Tab list item */
 .tab-item {
   cursor: pointer;
-  border-left: 4px solid transparent;
+  border-left: 4px solid transparent !important;
   transition: all 0.15s ease;
 }
 .tab-item:hover {
   background: var(--ui-bg-subtle);
-  border-left-color: var(--ui-border);
+  border-left-color: var(--ui-border) !important;
 }
 .tab-item.active {
   background: var(--bs-primary-subtle);
-  border-left-color: var(--bs-primary);
+  border-left-color: var(--bs-primary) !important;
 }
 
 /* Active state text overrides */
 .tab-item.active .ui-text-primary {
-  color: var(--bs-primary-text-emphasis) !important;
+  color: var(--bs-primary) !important;
 }
-.tab-item.active .ui-text-secondary,
+/* .tab-item.active .ui-text-secondary,
 .tab-item.active .ui-text-tertiary {
   color: var(--bs-primary) !important;
-  opacity: 0.75;
-}
+} */
 
 /* Active state tag override */
 .tab-item.active .ui-tag {
-  background-color: rgba(255, 255, 255, 0.6);
-  color: var(--bs-primary);
-  border-color: transparent;
+    background-color: var(--ui-success-bg);
+    border-color: var(--ui-success-border);
+    color: var(--ui-success);
 }
 
 /* Request row */

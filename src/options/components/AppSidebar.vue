@@ -10,8 +10,8 @@
         <div class="ripple-core"></div>
       </div>
       <!-- Brand Text -->
-      <img src="../../assets/img/oasis-proxy-black.png" alt="Oasis Proxy" class="brand-text logo-primary">
-      <img src="../../assets/img/oasis-proxy-white.png" alt="Oasis Proxy" class="brand-text logo-white">
+      <img src="../../assets/img/oasis-proxy-primary-96px.png" alt="Oasis Proxy" class="brand-text logo-primary">
+      <img src="../../assets/img/oasis-proxy-white-96px.png" alt="Oasis Proxy" class="brand-text logo-white">
     </div>
 
     <!-- Navigation -->
@@ -70,6 +70,7 @@
 
           <!-- Request Monitor (opens in new tab) -->
           <button 
+             v-if="shouldShowMonitor"
              @click="openMonitor"
              class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors group nav-item-inactive"
           >
@@ -316,6 +317,23 @@ const handleCreatePolicy = async ({ name, type }) => {
 const openMonitor = () => {
     chrome.tabs.create({ url: chrome.runtime.getURL('src/monitor/index.html') })
 }
+
+const shouldShowMonitor = computed(() => {
+    if (!config.value) return false
+    
+    // Check if monitoring is enabled
+    if (!config.value.behavior?.connectionMonitoring) return false
+    
+    // Check if active profile is Auto Policy
+    const activeId = config.value.activeProfileId
+    const policy = config.value.policies?.[activeId]
+    
+    if (policy && (policy.rules || policy.defaultProfileId)) {
+        return true
+    }
+    
+    return false
+})
 </script>
 
 <style scoped>
@@ -361,6 +379,7 @@ const openMonitor = () => {
 .brand-text {
   font-size: 24px;
   font-weight: 900;
+  height: 36px;
   color: var(--ui-text-primary);
   letter-spacing: -0.02em;
   white-space: nowrap;

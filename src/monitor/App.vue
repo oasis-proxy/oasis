@@ -4,8 +4,8 @@
     <header class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom" style="background: var(--ui-bg-card);">
       <div class="d-flex align-items-center gap-3">
         <!-- Theme-aware logo -->
-        <img :src="isDark ? darkIconUrl : lightIconUrl" alt="Oasis" style="width: 24px; height: 24px;" />
-        <img :src="isDark ? darkBrandUrl : lightBrandUrl" alt="Oasis Proxy" style="height: 24px;" />
+        <img :src="isDark ? darkIconUrl : lightIconUrl" alt="Oasis" style="width: 32px; height: 32px;" />
+        <img :src="isDark ? darkBrandUrl : lightBrandUrl" alt="Oasis Proxy" style="height: 32px;" />
       </div>
 
       <!-- Right side: History limit + Filter -->
@@ -82,7 +82,7 @@
       </aside>
 
       <!-- Right Panel: Request List -->
-      <section class="flex-1 d-flex flex-column overflow-hidden" style="background: var(--ui-bg);">
+      <section class="flex-1 d-flex flex-column overflow-hidden" style="background: var(--bs-body-bg);">
         <!-- Panel Header -->
         <div class="d-flex align-items-center justify-content-between px-4 py-2 border-bottom" style="background: var(--ui-bg-card);">
           <div class="d-flex align-items-center gap-3">
@@ -107,7 +107,7 @@
                style="background: var(--ui-bg-subtle); min-width: max-content; z-index: 10;">
           <div style="width: 80px;" class="flex-shrink-0">Time</div>
           <div style="width: 140px;" class="flex-shrink-0">Domain</div>
-          <div style="width: 260px;" class="flex-shrink-0">Pattern</div>
+          <div style="width: 180px;" class="flex-shrink-0">Pattern</div>
           <div style="width: 120px;" class="flex-shrink-0">Proxy Name</div>
           <div style="width: 140px;" class="flex-shrink-0">IP</div>
           <div style="width: 70px;" class="text-end flex-shrink-0">Duration</div>
@@ -128,7 +128,7 @@
             <div style="width: 140px;" class="text-truncate ui-text-primary flex-shrink-0" :title="request.domain">
               {{ request.domain }}
             </div>
-            <div style="width: 260px;" class="text-truncate ui-text-primary d-flex align-items-center flex-shrink-0" :title="request.matchedRule || 'Default'">
+            <div style="width: 180px;" class="text-truncate ui-text-primary d-flex align-items-center flex-shrink-0" :title="request.matchedRule || 'Default'">
                <template v-if="request.ruleSource">
                  <i class="bi bi-diagram-3 me-2 ui-text-tertiary" :title="request.ruleSource" style="cursor: pointer;"></i>
                </template>
@@ -190,8 +190,8 @@ import { loadConfig } from '../common/storage'
 // Import logo assets
 import lightIconUrl from '../assets/icons/light/ripple-icon-64x64.png'
 import darkIconUrl from '../assets/icons/dark/ripple-icon-dark-64x64.png'
-import lightBrandUrl from '../assets/img/oasis-proxy-primary.png'
-import darkBrandUrl from '../assets/img/oasis-proxy-white.png'
+import lightBrandUrl from '../assets/img/oasis-proxy-primary-96px.png'
+import darkBrandUrl from '../assets/img/oasis-proxy-white-96px.png'
 
 // Theme state
 const isDark = ref(false)
