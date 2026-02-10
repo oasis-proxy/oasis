@@ -14,7 +14,7 @@
                 type="text" 
                 class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
                 style="min-width: 100%; width: 100%; max-width: 100% !important;" 
-                placeholder="Search files or links"
+                placeholder="Filter downloads by name or URL..."
                 v-model="searchQuery"
             >
         </div>
@@ -103,7 +103,7 @@
             class="ui-button-icon" 
             title="Copy Link"
           >
-            <i class="bi bi-copy" style="font-size: 12px;"></i>
+            <i class="bi bi-link" style="font-size: 12px;"></i>
           </button>
 
           <!-- Cancel (In Progress) -->

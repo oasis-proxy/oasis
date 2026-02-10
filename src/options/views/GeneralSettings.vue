@@ -152,7 +152,7 @@
               <input
                 v-model.lazy="rejectAddress"
                 type="text"
-                placeholder="ip:port"
+                placeholder="127.0.0.1:65535"
                 class="form-control ui-input block rounded-lg border text-xs"
                 style="width: 12rem"
               />
@@ -244,7 +244,7 @@
                         class="form-control ui-input w-100 rounded text-xs py-0 px-2 font-mono"
                         style="height: 24px"
                         :style="item.errors?.ip ? 'border-color: var(--ui-danger) !important;' : ''"
-                        placeholder="0.0.0.0"
+                        placeholder="192.168.1.100"
                         @keyup.enter="saveTag(index)"
                         @keyup.esc="cancelEdit(index)"
                         @blur="validateItem(index)"
@@ -259,7 +259,7 @@
                         class="form-control ui-input w-100 rounded text-xs py-0 px-2"
                         style="height: 24px"
                         :style="item.errors?.tag ? 'border-color: var(--ui-danger) !important;' : ''"
-                        placeholder="Tag Name"
+                        placeholder="e.g. vps, US vps"
                         @keyup.enter="saveTag(index)"
                         @keyup.esc="cancelEdit(index)"
                         @blur="validateItem(index)"
@@ -278,16 +278,10 @@
                         >
                           <i class="bi bi-floppy-fill text-xs"></i>
                         </button>
-                        <button
-                          @click="cancelEdit(index)"
-                          class="ui-button-icon"
-                          title="Cancel"
-                        >
-                          <i class="bi bi-x-lg text-xs"></i>
-                        </button>
+
                       </template>
                       <button v-else @click="editTag(index)" class="ui-button-icon" title="Edit">
-                        <i class="bi bi-pencil text-xs"></i>
+                        <i class="bi bi-pencil-square text-xs"></i>
                       </button>
 
                       <button

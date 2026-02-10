@@ -26,9 +26,10 @@
            <button 
              @click="resetChanges"
              :disabled="!isDirty"
-             class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all"
+             class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
            >
-             Reset
+             <i class="bi bi-reply-fill"></i>
+             <span>Reset</span>
            </button>
 
            <button 
@@ -36,6 +37,7 @@
              :disabled="!isDirty"
              class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
            >
+             <i class="bi bi-floppy-fill"></i>
              <span>Save</span>
            </button>
 
@@ -54,7 +56,7 @@
               <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                   <li>
                     <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-pencil text-slate-400"></i> Rename
+                        <i class="bi bi-pencil-square text-slate-400"></i> Rename
                     </button>
                   </li>
                   <li>
@@ -115,7 +117,7 @@
                       <input 
                         v-model="proxy.host"
                         type="text" 
-
+                        placeholder="example.com or 1.2.3.4"
                         class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
                       />
                     </label>
@@ -128,7 +130,7 @@
                       <input 
                         v-model="proxy.port"
                         type="number" 
-
+                        :placeholder="getPortPlaceholder(proxy.scheme)"
                         class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
                         min="1"
                         max="65535"
@@ -152,7 +154,7 @@
                       <input 
                         v-model="authUsername"
                         type="text" 
-                       
+                        placeholder="Optional"
                         class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
                       />
                     </label>
@@ -163,7 +165,7 @@
                       <input 
                         v-model="authPassword"
                         type="password" 
-
+                        placeholder="Optional"
                         class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
                       />
                     </label>
@@ -185,7 +187,7 @@
                 <textarea 
                   v-model="bypassList"
                   rows="4"
-
+                  placeholder="localhost&#10;127.0.0.1&#10;*.local"
                   class="form-control ui-input w-100 rounded-lg border text-xs font-mono py-2 px-3"
                 ></textarea>
                 <p class="text-xs text-slate-500 m-0">Requests to these domains or IPs will bypass the proxy. Supports wildcards (e.g. *.google.com).</p>
@@ -228,13 +230,13 @@
                       <div class="col-span-7">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Host Address</span>
-                          <input v-model="proxy.overrides.http.host" type="text" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                          <input v-model="proxy.overrides.http.host" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                         </label>
                       </div>
                       <div class="col-span-2">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Port</span>
-                          <input v-model="proxy.overrides.http.port" type="number" min="1" max="65535" :disabled="httpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.http, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                          <input v-model="proxy.overrides.http.port" type="number" min="1" max="65535" :placeholder="httpOverrideScheme === 'default' ? '' : getPortPlaceholder(httpOverrideScheme)" :disabled="httpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.http, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                         </label>
                       </div>
                     </div>
@@ -250,13 +252,13 @@
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Username</span>
-                                <input v-model="proxy.overrides.http.authUsername" type="text" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.http.authUsername" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                               </label>
                           </div>
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Password</span>
-                                <input v-model="proxy.overrides.http.authPassword" type="password" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.http.authPassword" type="password" :placeholder="httpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                               </label>
                           </div>
                       </div>
@@ -286,13 +288,13 @@
                       <div class="col-span-7">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Host Address</span>
-                          <input v-model="proxy.overrides.https.host" type="text" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                          <input v-model="proxy.overrides.https.host" type="text" :placeholder="httpsOverrideScheme === 'default' ? '' : 'example.com'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                         </label>
                       </div>
                       <div class="col-span-2">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Port</span>
-                          <input v-model="proxy.overrides.https.port" type="number" min="1" max="65535" :disabled="httpsOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.https, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                          <input v-model="proxy.overrides.https.port" type="number" min="1" max="65535" :placeholder="httpsOverrideScheme === 'default' ? '' : getPortPlaceholder(httpsOverrideScheme)" :disabled="httpsOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.https, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                         </label>
                       </div>
                     </div>
@@ -308,13 +310,13 @@
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Username</span>
-                                <input v-model="proxy.overrides.https.authUsername" type="text" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.https.authUsername" type="text" :placeholder="httpsOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                               </label>
                           </div>
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Password</span>
-                                <input v-model="proxy.overrides.https.authPassword" type="password" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.https.authPassword" type="password" :placeholder="httpsOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                               </label>
                           </div>
                       </div>
@@ -345,13 +347,13 @@
                       <div class="col-span-7">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Host Address</span>
-                          <input v-model="proxy.overrides.ftp.host" type="text" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                          <input v-model="proxy.overrides.ftp.host" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                         </label>
                       </div>
                       <div class="col-span-2">
                         <label class="ui-form-group">
                           <span class="ui-text-primary text-xs font-medium leading-none">Port</span>
-                          <input v-model="proxy.overrides.ftp.port" type="number" min="1" max="65535" :disabled="ftpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.ftp, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                          <input v-model="proxy.overrides.ftp.port" type="number" min="1" max="65535" :placeholder="ftpOverrideScheme === 'default' ? '' : getPortPlaceholder(ftpOverrideScheme)" :disabled="ftpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.ftp, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                         </label>
                       </div>
                     </div>
@@ -367,13 +369,13 @@
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Username</span>
-                                <input v-model="proxy.overrides.ftp.authUsername" type="text" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.ftp.authUsername" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                               </label>
                           </div>
                           <div>
                               <label class="ui-form-group">
                                 <span class="ui-text-primary text-xs font-medium leading-none">Password</span>
-                                <input v-model="proxy.overrides.ftp.authPassword" type="password" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                                <input v-model="proxy.overrides.ftp.authPassword" type="password" :placeholder="ftpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                               </label>
                           </div>
                       </div>
@@ -479,6 +481,13 @@ const validatePort = (obj, key) => {
   if (val < 1) obj[key] = 1
   else if (val > 65535) obj[key] = 65535
   else obj[key] = val // Ensure integer
+}
+
+const getPortPlaceholder = (scheme) => {
+  if (scheme === 'http') return '8080'
+  if (scheme === 'https') return '443'
+  if (['socks4', 'socks5'].includes(scheme)) return '1080'
+  return '8080'
 }
 
 
@@ -613,8 +622,17 @@ const saveChanges = async () => {
     payload.auth = null
   }
 
-  // Clean up default overrides
+  // Clean up and apply defaults for overrides
   if (payload.overrides) {
+    // Apply default port if missing
+    ['http', 'https', 'ftp'].forEach(key => {
+        const override = payload.overrides[key]
+        if (override && override.scheme !== 'default' && !override.port) {
+             const defaultPort = getPortPlaceholder(override.scheme)
+             if (defaultPort) override.port = parseInt(defaultPort, 10)
+        }
+    })
+
     if (payload.overrides.http?.scheme === 'default') delete payload.overrides.http
     if (payload.overrides.https?.scheme === 'default') delete payload.overrides.https
     if (payload.overrides.ftp?.scheme === 'default') delete payload.overrides.ftp
@@ -740,4 +758,3 @@ const handleDelete = async () => {
   showDeleteModal.value = false
 }
 </script>
-

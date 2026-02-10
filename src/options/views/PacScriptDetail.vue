@@ -26,9 +26,10 @@
            <button 
              @click="resetChanges"
              :disabled="!isDirty"
-             class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all"
+             class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
            >
-             Reset
+            <i class="bi bi-reply-fill"></i>
+            <span>Reset</span>
            </button>
 
            <button 
@@ -36,7 +37,8 @@
              :disabled="!isDirty"
              class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
            >
-             <span>Save</span>
+            <i class="bi bi-floppy-fill"></i>
+            <span>Save</span>
            </button>
 
            <!-- Action Menu -->
@@ -54,7 +56,7 @@
               <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                   <li>
                     <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-pencil text-slate-400"></i> Rename
+                        <i class="bi bi-pencil-square text-slate-400"></i> Rename
                     </button>
                   </li>
                   <li>
@@ -111,7 +113,7 @@
                             type="text" 
                             v-model="pac.url"
                             @blur="fetchPacContent"
-                            placeholder="https://example.com/proxy.pac"
+                            placeholder="https://example.com/config.pac"
                             class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
                           />
                         </label>
@@ -165,7 +167,7 @@
                         class="form-control w-100 h-100 p-4 font-mono text-xs custom-scrollbar bg-white  text-slate-900 border-0 rounded-0"
                         style="resize: none;"
                         spellcheck="false"
-                        placeholder="function FindProxyForURL(url, host) { ... }"
+                        :placeholder="`// Enter your PAC script here\nfunction FindProxyForURL(url, host) {\n  return 'DIRECT';\n}`"
                     ></textarea>
                 </div>
             </div>

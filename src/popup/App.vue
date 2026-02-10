@@ -42,7 +42,7 @@
         <i class="bi bi-activity" style="font-size: 16px;"></i>
       </button>
       <button @click="openOptions" class="ui-button-icon" title="Options">
-        <i class="bi bi-gear" style="font-size: 16px;"></i>
+        <i class="bi bi-gear-wide-connected" style="font-size: 16px;"></i>
       </button>
     </div>
   </header>
@@ -62,7 +62,7 @@
               @click="selectProfile('direct')"
             >
               <div class="profile-icon">
-                <i class="bi bi-lightning" style="font-size: 18px;"></i>
+                <i class="bi bi-power" style="font-size: 18px;"></i>
               </div>
               <p class="profile-name">Direct Connect</p>
               <div 

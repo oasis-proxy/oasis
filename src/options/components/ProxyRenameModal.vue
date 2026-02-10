@@ -47,7 +47,7 @@
                   autofocus 
                   class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
                   style="min-width: 100%; width: 100%; max-width: 100% !important;" 
-                  placeholder="Enter new name" 
+                  placeholder="e.g. My Fast Proxy" 
                   type="text"
                   maxlength="30"
                   @keydown.enter="handleConfirm"

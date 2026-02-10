@@ -23,6 +23,7 @@
           :disabled="!isDirty"
           class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
         >
+          <i class="bi bi-floppy-fill"></i>
           <span>Save</span>
         </button>
       </div>
@@ -102,7 +103,7 @@
                      <input 
                       v-model="rule.pattern" 
                       type="text" 
-                      placeholder="Pattern..." 
+                      :placeholder="getPlaceholder(rule.ruleType)" 
                       class="form-control ui-input w-100 mw-100 rounded text-xs py-0 px-2 font-mono"
                       :style="`height: 28px;${validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : ''}`"
                       @blur="validateRule(index, rule)"
@@ -397,4 +398,13 @@ onMounted(() => {
     loadData()
 })
 
+const getPlaceholder = (type) => {
+  switch (type) {
+    case 'wildcard': return 'e.g. *.example.com';
+    case 'regex': return 'e.g. ^https?://.*\\.example\\.com';
+    case 'ip': return 'e.g. 192.168.1.1/24';
+    case 'ruleset': return 'https://example.com/rules.txt';
+    default: return 'Pattern...';
+  }
+};
 </script>

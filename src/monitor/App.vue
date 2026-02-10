@@ -21,7 +21,7 @@
         </div>
 
         <!-- Filter Input -->
-        <div class="position-relative flex-1" style="max-width: 400px;">
+        <div class="position-relative flex-1" style="max-width: 320px;width: 320px;">
           <i class="bi bi-search position-absolute ui-text-tertiary" 
              style="left: 12px; top: 50%; transform: translateY(-50%);"></i>
           <input 
@@ -29,7 +29,7 @@
             type="text"
             class="form-control form-control-sm ps-5 ui-input w-100"
             style="max-width: none;"
-            placeholder="Filter by URL, method..."
+            placeholder="Search requests (e.g. google, POST)"
           />
         </div>
       </div>

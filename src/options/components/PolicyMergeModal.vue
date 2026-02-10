@@ -37,7 +37,7 @@
                 class="form-select ui-input w-100 rounded-lg border h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
                 style="min-width: 100%; width: 100%; max-width: 100% !important;"
               >
-                <option value="">-- Select Policy to Merge From --</option>
+                <option value="" disabled>-- Select Policy to Merge From --</option>
                 <option v-for="policyOption in availablePolicies" :key="policyOption.id" :value="policyOption.id">
                   {{ policyOption.name }}
                 </option>

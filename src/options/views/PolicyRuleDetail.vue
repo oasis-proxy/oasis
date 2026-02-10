@@ -26,9 +26,10 @@
         <button 
           @click="resetChanges"
           :disabled="!isDirty"
-          class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all"
+          class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
         >
-          Reset
+          <i class="bi bi-reply-fill"></i>
+          <span>Reset</span>
         </button>
 
         <button 
@@ -36,6 +37,7 @@
           :disabled="!isDirty"
           class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
         >
+          <i class="bi bi-floppy-fill"></i>
           <span>Save</span>
         </button>
 
@@ -54,7 +56,7 @@
            <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                <li>
                  <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                     <i class="bi bi-pencil text-slate-400"></i> Rename
+                     <i class="bi bi-pencil-square text-slate-400"></i> Rename
                  </button>
                </li>
                <li>
@@ -148,7 +150,7 @@
                       title="Double-click to edit section name"
                     >
                       {{ rule.label || 'New Section' }}
-                      <i class="bi bi-pencil" style="font-size: 9px; opacity: 0.6;"></i>
+                      <i class="bi bi-pencil-square" style="font-size: 9px; opacity: 0.6;"></i>
                     </span>
                     <input 
                       v-else
@@ -225,7 +227,7 @@
                       <input 
                         v-model="rule.pattern" 
                         type="text" 
-                        placeholder="Enter RuleSet URL..." 
+                        placeholder="https://example.com/rules.txt" 
                         class="form-control ui-input w-100 mw-100 rounded text-xs py-0 font-mono"
                         :style="`height: 28px; padding-left: 8px; padding-right: 28px;${duplicateIndices.has(index) ? ' border-color: var(--bs-primary) !important;' : (validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : '')}`"
                         @focus="focusedIndex = index"
@@ -248,7 +250,7 @@
                       v-else
                       v-model="rule.pattern" 
                       type="text" 
-                      placeholder="Pattern..." 
+                      :placeholder="getPlaceholder(rule.ruleType)" 
                       class="form-control ui-input w-100 mw-100 rounded text-xs py-0 px-2 font-mono"
                       :style="`height: 28px;${duplicateIndices.has(index) ? ' border-color: var(--bs-primary) !important;' : (validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : '')}`"
                       @focus="focusedIndex = index"
@@ -367,7 +369,7 @@
                       title="Double-click to edit section name"
                     >
                       {{ rule.label || 'New Section' }}
-                      <i class="bi bi-pencil" style="font-size: 9px; opacity: 0.6;"></i>
+                      <i class="bi bi-pencil-square" style="font-size: 9px; opacity: 0.6;"></i>
                     </span>
                     <input 
                       v-else
@@ -442,7 +444,7 @@
                   <input 
                     v-model="rule.pattern" 
                     type="text" 
-                    placeholder="Pattern..." 
+                    :placeholder="getPlaceholder(rule.ruleType)" 
                     class="form-control ui-input w-100 mw-100 rounded border text-xs py-0 px-2 font-mono"
                     :style="`height: 28px;${rejectValidationErrors[index] ? ' border-color: var(--ui-danger) !important;' : ''}`"
                     @focus="focusedIndex = index"
@@ -1223,6 +1225,14 @@ const handleDelete = async () => {
     router.push('/settings')
     showDeleteModal.value = false
 }
+const getPlaceholder = (type) => {
+  switch (type) {
+    case 'wildcard': return 'e.g. *.google.com';
+    case 'regex': return 'e.g. ^https?://.*\\.google\\.com';
+    case 'ip': return 'e.g. 192.168.1.1';
+    default: return 'Pattern...';
+  }
+};
 </script>
 
 
