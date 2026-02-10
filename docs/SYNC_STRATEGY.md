@@ -47,7 +47,7 @@ The configuration is split into:
     - `count`: Total number of data chunks.
 
 2.  **Data Chunks (`sync_chunk_0`, `sync_chunk_1`, ...)**:
-    - The full configuration JSON is serialized and split into 7KB chunks to fit comfortably within the 8KB per-item limit.
+    - The full configuration JSON is serialized and split into 7KB chunks (7000 bytes) to fit comfortably within the 8KB per-item limit.
 
 ## 4. Synchronization Flow
 
@@ -57,7 +57,9 @@ When syncing _to_ the cloud (Manual or Auto):
 
 1.  **Snapshot**: A copy of the current local configuration is created.
 2.  **Optimization**:
-    - **Strip Local-Only Data**: `config.sync` settings are removed (e.g., enabled state).
+    - **Strip Local-Only Data**:
+      - `config.sync` settings (e.g., enabled state).
+      - `config.activeProfileId` (Current active profile is device-specific).
     - **Strip Cache**: Heavy content is removed to save space:
       - `policy.rules[].ruleSet.content` (Cached RuleSet text)
       - `pac.script` (Cached remote PAC script)

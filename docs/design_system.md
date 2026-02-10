@@ -1,298 +1,169 @@
-# Oasis Extension Design System (Extracted from GeneralSettings)
+# Oasis Extension Design System
 
-## 1. Page Layout
+This document outlines the design tokens, components, and utility classes used in the Oasis Extension, based on the CSS files in `src/styles/`.
 
-- **Container**: Flex column, full height (`h-full flex flex-col`).
-- **Header**:
-  - Height: `h-24` (6rem / 96px)
-  - Padding: `px-8` (2rem / 32px)
-  - Border: Bottom `border-b` (`border-slate-100` / `dark:border-slate-700`)
-  - Alignment: `flex items-center justify-between`
-- **Content Area**:
-  - Scrollable: `flex-1 overflow-y-auto custom-scrollbar`
-  - Padding: `px-5 pt-4 pb-5` (Sides: 3rem/48px, Top: 1.5rem/24px, Bottom: 3rem/48px)
-  - Max Width: `max-w-3xl mx-auto` (48rem / 768px inner content)
-  - Spacing: `d-flex flex-column gap-5` (3rem / 48px) between sections
+## 1. Global Variables (`theme.css`)
 
-## 2. Typography
+### Brand Colors
 
-- **Global**: Font size `16px` (`1rem` = `16px` in HTML default).
-- **Header Title**:
-  - Size: `text-[22px]`
-  - Weight: `font-bold`
-  - Color: `text-slate-900` (`dark:text-slate-50`)
-- **Header Description**:
-  - Size: `text-xs` (12px)
-  - Color: `text-slate-500` (`dark:text-slate-400`/`#94a3b8`)
-  - Margin: `mt-1`
-- **Section Label**:
-  - Size: `text-sm` (14px)
-  - Weight: `font-semibold`
-  - Color: `.settings-label` (`slate-900` / `white`)
-  - Icon size: `text-[20px]`
-- **Card Item Title**:
-  - Size: `text-sm` (14px)
-  - Weight: `font-medium`
-  - Color: `.settings-text-primary` (`slate-900` / `dark:text-slate-100` `#f1f5f9`)
-- **Card Item Description**:
-  - Size: `text-xs` (12px)
-  - Color: `.settings-text-secondary` (`slate-500` / `dark:text-slate-400` `#94a3b8`)
-  - Margin: `mt-0.5`
+| Variable              | Value                                | Description               |
+| --------------------- | ------------------------------------ | ------------------------- |
+| `--bs-primary`        | `#137fec` (Light) / `#3b9eff` (Dark) | Primary brand color       |
+| `--bs-primary-hover`  | `#1170cf` (Light) / `#5aadff` (Dark) | Primary hover state       |
+| `--bs-primary-subtle` | `#e0f2fe` (Light) / `#1e3a5f` (Dark) | Subtle primary background |
 
-### Dark Mode Text Summary
+### Semantic Colors
 
-- **Primary Text**: `slate-100` (`#f1f5f9`)
-- **Secondary/Muted**: `slate-400` (`#94a3b8`)
-- **Headings**: `slate-50` (`#f8fafc`)
+| Context            | Variable              | Light Mode | Dark Mode |
+| ------------------ | --------------------- | ---------- | --------- |
+| **Background**     | `--bs-body-bg`        | `#f3f4f6`  | `#0f172a` |
+| **Card Bg**        | `--ui-bg-card`        | `#ffffff`  | `#1e293b` |
+| **Subtle Bg**      | `--ui-bg-subtle`      | `#f8fafc`  | `#1e293b` |
+| **Hover Bg**       | `--ui-bg-hover`       | `#f1f5f9`  | `#334155` |
+| **Text Primary**   | `--ui-text-primary`   | `#0f172a`  | `#f1f5f9` |
+| **Text Secondary** | `--ui-text-secondary` | `#64748b`  | `#94a3b8` |
+| **Text Tertiary**  | `--ui-text-tertiary`  | `#94a3b8`  | `#64748b` |
+| **Border**         | `--ui-border`         | `#cbd5e1`  | `#475569` |
+| **Border Subtle**  | `--ui-border-subtle`  | `#e2e8f0`  | `#334155` |
 
-## 3. Colors
+### Status Colors
 
-- **Primary**: `#137fec` (var(--bs-primary))
-- **Primary (Dark)**: `#3b82f6` (blue-500) or `#60a5fa` (blue-400) for better contrast.
-- **Backgrounds**:
-  - Body: `#f3f4f6` (`slate-50` equiv) / Dark: `#0f172a` (`slate-900`)
-  - Card: `#ffffff` / Dark: `#252525`
-  - Header: Same as Body/Card context (White/Dark usually)
-- **Borders**:
-  - Light: `#e2e8f0` (`slate-200`) or `#f1f5f9` (`slate-100` for dividers)
-  - Dark: `#333333`
-- **Hovers**:
-  - List Items: `hover:bg-slate-50/50` / Dark: `hover:bg-slate-700/30`
+| Status      | Color Var      | Bg Var            | Text Var           |
+| ----------- | -------------- | ----------------- | ------------------ |
+| **Success** | `--ui-success` | `--ui-success-bg` | `--ui-success`     |
+| **Danger**  | `--ui-danger`  | `--ui-danger-bg`  | `--ui-danger-text` |
+| **Warning** | `--ui-warning` | `--ui-warning-bg` | `--ui-warning`     |
+| **Info**    | `--ui-info`    | `--ui-info-bg`    | `--ui-info`        |
 
-### Semantic Status Colors (Dark Mode)
+### Typography
 
-- **Success**: `#4ade80` (green-400)
-- **Danger**: `#f87171` (red-400)
-- **Info**: `#38bdf8` (sky-400)
-- **Warning**: `#fbbf24` (amber-400)
+Font Family: `'Inter', system-ui, -apple-system, sans-serif`
 
-## 4. Components
+| Variable      | Size   | Weight Vars                    |
+| ------------- | ------ | ------------------------------ |
+| `--font-xs`   | `12px` | `--font-weight-normal` (400)   |
+| `--font-sm`   | `14px` | `--font-weight-medium` (500)   |
+| `--font-base` | `16px` | `--font-weight-semibold` (600) |
+| `--font-lg`   | `18px` | `--font-weight-bold` (700)     |
+| `--font-xl`   | `20px` |                                |
+| `--font-2xl`  | `24px` |                                |
+| `--font-3xl`  | `30px` |                                |
 
-### Cards
+### Icon Palette
 
-- Class: `.settings-card`
-- Style: `rounded-xl border divide-y shadow-sm`
-- Item Padding: `p-4` (1.5rem / 24px)
-- **Spacing**:
-  - Between Cards: `space-y-6` (1.5rem / 24px)
-  - Inside Card (Sections): `space-y-3` (0.75rem / 12px)
+Used for `ui-icon-*` classes.
 
-### Icons
-
-- Container: `p-2 rounded-lg`
-- Size: `text-[24px]`
-- Variants:
-  - Blue: `.settings-icon-blue` (bg-blue-50 text-blue-600)
-  - Indigo: `.settings-icon-indigo`
-  - Green: `.settings-icon-green`
-  - Purple: `.settings-icon-purple`
-  - Orange: `.settings-icon-orange`
-  - Red: `.settings-icon-red`
-  - Teal: `.settings-icon-teal`
-  - Pink: `.settings-icon-pink`
-  - Gray: `.settings-icon-gray`
-
-### Inputs & Selects
-
-- Class: `.settings-input` (mapped to `.ui-input`)
-- Height: `h-8` (2rem / 32px)
-- **Constraints**:
-  - Inputs: `max-width: 200px`
-  - Selects: `max-width: 100px`
-- Radius: `rounded-lg`
-- Border: `border`
-- Text: `text-xs` (12px)
-- **Text Color**:
-  - Light: Default
-  - Dark: White (`#ffffff`) or Slate-50 (`#f8fafc`)
-- Border: `border`
-- Text: `text-xs` (12px)
-- Focus: `focus:border-primary focus:ring-primary`
-- **Spacing**:
-  - Grid Gap: `gap-4` (1rem / 16px) for input groups.
-
-### Buttons
-
-- **Primary (Main Actions)**:
-  - Class: `.settings-button-primary` (mapped to `.ui-button-primary`)
-  - Background: Var `--bs-primary` (`#137fec`)
-  - Text: White
-  - Hover: Darker Blue (`#1170cf`)
-- **Secondary (Default Actions)**:
-  - Class: `.settings-button-secondary`
-  - Size: `px-3 py-2 text-xs font-medium`
-  - Style: `border rounded-lg`
-- **Tertiary (Add Actions)**:
-  - Class: `.ui-button-tertiary`
-  - Size: `px-2.5 py-1.5 text-[11px] font-medium` (smaller than primary/secondary)
-  - Style: `bg-primary/10 no-border rounded-lg`
-  - Usage: "Add Rule", "Add Item" buttons
-  - Dark Mode: No border. Text matches semantic color if applicable.
-- **Danger (Delete/Clear)**:
-  - Class: `.settings-button-danger`
-- **Dashed (Add New)**:
-  - Class: `.settings-button-dashed`
-  - Style: `border border-dashed w-full flex items-center justify-center`
-- **Icon Button (Action)**:
-  - Class: `.ui-button-icon`
-  - Style: `bg-transparent border-0 p-1 rounded text-slate-400 hover:text-primary transition-colors`
-  - Hover Bg: `hover:bg-transparent` (Light) / `dark:hover:bg-white/5` (Dark)
-  - Default Color (Dark): `text-slate-400` (`#94a3b8`)
-  - Hover Color: Matches Primary or Semantic Danger/Success.
-
-### Toggles (Switches)
-
-- Standard Bootstrap `form-switch` with `form-check-input`.
-
-### Modals
-
-- **Overlay**:
-  - Class: `position-fixed top-0 start-0 w-100 h-100`
-  - **Background**: `rgba(15, 23, 42, 0.5)` (Slate-900 @ 50%)
-  - **Effect**: `backdrop-filter: blur(4px)`
-  - Z-Index: `1050`
-
-- **Container (Card)**:
-  - Class: `.ui-card`
-  - **Background**:
-    - Light: `#ffffff` (White)
-    - Dark: `#252525` (Card Dark)
-  - Radius: `rounded-xl`
-  - Shadow: `shadow-lg`
-  - Width: `w-100` with `max-width` constraint
-
-- **Header**:
-  - **Background**: Transparent (Inherits Container)
-  - **Border Bottom**:
-    - Light: `#f1f5f9` (Slate-100)
-    - Dark: `#333333` (Divider Dark)
-  - Padding: `p-4`
-  - Title: `.ui-modal-title` (18px, font-semibold, ui-text-primary)
-
-- **Body**:
-  - **Background**: Transparent (Inherits Container)
-  - Padding: `px-4`
-  - Spacing: `gap-3` (vertical stack)
-
-- **Footer**:
-  - **Background**: Transparent (Inherits Container)
-  - **Border Top**: Same as Header
-  - Padding: `p-4`
-  - Alignment: `d-flex justify-content-end gap-3`
-
-## 10. Toast Notifications
-
-**Component**: `src/options/components/Toast.vue`  
-**Utility**: `src/options/utils/toast.js`
-
-### Design Specifications
-
-- **Position**: Fixed, top-right corner
-  - `top: 80px` (below header)
-  - `right: 24px`
-  - `z-index: 9999`
-- **Size**:
-  - `min-width: 320px`
-  - `max-width: 480px`
-- **Styling**:
-  - Background: `var(--ui-card-bg)`
-  - Border: `1px solid var(--ui-border)` + 3px colored left border
-  - Border Radius: `12px`
-  - Shadow: `0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08)`
-  - Backdrop Filter: `blur(10px)`
-  - Padding: `14px 16px`
-
-### Toast Types
-
-| Type    | Color     | Icon                           | Border Color |
-| ------- | --------- | ------------------------------ | ------------ |
-| Success | `#10b981` | `bi-check-circle-fill`         | Green        |
-| Error   | `#ef4444` | `bi-exclamation-circle-fill`   | Red          |
-| Warning | `#f59e0b` | `bi-exclamation-triangle-fill` | Amber        |
-| Info    | `#3b82f6` | `bi-info-circle-fill`          | Blue         |
-
-### Animation
-
-- **Enter**: Slide from right + scale up
-- **Leave**: Slide to right + scale down
-- **Duration**: 300ms
-- **Easing**: `cubic-bezier(0.4, 0, 0.2, 1)`
-
-### Usage
-
-```javascript
-import { toast } from '@/options/utils/toast'
-
-// Quick methods
-toast.success('Changes saved successfully')
-toast.error('Failed to save changes')
-toast.warning('You have unsaved changes')
-toast.info('Loading data...')
-```
+- Blue, Indigo, Green, Purple, Orange, Red, Teal, Pink, Gray.
 
 ---
 
-**Last Updated**: 2026-01-30
+## 2. Components
 
-## Sidebar Component
+### Buttons (`buttons.css`)
 
-**Component**: `src/options/components/AppSidebar.vue`
+| Class                  | Appearance                                                      |
+| ---------------------- | --------------------------------------------------------------- |
+| `.ui-button-primary`   | Solid primary color, white text. No border.                     |
+| `.ui-button-secondary` | Card background, border, secondary text.                        |
+| `.ui-button-danger`    | Solid danger color, white text. No border.                      |
+| `.ui-button-icon`      | Transparent, tertiary text. Primary color on hover. Size: 28px. |
+| `.ui-button-icon.sm`   | Small icon button (16px).                                       |
 
-### Layout
+**Common Specs**: Height 32px, Padding 0 12px, Flex centered.
 
-- **Width**: `w-72` (288px, fixed)
-- **Background**: `bg-slate-50` / `dark:bg-sidebar-dark`
-- **Border**: `border-r border-slate-200` / `dark:border-divider-dark`
+### Cards & Layout (`cards.css`)
 
-### Logo/Brand Section
+- **Card Container**: `.ui-card`
+  - Background: `--ui-bg-card`
+  - Border: `--ui-border-subtle`
+- **Header**: `.ui-card-header`
+  - Background: `--ui-bg-card-header`
+  - Border Bottom: `--ui-border-light`
+  - Typography: `--font-xs`, semibold, uppercase, tracking-wider.
+- **Label**: `.ui-card-label`
+  - Typography: `--font-sm`, semibold, uppercase, tracking-wide.
+- **Footer**: `.ui-card-footer`
+  - Background: `--ui-bg-subtle`
+  - Border Top: `--ui-border-light`
 
-- **Height**: `h-24` (96px)
-- **Padding**: `px-4`
-- **Border**: `border-b border-slate-100` / `dark:border-divider-dark`
-- **Logo Icon**: `32x32px`, `bg-primary`, `rounded-lg`, icon size `text-base` (16px)
-- **Title**: `text-base` (16px), `font-bold`
+### Inputs & Forms (`inputs.css`, `dropdowns.css`)
 
-### Navigation Section
+- **Input**: `.ui-input`
+  - Height: 32px
+  - Radius: 8px
+  - Bg: `white` (Light) / `slate-50` (Dark check?)
+  - **Constraints**: Text inputs max-width 200px, Selects max-width 100px.
+- **Select**: `.form-select`
+  - Matches card background and border.
+- **Switches**: Standard Bootstrap `.form-check-input[type="checkbox"][role="switch"]`.
+  - Checked color: `--bs-primary`.
+- **Radio**: `.form-check-input[type="radio"]`.
+  - Border: `--ui-radio-border`.
 
-- **Padding**: `p-3`
-- **Gap between groups**: `gap-4`
-- **Scrollable**: `overflow-y-auto custom-scrollbar`
+### Content Tags (`tags.css`)
 
-### Section Headers
+Base Class: `.ui-tag`
 
-- **Text**: `text-xs` (12px), `font-semibold`, `uppercase`, `tracking-wider`
-- **Color**: `text-slate-400` / `dark:text-slate-500`
-- **Padding**: `px-2 mb-2`
+- Specs: `inline-flex`, `padding: 2px 6px`, `font-size: 9px`.
 
-### Navigation Items
+**Variants**:
 
-- **Padding**: `px-3 py-2`
-- **Border Radius**: `rounded-lg`
-- **Gap**: `gap-2` (0.5rem / 8px)
-- **Icon Size**: `text-base` (16px)
-- **Text Size**: `text-xs` (12px) ← Updated from 14px
-- **Active State**: `nav-item-active`, `text-primary`, `font-medium`, `shadow-sm`
-- **Inactive State**: `text-slate-600` / `dark:text-slate-400`
-- **Hover**: `nav-item-hover`
+- `.ui-tag-default`: Subtle gray.
+- `.ui-tag-primary`: Primary color subtle.
+- `.ui-tag-success`: Success color.
+- `.ui-tag-danger`: Danger color.
+- `.ui-tag-warning`: Warning color.
+- `.ui-tag-info`: Info color.
 
-### Add Buttons (+ icons)
+### Navigation (`nav.css`, `AppSidebar.vue` specs)
 
-- **Size**: `ui-button-icon`
-- **Icon Size**: `text-xs` (12px) ← Updated from 14px
-- **Position**: Right side of section header
+- **Items**:
+  - Active: `.nav-item-active` (Primary text, active bg).
+  - Inactive: `.nav-item-inactive` (Secondary text, transparent bg).
+- **Sidebar Width**: `w-72` (18rem).
 
-### Status Indicators
+### Modals (`modals.css`)
 
-- **Size**: `w-2 h-2` (8px)
-- **Shape**: `rounded-full`
-- **Position**: `ml-auto`
+- **Header**: `--font-lg`, semibold.
+- **Content**: Card background.
+- **Backdrop**: `--ui-backdrop` with opacity.
+- **Close Button**: Transparent, hovers to secondary text.
+
+### Toasts (`toasts.css`)
+
+- **Position**: Fixed top-right (24px).
+- **Style**: Card background, dropped shadow, blur effect.
+- **Variants**: Success, Error, Warning, Info (Colored icon and left border).
+- **Animation**: Slide in from right/bottom.
 
 ---
 
-## 11. Button Border Specifications
+## 3. Utilities (`utils.css`)
 
-- **Primary Button**: No border.
-- **Secondary Button**:
-  - **Light Mode**: 1px solid slate-300 (`#cbd5e1`).
-  - **Dark Mode**: No visible border (`border-color: transparent`).
-- **Tertiary / Icon Button**: No border.
+### Text & Backgrounds
+
+- `.text-slate-{300,400,500,600,700,900}`
+- `.text-primary`, `.text-white`
+- `.bg-subtle`, `.bg-hover`, `.bg-background-light`
+- `.ui-icon-wrapper`: Default subtle background for icons.
+
+### Scrollbars
+
+- `.custom-scrollbar`: Thin (6px) scrollbar with `--ui-border` thumb color.
+
+### Icon Wrappers
+
+- `.ui-icon-{color}`: Sets specific background and text color defined in variables (e.g., `.ui-icon-blue`).
+
+### Layout Helpers
+
+- `.w-72`, `.w-64`
+- `.h-24`, `.h-14`, `.h-8`
+- `.max-w-6xl`
+- `.rounded-{md,lg,xl,2xl,full}`
+
+### Animations
+
+- `.animate-spin`
+- `.animate-fade-in`
+- `.animate-fade-in-up`

@@ -1,134 +1,187 @@
 # Oasis Proxy Configuration Guide
 
-This document describes the configuration structure used in the Oasis Proxy extension. The configuration is stored in `chrome.storage.local` (persistent) and `chrome.storage.session` (temporary).
+This document describes the data structures used in Oasis Proxy's `chrome.storage.local`.
 
-## Storage Keys
+## Local Storage Schema
 
-- `proxyConfig`: The main configuration object (Persistent).
-- `tempRules`: Array of temporary rules valid only for the current browser session (Session).
+The extension uses the following top-level keys in `chrome.storage.local`.
 
-## Configuration Object Structure
+| Key           | Description                                                              |
+| :------------ | :----------------------------------------------------------------------- |
+| `config`      | **General Settings**: UI, behavior, update intervals, and sync metadata. |
+| `proxies`     | **Proxy Map**: Dictionary of defined proxy servers.                      |
+| `proxyGroups` | **Proxy Group Map**: Dictionary of load balancing/failover groups.       |
+| `pacs`        | **PAC Map**: Dictionary of PAC script configurations.                    |
+| `policies`    | **Policy Map**: Dictionary of auto-proxy policies (Rule Sets).           |
+| `system`      | **Singleton**: System proxy profile definition.                          |
+| `direct`      | **Singleton**: Direct connection profile definition.                     |
+| `reject`      | **Singleton**: Reject (Blackhole) profile definition.                    |
 
-The configuration object (`config`) has the following top-level properties:
+---
 
-### 1. `mode`
+## 1. General Config (`config`)
 
-Defines the current active proxy mode.
+Stores application-wide settings and metadata.
 
-- `'fixed'`: Use a single fixed proxy server.
-- `'pac'`: Use a PAC script URL.
-- `'auto'`: Use automatic rule-based switching (PAC generated internally).
+```json
+{
+  "version": 1, // Integer: Config generation version (for sync)
+  "updatedAt": 1678888888888, // Timestamp: Last modification time
+  "activeProfileId": "direct", // String: ID of the currently active profile
 
-### 2. `proxies`
+  "ui": {
+    "theme": "auto", // "light" | "dark" | "auto"
+    "showContextMenu": false // Boolean: Show context menu items
+  },
 
-A map of defined proxy profiles. Keys are unique profile IDs.
-Each profile object contains:
+  "update": {
+    "interval": 720 // Number: Minutes between background updates (-1 = Manual)
+  },
 
-- `id` (string): Unique identifier.
-- `type` (string): Proxy type (`'direct'`, `'system'`, `'reject'`, `'server'`).
-- `label` (string): Display name.
-- `scheme` (string, optional): Protocol (`http`, `https`, `socks4`, `socks5`). Only for `server` type.
-- `host` (string, optional): Server IP or hostname.
-- `port` (number, optional): Server port.
-- `auth` (object, optional): Username/password (if applicable).
+  "behavior": {
+    "refreshOnSwitch": false, // Boolean: Refresh tab on profile switch
+    "connectionMonitoring": false // Boolean: Monitor connection health
+  },
 
-**Special Profiles:**
+  "sync": {
+    "enabled": false // Boolean: Cloud sync status (Local only)
+  },
 
-- `direct`: Direct connection.
-- `system`: Use system proxy settings.
-- `reject`: Blocks the request (Blackhole).
-  - `host`: Default `127.0.0.1` (Configurable).
-  - `port`: Default `65535` (Configurable).
+  "rulePriority": ["reject", "temp", "normal"], // Array<String>: Priority of rule evaluation
 
-### 3. `fixed`
+  "ipTags": {
+    // Map: Custom labels for IPs
+    "127.0.0.1": "Localhost"
+  }
+}
+```
 
-Configuration for "Fixed Server" mode.
+## 2. Proxies (`proxies`)
 
-- `activeProxyId` (string): The ID of the proxy profile to use.
+A map of proxy server definitions. Key is the unique `id`.
 
-### 4. `pac`
+```json
+{
+  "proxy_12345": {
+    "id": "proxy_12345",
+    "type": "server", // Fixed type: "server"
+    "label": "My Proxy",
+    "color": "#137fec", // UI color (hex)
+    "showInPopup": true, // Boolean: Show in popup menu
+    "scheme": "socks5", // "http" | "https" | "socks4" | "socks5"
+    "host": "192.168.1.1",
+    "port": 1080,
+    "auth": {
+      // Optional
+      "username": "user",
+      "password": "pass"
+    },
+    "bypassList": [
+      // Array<String>: Domains/IPs to bypass proxy
+      "localhost",
+      "127.0.0.1",
+      "*.local"
+    ],
+    "overrides": {
+      // Optional: Protocol-specific server overrides
+      "http": {
+        "scheme": "http",
+        "host": "proxy-http.com",
+        "port": 80,
+        "authUsername": "user",
+        "authPassword": "pass"
+      },
+      "https": { "scheme": "default" }, // "default" means use main settings
+      "ftp": { "scheme": "default" }
+    }
+  }
+}
+```
 
-Configuration for "PAC Script" mode.
+## 3. Proxy Groups (`proxyGroups`)
 
-- `url` (string): The URL of the PAC file.
+A map of proxy groups (Failover chains). Key is the `id`.
 
-### 5. `auto`
+```json
+{
+  "group_67890": {
+    "id": "group_67890",
+    "type": "group",
+    "name": "Auto Select",
+    "color": "#6366f1", // UI color (hex)
+    "proxies": ["proxy_12345"], // Array of Proxy IDs (Failover chain)
+    "fallbackEnabled": true, // Boolean: Toggle for final fallback
+    "fallback": {
+      "type": "direct" // "direct" | "reject"
+    }
+  }
+}
+```
 
-Configuration for "Auto Switch" mode.
+## 4. PAC Scripts (`pacs`)
 
-#### Properties:
+A map of PAC configurations.
 
-- `defaultProfileId` (string): The default proxy profile ID to use if no rules match.
+```json
+{
+  "pac_abcde": {
+    "id": "pac_abcde",
+    "name": "My PAC", // String: Display name
+    "color": "#8b5cf6", // UI color (hex)
+    "showInPopup": true, // Boolean: Show in popup menu
+    "mode": "remote", // "remote" | "manual"
+    "url": "https://example.com/proxy.pac", // For "remote" mode
+    "script": "function FindProxyForURL...", // Raw or Cached content
+    "updateInterval": 720, // Number: Minutes between updates
+    "lastUpdated": 1678888888888 // Timestamp: Last fetch/edit time
+  }
+}
+```
 
-#### Rule Lists (In Priority Order):
+## 5. Policies (`policies`)
 
-priority is determined by the order in the generated PAC script:
+A map of Auto Switch policies. Key is the `id`.
 
-**0. Temporary Session Rules (`tempRules`)**
+```json
+{
+  "policy_xyz": {
+    "id": "policy_xyz",
+    "type": "policy",
+    "name": "Smart Mode",
+    "color": "#137fec",
+    "showInPopup": true, // Boolean: Show in popup menu
+    "defaultProfileId": "direct", // String: Fallback profile ID
 
-- Stored in `chrome.storage.session`.
-- Highest priority.
-- Structure: Array of Rule objects.
-
-**1. Custom Reject Rules (`rejectRules`)**
-
-- User-defined blocking rules.
-- Route to the `reject` profile (blackhole).
-
-**2. Custom Proxy Rules (`proxyRules`)**
-
-- User-defined switching rules.
-- Route to any defined proxy profile.
-
-#### Rule Object Structure:
-
-- `id` (string): Unique rule ID.
-- `type` (string): Rule match type.
-  - `'domainSuffix'`: Matches domain suffix (e.g., `google.com`).
-  - `'domainKeyword'`: Matches keyword in host (e.g., `google`).
-  - `'ipCIDR'`: Matches IP range (e.g., `192.168.0.0/16`).
-  - `'wildcard'`: Glob matching (e.g., `*.example.com`).
-  - `'regex'`: Regular expression.
-- `pattern` (string): The value to match against.
-- `profileId` (string): The ID of the proxy profile to use if matched.
-
-#### External Subscriptions (Pending Implementation):
-
-- `rejectRuleSets`: List of external blocking lists (e.g., AdBlock lists).
-- `proxyRuleSets`: List of external proxy lists (e.g., GFWList).
-
-### 6. `ui`
-
-Global interface settings.
-
-- `theme` (string): `'light'`, `'dark'`, or `'auto'` (default).
-
-### 7. `update`
-
-Rule update settings.
-
-- `interval` (number): Update check interval in minutes.
-  - `0`: Manual update only.
-  - `15`: 15 minutes.
-  - `60`: 1 hour.
-  - `720`: 12 hours.
-  - `1440`: 24 hours.
-
-### 8. `behavior`
-
-Browser behavior settings.
-
-- `refreshOnSwitch` (boolean): Whether to refresh the current active tab when switching proxy modes or profiles (default `false`).
-
-### 9. `sync`
-
-Cloud synchronization settings.
-
-- `enabled` (boolean): Whether to sync configuration to `chrome.storage.sync` (default `false`).
-
-### 10. `ipTags`
-
-Map of IP addresses to custom names (Tags).
-
-- Key: IP Address (e.g., `'127.0.0.1'`).
-- Value: Tag Name (e.g., `'Localhost'`).
+    "rules": [
+      {
+        "id": "rule_1", // String: Unique rule ID
+        "type": "rule", // "rule" | "divider"
+        "ruleType": "wildcard", // "wildcard" | "regex" | "ip" | "ruleset"
+        "pattern": "*.google.com",
+        "proxyId": "proxy_12345",
+        "valid": true // Boolean: Toggle if rule is active
+      },
+      {
+        "type": "divider",
+        "label": "Ads" // String: Divider label
+      },
+      {
+        "id": "rule_2",
+        "type": "rule",
+        "ruleType": "ruleset",
+        "pattern": "https://example.com/rules.txt",
+        "proxyId": "reject",
+        "valid": true,
+        "ruleSet": {
+          // Cache for remote rulesets
+          "content": "...", // String: Raw ruleset text
+          "lastUpdated": 1678888888888,
+          "lastFetched": 1678888888888,
+          "fetchError": null
+        }
+      }
+    ],
+    "rejectRules": [] // Array<Rule>: Rules processed with highest priority
+  }
+}
+```
