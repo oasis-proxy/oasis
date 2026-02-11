@@ -7,7 +7,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, system-ui;
   background-color: var(--bs-body-bg);
   -webkit-font-smoothing: antialiased;
 }

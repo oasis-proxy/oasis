@@ -43,5 +43,11 @@ If you add a new field to a component (e.g., adding `portRange` to a Proxy):
 
 ## 5. Persistence Cleanup
 
-- **Rule**: Ensure that `saveConfig` logic cleans up or formats data consistently.
 - **Check**: If a field is optional, decide if it should be saved as `null` or omitted. Be consistent.
+
+## 6. Session Storage (Temporary Rules)
+
+- **Storage Location**: `chrome.storage.session` (Key: `tempRules`).
+- **Runtime Merging**: These are loaded into `config.tempRules` at runtime by `loadConfig`.
+- **Persistence Rule**: NEVER save `tempRules` to `chrome.storage.local`. They must remain ephemeral.
+- **Integrity**: When creating a temporary rule, ensure it follows the same schema as a regular `policy.rules` item (or has a superset of fields needed for the UI).

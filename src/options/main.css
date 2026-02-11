@@ -24,7 +24,7 @@ html, body {
 
 body {
   min-width: 1200px; /* Enforce minimum page width */
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, system-ui;
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
   -webkit-font-smoothing: antialiased;

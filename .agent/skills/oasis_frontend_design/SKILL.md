@@ -57,11 +57,15 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 **Logo/Brand Section**:
 
 - Height: `h-24` (96px)
-- Padding: `px-4`
-- Border: `border-b border-slate-100` / `dark:border-divider-dark`
-- Logo Icon: `32x32px`, `bg-primary`, `rounded-lg`
-- Logo Icon Size: `text-base` (16px)
-- Title: `text-base` (16px), `font-bold`
+- Padding: `px-3`
+- Background: `bg-white` (Light) / `transparent` (Dark)
+- **Ripple Animation**:
+  - Container: `.ripple-container` (64x64px)
+  - Core: `.ripple-core` (16x16px, rounded-full, primary color)
+  - Rings: `.ripple-ring` (3 rings, animating outward)
+- **Brand Text**:
+  - Image-based logo (`oasis-proxy-primary-96px.png` for Light, `oasis-proxy-white-96px.png` for Dark).
+  - Class: `.brand-text`
 
 **Navigation Section**:
 
