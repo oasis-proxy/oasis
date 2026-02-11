@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>波纹图标 & OASIS PROXY Logo</title>
+    <!-- 引入 Montserrat 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#137fec", // 品牌蓝色
+                    },
+                    fontFamily: {
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* --- CSS 动画定义 --- */
+        
+        /* 通用圆环样式 */
+        .ripple-ring-css {
+            position: absolute;
+            border-radius: 50%;
+            box-sizing: border-box; /* 关键：确保边框计算在尺寸内 */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* 绝对居中 */
+            border-style: solid;
+        }
+
+        /* 静态圆环样式 (用于磨砂图标) */
+        .static-ring {
+            position: absolute;
+            border-radius: 50%;
+            box-sizing: border-box;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-style: solid;
+            border-width: 2px;
+        }
+        .static-ring.ring-1 {
+            filter: blur(2px);
+        }
+        .static-ring.ring-2 {
+            filter: blur(1.5px);
+        }
+        .static-ring.ring-3 {
+            filter: blur(1.25px);
+        }
+        .staticring.ripple-core-css {
+            box-shadow: 0 0 5px rgba(19, 127, 236, 0.8);
+        }
+
+        /* 核心样式 */
+        .ripple-core-css {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;  
+            box-shadow: 0 0 5px rgba(19, 127, 236, 0.8);
+        }
+        .dark-mode-group .ripple-core-css {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes ripple-css-1 {
+            0%   { width: 64px; height: 64px; border-width: 2px; opacity: var(--op-1); filter: blur(1.5px); } 
+            100% { width: 80px; height: 80px; border-width: 0px; opacity: 0; filter: blur(2px); }
+        }
+
+        @keyframes ripple-css-2 {
+            0%   { width: 48px; height: 48px; border-width: 2px; opacity: var(--op-2); filter: blur(1.25px); }
+            100% { width: 60px; height: 60px; border-width: 1px; opacity: 0; filter: blur(1.5px); }
+        }
+
+        @keyframes ripple-css-3 {
+            0%   { width: 32px; height: 32px; border-width: 2px; opacity: var(--op-3); filter: blur(1px); }
+            100% { width: 36px; height: 36px; border-width: 2px; opacity: 0; filter: blur(1.25px); }
+        }
+
+        /* 绑定动画 */
+        .animate-css-1 { animation: ripple-css-1 2s infinite ease-out; }
+        .animate-css-2 { animation: ripple-css-2 2s infinite ease-out; }
+        .animate-css-3 { animation: ripple-css-3 2s infinite ease-out; }
+
+        /* --- 变量定义 --- */
+        .light-mode-group {
+            --op-1: 0.3;
+            --op-2: 0.5;
+            --op-3: 0.7;
+            --ring-color: #137fec;
+        }
+
+        .dark-mode-group {
+            --op-1: 0.2;
+            --op-2: 0.4;
+            --op-3: 0.6;
+            --ring-color: #ffffff;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen p-8 flex flex-col items-center gap-10">
+
+    <div class="text-center space-y-2">
+        <h1 class="text-2xl font-bold text-slate-800">资源生成工具</h1>
+        <p class="text-slate-500">波纹图标 & OASIS PROXY Logo</p>
+    </div>
+
+    <!-- 1. 动态波纹图标 -->
+    <section class="flex flex-col items-center gap-4">
+        <h2 class="text-lg font-semibold text-slate-700 border-b pb-1">1. 动态波纹图标</h2>
+        <div class="flex gap-6">
+            <!-- 浅色模式 -->
+            <div class="light-mode-group w-24 h-24 bg-white rounded-2xl shadow-lg flex items-center justify-center border border-slate-100 overflow-visible relative">
+                <div class="relative w-16 h-16">
+                    <div class="ripple-ring-css animate-css-1" style="border-color: var(--ring-color)"></div>
+                    <div class="ripple-ring-css animate-css-2" style="border-color: var(--ring-color)"></div>
+                    <div class="ripple-ring-css animate-css-3" style="border-color: var(--ring-color)"></div>
+                    <div class="ripple-core-css bg-primary"></div>
+                </div>
+            </div>
+            <!-- 深色模式 -->
+            <div class="dark-mode-group w-24 h-24 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-lg flex items-center justify-center border border-slate-700 overflow-visible relative">
+                <div class="relative w-16 h-16">
+                    <div class="ripple-ring-css animate-css-1" style="border-color: var(--ring-color)"></div>
+                    <div class="ripple-ring-css animate-css-2" style="border-color: var(--ring-color)"></div>
+                    <div class="ripple-ring-css animate-css-3" style="border-color: var(--ring-color)"></div>
+                    <div class="ripple-core-css bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
+                </div>
+            </div>
+        </div>
+        <!-- 动态图标导出 -->
+        <div class="flex flex-col gap-3 mt-2 w-full max-w-md">
+            <div class="flex flex-wrap justify-center gap-2">
+                <span class="text-[10px] font-bold text-slate-400 uppercase w-full text-center">浅色模式 (Light)</span>
+                <button onclick="downloadIcon(256, 'light', false)" class="px-2 py-1 bg-slate-50 hover:bg-slate-100 text-slate-600 text-[10px] rounded border border-slate-200 transition-colors">256px</button>
+                <button onclick="downloadIcon(128, 'light', false)" class="px-2 py-1 bg-slate-50 hover:bg-slate-100 text-slate-600 text-[10px] rounded border border-slate-200 transition-colors">128px</button>
+                <button onclick="downloadIcon(64, 'light', false)" class="px-2 py-1 bg-slate-50 hover:bg-slate-100 text-slate-600 text-[10px] rounded border border-slate-200 transition-colors">64px</button>
+                <button onclick="downloadIcon(48, 'light', false)" class="px-2 py-1 bg-slate-50 hover:bg-slate-100 text-slate-600 text-[10px] rounded border border-slate-200 transition-colors">48px</button>
+                <button onclick="downloadIcon(32, 'light', false)" class="px-2 py-1 bg-slate-50 hover:bg-slate-100 text-slate-600 text-[10px] rounded border border-slate-200 transition-colors">32px</button>
+                <button onclick="downloadIcon(16, 'light', false)" class="px-2 py-1 bg-slate-50 hover:bg-slate-100 text-slate-600 text-[10px] rounded border border-slate-200 transition-colors">16px</button>
+            </div>
+            <div class="flex flex-wrap justify-center gap-2">
+                <span class="text-[10px] font-bold text-slate-500 uppercase w-full text-center">深色模式 (Dark)</span>
+                <button onclick="downloadIcon(256, 'dark', false)" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 text-[10px] rounded border border-slate-600 transition-colors">256px</button>
+                <button onclick="downloadIcon(128, 'dark', false)" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 text-[10px] rounded border border-slate-600 transition-colors">128px</button>
+                <button onclick="downloadIcon(64, 'dark', false)" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 text-[10px] rounded border border-slate-600 transition-colors">64px</button>
+                <button onclick="downloadIcon(48, 'dark', false)" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 text-[10px] rounded border border-slate-600 transition-colors">48px</button>
+                <button onclick="downloadIcon(32, 'dark', false)" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 text-[10px] rounded border border-slate-600 transition-colors">32px</button>
+                <button onclick="downloadIcon(16, 'dark', false)" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 text-[10px] rounded border border-slate-600 transition-colors">16px</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. 静态磨砂图标 (新功能) -->
+    <section class="flex flex-col items-center gap-4 border-t border-slate-200 pt-8 w-full max-w-2xl">
+        <h2 class="text-lg font-semibold text-slate-700 border-b pb-1">2. 静态磨砂图标 (1px Blur)</h2>
+        <div class="flex gap-6">
+            <!-- 浅色模式 (Static Blur) -->
+            <div class="light-mode-group w-24 h-24 bg-white rounded-2xl shadow-lg flex items-center justify-center border border-slate-100 overflow-visible relative">
+                <div class="relative w-16 h-16">
+                    <!-- 尺寸基于 r=30(60px), r=22(44px), r=14(28px) -->
+                    <div class="static-ring ring-1" style="width: 64px; height: 64px; border-color: var(--ring-color); opacity: var(--op-1);"></div>
+                    <div class="static-ring ring-2" style="width: 48px; height: 48px; border-color: var(--ring-color); opacity: var(--op-2);"></div>
+                    <div class="static-ring ring-3" style="width: 32px; height: 32px; border-color: var(--ring-color); opacity: var(--op-3);"></div>
+                    <div class="staticring ripple-core-css bg-primary shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
+                </div>
+            </div>
+            <!-- 深色模式 (Static Blur) -->
+            <div class="dark-mode-group w-24 h-24 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-lg flex items-center justify-center border border-slate-700 overflow-visible relative">
+                <div class="relative w-16 h-16">
+                    <div class="static-ring ring-1" style="width: 64px; height: 64px; border-color: var(--ring-color); opacity: var(--op-1);"></div>
+                    <div class="static-ring ring-2" style="width: 48px; height: 48px; border-color: var(--ring-color); opacity: var(--op-2);"></div>
+                    <div class="static-ring ring-3" style="width: 32px; height: 32px; border-color: var(--ring-color); opacity: var(--op-3);"></div>
+                    <div class="staticring ripple-core-css bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
+                </div>
+            </div>
+        </div>
+        <!-- 磨砂图标导出 -->
+        <div class="flex flex-col gap-3 mt-2 w-full max-w-md">
+            <div class="flex flex-wrap justify-center gap-2">
+                <span class="text-[10px] font-bold text-sky-400 uppercase w-full text-center">磨砂-蓝 (Light Blurred)</span>
+                <button onclick="downloadIcon(256, 'light', true)" class="px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 text-[10px] rounded border border-sky-200 transition-colors font-medium">256px</button>
+                <button onclick="downloadIcon(128, 'light', true)" class="px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 text-[10px] rounded border border-sky-200 transition-colors font-medium">128px</button>
+                <button onclick="downloadIcon(64, 'light', true)" class="px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 text-[10px] rounded border border-sky-200 transition-colors font-medium">64px</button>
+                <button onclick="downloadIcon(48, 'light', true)" class="px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 text-[10px] rounded border border-sky-200 transition-colors font-medium">48px</button>
+                <button onclick="downloadIcon(32, 'light', true)" class="px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 text-[10px] rounded border border-sky-200 transition-colors font-medium">32px</button>
+                <button onclick="downloadIcon(16, 'light', true)" class="px-2 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 text-[10px] rounded border border-sky-200 transition-colors font-medium">16px</button>
+            </div>
+            <div class="flex flex-wrap justify-center gap-2">
+                <span class="text-[10px] font-bold text-indigo-400 uppercase w-full text-center">磨砂-白 (Dark Blurred)</span>
+                <button onclick="downloadIcon(256, 'dark', true)" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-100 text-[10px] rounded border border-slate-600 transition-colors font-medium">256px</button>
+                <button onclick="downloadIcon(128, 'dark', true)" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-100 text-[10px] rounded border border-slate-600 transition-colors font-medium">128px</button>
+                <button onclick="downloadIcon(64, 'dark', true)" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-100 text-[10px] rounded border border-slate-600 transition-colors font-medium">64px</button>
+                <button onclick="downloadIcon(48, 'dark', true)" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-100 text-[10px] rounded border border-slate-600 transition-colors font-medium">48px</button>
+                <button onclick="downloadIcon(32, 'dark', true)" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-100 text-[10px] rounded border border-slate-600 transition-colors font-medium">32px</button>
+                <button onclick="downloadIcon(16, 'dark', true)" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-100 text-[10px] rounded border border-slate-600 transition-colors font-medium">16px</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Logo 文字生成 -->
+    <section class="flex flex-col items-center gap-6 w-full max-w-2xl border-t border-slate-200 pt-8 mt-4">
+        <h2 class="text-lg font-semibold text-slate-700">2. Logo 文字 (96px)</h2>
+        <!-- 预览区域 -->
+        <div class="flex flex-col items-center gap-4 p-6 bg-slate-100 rounded-xl border border-slate-200 w-full">
+            <div class="flex gap-4 flex-wrap justify-center w-full">
+                <!-- 黑色预览 -->
+                <div class="bg-white p-4 rounded border border-slate-200 flex items-center justify-center h-24 min-w-[150px] w-full md:w-auto overflow-hidden">
+                    <canvas id="text-preview-black" class="max-w-full max-h-full"></canvas>
+                </div>
+                <!-- 蓝色预览 -->
+                <div class="bg-white p-4 rounded border border-slate-200 flex items-center justify-center h-24 min-w-[150px] w-full md:w-auto overflow-hidden">
+                    <canvas id="text-preview-blue" class="max-w-full max-h-full"></canvas>
+                </div>
+                <!-- 白色预览 -->
+                <div class="bg-slate-800 p-4 rounded border border-slate-600 flex items-center justify-center h-24 min-w-[150px] w-full md:w-auto overflow-hidden">
+                    <canvas id="text-preview-white" class="max-w-full max-h-full"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- 文字下载按钮 -->
+        <div class="flex flex-wrap justify-center gap-3">
+            <button onclick="downloadTextLogo('black', 'png')" class="px-3 py-1.5 bg-slate-900 text-white text-xs rounded">黑 PNG</button>
+            <button onclick="downloadTextLogo('primary', 'png')" class="px-3 py-1.5 bg-sky-500 text-white text-xs rounded">蓝 PNG</button>
+            <button onclick="downloadTextLogo('white', 'png')" class="px-3 py-1.5 bg-slate-800 text-white text-xs rounded border border-slate-600">白 PNG</button>
+        </div>
+    </section>
+
+    <!-- 4. Brand 图片生成 (Logo + 文字) -->
+    <section class="flex flex-col items-center gap-6 w-full max-w-3xl border-t border-slate-200 pt-8 mt-4 pb-20">
+        <h2 class="text-lg font-semibold text-slate-700">4. Brand 图片生成</h2>
+        <p class="text-sm text-slate-500">包含普通版与磨砂版，自动适配尺寸</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full px-4">
+            <!-- 浅色模式 (Light Theme) -->
+            <div class="flex flex-col items-center gap-4 p-6 bg-white rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="font-medium text-slate-600 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-slate-200"></span> 浅色主题
+                </h3>
+                
+                <!-- 普通版 -->
+                <div class="w-full space-y-2">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">标准版 (Standard)</p>
+                    <div class="flex gap-2">
+                        <button onclick="downloadBrandImage(440, 280, 'light', false)" class="flex-1 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs rounded border border-slate-200 transition-colors">440x280</button>
+                        <button onclick="downloadBrandImage(1400, 560, 'light', false)" class="flex-1 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs rounded border border-slate-200 transition-colors">1400x560</button>
+                    </div>
+                </div>
+
+                <!-- 磨砂版 -->
+                <div class="w-full space-y-2 pt-2 border-t border-slate-100">
+                    <p class="text-xs text-sky-500 font-bold uppercase tracking-wider">磨砂版 (Blurred)</p>
+                    <div class="flex gap-2">
+                        <button onclick="downloadBrandImage(440, 280, 'light', true)" class="flex-1 px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs rounded border border-sky-200 transition-colors">440x280</button>
+                        <button onclick="downloadBrandImage(1400, 560, 'light', true)" class="flex-1 px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs rounded border border-sky-200 transition-colors">1400x560</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 深色模式 (Dark Theme) -->
+            <div class="flex flex-col items-center gap-4 p-6 bg-slate-900 rounded-xl border border-slate-700 shadow-sm">
+                <h3 class="font-medium text-slate-200 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-slate-600"></span> 深色主题
+                </h3>
+                
+                <!-- 普通版 -->
+                <div class="w-full space-y-2">
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">标准版 (Standard)</p>
+                    <div class="flex gap-2">
+                        <button onclick="downloadBrandImage(440, 280, 'dark', false)" class="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded border border-slate-600 transition-colors">440x280</button>
+                        <button onclick="downloadBrandImage(1400, 560, 'dark', false)" class="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded border border-slate-600 transition-colors">1400x560</button>
+                    </div>
+                </div>
+
+                <!-- 磨砂版 -->
+                <div class="w-full space-y-2 pt-2 border-t border-slate-800">
+                    <p class="text-xs text-indigo-400 font-bold uppercase tracking-wider">磨砂版 (Blurred)</p>
+                    <div class="flex gap-2">
+                        <button onclick="downloadBrandImage(440, 280, 'dark', true)" class="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-indigo-300 text-xs rounded border border-indigo-900/50 transition-colors">440x280</button>
+                        <button onclick="downloadBrandImage(1400, 560, 'dark', true)" class="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-indigo-300 text-xs rounded border border-indigo-900/50 transition-colors">1400x560</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 隐藏的 Canvas 用于生成图片 -->
+    <canvas id="export-canvas" style="display: none;"></canvas>
+
+    <script>
+        // --- 波纹图标逻辑 (保持不变) ---
+        const startTime = Date.now();
+        function easeOutQuad(t) { return t * (2 - t); }
+        function getProgress(duration) {
+            return ((Date.now() - startTime) % duration) / duration;
+        }
+
+        /**
+         * 核心图标导出逻辑 (支持磨砂)
+         * @param size 尺寸
+         * @param theme 主题 'light' | 'dark'
+         * @param useBlur 是否使用模糊
+         */
+        function downloadIcon(size, theme = 'light', useBlur = false) {
+            const canvas = document.getElementById('export-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = size; canvas.height = size;
+            const scale = size / 64;
+            
+            ctx.clearRect(0, 0, size, size);
+            ctx.save(); 
+            ctx.scale(scale, scale);
+            
+            const isDark = theme === 'dark';
+            // #137fec -> 19, 127, 236
+            const color = isDark ? "255, 255, 255" : "19, 127, 236"; 
+            const core = isDark ? "#ffffff" : "#137fec";
+            
+            // 如果启用模糊，应用滤镜
+            // 注意：Canvas filter 的单位是像素。为了保持“设计上的 1px”，随着 scale 增大，模糊半径也应增大
+            // 比如 64px 时是 1px blur，256px 时就是 4px blur。
+            if (useBlur) {
+                // 使用相对比例的模糊，保持视觉一致性
+                // 基础模糊 1px (相对于 64px 画布)
+                const blurAmount = 1 * scale; 
+                ctx.filter = `blur(${blurAmount}px)`;
+            } else {
+                ctx.filter = 'none';
+            }
+
+            // 绘制圆环 (Rings) - 应用模糊
+            ctx.lineWidth = 2; // Match AppSidebar.vue (2px)
+            
+            // Ring 1 (Outer) - 2px blur
+            if (useBlur) ctx.filter = `blur(${1.5 * scale}px)`;
+            ctx.beginPath(); ctx.arc(32, 32, 28, 0, 2 * Math.PI); 
+            ctx.strokeStyle = `rgba(${color}, ${isDark ? 0.2 : 0.3})`; ctx.stroke();
+            
+            // Ring 2 (Middle) - 2px blur
+            if (useBlur) ctx.filter = `blur(${1 * scale}px)`;
+            ctx.beginPath(); ctx.arc(32, 32, 21, 0, 2 * Math.PI); 
+            ctx.strokeStyle = `rgba(${color}, ${isDark ? 0.4 : 0.5})`; ctx.stroke();
+            
+            // Ring 3 (Inner) - 1px blur
+            if (useBlur) ctx.filter = `blur(${1 * scale}px)`;
+            ctx.beginPath(); ctx.arc(32, 32, 14, 0, 2 * Math.PI); 
+            ctx.strokeStyle = `rgba(${color}, ${isDark ? 0.6 : 0.7})`; ctx.stroke();
+            
+            // 核心 (Core) - 通常不需要模糊
+            ctx.filter = 'none'; 
+            
+            // 绘制核心圆
+            ctx.beginPath(); ctx.arc(32, 32, 8, 0, 2 * Math.PI); 
+            ctx.fillStyle = core;
+            
+            // 为核心应用发光阴影 (所有模式均适用)
+            ctx.shadowColor = isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(19, 127, 236, 0.8)";
+            ctx.shadowBlur = 8 * scale;
+            
+            ctx.fill();
+            ctx.shadowBlur = 0; // 重置阴影，防止影响后续绘制
+            
+            ctx.restore();
+            
+            const link = document.createElement('a');
+            const suffix = useBlur ? '-blurred' : '';
+            link.download = `ripple-icon-${theme}-${size}x${size}${suffix}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // --- OASIS PROXY Logo 逻辑 (Text Only) ---
+        async function drawLogoOnCanvas(canvas, color) {
+            const ctx = canvas.getContext('2d');
+            const text = "OASIS PROXY";
+            const fontSize = 96; 
+            const fontFamily = 'Montserrat';
+            const fontWeight = '800';
+
+            await document.fonts.load(`${fontWeight} ${fontSize}px "${fontFamily}"`);
+            ctx.font = `${fontWeight} ${fontSize}px "${fontFamily}"`;
+            const metrics = ctx.measureText(text);
+
+            const canvasWidth = Math.ceil(metrics.width) + 20; 
+            const canvasHeight = Math.ceil(fontSize * 1.5); 
+
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+
+            ctx.font = `${fontWeight} ${fontSize}px "${fontFamily}"`;
+            ctx.fillStyle = color;
+            ctx.textBaseline = 'middle';
+            
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            ctx.fillText(text, 10, canvasHeight / 2 + 5); 
+            
+            return { width: canvasWidth, height: canvasHeight }; 
+        }
+
+        // --- Brand Image Logic (Logo + Text) ---
+        // 支持 useBlur 参数
+        async function downloadBrandImage(canvasWidth, canvasHeight, theme, useBlur = false) {
+            const canvas = document.getElementById('export-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+
+            // 1. 背景填充
+            const isDark = theme === 'dark';
+            const bgColor = isDark ? '#0f172a' : '#ffffff';
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+            // 2. 颜色配置
+            const brandBlue = "#137fec"; 
+            const contentColor = isDark ? "#ffffff" : brandBlue; 
+            const ringBaseColor = isDark ? "255, 255, 255" : "19, 127, 236"; 
+
+            // 3. 布局计算
+            const text = "OASIS PROXY";
+            const fontFamily = 'Montserrat';
+            const fontWeight = '800';
+            
+            const refFontSize = 100;
+            const refIconSize = 120; 
+            const refGap = 40; 
+            
+            await document.fonts.load(`${fontWeight} ${refFontSize}px "${fontFamily}"`);
+            ctx.font = `${fontWeight} ${refFontSize}px "${fontFamily}"`;
+            const metrics = ctx.measureText(text);
+            const refTextWidth = metrics.width;
+            
+            const refTotalWidth = refIconSize + refGap + refTextWidth;
+            const refTotalHeight = Math.max(refIconSize, refFontSize);
+
+            // 4. 智能缩放
+            const paddingX = canvasWidth * 0.12; 
+            const paddingY = canvasHeight * 0.2; 
+            const availableWidth = canvasWidth - (paddingX * 2);
+            const availableHeight = canvasHeight - (paddingY * 2);
+
+            const scaleX = availableWidth / refTotalWidth;
+            const scaleY = availableHeight / refTotalHeight;
+            const finalScale = Math.min(scaleX, scaleY);
+
+            const fontSize = Math.floor(refFontSize * finalScale);
+            const iconSize = Math.floor(refIconSize * finalScale);
+            const gap = Math.floor(refGap * finalScale);
+
+            // 5. 定位
+            ctx.font = `${fontWeight} ${fontSize}px "${fontFamily}"`;
+            const finalMetrics = ctx.measureText(text);
+            const textWidth = finalMetrics.width;
+
+            const totalWidth = iconSize + gap + textWidth;
+            const startX = (canvasWidth - totalWidth) / 2;
+            const centerY = canvasHeight / 2;
+
+            // 6. 绘制 Logo 图标
+            ctx.save();
+            const iconCenterX = startX + (iconSize / 2);
+            const iconCenterY = centerY;
+            
+            ctx.translate(iconCenterX, iconCenterY);
+            // 缩放坐标系 (基于 64x64)
+            const iconScale = iconSize / 64; 
+            ctx.scale(iconScale, iconScale);
+            ctx.translate(-32, -32); 
+
+            // ** 关键：应用模糊 ** 
+            if (useBlur) {
+                // 1px blur base on 64px design -> scale accordingly
+                const blurAmount = 1 * iconScale;
+                ctx.filter = `blur(${blurAmount}px)`;
+            } else {
+                ctx.filter = 'none';
+            }
+
+            // 绘制圆环
+            ctx.lineWidth = 2; // Match AppSidebar.vue (2px)
+            
+            // Ring 1 (Outer) - 2px blur
+            if (useBlur) ctx.filter = `blur(${1.5 * iconScale}px)`;
+            ctx.beginPath(); ctx.arc(32, 32, 28, 0, 2 * Math.PI); 
+            ctx.strokeStyle = `rgba(${ringBaseColor}, ${isDark ? 0.2 : 0.3})`; ctx.stroke();
+            
+            // Ring 2 (Middle) - 2px blur
+            if (useBlur) ctx.filter = `blur(${1 * iconScale}px)`;
+            ctx.beginPath(); ctx.arc(32, 32, 21, 0, 2 * Math.PI); 
+            ctx.strokeStyle = `rgba(${ringBaseColor}, ${isDark ? 0.4 : 0.5})`; ctx.stroke();
+            
+            // Ring 3 (Inner) - 1px blur
+            if (useBlur) ctx.filter = `blur(${1 * iconScale}px)`;
+            ctx.beginPath(); ctx.arc(32, 32, 14, 0, 2 * Math.PI); 
+            ctx.strokeStyle = `rgba(${ringBaseColor}, ${isDark ? 0.6 : 0.7})`; ctx.stroke();
+            
+            // 绘制核心 (不模糊，保持清晰，带阴影)
+            ctx.filter = 'none';
+
+            ctx.beginPath(); ctx.arc(32, 32, 8, 0, 2 * Math.PI); 
+            ctx.fillStyle = contentColor; 
+            
+            // 为核心应用发光阴影
+            ctx.shadowColor = isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(19, 127, 236, 0.8)";
+            ctx.shadowBlur = 8 * iconScale;
+            
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.restore();
+
+            // 7. 绘制文字 (不模糊)
+            ctx.fillStyle = contentColor;
+            ctx.font = `${fontWeight} ${fontSize}px "${fontFamily}"`;
+            ctx.textBaseline = 'middle'; 
+            
+            const textX = startX + iconSize + gap;
+            ctx.fillText(text, textX, centerY + (fontSize * 0.05));
+
+            // 8. 下载
+            const link = document.createElement('a');
+            const suffix = useBlur ? '-blurred' : '';
+            link.download = `brand-${theme}-${canvasWidth}x${canvasHeight}${suffix}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // --- Initializers ---
+
+        async function initTextPreviews() {
+            const blackCanvas = document.getElementById('text-preview-black');
+            const blueCanvas = document.getElementById('text-preview-blue');
+            const whiteCanvas = document.getElementById('text-preview-white');
+            if (blackCanvas) await drawLogoOnCanvas(blackCanvas, '#000000');
+            if (blueCanvas) await drawLogoOnCanvas(blueCanvas, '#137fec');
+            if (whiteCanvas) await drawLogoOnCanvas(whiteCanvas, '#ffffff');
+        }
+
+        async function downloadTextLogo(colorType, format = 'png') {
+            const canvas = document.createElement('canvas');
+            let color = '#000000';
+            if (colorType === 'white') color = '#ffffff';
+            if (colorType === 'primary') color = '#137fec';
+
+            const dimensions = await drawLogoOnCanvas(canvas, color);
+            const link = document.createElement('a');
+            link.download = `oasis-proxy-${colorType}-96px.${format}`; 
+
+            if (format === 'png') {
+                link.href = canvas.toDataURL('image/png');
+            } else if (format === 'svg') {
+                const text = "OASIS PROXY";
+                const fontSize = 96;
+                const svgContent = `
+<svg xmlns="http://www.w3.org/2000/svg" width="${dimensions.width}" height="${dimensions.height}" viewBox="0 0 ${dimensions.width} ${dimensions.height}">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+    .logo-text { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: ${fontSize}px; }
+  </style>
+  <text x="10" y="52%" dominant-baseline="middle" fill="${color}" class="logo-text">${text}</text>
+</svg>`.trim();
+                const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+                link.href = URL.createObjectURL(blob);
+            }
+            link.click();
+            if (format === 'svg') setTimeout(() => URL.revokeObjectURL(link.href), 100);
+        }
+
+        window.onload = () => { initTextPreviews(); }
+        document.fonts.ready.then(() => { initTextPreviews(); });
+    </script>
+</body>
+</html>

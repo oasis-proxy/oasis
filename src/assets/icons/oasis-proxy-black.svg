@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="173" height="36" viewBox="0 0 173 36">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
-    .logo-text { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 24px; }
-  </style>
-  <text x="2" y="52%" dominant-baseline="middle" fill="#000000" class="logo-text">OASIS PROXY</text>
-</svg>
