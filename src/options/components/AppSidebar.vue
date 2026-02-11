@@ -54,6 +54,7 @@
           </router-link>
 
           <router-link 
+            v-if="shouldShowTempRules"
             to="/temp-rules" 
             custom 
             v-slot="{ navigate, isActive }"
@@ -404,6 +405,13 @@ const shouldShowMonitor = computed(() => {
     }
     
     return false
+})
+
+const shouldShowTempRules = computed(() => {
+    if (!config.value) return false
+    const activeId = config.value.activeProfileId
+    // Show only if active profile is an Auto Policy
+    return !!(config.value.policies && config.value.policies[activeId])
 })
 </script>
 

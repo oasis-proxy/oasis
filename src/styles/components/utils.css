@@ -344,9 +344,6 @@
 .bg-primary-subtle {
   background-color: var(--bs-primary-subtle);
 }
-.text-primary {
-  color: var(--bs-primary) !important;
-}
 .border-primary-subtle {
   border-color: var(--bs-primary-border-subtle) !important;
 }

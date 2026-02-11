@@ -30,6 +30,7 @@ export const DEFAULT_CONFIG = {
   },
 
   update: {
+    // Global update interval for external resources (RuleSets and PACs)
     // 0 = Manual, 15 = 15 min, 60 = 1 hr, 720 = 12 hr, 1440 = 24 hr
     interval: -1 
   },

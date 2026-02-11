@@ -6,6 +6,17 @@ Oasis 是一款现代、高性能的浏览器扩展，旨在通过高级路由�
 
 ---
 
+## 功能特性
+
+- **协议支持**: 支持 HTTP, HTTPS, SOCKS4 和 SOCKS5。
+- **故障转移链**: 自动化的回退逻辑，确保高可用性。
+- **智能规则合并**: 对路由规则进行智能优化与收缩。
+- **未保存更改保护**: 严格的导航守卫，防止编辑过程中数据丢失。
+- **环境感知**: 直接从页面、下载任务或监控日志中添加规则。
+- **跨设备同步**: 通过 Chrome 云轻松同步您的整个配置环境。
+
+---
+
 ## 文档指南
 
 通过我们的详细指南探索 Oasis 的功能和配置选项：
@@ -18,13 +29,25 @@ Oasis 是一款现代、高性能的浏览器扩展，旨在通过高级路由�
 - [**扩展配置**](docs/zh/guides/EXTENSION_CONFIG.md) - 主题自定义、浏览器行为和全局规则。
 - [**数据管理与备份**](docs/zh/guides/DATA_SYNC.md) - Chrome 云同步、备份和冲突解决。
 
+## Wiki
+
+[Wiki](https://github.com/oasis-proxy/oasis/wiki)
+
 ---
 
-## 功能特性
+## 项目参考
 
-- **协议支持**: 支持 HTTP, HTTPS, SOCKS4 和 SOCKS5。
-- **故障转移链**: 自动化的回退逻辑，确保高可用性。
-- **智能规则合并**: 对路由规则进行智能优化与收缩。
-- **未保存更改保护**: 严格的导航守卫，防止编辑过程中数据丢失。
-- **环境感知**: 直接从页面、下载任务或监控日志中添加规则。
-- **跨设备同步**: 通过 Chrome 云轻松同步您的整个配置环境。
+本项目站在巨人的肩膀上，使用了以下开源技术：
+
+- **[Vue.js](https://vuejs.org/)**: 渐进式 JavaScript 框架。
+- **[Bootstrap 5](https://getbootstrap.com/)**: 强大、可扩展且功能丰富的前端工具包。
+- **[Bootstrap Icons](https://icons.getbootstrap.com/)**: Bootstrap 的官方开源 SVG 图标库。
+- **[Vite](https://vitejs.dev/)**: 下一代前端构建工具。
+- **[CRXJS](https://crxjs.dev/)**: 专为 Chrome 扩展设计的 Vite 插件。
+- **[Popper](https://popper.js.org/)**: 提示框与弹出框定位引擎。
+
+---
+
+## 隐私政策
+
+我们非常重视您的隐私。请阅读我们的 [Privacy Policy](docs/PRIVACY.md) 了解我们如何处理您的数据。

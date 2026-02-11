@@ -542,7 +542,13 @@ const loadProxyData = async () => {
     // Deep copy
     proxy.value = JSON.parse(JSON.stringify(config.value.proxies[id]))
     // Ensure exist and is array
-    if (!Array.isArray(proxy.value.bypassList)) proxy.value.bypassList = []
+    if (!proxy.value.bypassList) {
+            proxy.value.bypassList = [
+                '127.0.0.1',
+                '::1',
+                '<localhost>'
+            ] // Standard localhost bypass
+        }
     if (!proxy.value.overrides) proxy.value.overrides = {}
     
     // Ensure override objects exist for UI binding

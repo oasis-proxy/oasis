@@ -67,7 +67,7 @@
               <p class="profile-name">Direct Connect</p>
               <div 
                 v-if="isActive('direct')"
-                class="ui-text-primary"
+                class="text-primary"
               >
                 <i class="bi bi-check-circle-fill ui-icon-lg"></i>
               </div>
@@ -84,7 +84,7 @@
               <p class="profile-name">System Proxy</p>
               <div 
                 v-if="isActive('system')"
-                class="ui-text-primary"
+                class="text-primary"
               >
                 <i class="bi bi-check-circle-fill ui-icon-lg"></i>
               </div>
@@ -112,7 +112,7 @@
               <p class="profile-name">{{ profile.name }}</p>
               <div 
                 v-if="isActive(profile.id)"
-                class="ui-text-primary"
+                class="text-primary"
               >
                 <i class="bi bi-check-circle-fill ui-icon-lg"></i>
               </div>
@@ -140,7 +140,7 @@
               <p class="profile-name">{{ profile.name }}</p>
               <div 
                 v-if="isActive(profile.id)"
-                class="ui-text-primary"
+                class="text-primary"
               >
                 <i class="bi bi-check-circle-fill ui-icon-lg"></i>
               </div>
@@ -168,7 +168,7 @@
               <p class="profile-name">{{ profile.name }}</p>
               <div 
                 v-if="isActive(profile.id)"
-                class="ui-text-primary"
+                class="text-primary"
               >
                 <i class="bi bi-check-circle-fill ui-icon-lg"></i>
               </div>
@@ -263,10 +263,14 @@
             <div class="d-flex gap-3 pb-2 px-2">
                 <!-- Proxy Host -->
                 <div class="flex-1 d-flex flex-column gap-1">
-                   <select v-model="quickProxyId" class="form-select ui-input ui-input-sm w-100 text-xs cursor-pointer">
-                    <option v-for="proxy in proxyOptionsArray" :key="proxy.id" :value="proxy.id">
-                        {{ proxy.label }}
-                    </option>
+                  <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">Proxy Host/Group</label>
+                  <select v-model="quickProxyId" class="form-select ui-input ui-input-sm w-100 text-xs cursor-pointer">
+                    <option value="direct">Direct</option>
+                    <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
+                        <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
+                          {{ proxy.label }}
+                        </option>
+                    </optgroup>
                   </select>
                 </div>
 
@@ -621,19 +625,34 @@ watch(failedDomains, (newVal) => {
     selectedDomains.value = [...newVal]
 }, { immediate: true })
 
-const proxyOptionsArray = computed(() => {
-  if (!config.value) return [{ id: 'direct', label: 'Direct' }]
-  const options = [] // Default is empty, user picks explicit proxy
+const proxyOptions = computed(() => {
+  if (!config.value) return []
   
-  // Add Direct (Reject removed as per request)
-  options.push({ id: 'direct', label: 'Direct' })
-
+  const groups = []
+  
+  // Proxies
   if (config.value.proxies) {
-    Object.values(config.value.proxies).forEach(p => {
-      options.push({ id: p.id, label: p.label || p.name })
-    })
+      const proxies = Object.values(config.value.proxies)
+          .map(p => ({ id: p.id, label: p.label || p.name }))
+          .sort((a, b) => a.label.localeCompare(b.label))
+          
+      if (proxies.length > 0) {
+          groups.push({ label: 'Proxies', options: proxies })
+      }
   }
-  return options
+  
+  // Proxy Groups
+  if (config.value.proxyGroups) {
+      const proxyGroups = Object.values(config.value.proxyGroups)
+          .map(g => ({ id: g.id, label: g.name }))
+          .sort((a, b) => a.label.localeCompare(b.label))
+          
+      if (proxyGroups.length > 0) {
+          groups.push({ label: 'Proxy Groups', options: proxyGroups })
+      }
+  }
+  
+  return groups
 })
 
 

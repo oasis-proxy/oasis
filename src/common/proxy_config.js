@@ -49,22 +49,12 @@ export function createProxyConfig(profile, config) {
         // PAC Script
         proxyConfig.mode = 'pac_script'
         
-        // Handle both remote and manual PAC scripts
-        if (profile.mode === 'manual' && profile.script) {
-            // Manual mode: use script data
-            proxyConfig.pacScript = {
-                data: profile.script
-            }
-        } else if (profile.url) {
-            // Remote mode: use URL
-            proxyConfig.pacScript = {
-                url: profile.url
-            }
-        } else {
-            // Fallback: empty PAC script returns DIRECT
-            proxyConfig.pacScript = {
-                data: 'function FindProxyForURL(url, host) { return "DIRECT"; }'
-            }
+        // Use cached script content for both manual and remote modes
+        // If remote PAC hasn't been fetched yet, script might be empty -> Fallback to DIRECT
+        const scriptContent = profile.script || 'function FindProxyForURL(url, host) { return "DIRECT"; }'
+        
+        proxyConfig.pacScript = {
+            data: scriptContent
         }
     }
     else if (profile.rules || profile.defaultProfileId) {

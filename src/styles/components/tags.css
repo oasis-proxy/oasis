@@ -17,7 +17,7 @@
 }
 
 /* Neutral / Default Tag */
-.ui-tag-default, .ui-tag {
+.ui-tag-default {
     background-color: var(--ui-bg-subtle);
     border-color: var(--ui-border-subtle);
     color: var(--ui-text-secondary);

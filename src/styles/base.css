@@ -14,7 +14,3 @@ body {
 
 /* Reset Lists */
 ul { padding: 0; margin: 0; list-style: none; }
-
-/* Display Utilities (Tailwind Compat) */
-.hidden { display: none !important; }
-.block { display: block !important; }

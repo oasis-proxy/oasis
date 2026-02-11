@@ -126,19 +126,6 @@
                        </button>
                     </div>
 
-                     <!-- Update Frequency (3) -->
-                     <div class="col-span-3">
-                        <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">Update Frequency</span>
-                          <select v-model="pac.updateInterval" class="form-select ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3">
-                             <option :value="60">Every 1 hour</option>
-                             <option :value="360">Every 6 hours</option>
-                             <option :value="720">Every 12 hours</option>
-                             <option :value="1440">Every 24 hours</option>
-                             <option :value="0">Never</option>
-                          </select>
-                        </label>
-                     </div>
                 </div>
 
                 <!-- Manual Mode Hint -->
@@ -227,7 +214,7 @@ const loadPacData = async () => {
         
         // Ensure defaults
         if (!pac.value.mode) pac.value.mode = 'remote'
-        if (!pac.value.updateInterval) pac.value.updateInterval = 720
+        // updateInterval removed - using global settings
         if (!pac.value.url) pac.value.url = ''
         if (!pac.value.script) pac.value.script = ''
         if (!pac.value.script) pac.value.script = ''

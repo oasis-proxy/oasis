@@ -306,6 +306,74 @@
             </div>
           </div>
         </section>
+        <!-- Extension Information -->
+        <section>
+          <div class="ui-card-label">
+            <span class="label-text">Extension Information</span>
+          </div>
+          <div class="ui-card rounded-xl border shadow-sm">
+            <!-- Extension Version -->
+            <div
+              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+            >
+              <div class="d-flex items-start">
+                <div>
+                  <p class="text-sm font-medium ui-text-primary m-0">Extension Version</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">
+                    Current version of the extension by <span class="fw-bold">Oasis</span>.
+                  </p>
+                </div>
+              </div>
+              <div class="text-sm text-slate-600 font-mono bg-slate-100 px-2 py-1 rounded">
+                v{{ extensionVersion }}
+              </div>
+            </div>
+
+            <!-- Github Repository -->
+            <div
+              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+            >
+              <div class="d-flex items-start">
+                <div>
+                  <p class="text-sm font-medium ui-text-primary m-0">Github Repository</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">
+                    Source code and contributions.
+                  </p>
+                </div>
+              </div>
+              <a
+                href="https://github.com/oasis-proxy/oasis"
+                target="_blank"
+                class="ui-button-secondary d-flex align-items-center gap-2 px-3 py-1 rounded-lg text-xs no-underline hover:text-inherit"
+              >
+                <i class="bi bi-github"></i>
+                GitHub
+              </a>
+            </div>
+
+            <!-- Wiki Address -->
+            <div
+              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+            >
+              <div class="d-flex items-start">
+                <div>
+                  <p class="text-sm font-medium ui-text-primary m-0">Wiki Address</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">
+                    Documentation and guides.
+                  </p>
+                </div>
+              </div>
+              <a
+                href="https://github.com/oasis-proxy/oasis/wiki"
+                target="_blank"
+                class="ui-button-secondary d-flex align-items-center gap-2 px-3 py-1 rounded-lg text-xs no-underline hover:text-inherit"
+              >
+                <i class="bi bi-book"></i>
+                Wiki
+              </a>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -316,6 +384,8 @@ import { reactive, computed, watch, onMounted, ref } from 'vue'
 import { loadConfig, saveGeneralSettings } from '../../common/storage'
 import { DEFAULT_CONFIG } from '../../common/config'
 import { toast } from '../utils/toast'
+
+const extensionVersion = chrome.runtime.getManifest().version
 
 // Constants
 const IPV4_REGEX =
