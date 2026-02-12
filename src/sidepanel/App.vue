@@ -4,7 +4,7 @@
     <!-- Header -->
     <div class="flex-shrink-0 z-sticky top-0 pt-3 px-3 shadow-sm" style="background-color: var(--ui-bg-card);">
       <div class="pb-3 d-flex align-items-center">
-        <h2 class="fs-4 fw-bold m-0 tracking-tight" style="color: var(--ui-text-primary);">Downloads</h2>
+        <h2 class="fs-4 fw-bold m-0 tracking-tight" style="color: var(--ui-text-primary);">{{ $t('spTitle') }}</h2>
       </div>
       
       <!-- Search -->
@@ -14,7 +14,7 @@
                 type="text" 
                 class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
                 style="min-width: 100%; width: 100%; max-width: 100% !important;" 
-                placeholder="Filter downloads by name or URL..."
+                :placeholder="$t('spPlaceholderFilter')"
                 v-model="searchQuery"
             >
         </div>
@@ -25,7 +25,7 @@
     <div class="flex-fill overflow-y-auto custom-scrollbar">
       <div v-if="filteredDownloads.length === 0" class="d-flex flex-column align-items-center justify-content-center h-100 text-secondary">
           <i class="bi bi-download mb-2 opacity-50" style="font-size: 2rem;"></i>
-          <p class="small m-0">No downloads found in the last 7 days.</p>
+          <p class="small m-0">{{ $t('spMsgNoDownloads') }}</p>
       </div>
 
       <div 
@@ -60,19 +60,19 @@
                     v-if="item.state === 'in_progress'"
                     class="ui-tag ui-tag-info"
                  >
-                    In Progress {{ Math.round((item.bytesReceived / item.totalBytes) * 100) }}%
+                    {{ $t('spStatusInProgress') }} {{ Math.round((item.bytesReceived / item.totalBytes) * 100) }}%
                  </span>
                  <span 
                     v-else-if="item.state === 'interrupted'"
                     class="ui-tag ui-tag-danger"
                  >
-                    Failed
+                    {{ $t('spStatusFailed') }}
                  </span>
                  <span 
                     v-else-if="item.state === 'complete'"
                     class="ui-tag ui-tag-primary"
                  >
-                    Completed
+                    {{ $t('spStatusCompleted') }}
                  </span>
             </div>
         </div>
@@ -83,7 +83,7 @@
           <button 
              @click="openFileLocation(item.id)"
              class="ui-button-icon" 
-             title="Show in Folder"
+             :title="$t('spActionShowFolder')"
           >
             <i class="bi bi-folder2-open" style="font-size: 12px;"></i>
           </button>
@@ -92,7 +92,7 @@
           <button 
             @click="openQuickAdd(item)"
             class="ui-button-icon" 
-            title="Add Rule"
+            :title="$t('spActionAddRule')"
           >
             <i class="bi bi-plus-lg" style="font-size: 12px;"></i>
           </button>
@@ -101,7 +101,7 @@
            <button 
             @click="copyLink(item.finalUrl || item.url)"
             class="ui-button-icon" 
-            title="Copy Link"
+            :title="$t('spActionCopyLink')"
           >
             <i class="bi bi-link" style="font-size: 12px;"></i>
           </button>
@@ -111,7 +111,7 @@
             v-if="item.state === 'in_progress'"
             @click="cancelDownload(item.id)"
             class="ui-button-icon text-danger hover-danger" 
-            title="Cancel Download"
+            :title="$t('spActionCancel')"
           >
             <i class="bi bi-x-circle" style="font-size: 12px;"></i>
           </button>
@@ -121,7 +121,7 @@
             v-else
             @click="retryDownload(item.url)"
              class="ui-button-icon" 
-            title="Re-download"
+            :title="$t('spActionRetry')"
           >
             <i class="bi bi-arrow-clockwise" style="font-size: 12px;"></i>
           </button>
@@ -323,7 +323,7 @@ const openQuickAdd = async (item) => {
     const domain = getDomain(urlToUse)
     
     if (!domain) {
-        showNotification('Not Supported', 'Only HTTP/HTTPS links are supported')
+        showNotification(chrome.i18n.getMessage('spMsgNotSupported'), chrome.i18n.getMessage('spMsgOnlyHttp'))
         return
     }
     
@@ -346,7 +346,7 @@ const openQuickAdd = async (item) => {
         }
     } catch(e) {
         console.error('Failed to open popup:', e)
-        showNotification('Error', 'Failed to open Quick Add popup')
+        showNotification(chrome.i18n.getMessage('spMsgError'), chrome.i18n.getMessage('spMsgPopupFailed'))
     }
 }
 
@@ -356,7 +356,7 @@ const openFileLocation = (id) => {
 
 const cancelDownload = (id) => {
     chrome.downloads.cancel(id, () => {
-        showNotification('Canceled', 'Download has been canceled')
+        showNotification(chrome.i18n.getMessage('spMsgCanceled'), chrome.i18n.getMessage('spMsgDownloadCanceled'))
     })
 }
 
@@ -364,9 +364,9 @@ const retryDownload = (url) => {
     if (!url) return
     chrome.downloads.download({ url }, () => {
         if (chrome.runtime.lastError) {
-             showNotification('Error', 'Failed to restart download')
+             showNotification(chrome.i18n.getMessage('spMsgError'), 'Failed to restart download')
         } else {
-             showNotification('Started', 'Download restarted')
+             showNotification(chrome.i18n.getMessage('spMsgStarted'), chrome.i18n.getMessage('spMsgDownloadRestarted'))
         }
     })
 }
@@ -374,9 +374,9 @@ const retryDownload = (url) => {
 const copyLink = (url) => {
     if (!url) return
     navigator.clipboard.writeText(url).then(() => {
-        showNotification('Copied', 'Like copied to clipboard')
+        showNotification(chrome.i18n.getMessage('spMsgCopied'), chrome.i18n.getMessage('spMsgLinkCopied'))
     }).catch(() => {
-        showNotification('Error', 'Failed to copy link')
+        showNotification(chrome.i18n.getMessage('spMsgError'), chrome.i18n.getMessage('spMsgCopyFailed'))
     })
 }
 

@@ -20,7 +20,7 @@
       <!-- Fixed: Configuration -->
       <div>
         <div class="mb-2 d-flex align-items-center justify-content-between group cursor-pointer">
-          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">Configuration</h3>
+          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">{{ $t('navConfig') }}</h3>
         </div>
         <div class="d-flex flex-column gap-1">
           <router-link 
@@ -34,7 +34,7 @@
               :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
             >
               <i class="bi bi-gear text-base"></i>
-              <span class="text-xs text-truncate">General Settings</span>
+              <span class="text-xs text-truncate">{{ $t('navGeneral') }}</span>
             </button>
           </router-link>
 
@@ -49,7 +49,7 @@
               :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
             >
               <i class="bi bi-cloud text-base"></i>
-              <span class="text-xs text-truncate">Data Synchronization</span>
+              <span class="text-xs text-truncate">{{ $t('navDataSync') }}</span>
             </button>
           </router-link>
 
@@ -65,7 +65,7 @@
                :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
             >
               <i class="bi bi-clock-history text-base"></i>
-              <span class="text-xs text-truncate">Temporary Rules</span>
+              <span class="text-xs text-truncate">{{ $t('navTempRules') }}</span>
             </button>
           </router-link>
 
@@ -76,7 +76,7 @@
              class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors group nav-item-inactive"
           >
             <i class="bi bi-activity text-base"></i>
-            <span class="text-xs text-truncate">Request Monitor</span>
+            <span class="text-xs text-truncate">{{ $t('navRequestMonitor') }}</span>
             <i class="bi bi-box-arrow-up-right text-xs ms-auto opacity-50"></i>
           </button>
         </div>
@@ -85,7 +85,7 @@
       <!-- Variable: Proxy Hosts -->
       <div>
         <div class="mb-2 d-flex align-items-center justify-content-between group">
-          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">Proxy Hosts</h3>
+          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">{{ $t('navProxyHosts') }}</h3>
           <button 
             @click="showProxyModal = true"
             class="ui-button-icon"
@@ -117,7 +117,7 @@
       <!-- Variable: Proxy Host Groups -->
       <div>
         <div class="mb-2 d-flex align-items-center justify-content-between group">
-          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">Proxy Host Groups</h3>
+          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">{{ $t('navProxyGroups') }}</h3>
           <button 
             @click="showGroupModal = true"
             class="ui-button-icon"
@@ -148,7 +148,7 @@
       <!-- Variable: Policy Rules -->
       <div>
         <div class="mb-2 d-flex align-items-center justify-content-between group">
-          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">Policy Rules</h3>
+          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">{{ $t('navPolicyRules') }}</h3>
           <button 
             @click="showPolicyModal = true"
             class="ui-button-icon"
@@ -231,7 +231,7 @@ const proxyGroupsList = computed(() => {
     if (!config.value?.proxyGroups) return []
     return Object.values(config.value.proxyGroups).map(g => ({
         id: g.id,
-        name: g.name || 'Unnamed Group',
+        name: g.name || chrome.i18n.getMessage('unnamedGroup'),
         color: g.color,
         type: 'group'
     }))
@@ -246,7 +246,7 @@ const policyRules = computed(() => {
         Object.values(config.value.pacs).forEach(pac => {
             rules.push({
                 id: pac.id,
-                name: pac.name || pac.url || 'Unnamed PAC', // Support 'name' property
+                name: pac.name || pac.url || chrome.i18n.getMessage('unnamedPAC'), // Support 'name' property
                 icon: 'bi-file-earmark-code', // Distinct icon for PAC
                 color: pac.color,
                 type: 'pac'
@@ -310,7 +310,7 @@ const handleCreateProxy = async ({ name }) => {
     }
 
     await saveProxies(latestConfig.proxies)
-    toast.success('Proxy host created successfully')
+    toast.success(chrome.i18n.getMessage('msgProxyCreated'))
     showProxyModal.value = false
     router.push(`/host/${id}`)
 }
@@ -348,10 +348,10 @@ const handleCreatePolicy = async ({ name, type }) => {
 
     if (type === 'pac') {
        await savePacs(latestConfig.pacs)
-       toast.success('PAC script created successfully')
+       toast.success(chrome.i18n.getMessage('msgPACCreated'))
     } else {
        await savePolicies(latestConfig.policies)
-       toast.success('Policy created successfully')
+       toast.success(chrome.i18n.getMessage('msgPolicyCreated'))
     }
     
     // Navigation
@@ -380,7 +380,7 @@ const handleCreateProxyGroup = async ({ name }) => {
     }
     
     await saveProxyGroups(latestConfig.proxyGroups)
-    toast.success('Proxy group created successfully')
+    toast.success(chrome.i18n.getMessage('msgGroupCreated'))
     showGroupModal.value = false
     router.push(`/group/${id}`)
 }

@@ -12,7 +12,7 @@
       <div class="d-flex align-items-center gap-3">
         <!-- History Limit -->
         <div class="d-flex align-items-center gap-2">
-          <span class="text-xs font-medium ui-text-tertiary">History:</span>
+          <span class="text-xs font-medium ui-text-tertiary">{{ $t('lblHistory') }}</span>
           <select v-model="historyLimit" class="form-select form-select-sm ui-input" style="width: 80px;">
             <option :value="1000">1000</option>
             <option :value="2000">2000</option>
@@ -29,7 +29,7 @@
             type="text"
             class="form-control form-control-sm ps-5 ui-input w-100"
             style="max-width: none;"
-            placeholder="Search requests (e.g. google, POST)"
+            :placeholder="$t('phSearchRequests')"
           />
         </div>
       </div>
@@ -48,12 +48,12 @@
             @click="selectTab(null)"
           >
             <div class="d-flex align-items-center justify-content-between mb-1">
-              <span class="font-mono text-xs ui-text-tertiary">All Tabs</span>
+              <span class="font-mono text-xs ui-text-tertiary">{{ $t('lblAllTabs') }}</span>
               <span class="ui-tag">{{ totalRequestCount }}</span>
             </div>
             <div class="d-flex align-items-center gap-2">
               <i class="bi bi-globe text-primary"></i>
-              <span class="text-sm font-medium ui-text-primary">All Requests</span>
+              <span class="text-sm font-medium ui-text-primary">{{ $t('lblAllRequests') }}</span>
             </div>
           </div>
 
@@ -73,7 +73,7 @@
               <img v-if="tab.favIconUrl" :src="tab.favIconUrl" class="mt-1" style="width: 16px; height: 16px;" />
               <i v-else class="bi bi-file-earmark ui-text-tertiary mt-1"></i>
               <div class="flex-1 min-w-0" style="max-width: calc(100% - 24px);">
-                <p class="text-sm font-medium ui-text-primary text-truncate m-0" style="max-width: 100%;">{{ tab.title || 'Untitled' }}</p>
+                <p class="text-sm font-medium ui-text-primary text-truncate m-0" style="max-width: 100%;">{{ tab.title || $t('lblUntitled') }}</p>
                 <p class="text-xs ui-text-secondary text-truncate m-0">{{ getHostname(tab.url) }}</p>
               </div>
             </div>
@@ -87,9 +87,9 @@
         <div class="d-flex align-items-center justify-content-between px-4 py-2 border-bottom" style="background: var(--ui-bg-card);">
           <div class="d-flex align-items-center gap-3">
             <h2 class="m-0 text-sm font-bold ui-text-primary">
-              {{ selectedTabId ? getSelectedTabTitle() : 'All Requests' }}
+              {{ selectedTabId ? getSelectedTabTitle() : $t('lblAllRequests') }}
             </h2>
-            <span class="text-xs ui-text-tertiary">{{ filteredRequests.length }} requests</span>
+            <span class="text-xs ui-text-tertiary">{{ filteredRequests.length }} {{ $t('lblRequestsSuffix') }}</span>
           </div>
           <div class="d-flex align-items-center gap-2">
             <!-- Add Tab Domains button (only when a single tab is selected) -->
@@ -97,13 +97,13 @@
                     @click="openQuickAdd" 
                     class="ui-button-icon d-flex align-items-center gap-1"
                     :disabled="filteredRequests.length === 0"
-                    title="Add Tab Domains">
+                    :title="$t('btnAddTabDomains')">
               <i class="bi bi-plus-circle text-sm"></i>
             </button>
             <!-- Delete button for selected tab or all -->
             <button @click="clearCurrentRequests" 
                     class="ui-button-icon d-flex align-items-center gap-1"
-                    :title="selectedTabId ? 'Clear this tab' : 'Clear All'">
+                    :title="selectedTabId ? $t('btnClearTab') : $t('btnClearAll')">
               <i class="bi bi-trash text-sm"></i>
             </button>
           </div>
@@ -114,15 +114,15 @@
           <!-- Table Header (Sticky) -->
           <div class="d-flex align-items-center gap-3 px-4 py-2 border-bottom text-xs font-semibold ui-text-tertiary text-uppercase position-sticky top-0"
                style="background: var(--ui-bg-subtle); min-width: max-content; z-index: 10;">
-          <div style="width: 80px;" class="flex-shrink-0">Time</div>
-          <div style="width: 140px;" class="flex-shrink-0">Domain</div>
-          <div style="width: 180px;" class="flex-shrink-0">Pattern</div>
-          <div style="width: 120px;" class="flex-shrink-0">Proxy Name</div>
-          <div style="width: 140px;" class="flex-shrink-0">IP</div>
-          <div style="width: 70px;" class="text-end flex-shrink-0">Duration</div>
-          <div style="width: 60px;" class="flex-shrink-0">Method</div>
-          <div style="width: 60px;" class="flex-shrink-0">Status</div>
-          <div style="width: 300px;" class="flex-shrink-0">URL</div>
+          <div style="width: 80px;" class="flex-shrink-0">{{ $t('colTime') }}</div>
+          <div style="width: 140px;" class="flex-shrink-0">{{ $t('colDomain') }}</div>
+          <div style="width: 180px;" class="flex-shrink-0">{{ $t('colPattern') }}</div>
+          <div style="width: 120px;" class="flex-shrink-0">{{ $t('colProxyName') }}</div>
+          <div style="width: 140px;" class="flex-shrink-0">{{ $t('colIP') }}</div>
+          <div style="width: 70px;" class="text-end flex-shrink-0">{{ $t('colDuration') }}</div>
+          <div style="width: 60px;" class="flex-shrink-0">{{ $t('colMethod') }}</div>
+          <div style="width: 60px;" class="flex-shrink-0">{{ $t('colStatus') }}</div>
+          <div style="width: 300px;" class="flex-shrink-0">{{ $t('colURL') }}</div>
         </div>
 
           <!-- Request List -->
@@ -137,18 +137,18 @@
             <div style="width: 140px;" class="text-truncate ui-text-primary flex-shrink-0" :title="request.domain">
               {{ request.domain }}
             </div>
-            <div style="width: 180px;" class="text-truncate ui-text-primary d-flex align-items-center flex-shrink-0" :title="request.matchedRule || 'Default'">
+            <div style="width: 180px;" class="text-truncate ui-text-primary d-flex align-items-center flex-shrink-0" :title="request.matchedRule || $t('lblDefault')">
                <template v-if="request.ruleSource">
                  <i class="bi bi-diagram-3 me-2 ui-text-tertiary" :title="request.ruleSource" style="cursor: pointer;"></i>
                </template>
-               <span class="text-truncate">{{ request.matchedRule || 'Default' }}</span>
+               <span class="text-truncate">{{ request.matchedRule || $t('lblDefault') }}</span>
             </div>
             <div style="width: 120px;" class="ui-text-primary flex-shrink-0" :title="proxies[request.proxyUsed]?.name || request.proxyUsed">
               <span v-if="request.proxyUsed" class="ui-tag">{{ request.proxyUsed }}</span>
               <span v-else class="ui-text-primary">-</span>
             </div>
             <div style="width: 140px;" class="text-truncate ui-text-primary d-flex align-items-center gap-2 flex-shrink-0" :title="request.ip || '-'">
-              <span v-if="request.fromCache" class="ui-text-tertiary" title="From Cache" style="cursor: pointer;">
+              <span v-if="request.fromCache" class="ui-text-tertiary" :title="$t('lblFromCache')" style="cursor: pointer;">
                 <i class="bi bi-database-fill-check"></i>
               </span>
               <span>{{ getIpDisplay(request.ip) }}</span>
@@ -175,8 +175,8 @@
           <!-- Empty State -->
           <div v-if="filteredRequests.length === 0" class="d-flex flex-column align-items-center justify-content-center py-5 ui-text-tertiary">
             <i class="bi bi-inbox fs-1 mb-2"></i>
-            <span class="text-sm">No requests recorded yet</span>
-            <span class="text-xs mt-1">Navigate to any webpage to see requests</span>
+            <span class="text-sm">{{ $t('msgNoRequests') }}</span>
+            <span class="text-xs mt-1">{{ $t('msgNavigateToSeeRequests') }}</span>
           </div>
         </div>
         </div>
@@ -184,8 +184,8 @@
         <!-- Footer -->
         <div class="d-flex align-items-center justify-content-between px-4 py-2 border-top text-xs ui-text-tertiary"
              style="background: var(--ui-bg-subtle);">
-          <span>Showing {{ filteredRequests.length }} of {{ totalRequestCount }} requests</span>
-          <span>Max history: {{ historyLimit }}</span>
+          <span>{{ $t('lblShowing') }} {{ filteredRequests.length }} {{ $t('lblOf') }} {{ totalRequestCount }} {{ $t('lblRequestsSuffix') }}</span>
+          <span>{{ $t('lblMaxHistory') }} {{ historyLimit }}</span>
         </div>
       </section>
     </main>
@@ -210,8 +210,8 @@ import { loadConfig, savePolicies } from '../common/storage'
 import SmartRulesMergeModal from '../options/components/SmartRulesMergeModal.vue'
 
 // Import logo assets
-import lightIconUrl from '../assets/icons/light/ripple-icon-64x64.png'
-import darkIconUrl from '../assets/icons/dark/ripple-icon-dark-64x64.png'
+import lightIconUrl from '../assets/icons/light/ripple-icon-light-64x64-blurred.png'
+import darkIconUrl from '../assets/icons/dark/ripple-icon-dark-64x64-blurred.png'
 import lightBrandUrl from '../assets/img/oasis-proxy-primary-96px.png'
 import darkBrandUrl from '../assets/img/oasis-proxy-white-96px.png'
 

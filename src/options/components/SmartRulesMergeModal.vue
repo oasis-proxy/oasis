@@ -16,7 +16,7 @@
         
         <!-- Modal Header -->
         <div class="p-4 d-flex justify-content-between align-items-center border-b border-light ">
-          <h3 class="ui-text-primary modal-header tracking-tight m-0">Merge Rules</h3>
+          <h3 class="ui-text-primary modal-header tracking-tight m-0">{{ $t('smmmTitle') }}</h3>
           <button 
             @click="emit('close')" 
             class="modal-close-button"
@@ -31,7 +31,7 @@
 
             <!-- Section 1: Target Policy -->
             <section>
-               <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Policy</h4>
+               <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{{ $t('smmmSectionTarget') }}</h4>
                <label class="d-flex flex-column gap-2 w-100">
                   <select 
                     v-model="targetPolicyId"
@@ -40,7 +40,7 @@
                     class="form-select ui-input w-100 rounded-lg border h-8 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
                     style="max-width: 100%;"
                   >
-                    <option value="">-- Select Target Policy --</option>
+                    <option value="">{{ $t('armPlaceholderTarget') }}</option>
                     <option v-for="policyOption in availablePolicies" :key="policyOption.id" :value="policyOption.id">
                       {{ policyOption.name }}
                     </option>
@@ -51,15 +51,15 @@
              <!-- Section 2: Source Rules (Read-only) -->
             <section>
                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider m-0">Source Rules</h4>
+                  <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider m-0">{{ $t('smmmSectionSource') }}</h4>
                   <span class="text-xs ui-button-secondary px-2 py-0.5 rounded-full">{{ sourceRules.length }} rules</span>
                </div>
                
                <div class="rounded-lg border border-light  overflow-hidden shadow-sm">
                    <div class="ui-card-header">
-                       <div style="width: 30%;">Type</div>
-                       <div style="width: 50%;">Pattern</div>
-                       <div style="width: 20%;">Proxy</div>
+                       <div style="width: 30%;">{{ $t('lblType') }}</div>
+                       <div style="width: 50%;">{{ $t('lblPattern') }}</div>
+                       <div style="width: 20%;">{{ $t('lblProxy') }}</div>
                    </div>
                    <div class="max-h-48 overflow-y-auto custom-scrollbar bg-white  divide-y divide-slate-100 ">
                        <div v-for="(rule, idx) in sourceRules" :key="idx" class="d-flex align-items-center gap-2 px-3 py-2 opacity-70">
@@ -91,18 +91,18 @@
                                />
                            </div>
                        </div>
-                       <div v-if="sourceRules.length === 0" class="p-4 text-center text-xs text-slate-500">No rules selected.</div>
+                       <div v-if="sourceRules.length === 0" class="p-4 text-center text-xs text-slate-500">{{ $t('smmmMsgNoSource') }}</div>
                    </div>
                </div>
             </section>
 
-            <!-- Section 3: Merged Preview (Optimization) -->
+             <!-- Section 3: Merged Preview (Optimization) -->
             <section>
                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider m-0">Merged Preview</h4>
+                  <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider m-0">{{ $t('smmmSectionPreview') }}</h4>
                    <div class="d-flex align-items-center gap-2">
                        <span class="text-xs text-slate-500" v-if="mergedRules.length < sourceRules.length">
-                           Optimized: <span class="text-green-600 font-bold">-{{ sourceRules.length - mergedRules.length }}</span> rules
+                           {{ $t('smmmMsgOptimized', ['-' + (sourceRules.length - mergedRules.length)]) }}
                        </span>
                        <span class="text-xs ui-button-secondary px-2 py-0.5 rounded-full">{{ mergedRules.length }} rules</span>
                    </div>
@@ -111,10 +111,10 @@
                <div class="rounded-lg border border-light  overflow-hidden shadow-sm">
                    <!-- Header -->
                    <div class="ui-card-header">
-                       <div style="width: 30%;">Type</div>
-                       <div style="width: 42%;">Pattern</div>
-                       <div style="width: 20%;">Proxy</div>
-                       <div style="width: 8%;" class="text-center">ACTION</div>
+                       <div style="width: 30%;">{{ $t('lblType') }}</div>
+                       <div style="width: 42%;">{{ $t('lblPattern') }}</div>
+                       <div style="width: 20%;">{{ $t('lblProxy') }}</div>
+                       <div style="width: 8%;" class="text-center">{{ $t('lblAction').toUpperCase() }}</div>
                    </div>
                    
                    <!-- List -->
@@ -128,8 +128,8 @@
                                 class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
                                 style="height: 28px; max-width: 100%;"
                                >
-                                   <option value="wildcard">Wildcard</option>
-                                   <option value="regex">Regex</option>
+                                   <option value="wildcard">{{ $t('optWildcard') }}</option>
+                                   <option value="regex">{{ $t('optRegex') }}</option>
                                </select>
                            </div>
                            
@@ -150,7 +150,7 @@
                                 class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
                                 style="height: 28px; max-width: none;"
                                >
-                                  <option value="direct">Direct</option>
+                                  <option value="direct">{{ $t('directConnect') }}</option>
                                   <option v-for="p in proxyList" :key="p.id" :value="p.id">{{ p.label }}</option>
                                </select>
                            </div>
@@ -160,23 +160,23 @@
                                <button 
                                  @click="removeMergedRule(idx)" 
                                  class="ui-button-icon p-0.5 transition-colors text-red-500 hover:bg-red-50 " 
-                                 title="Remove"
+                                 :title="$t('btnRemove')"
                                >
                                    <i class="bi bi-trash text-xs"></i>
                                </button>
                            </div>
                        </div>
-                        <div v-if="mergedRules.length === 0" class="p-4 text-center text-xs text-slate-500">No rules to merge.</div>
+                        <div v-if="mergedRules.length === 0" class="p-4 text-center text-xs text-slate-500">{{ $t('smmmMsgNoMerge') }}</div>
                    </div>
                </div>
                <p class="text-xs text-slate-500 mt-2 mb-0">
-                   Rules have been automatically optimized. You can further edit them here before merging.
+                   {{ $t('smmmDescOptimization') }}
                </p>
             </section>
 
              <!-- Section 4: Conflict Resolution -->
             <section>
-                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Conflict Resolution</h4>
+                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{{ $t('armLabelConflict') }}</h4>
                 <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr;">
                 
                 <!-- Ignore Option -->
@@ -187,8 +187,8 @@
                   <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="ignore"/>
                   <span class="d-flex flex-1">
                     <span class="d-flex flex-column">
-                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">Ignore Duplicates</span>
-                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Keep existing rules</span>
+                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptIgnore') }}</span>
+                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">{{ $t('armDescIgnore') }}</span>
                     </span>
                   </span>
                   <i v-if="conflictMode === 'ignore'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -202,8 +202,8 @@
                   <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="overwrite"/>
                   <span class="d-flex flex-1">
                     <span class="d-flex flex-column">
-                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">Overwrite</span>
-                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Update existing rules</span>
+                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptOverwrite') }}</span>
+                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">{{ $t('armDescOverwrite') }}</span>
                     </span>
                   </span>
                   <i v-if="conflictMode === 'overwrite'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -221,14 +221,14 @@
             @click="emit('close')"
             class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
-            Cancel
+            {{ $t('btnCancel') }}
           </button>
           <button 
             @click="handleConfirm"
             :disabled="!isValid"
             class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Merge {{ mergedRules.length }} Rules
+            {{ $t('smmmBtnMerge', [mergedRules.length]) }}
           </button>
         </div>
 
@@ -277,7 +277,7 @@ const proxyList = computed(() => {
 const availablePolicies = computed(() => {
   return Object.values(props.policies || {})
     .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
-    .map(p => ({ id: p.id, name: p.name || 'Unnamed Policy' }))
+    .map(p => ({ id: p.id, name: p.name || chrome.i18n.getMessage('unnamedPolicy') }))
 })
 
 const isValid = computed(() => {
@@ -285,7 +285,7 @@ const isValid = computed(() => {
 })
 
 const getProxyLabel = (id) => {
-    if (id === 'direct') return 'Direct'
+    if (id === 'direct') return chrome.i18n.getMessage('directConnect')
     const p = props.proxies && props.proxies[id]
     return p ? (p.label || p.name) : id
 }
@@ -434,4 +434,3 @@ watch(() => props.visible, (newVal) => {
   }
 })
 </script>
-

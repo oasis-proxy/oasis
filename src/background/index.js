@@ -123,7 +123,7 @@ async function updateContextMenus(config) {
     if (config.ui && config.ui.showContextMenu) {
         chrome.contextMenus.create({
             id: 'oasis-quick-add',
-            title: 'Add domain to Oasis',
+            title: chrome.i18n.getMessage('contextMenuQuickAdd'),
             contexts: ['page', 'link']
         })
         console.log('Oasis: Context menu enabled.')

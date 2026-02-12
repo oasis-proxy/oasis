@@ -16,7 +16,7 @@
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <h3 class="modal-header tracking-tight text-red-600  m-0">Delete Proxy Host</h3>
+          <h3 class="modal-header tracking-tight text-red-600  m-0">{{ $t('pdmTitle') }}</h3>
           <button 
             @click="emit('close')" 
             class="modal-close-button"
@@ -31,10 +31,10 @@
             <div class="d-flex items-start gap-3 text-sm text-slate-600 ">
                 <i class="bi bi-exclamation-triangle-fill text-xl text-red-600  shrink-0"></i>
                 <div>
-                    <p class="font-bold mb-1 text-red-600 ">Warning: Destructive Action</p>
+                    <p class="font-bold mb-1 text-red-600 ">{{ $t('pdmWarningTitle') }}</p>
                     <p class="opacity-90 leading-relaxed m-0">
-                        Are you sure you want to delete <span class="font-bold underline text-slate-900 ">{{ proxyName }}</span>? 
-                        This action cannot be undone and will permanently remove this proxy configuration.
+                        {{ $t('pdmMsgDeleteConfirm') }} <span class="font-bold underline text-slate-900 ">{{ proxyName }}</span>? 
+                        {{ $t('pdmMsgDeleteIrreversible') }}
                     </p>
                 </div>
             </div>
@@ -47,13 +47,13 @@
             @click="emit('close')"
             class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
-            Cancel
+            {{ $t('btnCancel') }}
           </button>
           <button 
             @click="emit('delete')"
             class="px-3 py-2 rounded-lg text-xs font-bold ui-button-danger shadow-md shadow-red-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
           >
-            Delete Forever
+            {{ $t('btnDeleteForever') }}
           </button>
         </div>
 

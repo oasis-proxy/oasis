@@ -13,23 +13,23 @@
              title="Choose color"
           />
           <h2 class="fs-4 font-bold ui-text-primary tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="policy.name">
-            {{ policy.name || 'Auto Policy' }}
+            {{ policy.name || $t('lblAutoPolicy') }}
           </h2>
         </div>
       </div>
       <div class="d-flex align-items-center gap-3">
         <!-- Show in Popup Switch -->
-        <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
-           <input class="form-check-input align-self-start" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="policy.showInPopup">
-           <label class="form-check-label text-xs font-medium ui-text-secondary" style="cursor: pointer;" for="showInPopup">Show in Popup</label>
-        </div>
+           <div class="form-check form-switch m-0 d-flex align-items-center gap-2" :title="$t('phTitleShowPopup')">
+              <input class="form-check-input align-self-start" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="policy.showInPopup">
+              <label class="form-check-label text-xs font-medium ui-text-secondary" style="cursor: pointer;" for="showInPopup">{{ $t('phLabelShowPopup') }}</label>
+           </div>
         <button 
           @click="resetChanges"
           :disabled="!isDirty"
           class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
         >
           <i class="bi bi-reply-fill"></i>
-          <span>Reset</span>
+          <span>{{ $t('btnReset') }}</span>
         </button>
 
         <button 
@@ -38,7 +38,7 @@
           class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
         >
           <i class="bi bi-floppy-fill"></i>
-          <span>Save</span>
+          <span>{{ $t('btnSave') }}</span>
         </button>
 
         <!-- Action Menu -->
@@ -56,29 +56,29 @@
            <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                <li>
                  <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
-                     <i class="bi bi-pencil-square ui-text-tertiary"></i> Rename
+                     <i class="bi bi-pencil-square ui-text-tertiary"></i> {{ $t('btnRename') }}
                  </button>
                </li>
                <li>
                  <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
-                     <i class="bi bi-files ui-text-tertiary"></i> Clone
+                     <i class="bi bi-files ui-text-tertiary"></i> {{ $t('btnClone') }}
                  </button>
                </li>
                 <li>
                   <button @click="showPolicyMergeModal = true" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                      <i class="bi bi-diagram-3-fill text-slate-400"></i> Merge Policy
+                      <i class="bi bi-diagram-3-fill text-slate-400"></i> {{ $t('lblMergePolicy') }}
                   </button>
                 </li>
                 <li>
                   <button @click="handleExportPAC" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                      <i class="bi bi-download text-slate-400"></i> Export PAC
+                      <i class="bi bi-download text-slate-400"></i> {{ $t('lblExportPAC') }}
                   </button>
                 </li>
 
                <li><hr class="dropdown-divider my-1 border-subtle "></li>
                <li>
                  <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-danger  rounded-md transition-colors d-flex align-items-center gap-2">
-                     <i class="bi bi-trash"></i> Delete
+                     <i class="bi bi-trash"></i> {{ $t('btnDelete') }}
                  </button>
                </li>
            </ul>
@@ -93,12 +93,12 @@
         <!-- Normal Rules Section -->
         <section>
           <div class="ui-card-label">
-            <span class="label-text">Normal Rules</span>
+            <span class="label-text">{{ $t('phHeaderNormalRules') }}</span>
             <div class="d-flex align-items-center gap-2">
-              <button @click="showBatchReplaceModal = true" class="ui-button-icon sm" title="Batch Replace">
+              <button @click="showBatchReplaceModal = true" class="ui-button-icon sm" :title="$t('btnBatchReplace')">
                 <i class="bi bi-list-check ui-icon-md"></i>
               </button>
-              <button @click="addRule" class="ui-button-icon sm" title="Add Rule">
+              <button @click="addRule" class="ui-button-icon sm" :title="$t('btnAddRule')">
                 <i class="bi bi-plus-lg text-sm"></i>
               </button>
             </div>
@@ -109,11 +109,11 @@
             <!-- Table Header -->
             <div class="ui-card-header">
               <div style="width: 4%;" class="text-center"></div>
-              <div style="width: 8%;" class="text-center">Valid</div>
-              <div style="width: 16%;">Type</div>
-              <div style="width: 44%;">Pattern</div>
-              <div style="width: 20%;">Proxy</div>
-              <div style="width: 8%;" class="text-center">Action</div>
+              <div style="width: 8%;" class="text-center">{{ $t('lblValid') }}</div>
+              <div style="width: 16%;">{{ $t('lblType') }}</div>
+              <div style="width: 44%;">{{ $t('lblPattern') }}</div>
+              <div style="width: 20%;">{{ $t('lblProxy') }}</div>
+              <div style="width: 8%;" class="text-center">{{ $t('lblAction') }}</div>
             </div>
 
             <!-- Rules -->
@@ -147,9 +147,9 @@
                       @dblclick="startEditDivider(index, rule.label)"
                       class="text-xs font-semibold ui-text-secondary uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-2"
                       style="user-select: none; line-height: 1;"
-                      title="Double-click to edit section name"
+                      :title="$t('descEditSection')"
                     >
-                      {{ rule.label || 'New Section' }}
+                      {{ rule.label || $t('lblNewSection') }}
                       <i class="bi bi-pencil-square ui-icon-xs opacity-60"></i>
                     </span>
                     <input 
@@ -165,13 +165,13 @@
                     <div style="flex: 1; height: 1px; border-top: 1px solid var(--ui-border);" class=""></div>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
-                    <button @click="insertRuleBelow(index)" class="ui-button-icon" title="Add rule below">
+                    <button @click="insertRuleBelow(index)" class="ui-button-icon" :title="$t('btnAddRuleBelow')">
                       <i class="bi bi-plus-lg text-xs"></i>
                     </button>
-                    <button @click="insertDividerBelow(index)" class="ui-button-icon" title="Add divider below">
+                    <button @click="insertDividerBelow(index)" class="ui-button-icon" :title="$t('btnAddDividerBelow')">
                       <i class="bi bi-inboxes-fill text-xs"></i>
                     </button>
-                    <button @click="deleteRule(index)" class="ui-button-icon" title="Delete">
+                    <button @click="deleteRule(index)" class="ui-button-icon" :title="$t('btnDelete')">
                       <i class="bi bi-trash text-xs"></i>
                     </button>
                   </div>
@@ -270,13 +270,13 @@
                     </select>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
-                    <button @click="insertRuleBelow(index)" class="ui-button-icon" title="Add rule below">
+                    <button @click="insertRuleBelow(index)" class="ui-button-icon" :title="$t('btnAddRuleBelow')">
                       <i class="bi bi-plus-lg ui-icon-sm"></i>
                     </button>
-                    <button @click="insertDividerBelow(index)" class="ui-button-icon p-0.5" title="Add divider">
+                    <button @click="insertDividerBelow(index)" class="ui-button-icon p-0.5" :title="$t('btnAddDividerBelow')">
                       <i class="bi bi-inboxes-fill ui-icon-sm"></i>
                     </button>
-                    <button @click="deleteRule(index)" class="ui-button-icon p-0.5" title="Delete">
+                    <button @click="deleteRule(index)" class="ui-button-icon p-0.5" :title="$t('btnDelete')">
                       <i class="bi bi-trash ui-icon-sm"></i>
                     </button>
                   </div>
@@ -295,7 +295,7 @@
               <div style="width: 16%;"></div>
               <div style="width: 44%;" class="d-flex align-items-center justify-content-end px-2">
                  <div class="d-flex align-items-center gap-2 whitespace-nowrap">
-                   <i class="bi bi-arrow-return-right"></i> Default Strategy
+                   <i class="bi bi-arrow-return-right"></i> {{ $t('lblDefaultStrategy') }}
                 </div>
               </div>
               <div style="width: 20%;">
@@ -319,8 +319,8 @@
         <!-- Reject Rules Section -->
         <section>
           <div class="ui-card-label">
-            <span class="label-text">Reject Rules</span>
-            <button @click="addRejectRule" class="ui-button-icon sm" title="Add Reject Rule">
+            <span class="label-text">{{ $t('phHeaderRejectRules') }}</span>
+            <button @click="addRejectRule" class="ui-button-icon sm" :title="$t('btnAddRejectRule')">
               <i class="bi bi-plus-lg text-sm"></i>
             </button>
           </div>
@@ -329,11 +329,11 @@
             <!-- Table Header -->
             <div class="ui-card-header">
               <div style="width: 4%;" class="text-center"></div>
-              <div style="width: 8%;" class="text-center">Valid</div>
-              <div style="width: 16%;">Type</div>
-              <div style="width: 44%;">Pattern</div>
-              <div style="width: 20%;">Proxy</div>
-              <div style="width: 8%;" class="text-center">Action</div>
+              <div style="width: 8%;" class="text-center">{{ $t('lblValid') }}</div>
+              <div style="width: 16%;">{{ $t('lblType') }}</div>
+              <div style="width: 44%;">{{ $t('lblPattern') }}</div>
+              <div style="width: 20%;">{{ $t('lblProxy') }}</div>
+              <div style="width: 8%;" class="text-center">{{ $t('lblAction') }}</div>
             </div>
 
             <!-- Reject Rules -->
@@ -367,9 +367,9 @@
                       @dblclick="startEditRejectDivider(index, rule.label)"
                       class="text-xs font-semibold ui-text-secondary uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-1"
                       style="user-select: none; line-height: 1;"
-                      title="Double-click to edit section name"
+                      :title="$t('descEditSection')"
                     >
-                      {{ rule.label || 'New Section' }}
+                      {{ rule.label || $t('lblNewSection') }}
                       <i class="bi bi-pencil-square ui-icon-xs opacity-60"></i>
                     </span>
                     <input 
@@ -385,13 +385,13 @@
                     <div style="flex: 1; height: 1px; border-top: 1px solid var(--ui-border);" class=""></div>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
-                    <button @click="insertRejectRuleBelow(index)" class="ui-button-icon" title="Add rule below">
+                    <button @click="insertRejectRuleBelow(index)" class="ui-button-icon" :title="$t('btnAddRuleBelow')">
                       <i class="bi bi-plus-lg ui-icon-sm"></i>
                     </button>
-                    <button @click="insertRejectDividerBelow(index)" class="ui-button-icon p-0.5" title="Add divider">
+                    <button @click="insertRejectDividerBelow(index)" class="ui-button-icon p-0.5" :title="$t('btnAddDividerBelow')">
                       <i class="bi bi-inboxes-fill ui-icon-sm"></i>
                     </button>
-                    <button @click="deleteRejectRule(index)" class="ui-button-icon p-0.5" title="Delete">
+                    <button @click="deleteRejectRule(index)" class="ui-button-icon p-0.5" :title="$t('btnDelete')">
                       <i class="bi bi-trash ui-icon-sm"></i>
                     </button>
                   </div>
@@ -454,26 +454,26 @@
                 <div style="width: 20%;">
                    <div class="w-100 rounded border border-subtle ui-bg-subtle ui-text-secondary text-xs px-2 d-flex align-items-center gap-2 cursor-not-allowed" style="user-select: none; height: 28px;">
                     <span class="w-1.5 h-1.5 rounded-full bg-danger"></span>
-                    REJECT
+                    {{ $t('lblReject') }}
                   </div>
                 </div>
-                <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
-                  <button @click="insertRejectRuleBelow(index)" class="ui-button-icon" title="Add rule below">
-                    <i class="bi bi-plus-lg ui-icon-sm"></i>
-                  </button>
-                  <button @click="insertRejectDividerBelow(index)" class="ui-button-icon p-0.5" title="Add divider">
-                    <i class="bi bi-inboxes-fill ui-icon-sm"></i>
-                  </button>
-                  <button @click="deleteRejectRule(index)" class="ui-button-icon p-0.5" title="Delete">
-                    <i class="bi bi-trash ui-icon-sm"></i>
-                  </button>
-                </div>
+                  <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
+                   <button @click="insertRejectRuleBelow(index)" class="ui-button-icon" :title="$t('btnAddRuleBelow')">
+                     <i class="bi bi-plus-lg ui-icon-sm"></i>
+                   </button>
+                   <button @click="insertRejectDividerBelow(index)" class="ui-button-icon p-0.5" :title="$t('btnAddDividerBelow')">
+                     <i class="bi bi-inboxes-fill ui-icon-sm"></i>
+                   </button>
+                   <button @click="deleteRejectRule(index)" class="ui-button-icon p-0.5" :title="$t('btnDelete')">
+                     <i class="bi bi-trash ui-icon-sm"></i>
+                   </button>
+                 </div>
               </div>
             </div>
           </div>
             <!-- Empty State -->
             <div v-else class="p-2 d-flex align-items-center justify-content-center" style="min-height: 44px;">
-              <p class="text-xs text-slate-500 m-0">No reject rules defined.</p>
+              <p class="text-xs text-slate-500 m-0">{{ $t('msgNoRejectRules') }}</p>
             </div>
           </div>
         </section>
@@ -671,7 +671,7 @@ const loadPolicyData = async () => {
             })
         }
         if (!policy.value.name) {
-            policy.value.name = 'Auto Policy'
+            policy.value.name = chrome.i18n.getMessage('lblAutoPolicy') || 'Auto Policy'
         }
         if (!policy.value.id) {
             policy.value.id = id
@@ -732,7 +732,7 @@ onMounted(() => {
 onMounted(() => {
   registerUnsavedChangesChecker(() => {
     if (isDirty.value) {
-      toast.warning('You have unsaved changes. Please save or reset before leaving.')
+      toast.warning(chrome.i18n.getMessage('phMsgUnsaved'))
       return true  // Has unsaved changes
     }
     return false  // No unsaved changes
@@ -762,7 +762,7 @@ const saveChanges = async () => {
     // Persist
     await savePolicies(config.value.policies)
     
-    toast.success('Policy saved successfully')
+    toast.success(chrome.i18n.getMessage('msgPolicySaved') || 'Policy saved successfully')
     
     // Refresh
     await loadPolicyData()

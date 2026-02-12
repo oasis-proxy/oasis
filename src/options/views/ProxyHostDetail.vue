@@ -18,9 +18,9 @@
         </div>
         <div class="d-flex align-items-center gap-3">
            <!-- Show in Popup Switch -->
-           <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
+           <div class="form-check form-switch m-0 d-flex align-items-center gap-2" :title="$t('phTitleShowPopup')">
               <input class="form-check-input align-self-start" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="proxy.showInPopup">
-              <label class="form-check-label text-xs font-medium ui-text-secondary" style="cursor: pointer;" for="showInPopup">Show in Popup</label>
+              <label class="form-check-label text-xs font-medium ui-text-secondary" style="cursor: pointer;" for="showInPopup">{{ $t('phLabelShowPopup') }}</label>
            </div>
            
            <button 
@@ -29,7 +29,7 @@
              class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
            >
              <i class="bi bi-reply-fill"></i>
-             <span>Reset</span>
+             <span>{{ $t('btnReset') }}</span>
            </button>
 
            <button 
@@ -38,7 +38,7 @@
              class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
            >
              <i class="bi bi-floppy-fill"></i>
-             <span>Save</span>
+             <span>{{ $t('btnSave') }}</span>
            </button>
 
            <!-- Action Menu -->
@@ -56,18 +56,18 @@
               <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                   <li>
                     <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-pencil-square ui-text-tertiary"></i> Rename
+                        <i class="bi bi-pencil-square ui-text-tertiary"></i> {{ $t('btnRename') }}
                     </button>
                   </li>
                   <li>
                     <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-files ui-text-tertiary"></i> Clone
+                        <i class="bi bi-files ui-text-tertiary"></i> {{ $t('btnClone') }}
                     </button>
                   </li>
                   <li><hr class="dropdown-divider my-1 border-subtle "></li>
                   <li>
                     <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-danger  rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-trash"></i> Delete
+                        <i class="bi bi-trash"></i> {{ $t('btnDelete') }}
                     </button>
                   </li>
               </ul>
@@ -83,7 +83,7 @@
         <!-- Connection Details -->
         <section>
           <div class="ui-card-label">
-            <span class="label-text">Connection Details</span>
+            <span class="label-text">{{ $t('phHeaderConn') }}</span>
           </div>
           
 
@@ -97,7 +97,7 @@
                   <!-- Protocol -->
                   <div class="col-span-3">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">Proxy Protocol</span>
+                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelProxyProtocol') }}</span>
                       <select 
                         v-model="proxy.scheme"
                         class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
@@ -113,11 +113,11 @@
                   <!-- Host -->
                   <div class="col-span-7">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">Host Address</span>
+                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelHost') }}</span>
                       <input 
                         v-model="proxy.host"
                         type="text" 
-                        placeholder="example.com or 1.2.3.4"
+                        :placeholder="$t('phPlaceholderHost')"
                         class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
                       />
                     </label>
@@ -126,7 +126,7 @@
                   <!-- Port -->
                   <div class="col-span-2">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">Port</span>
+                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPort') }}</span>
                       <input 
                         v-model="proxy.port"
                         type="number" 
@@ -144,28 +144,28 @@
               <!-- Authentication -->
               <div class="px-4 pt-3 pb-4 border-top border-light ">
                 <h4 class="text-sm font-medium ui-text-primary mb-4 d-flex align-items-center justify-content-between">
-                  Authentication (Optional)
-                  <span class="text-xs ui-text-secondary font-normal">Leave blank if not required</span>
+                  {{ $t('phHeaderAuth') }}
+                  <span class="text-xs ui-text-secondary font-normal">{{ $t('phDescAuth') }}</span>
                 </h4>
                 <div class="grid grid-cols-2 gap-3">
                   <div>
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">Username</span>
+                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblUsername') }}</span>
                       <input 
                         v-model="authUsername"
                         type="text" 
-                        placeholder="Optional"
+                        :placeholder="$t('phPlaceholderOptional')"
                         class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
                       />
                     </label>
                   </div>
                   <div>
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">Password</span>
+                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPassword') }}</span>
                       <input 
                         v-model="authPassword"
                         type="password" 
-                        placeholder="Optional"
+                        :placeholder="$t('phPlaceholderOptional')"
                         class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
                       />
                     </label>
@@ -179,18 +179,18 @@
 
         <section>
             <div class="ui-card-label">
-                <span class="label-text">Bypass Rules</span>
+                <span class="label-text">{{ $t('phHeaderBypass') }}</span>
             </div>
             <div class="ui-card rounded-xl border shadow-sm p-4">
                <label class="ui-form-group">
-                <span class="ui-text-primary text-xs font-medium leading-none">Rules</span>
+                <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelRules') }}</span>
                 <textarea 
                   v-model="bypassList"
                   rows="4"
                   placeholder="localhost&#10;127.0.0.1&#10;*.local"
                   class="form-control ui-input w-100 rounded-lg border text-xs font-mono py-2 px-3"
                 ></textarea>
-                <p class="text-xs ui-text-secondary m-0">Requests to these domains or IPs will bypass the proxy. Supports wildcards (e.g. *.google.com).</p>
+                <p class="text-xs ui-text-secondary m-0">{{ $t('phDescBypass') }}</p>
                </label>
             </div>
 
@@ -201,7 +201,7 @@
         <section>
               <div class="ui-card-label">
                 <span class="label-text">
-                  Advanced Protocol Overrides
+                  {{ $t('phHeaderAdvanced') }}
                 </span>
               </div>
               
@@ -216,9 +216,9 @@
                     <div class="grid grid-cols-12 gap-4">
                       <div class="col-span-3">
                         <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">Protocol</span>
+                          <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblProtocol') }}</span>
                           <select v-model="httpOverrideScheme" class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3">
-                            <option value="default">Default</option>
+                            <option value="default">{{ $t('phDefault') }}</option>
                             <option value="http">HTTP</option>
                             <option value="https">HTTPS</option>
                             <option value="socks4">SOCKS4</option>
@@ -229,7 +229,7 @@
                       
                       <div class="col-span-7">
                         <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">Host Address</span>
+                          <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelHost') }}</span>
                           <input v-model="proxy.overrides.http.host" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                         </label>
                       </div>
@@ -245,20 +245,20 @@
                   <!-- HTTP Auth -->
                   <div class="px-4 pt-3 pb-4 border-top border-light  transition-opacity duration-200" :class="{ 'pointer-events-none': httpOverrideScheme === 'default' }">
                       <h4 class="text-sm font-medium text-slate-900 mb-3 tracking-wide d-flex align-items-center justify-content-between">
-                          Authentication (Optional)
-                          <span class="text-xs text-slate-500 font-normal normal-case">Leave blank if not required</span>
+                          {{ $t('phHeaderAuth') }}
+                          <span class="text-xs text-slate-500 font-normal normal-case">{{ $t('phDescAuth') }}</span>
                       </h4>
                       <div class="grid grid-cols-2 gap-3">
                           <div>
                               <label class="ui-form-group">
-                                <span class="ui-text-primary text-xs font-medium leading-none">Username</span>
-                                <input v-model="proxy.overrides.http.authUsername" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                                <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblUsername') }}</span>
+                                <input v-model="proxy.overrides.http.authUsername" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                           <div>
                               <label class="ui-form-group">
-                                <span class="ui-text-primary text-xs font-medium leading-none">Password</span>
-                                <input v-model="proxy.overrides.http.authPassword" type="password" :placeholder="httpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                                <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPassword') }}</span>
+                                <input v-model="proxy.overrides.http.authPassword" type="password" :placeholder="httpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                       </div>
@@ -274,9 +274,9 @@
                     <div class="grid grid-cols-12 gap-4">
                       <div class="col-span-3">
                         <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">Protocol</span>
+                          <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblProtocol') }}</span>
                           <select v-model="httpsOverrideScheme" class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3">
-                            <option value="default">Default</option>
+                            <option value="default">{{ $t('phDefault') }}</option>
                             <option value="http">HTTP</option>
                             <option value="https">HTTPS</option>
                             <option value="socks4">SOCKS4</option>
@@ -303,20 +303,20 @@
                   <!-- HTTPS Auth -->
                   <div class="px-4 pt-3 pb-4 border-top border-light  transition-opacity duration-200" :class="{ 'pointer-events-none': httpsOverrideScheme === 'default' }">
                       <h4 class="text-sm font-medium text-slate-900 mb-3 tracking-wide d-flex align-items-center justify-content-between">
-                          Authentication (Optional)
-                          <span class="text-xs text-slate-500 font-normal normal-case">Leave blank if not required</span>
+                          {{ $t('phHeaderAuth') }}
+                          <span class="text-xs text-slate-500 font-normal normal-case">{{ $t('phDescAuth') }}</span>
                       </h4>
                       <div class="grid grid-cols-2 gap-3">
                           <div>
                               <label class="ui-form-group">
-                                <span class="ui-text-primary text-xs font-medium leading-none">Username</span>
-                                <input v-model="proxy.overrides.https.authUsername" type="text" :placeholder="httpsOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                                <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblUsername') }}</span>
+                                <input v-model="proxy.overrides.https.authUsername" type="text" :placeholder="httpsOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                           <div>
                               <label class="ui-form-group">
-                                <span class="ui-text-primary text-xs font-medium leading-none">Password</span>
-                                <input v-model="proxy.overrides.https.authPassword" type="password" :placeholder="httpsOverrideScheme === 'default' ? '' : 'Optional'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                                <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPassword') }}</span>
+                                <input v-model="proxy.overrides.https.authPassword" type="password" :placeholder="httpsOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                       </div>
@@ -333,9 +333,9 @@
                     <div class="grid grid-cols-12 gap-3">
                       <div class="col-span-3">
                         <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">Protocol</span>
+                          <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblProtocol') }}</span>
                           <select v-model="ftpOverrideScheme" class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3">
-                            <option value="default">Default</option>
+                            <option value="default">{{ $t('phDefault') }}</option>
                             <option value="http">HTTP</option>
                             <option value="https">HTTPS</option>
                             <option value="socks4">SOCKS4</option>
@@ -362,20 +362,20 @@
                   <!-- FTP Auth -->
                   <div class="px-4 pt-3 pb-4 border-top border-light  transition-opacity duration-200" :class="{ 'pointer-events-none': ftpOverrideScheme === 'default' }">
                       <h4 class="text-sm font-medium text-slate-900 mb-3 tracking-wide d-flex align-items-center justify-content-between">
-                          Authentication (Optional)
-                          <span class="text-xs text-slate-500 font-normal normal-case">Leave blank if not required</span>
+                          {{ $t('phHeaderAuth') }}
+                          <span class="text-xs text-slate-500 font-normal normal-case">{{ $t('phDescAuth') }}</span>
                       </h4>
                       <div class="grid grid-cols-2 gap-3">
                           <div>
                               <label class="ui-form-group">
-                                <span class="ui-text-primary text-xs font-medium leading-none">Username</span>
-                                <input v-model="proxy.overrides.ftp.authUsername" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                                <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblUsername') }}</span>
+                                <input v-model="proxy.overrides.ftp.authUsername" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                           <div>
                               <label class="ui-form-group">
-                                <span class="ui-text-primary text-xs font-medium leading-none">Password</span>
-                                <input v-model="proxy.overrides.ftp.authPassword" type="password" :placeholder="ftpOverrideScheme === 'default' ? '' : 'Optional'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                                <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPassword') }}</span>
+                                <input v-model="proxy.overrides.ftp.authPassword" type="password" :placeholder="ftpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                               </label>
                           </div>
                       </div>
@@ -593,7 +593,7 @@ watch(() => route.params.id, (newId, oldId) => {
 onMounted(() => {
   registerUnsavedChangesChecker(() => {
     if (isDirty.value) {
-      toast.warning('You have unsaved changes. Please save or reset before leaving.')
+      toast.warning(chrome.i18n.getMessage('phMsgUnsaved'))
       return true  // Has unsaved changes
     }
     return false  // No unsaved changes
@@ -650,7 +650,7 @@ const saveChanges = async () => {
   // Save Proxies only
   await saveProxies(config.value.proxies)
   
-  toast.success('Proxy saved successfully')
+  toast.success(chrome.i18n.getMessage('phMsgSaved'))
   
   // Reload
   await loadProxyData()
@@ -662,7 +662,7 @@ const saveChanges = async () => {
 
 const openRenameModal = () => {
   if (isDirty.value) {
-    toast.warning('Please save or reset your changes before renaming')
+    toast.warning(chrome.i18n.getMessage('phMsgRenameDirty'))
     return
   }
   showRenameModal.value = true
@@ -670,7 +670,7 @@ const openRenameModal = () => {
 
 const openCloneModal = () => {
   if (isDirty.value) {
-    toast.warning('Please save or reset your changes before cloning')
+    toast.warning(chrome.i18n.getMessage('phMsgCloneDirty'))
     return
   }
   showCloneModal.value = true
@@ -705,7 +705,7 @@ const openDeleteModal = () => {
   }
 
   if (usedInPolicies.length > 0) {
-    toast.warning(`Cannot delete proxy. It is used by: ${usedInPolicies.join(', ')}`)
+    toast.warning(`${chrome.i18n.getMessage('phMsgDeleteUsed')} ${usedInPolicies.join(', ')}`)
     return
   }
 
@@ -720,7 +720,7 @@ const handleRename = async (newName) => {
   
   // Save
   await saveProxies(config.value.proxies)
-  toast.success('Proxy renamed successfully')
+  toast.success(chrome.i18n.getMessage('phMsgRenamed'))
   await loadProxyData()
   showRenameModal.value = false
 }
@@ -741,7 +741,7 @@ const handleClone = async (newName) => {
   // Save
   await saveProxies(config.value.proxies)
   
-  toast.success('Proxy cloned successfully')
+  toast.success(chrome.i18n.getMessage('phMsgCloned'))
   
   // Navigate to new proxy
   router.push(`/host/${newId}`)
@@ -757,7 +757,7 @@ const handleDelete = async () => {
   // Save
   await saveProxies(config.value.proxies)
   
-  toast.success('Proxy deleted successfully')
+  toast.success(chrome.i18n.getMessage('phMsgDeleted'))
   
   // Navigate away
   router.push('/settings')

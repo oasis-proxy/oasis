@@ -5,4 +5,6 @@ import './main.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
-createApp(App).use(router).mount('#app')
+import { i18n } from '../common/i18n'
+
+createApp(App).use(router).use(i18n).mount('#app')

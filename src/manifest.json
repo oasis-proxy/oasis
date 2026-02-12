@@ -1,14 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "Oasis Proxy 2",
+  "default_locale": "en",
+  "name": "__MSG_extName__",
   "version": "2.0.0",
+  "description": "__MSG_extDesc__",
   "action": {
     "default_popup": "src/popup/index.html"
   },
   "icons": {
-    "16": "src/assets/icons/light/ripple-icon-16x16.png",
-    "48": "src/assets/icons/light/ripple-icon-64x64.png",
-    "128": "src/assets/icons/light/ripple-icon-128x128.png"
+    "16": "src/assets/icons/light/ripple-icon-light-16x16-blurred.png",
+    "48": "src/assets/icons/light/ripple-icon-light-64x64-blurred.png",
+    "128": "src/assets/icons/light/ripple-icon-light-128x128-blurred.png"
   },
   "options_ui": {
     "page": "src/options/index.html",

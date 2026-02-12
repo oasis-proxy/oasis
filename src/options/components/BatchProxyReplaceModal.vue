@@ -16,7 +16,7 @@
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <h3 class="ui-text-primary modal-header tracking-tight m-0">Batch Replace Proxy</h3>
+          <h3 class="ui-text-primary modal-header tracking-tight m-0">{{ $t('bpmTitle') }}</h3>
           <button 
             @click="emit('close')" 
             class="modal-close-button"
@@ -31,13 +31,13 @@
             
             <!-- From Proxy Dropdown -->
             <label class="d-flex flex-column gap-2 w-100">
-              <span class="ui-text-primary text-xs font-medium leading-none">Replace From</span>
+              <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('bpmLabelFrom') }}</span>
               <select 
                 v-model="fromProxy"
                 class="form-select ui-input w-100 rounded-lg border h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
                 style="min-width: 100%; width: 100%; max-width: 100% !important;"
               >
-                <option value="" disabled>-- Select Source Proxy --</option>
+                <option value="" disabled>{{ $t('bpmSelectSource') }}</option>
                 <option value="direct">DIRECT</option>
                 <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
                   <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
@@ -45,18 +45,18 @@
                   </option>
                 </optgroup>
               </select>
-              <p class="text-xs text-slate-500 m-0">Rules using this proxy will be replaced.</p>
+              <p class="text-xs text-slate-500 m-0">{{ $t('bpmDescFrom') }}</p>
             </label>
 
             <!-- To Proxy Dropdown -->
             <label class="d-flex flex-column gap-2 w-100">
-              <span class="ui-text-primary text-xs font-medium leading-none">Replace To</span>
+              <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('bpmLabelTo') }}</span>
               <select 
                 v-model="toProxy"
                 class="form-select ui-input w-100 rounded-lg border h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
                 style="min-width: 100%; width: 100%; max-width: 100% !important;"
               >
-                <option value="" disabled>-- Select Target Proxy --</option>
+                <option value="" disabled>{{ $t('bpmSelectTarget') }}</option>
                 <option value="direct">DIRECT</option>
                 <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
                   <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
@@ -64,7 +64,7 @@
                   </option>
                 </optgroup>
               </select>
-              <p class="text-xs text-slate-500 m-0">Rules will be changed to use this proxy.</p>
+              <p class="text-xs text-slate-500 m-0">{{ $t('bpmDescTo') }}</p>
             </label>
 
           </div>
@@ -76,14 +76,14 @@
             @click="emit('close')"
             class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
-            Cancel
+            {{ $t('btnCancel') }}
           </button>
           <button 
             @click="handleConfirm"
             :disabled="!isValid"
             class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Replace
+            {{ $t('btnReplace') }}
           </button>
         </div>
 

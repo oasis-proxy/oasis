@@ -12,15 +12,15 @@
              v-model="pac.color"
              class="p-0 border-0 rounded-lg overflow-hidden shadow-sm transition-transform"
              style="width: 24px; height: 24px; min-width: 24px; cursor: pointer;"
-             title="Choose color"
+             :title="$t('lblChooseColor')"
            />
-           <h1 class="fs-4 font-bold text-slate-900 tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="pac.name || pac.url">{{ pac.name || pac.url || 'Unnamed PAC' }}</h1>
+           <h1 class="fs-4 font-bold text-slate-900 tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="pac.name || pac.url">{{ pac.name || pac.url || $t('unnamedPAC') }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
            <!-- Show in Popup Switch -->
-           <div class="form-check form-switch m-0 d-flex align-items-center gap-2" title="Whether to show in the Popup page">
+           <div class="form-check form-switch m-0 d-flex align-items-center gap-2" :title="$t('phTitleShowPopup')">
                <input class="form-check-input align-self-start" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="pac.showInPopup">
-               <label class="form-check-label text-xs font-medium text-slate-500" style="cursor: pointer;" for="showInPopup">Show in Popup</label>
+               <label class="form-check-label text-xs font-medium text-slate-500" style="cursor: pointer;" for="showInPopup">{{ $t('phLabelShowPopup') }}</label>
            </div>
            
            <button 
@@ -29,7 +29,7 @@
              class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
            >
             <i class="bi bi-reply-fill"></i>
-            <span>Reset</span>
+            <span>{{ $t('btnResetSimple') }}</span>
            </button>
 
            <button 
@@ -38,7 +38,7 @@
              class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
            >
             <i class="bi bi-floppy-fill"></i>
-            <span>Save</span>
+            <span>{{ $t('btnSave') }}</span>
            </button>
 
            <!-- Action Menu -->
@@ -56,18 +56,18 @@
               <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                   <li>
                     <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-pencil-square text-slate-400"></i> Rename
+                        <i class="bi bi-pencil-square text-slate-400"></i> {{ $t('btnRename') }}
                     </button>
                   </li>
                   <li>
                     <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-files text-slate-400"></i> Clone
+                        <i class="bi bi-files text-slate-400"></i> {{ $t('btnClone') }}
                     </button>
                   </li>
                   <li><hr class="dropdown-divider my-1 border-subtle "></li>
                   <li>
                     <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-danger  rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-trash"></i> Delete
+                        <i class="bi bi-trash"></i> {{ $t('btnDelete') }}
                     </button>
                   </li>
               </ul>
@@ -83,7 +83,7 @@
         <!-- Source Settings -->
         <section>
           <div class="ui-card-label">
-            <span class="label-text">PAC Source</span>
+            <span class="label-text">{{ $t('pacHeaderSource') }}</span>
           </div>
           
           <div class="ui-card rounded-xl border shadow-sm overflow-hidden">
@@ -91,15 +91,15 @@
              <div class="px-4 pt-4 pb-4 d-flex flex-column gap-4">
                                 <!-- Source Method Radio -->
                  <div class="ui-form-group">
-                    <span class="ui-text-primary text-xs font-medium leading-none">Source Method</span>
+                    <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pacLabelSourceMethod') }}</span>
                     <div class="d-flex align-items-center gap-4">
                        <label class="d-flex align-items-center gap-2" style="cursor: pointer;">
                           <input type="radio" value="remote" v-model="pac.mode" class="form-check-input mt-0" />
-                          <span class="text-xs text-slate-900 transition-colors">Remote URL</span>
+                          <span class="text-xs text-slate-900 transition-colors">{{ $t('pacLabelRemoteUrl') }}</span>
                        </label>
                        <label class="d-flex align-items-center gap-2" style="cursor: pointer;">
                           <input type="radio" value="manual" v-model="pac.mode" class="form-check-input mt-0" />
-                          <span class="text-xs text-slate-900 transition-colors">Manual Script</span>
+                          <span class="text-xs text-slate-900 transition-colors">{{ $t('pacLabelManualScript') }}</span>
                        </label>
                     </div>
                  </div>
@@ -108,12 +108,12 @@
                      <!-- URL Input (7) -->
                      <div class="col-span-7">
                         <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">PAC URL</span>
+                          <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pacLabelRemoteUrl') }}</span>
                           <input 
                             type="text" 
                             v-model="pac.url"
                             @blur="fetchPacContent"
-                            placeholder="https://example.com/config.pac"
+                            :placeholder="$t('pacPlaceholderUrl')"
                             class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
                           />
                         </label>
@@ -122,7 +122,7 @@
                     <!-- Refresh Button (2) -->
                     <div class="col-span-2 d-flex flex-column justify-content-end">
                        <button @click="fetchPacContent" class="w-100 px-3 py-1 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors d-flex align-items-center justify-content-center gap-2 h-8">
-                           <i class="bi bi-arrow-clockwise"></i> Refresh
+                           <i class="bi bi-arrow-clockwise"></i> {{ $t('btnRefresh') }}
                        </button>
                     </div>
 
@@ -130,7 +130,7 @@
 
                 <!-- Manual Mode Hint -->
                 <div v-else class="text-xs text-slate-500">
-                    <i class="bi bi-info-circle me-1"></i> You can edit the script content directly below.
+                    <i class="bi bi-info-circle me-1"></i> {{ $t('pacMsgEditable') }}
                 </div>
 
              </div>
@@ -140,12 +140,12 @@
         <!-- Script Content -->
         <section class="d-flex flex-column" style="height: 600px;">
             <div class="ui-card-label">
-                <span class="label-text">Script Content</span>
+                <span class="label-text">{{ $t('pacHeaderScript') }}</span>
             </div>
             <div class="ui-card rounded-xl border shadow-sm overflow-hidden d-flex flex-column h-100 w-100 flex-1">
                 <div class="ui-card-header justify-content-end">
-                    <span v-if="pac.mode === 'remote'" class="px-2 py-1 rounded bg-hover  text-xs font-mono text-slate-600 ">Read Only</span>
-                    <span v-else class="px-2 py-1 rounded bg-hover  text-xs font-mono text-slate-600 ">Editable</span>
+                    <span v-if="pac.mode === 'remote'" class="px-2 py-1 rounded bg-hover  text-xs font-mono text-slate-600 ">{{ $t('pacMsgReadOnly') }}</span>
+                    <span v-else class="px-2 py-1 rounded bg-hover  text-xs font-mono text-slate-600 ">{{ $t('pacMsgEditable') }}</span>
                 </div>
                 <div class="flex-1 position-relative">
                     <textarea 
@@ -154,7 +154,7 @@
                         class="form-control w-100 h-100 p-4 font-mono text-xs custom-scrollbar bg-white  text-slate-900 border-0 rounded-0"
                         style="resize: none;"
                         spellcheck="false"
-                        :placeholder="`// Enter your PAC script here\nfunction FindProxyForURL(url, host) {\n  return 'DIRECT';\n}`"
+                        :placeholder="$t('pacPlaceholderScript')"
                     ></textarea>
                 </div>
             </div>
@@ -241,7 +241,7 @@ onMounted(() => {
 onMounted(() => {
   registerUnsavedChangesChecker(() => {
     if (isDirty.value) {
-      toast.warning('You have unsaved changes. Please save or reset before leaving.')
+      toast.warning(chrome.i18n.getMessage('pacMsgUnsaved'))
       return true
     }
     return false
@@ -270,7 +270,7 @@ const saveChanges = async () => {
     // Persist
     await savePacs(config.value.pacs)
     
-    toast.success('PAC script saved successfully')
+    toast.success(chrome.i18n.getMessage('pacMsgSaved'))
     
     // Refresh
     await loadPacData()
@@ -279,7 +279,7 @@ const saveChanges = async () => {
 // Modal Handlers
 const openRenameModal = () => {
   if (isDirty.value) {
-    toast.warning('Please save or reset your changes before renaming')
+    toast.warning(chrome.i18n.getMessage('pacMsgSaveBeforeRenaming'))
     return
   }
   showRenameModal.value = true
@@ -287,7 +287,7 @@ const openRenameModal = () => {
 
 const openCloneModal = () => {
   if (isDirty.value) {
-    toast.warning('Please save or reset your changes before cloning')
+    toast.warning(chrome.i18n.getMessage('pacMsgSaveBeforeCloning'))
     return
   }
   showCloneModal.value = true
@@ -301,7 +301,7 @@ const handleRename = async (newName) => {
     if (!pac.value || !config.value) return
     config.value.pacs[pac.value.id].name = newName
     await savePacs(config.value.pacs)
-    toast.success('PAC script renamed successfully')
+    toast.success(chrome.i18n.getMessage('pacMsgRenamed'))
     await loadPacData()
     showRenameModal.value = false
 }
@@ -314,7 +314,7 @@ const handleClone = async (newName) => {
     newPac.name = newName
     config.value.pacs[newId] = newPac
     await savePacs(config.value.pacs)
-    toast.success('PAC script cloned successfully')
+    toast.success(chrome.i18n.getMessage('pacMsgCloned'))
     router.push(`/pac/${newId}`)
     showCloneModal.value = false
 }
@@ -323,7 +323,7 @@ const handleDelete = async () => {
     if (!pac.value || !config.value) return
     delete config.value.pacs[pac.value.id]
     await savePacs(config.value.pacs)
-    toast.success('PAC script deleted successfully')
+    toast.success(chrome.i18n.getMessage('pacMsgDeleted'))
     router.push('/settings')
     showDeleteModal.value = false
 }

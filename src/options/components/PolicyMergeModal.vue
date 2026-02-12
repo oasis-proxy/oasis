@@ -16,7 +16,7 @@
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <h3 class="ui-text-primary modal-header tracking-tight m-0">Merge Policy</h3>
+          <h3 class="ui-text-primary modal-header tracking-tight m-0">{{ $t('pmmTitle') }}</h3>
           <button 
             @click="emit('close')" 
             class="modal-close-button"
@@ -31,39 +31,39 @@
             
             <!-- Source Policy Dropdown -->
             <label class="d-flex flex-column gap-2 w-100">
-              <span class="ui-text-primary text-xs font-medium leading-none">Source Policy</span>
+              <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pmmLabelSource') }}</span>
               <select 
                 v-model="sourcePolicy"
                 class="form-select ui-input w-100 rounded-lg border h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
                 style="min-width: 100%; width: 100%; max-width: 100% !important;"
               >
-                <option value="" disabled>-- Select Policy to Merge From --</option>
+                <option value="" disabled>{{ $t('pmmSelectSource') }}</option>
                 <option v-for="policyOption in availablePolicies" :key="policyOption.id" :value="policyOption.id">
                   {{ policyOption.name }}
                 </option>
               </select>
-              <p class="text-xs text-slate-500 m-0">Choose a policy to import rules from.</p>
+              <p class="text-xs text-slate-500 m-0">{{ $t('pmmDescSource') }}</p>
             </label>
 
             <!-- Import Options Checkboxes (Horizontal) -->
             <div class="d-flex flex-column gap-2">
-              <span class="ui-text-primary text-xs font-medium leading-none">Import Rules</span>
+              <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pmmLabelImport') }}</span>
               <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr;">
                 <label class="d-flex align-items-center gap-2 cursor-pointer">
                   <input type="checkbox" v-model="importNormalRules" class="form-check-input m-0" />
-                  <span class="text-xs ui-text-primary">Normal Rules</span>
+                  <span class="text-xs ui-text-primary">{{ $t('pmmOptionNormal') }}</span>
                 </label>
                 <label class="d-flex align-items-center gap-2 cursor-pointer">
                   <input type="checkbox" v-model="importRejectRules" class="form-check-input m-0" />
-                  <span class="text-xs ui-text-primary">Reject Rules</span>
+                  <span class="text-xs ui-text-primary">{{ $t('pmmOptionReject') }}</span>
                 </label>
               </div>
-              <p class="text-xs text-slate-500 m-0">Select which rule types to import.</p>
+              <p class="text-xs text-slate-500 m-0">{{ $t('pmmDescImport') }}</p>
             </div>
 
             <!-- Conflict Resolution (Card-based Radio) -->
             <div class="d-flex flex-column gap-2">
-              <span class="ui-text-primary text-xs font-medium leading-none">Conflict Resolution</span>
+              <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pmmLabelConflict') }}</span>
               <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr;">
                 
                 <!-- Ignore Option -->
@@ -74,8 +74,8 @@
                   <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="ignore"/>
                   <span class="d-flex flex-1">
                     <span class="d-flex flex-column">
-                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">Ignore</span>
-                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Skip conflicts</span>
+                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">{{ $t('pmmOptionIgnore') }}</span>
+                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">{{ $t('pmmDescIgnore') }}</span>
                     </span>
                   </span>
                   <i v-if="conflictMode === 'ignore'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -89,15 +89,15 @@
                   <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="overwrite"/>
                   <span class="d-flex flex-1">
                     <span class="d-flex flex-column">
-                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">Overwrite</span>
-                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Replace conflicts</span>
+                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">{{ $t('pmmOptionOverwrite') }}</span>
+                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">{{ $t('pmmDescOverwrite') }}</span>
                     </span>
                   </span>
                   <i v-if="conflictMode === 'overwrite'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
                 </label>
 
               </div>
-              <p class="text-xs text-slate-500 m-0">How to handle rules with same type and pattern.</p>
+              <p class="text-xs text-slate-500 m-0">{{ $t('pmmDescConflict') }}</p>
             </div>
 
           </div>
@@ -109,14 +109,14 @@
             @click="emit('close')"
             class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
-            Cancel
+            {{ $t('btnCancel') }}
           </button>
           <button 
             @click="handleConfirm"
             :disabled="!isValid"
             class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Merge
+            {{ $t('btnMerge') }}
           </button>
         </div>
 

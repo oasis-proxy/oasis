@@ -14,7 +14,7 @@
         :class="{ active: currentTab === 'proxy' }"
         @click="currentTab = 'proxy'"
       >
-        Proxy
+        {{ $t('lblProxy') }}
       </button>
       <button 
         v-if="showMonitorTab"
@@ -22,7 +22,7 @@
         :class="{ active: currentTab === 'monitor' }"
         @click="currentTab = 'monitor'"
       >
-        Monitor
+        {{ $t('monitor') }}
       </button>
       <button 
         v-if="showQuickTab"
@@ -30,18 +30,18 @@
         :class="{ active: currentTab === 'quick' }"
         @click="currentTab = 'quick'"
       >
-        Quick
+        {{ $t('quick') }}
       </button>
     </div>
     
     <div class="header-actions">
-       <button @click="openSidePanel" class="ui-button-icon" title="Open Downloads">
+       <button @click="openSidePanel" class="ui-button-icon" :title="$t('popTooltipDownloads')">
         <i class="bi bi-layout-sidebar-reverse ui-icon-md"></i>
       </button>
-       <button v-if="showMonitorTab" @click="openMonitor" class="ui-button-icon" title="Open Monitor">
+       <button v-if="showMonitorTab" @click="openMonitor" class="ui-button-icon" :title="$t('popTooltipMonitor')">
         <i class="bi bi-activity ui-icon-md"></i>
       </button>
-      <button @click="openOptions" class="ui-button-icon" title="Options">
+      <button @click="openOptions" class="ui-button-icon" :title="$t('popTooltipOptions')">
         <i class="bi bi-gear-wide-connected ui-icon-md"></i>
       </button>
     </div>
@@ -54,7 +54,7 @@
       <div v-if="currentTab === 'proxy'">
         <!-- Defaults Section -->
         <div class="mb-2">
-          <h3 class="section-heading">Defaults</h3>
+          <h3 class="section-heading">{{ $t('defaults') }}</h3>
           <div>
             <label 
               class="profile-item"
@@ -64,7 +64,7 @@
               <div class="profile-icon">
                 <i class="bi bi-power ui-icon-lg"></i>
               </div>
-              <p class="profile-name">Direct Connect</p>
+              <p class="profile-name">{{ $t('directConnect') }}</p>
               <div 
                 v-if="isActive('direct')"
                 class="text-primary"
@@ -81,7 +81,7 @@
               <div class="profile-icon">
                 <i class="bi bi-globe ui-icon-lg"></i>
               </div>
-              <p class="profile-name">System Proxy</p>
+              <p class="profile-name">{{ $t('systemProxy') }}</p>
               <div 
                 v-if="isActive('system')"
                 class="text-primary"
@@ -94,7 +94,7 @@
 
         <!-- Host Proxy Section -->
         <div v-if="hostProxies.length > 0" class="mb-2">
-          <h3 class="section-heading">Host Proxy</h3>
+          <h3 class="section-heading">{{ $t('hostProxy') }}</h3>
           <div>
             <label 
               v-for="profile in hostProxies"
@@ -122,7 +122,7 @@
 
         <!-- PAC Script Section -->
         <div v-if="pacScripts.length > 0" class="mb-2">
-          <h3 class="section-heading">PAC Script</h3>
+          <h3 class="section-heading">{{ $t('pacScript') }}</h3>
           <div>
             <label 
               v-for="profile in pacScripts"
@@ -150,7 +150,7 @@
 
         <!-- Auto Policy Section -->
         <div v-if="autoPolicies.length > 0" class="mb-2">
-          <h3 class="section-heading">Auto Policy</h3>
+          <h3 class="section-heading">{{ $t('autoPolicy') }}</h3>
           <div>
             <label 
               v-for="profile in autoPolicies"
@@ -182,8 +182,8 @@
           <!-- Protocol Warning -->
           <div v-if="!isProtocolSupported" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
                <div class="text-center p-4">
-                   <p class="text-sm">Monitoring not available.</p>
-                   <p class="text-xs text-muted">Only HTTP/HTTPS pages are supported.</p>
+                   <p class="text-sm">{{ $t('popMsgMonitorUnavailable') }}</p>
+                   <p class="text-xs text-muted">{{ $t('popMsgMonitorOnlyHttp') }}</p>
                </div>
           </div>
 
@@ -191,8 +191,8 @@
           <div v-else-if="monitorResult.length === 0" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
              <div class="text-center p-4">
                  <i class="bi bi-activity text-3xl mb-2 d-block opacity-50"></i>
-                 <p class="text-sm">No requests recorded.</p>
-                 <p class="text-xs text-muted">Refresh the page to capture traffic.</p>
+                 <p class="text-sm">{{ $t('popMsgNoRequests') }}</p>
+                 <p class="text-xs text-muted">{{ $t('popMsgRefreshHint') }}</p>
              </div>
           </div>
           
@@ -205,7 +205,7 @@
                  <div class="monitor-col-domain">
                      <div 
                         class="monitor-domain fw-medium text-truncate text-xs cursor-pointer" 
-                        :title="`Click to copy: ${item.domain}`"
+                        :title="$t('popTooltipCopy', [item.domain])"
                         @click="copyDomain(item.domain)"
                      >
                          {{ item.domain }}
@@ -230,13 +230,13 @@
 
        <!-- QUICK TAB -->
        <div v-if="currentTab === 'quick'" class="monitor-container d-flex flex-column h-100 text-xs">
-          <p class="quick-title">Select domains to proxy from current page</p>
+          <p class="quick-title">{{ $t('popTitleQuickAdd') }}</p>
           
           <div v-if="failedDomains.length === 0" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
              <div class="text-center p-4">
                  <i class="bi bi-check-circle text-3xl mb-2 d-block opacity-50 text-success"></i>
-                 <p class="text-xs">No failed requests.</p>
-                 <p class="text-xs text-muted">Page is working correctly.</p>
+                 <p class="text-xs">{{ $t('popMsgNoFailedRequests') }}</p>
+                 <p class="text-xs text-muted">{{ $t('popMsgPageWorking') }}</p>
              </div>
           </div>
 
@@ -263,9 +263,9 @@
             <div class="d-flex gap-3 pb-2 px-2">
                 <!-- Proxy Host -->
                 <div class="flex-1 d-flex flex-column gap-1">
-                  <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">Proxy Host/Group</label>
+                  <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">{{ $t('lblProxies') }}/{{ $t('lblProxyGroups') }}</label>
                   <select v-model="quickProxyId" class="form-select ui-input ui-input-sm w-100 text-xs cursor-pointer">
-                    <option value="direct">Direct</option>
+                    <option value="direct">{{ $t('directConnect') }}</option>
                     <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
                         <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
                           {{ proxy.label }}
@@ -276,10 +276,10 @@
 
                 <!-- Add To Destination -->
                 <div class="flex-1 d-flex flex-column gap-1">
-                  <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">Add To</label>
+                  <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">{{ $t('addTo') }}</label>
                   <select v-model="quickDestination" class="form-select ui-input ui-input-sm w-100 text-xs cursor-pointer">
-                    <option value="policy">Current Policy</option>
-                    <option value="temporary">Temporary (Session)</option>
+                    <option value="policy">{{ $t('currentPolicy') }}</option>
+                    <option value="temporary">{{ $t('temporarySession') }}</option>
                   </select>
                 </div>
             </div>
@@ -287,10 +287,10 @@
             <!-- Actions Section -->
             <div class="quick-section justify-content-end gap-2 pb-3"> 
               <button @click="currentTab = 'proxy'" class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all">
-                Cancel
+                {{ $t('cancel') }}
               </button>
               <button @click="confirmQuickAdd" :disabled="selectedDomains.length === 0" class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg shadow-primary/30 transition-colors border-0">
-                Confirm
+                {{ $t('confirm') }}
               </button>
             </div>
           </div>
@@ -637,7 +637,7 @@ const proxyOptions = computed(() => {
           .sort((a, b) => a.label.localeCompare(b.label))
           
       if (proxies.length > 0) {
-          groups.push({ label: 'Proxies', options: proxies })
+          groups.push({ label: chrome.i18n.getMessage('lblProxies'), options: proxies })
       }
   }
   
@@ -648,7 +648,7 @@ const proxyOptions = computed(() => {
           .sort((a, b) => a.label.localeCompare(b.label))
           
       if (proxyGroups.length > 0) {
-          groups.push({ label: 'Proxy Groups', options: proxyGroups })
+          groups.push({ label: chrome.i18n.getMessage('lblProxyGroups'), options: proxyGroups })
       }
   }
   
@@ -684,7 +684,7 @@ const confirmQuickAdd = async () => {
         // Notify Background to re-apply if currently active
         // Actually background detects session changes to tempRules and re-applies!
         
-        toast.success(`${newRules.length} rules added to Session (Temp)`)
+        toast.success(chrome.i18n.getMessage('msgRulesAddedTemp', [newRules.length]))
     } else {
         // Add to current policy (Persistent)
         const policyId = activeProfileId.value
@@ -699,7 +699,7 @@ const confirmQuickAdd = async () => {
         config.value.policies[policyId].rules = [...newRules, ...config.value.policies[policyId].rules]
         
         await saveConfig(config.value)
-        toast.success(`${newRules.length} rules added to ${config.value.policies[policyId].name || 'Policy'}`)
+        toast.success(chrome.i18n.getMessage('msgRulesAddedPolicy', [newRules.length, config.value.policies[policyId].name || 'Policy']))
     }
     
     // Clear selection and switch back
@@ -718,7 +718,7 @@ const showToast = (text, duration = 2000) => {
 
 const copyDomain = (domain) => {
     navigator.clipboard.writeText(domain).then(() => {
-        showToast('Copied to clipboard')
+        showToast(chrome.i18n.getMessage('msgCopiedGeneric'))
     })
 }
 

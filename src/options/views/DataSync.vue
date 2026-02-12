@@ -3,7 +3,7 @@
     <!-- Header -->
     <header class="h-24 px-5 d-flex align-items-center justify-content-between border-light  transition-colors">
       <div>
-        <h2 class="fs-4 font-bold text-slate-900  m-0">Data Synchronization</h2>
+        <h2 class="fs-4 font-bold text-slate-900  m-0">{{ $t('lblDataSync') }}</h2>
       </div>
     </header>
 
@@ -12,7 +12,7 @@
         <!-- Maintenance Operations -->
         <section class="mb-5">
              <div class="ui-card-label">
-                <span class="label-text">Maintenance Operations</span>
+                <span class="label-text">{{ $t('lblMaintenanceOps') }}</span>
             </div>
             <div class="ui-card rounded-xl border shadow-sm transition-colors">
                 
@@ -20,8 +20,8 @@
                  <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors">
                   <div class="d-flex items-start">
                     <div>
-                      <p class="text-sm font-medium text-slate-900 m-0">Auto Sync</p>
-                      <p class="text-xs text-slate-500 mt-1 m-0">Synchronize settings across devices automatically.</p>
+                      <p class="text-sm font-medium text-slate-900 m-0">{{ $t('lblAutoSync') }}</p>
+                      <p class="text-xs text-slate-500 mt-1 m-0">{{ $t('descAutoSync') }}</p>
                     </div>
                   </div>
                   <div class="form-check form-switch">
@@ -32,24 +32,24 @@
                 <div class="d-flex align-items-center justify-content-between px-4 pt-3 pb-4 hover:bg-slate-50 transition-colors">
                   <div class="d-flex items-start">
                     <div>
-                      <p class="text-sm font-medium text-slate-900 m-0">Maintenance</p>
-                      <p class="text-xs text-slate-500 mt-1 m-0">Manage configuration data.</p>
+                      <p class="text-sm font-medium text-slate-900 m-0">{{ $t('lblMaintenance') }}</p>
+                      <p class="text-xs text-slate-500 mt-1 m-0">{{ $t('descMaintenance') }}</p>
                     </div>
                   </div>
                   <div class="d-flex gap-2">
                     <input type="file" ref="fileInput" accept=".json" @change="handleImportFile" style="display: none;" />
                     
                     <button @click="triggerImport" class="h-8 px-3 text-xs font-medium ui-button-secondary border rounded-lg transition-colors d-flex align-items-center gap-2">
-                      <i class="bi bi-upload text-sm"></i> Import
+                      <i class="bi bi-upload text-sm"></i> {{ $t('btnImport') }}
                     </button>
                     <button @click="handleExport" class="h-8 px-3 text-xs font-medium ui-button-secondary border rounded-lg transition-colors d-flex align-items-center gap-2">
-                      <i class="bi bi-download text-sm"></i> Export
+                      <i class="bi bi-download text-sm"></i> {{ $t('btnExport') }}
                     </button>
                      <button @click="handleClearLocal" class="h-8 px-3 text-xs font-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-2">
-                      <i class="bi bi-trash text-sm"></i> Clear Local
+                      <i class="bi bi-trash text-sm"></i> {{ $t('btnClearLocal') }}
                     </button>
                     <button @click="handleClearCloud" class="h-8 px-3 text-xs font-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-2">
-                      <i class="bi bi-cloud-slash text-sm"></i> Clear Sync
+                      <i class="bi bi-cloud-slash text-sm"></i> {{ $t('btnClearSync') }}
                     </button>
                   </div>
                 </div>
@@ -66,7 +66,7 @@
                     <div class="ui-card-header px-4 py-3 border-bottom d-flex align-items-center justify-content-between" style="padding-left: 1.5rem !important">
                         <div>
                             <div class="d-flex align-items-center gap-2">
-                                 <h3 class="m-0">Local Version</h3>
+                                 <h3 class="m-0">{{ $t('lblLocalVersion') }}</h3>
                             </div>
                         </div>
                     </div>
@@ -74,27 +74,27 @@
                     <div class="d-flex flex-column gap-3 position-relative px-4 py-4 flex-grow-1" style="z-index: 10;">
                         <!-- Last Modified -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblLastModified') }}</p>
                             <p class="text-xs font-mono text-slate-900 m-0 text-end">
-                                {{ formattedLocalLastModified || 'Unknown' }}
+                                {{ formattedLocalLastModified || $t('lblUnknown') }}
                             </p>
                         </div>
                         
                         <!-- Config Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblConfigVer') }}</p>
                             <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ configVersion }}</p>
                         </div>
 
                         <!-- Software Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Software Ver.</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblSoftwareVer') }}</p>
                             <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ softwareVersion }}</p>
                         </div>
                         
                         <!-- Proxy Hosts -->
                         <div class="d-flex flex-column gap-2">
-                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Proxy Hosts ({{ proxyCount }})</p>
+                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblProxyHosts') }} ({{ proxyCount }})</p>
                              <div class="d-flex flex-wrap gap-2">
                                 <span v-for="host in previewProxies" :key="host.id" class="ui-tag" :title="host.label">
                                     {{ truncate(host.label, 20) }}
@@ -104,7 +104,7 @@
 
                         <!-- Policies -->
                         <div class="d-flex flex-column gap-2">
-                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Policies ({{ policyCount }})</p>
+                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblPolicies') }} ({{ policyCount }})</p>
                              <div class="d-flex flex-wrap gap-2">
                                 <span v-for="policy in previewPolicies" :key="policy.id" class="ui-tag ui-tag-primary" :title="policy.name">
                                     {{ truncate(policy.name, 20) }}
@@ -119,7 +119,7 @@
                     <div class="ui-card-header px-4 py-3 border-bottom d-flex align-items-center justify-content-between" style="padding-left: 1.5rem !important">
                         <div>
                             <div class="d-flex align-items-center gap-2">
-                                <h3 class="m-0">Cloud Version</h3>
+                                <h3 class="m-0">{{ $t('lblCloudVersion') }}</h3>
                             </div>
                         </div>
                     </div>
@@ -127,24 +127,24 @@
                     <div class="d-flex flex-column gap-3 position-relative px-4 py-4 flex-grow-1" style="z-index: 10;">
                          <!-- Last Modified -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblLastModified') }}</p>
                             <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ formattedCloudLastModified }}</p>
                         </div>
                         
                         <!-- Config Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblConfigVer') }}</p>
                             <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ cloudConfigVersion }}</p>
                         </div>
 
                         <div v-if="!cloudConfig" class="d-flex flex-column align-items-center justify-content-center py-4 text-slate-400 flex-grow-1">
                             <i class="bi bi-cloud-slash fs-2 mb-2"></i>
-                            <span class="text-xs">No cloud data found</span>
+                            <span class="text-xs">{{ $t('msgNoCloudData') }}</span>
                         </div>
                         <div v-else class="d-flex flex-column gap-3">
                              <!-- Proxy Hosts -->
                             <div class="d-flex flex-column gap-2">
-                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Proxy Hosts ({{ cloudProxyCount }})</p>
+                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblProxyHosts') }} ({{ cloudProxyCount }})</p>
                                  <div v-if="cloudPreviewProxies.length > 0" class="d-flex flex-wrap gap-2">
                                     <span v-for="host in cloudPreviewProxies" :key="host.id" class="ui-tag" :title="host.label">
                                         {{ truncate(host.label, 20) }}
@@ -155,7 +155,7 @@
 
                             <!-- Policies -->
                             <div class="d-flex flex-column gap-2">
-                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Policies ({{ cloudPolicyCount }})</p>
+                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblPolicies') }} ({{ cloudPolicyCount }})</p>
                                  <div v-if="cloudPreviewPolicies.length > 0" class="d-flex flex-wrap gap-2">
                                     <span v-for="policy in cloudPreviewPolicies" :key="policy.id" class="ui-tag ui-tag-primary" :title="policy.name">
                                         {{ truncate(policy.name, 20) }}
@@ -173,13 +173,13 @@
                 <div class="flex-1 d-flex justify-content-center">
                     <button @click="handleSyncToCloud" class="d-flex align-items-center gap-2 px-4 py-2 ui-button-secondary rounded-lg border transition-all">
                         <i class="bi bi-cloud-upload" style="font-size: 14px;"></i>
-                        <span class="text-xs font-semibold">Push to Cloud</span>
+                        <span class="text-xs font-semibold">{{ $t('btnPushToCloud') }}</span>
                     </button>
                 </div>
                 <div class="flex-1 d-flex justify-content-center">
                     <button @click="handleSyncFromLocal" class="d-flex align-items-center gap-2 px-4 py-2 ui-button-secondary rounded-lg border transition-all">
                         <i class="bi bi-cloud-download" style="font-size: 14px;"></i>
-                        <span class="text-xs font-semibold">Pull from Cloud</span>
+                        <span class="text-xs font-semibold">{{ $t('btnPullFromCloud') }}</span>
                     </button>
                 </div>
             </div>
@@ -390,7 +390,7 @@ const toggleAutoSync = async (event) => {
              // Then syncToCloud updates local version to +1.
              // So we avoid double increment.
              await saveGeneralSettings(config, false, true) 
-             toast.success('Auto Sync Enabled')
+             toast.success(chrome.i18n.getMessage('msgAutoSyncEnabled'))
         }
     } else {
         // Turning OFF
@@ -402,7 +402,7 @@ const toggleAutoSync = async (event) => {
 
 const handleSyncToCloud = async () => {
     await syncToCloud(config)
-    toast.success('Synced to cloud successfully')
+    toast.success(chrome.i18n.getMessage('msgSyncedToCloud'))
     showConflictModal.value = false
     await loadData()
 }
@@ -411,11 +411,11 @@ const handleSyncFromLocal = async () => {
     // Sync TO Local from Cloud
     const success = await syncFromCloud(true) // Force pull
     if (success) {
-        toast.success('Synced from cloud successfully')
+        toast.success(chrome.i18n.getMessage('msgSyncedFromCloud'))
         showConflictModal.value = false
         await loadData() // Reload local config to reflect changes
     } else {
-        toast.error('Failed to sync from cloud (Empty or Error)')
+        toast.error(chrome.i18n.getMessage('msgSyncFromCloudFailed'))
     }
 }
 
@@ -429,7 +429,7 @@ const resolveConflictCloud = async () => {
     // 2. Persist Local Config with Sync Enabled
     config.sync.enabled = true
     await saveGeneralSettings(config, false, true) // skipSync=false (safe, just synced), skipTouch=true
-    toast.success('Local version pushed to cloud. Auto Sync enabled.')
+    toast.success(chrome.i18n.getMessage('msgLocalPushedAutoSync'))
 }
 
 const resolveConflictLocal = async () => {
@@ -446,7 +446,7 @@ const resolveConflictLocal = async () => {
         config.sync.enabled = true
         await saveGeneralSettings(config, true, true) // Save enabled state locally only
         
-        toast.success('Synced from cloud successfully. Auto Sync enabled.')
+        toast.success(chrome.i18n.getMessage('msgSyncedFromCloudAutoSync'))
         showConflictModal.value = false
     }
 }
@@ -474,14 +474,14 @@ const handleImportFile = async (event) => {
             const jsonString = e.target.result
             const success = await importConfig(jsonString)
             if (success) {
-                toast.success('Configuration imported successfully')
+                toast.success(chrome.i18n.getMessage('msgConfigImported'))
                 await loadData()
             } else {
-                toast.error('Failed to import configuration')
+                toast.error(chrome.i18n.getMessage('msgConfigImportFailed'))
             }
         } catch (err) {
             console.error(err)
-            toast.error('Invalid configuration file')
+            toast.error(chrome.i18n.getMessage('msgInvalidConfig'))
         }
         // Reset input
         event.target.value = ''
@@ -501,17 +501,17 @@ const handleExport = async () => {
         a.click()
         document.body.removeChild(a)
         URL.revokeObjectURL(url)
-        toast.success('Configuration exported')
+        toast.success(chrome.i18n.getMessage('msgConfigExported'))
     } catch (e) {
         console.error(e)
-        toast.error('Failed to export configuration')
+        toast.error(chrome.i18n.getMessage('msgConfigExportFailed'))
     }
 }
 
 const handleClearLocal = async () => {
-    if (confirm('Are you sure you want to clear LOCAL configuration? This will reset everything to defaults and disable Auto Sync.')) {
+    if (confirm(chrome.i18n.getMessage('confirmClearLocal'))) {
         await clearLocalConfig()
-        toast.success('Local configuration cleared')
+        toast.success(chrome.i18n.getMessage('msgLocalCleared'))
         // We need to reload the page or re-init state fully
         await loadData() 
         // Force refresh state variables if loadData doesn't catch everything (it usually does as it overwrites reactive config)
@@ -519,7 +519,7 @@ const handleClearLocal = async () => {
 }
 
 const handleClearCloud = async () => {
-    if (confirm('Are you sure you want to clear CLOUD configuration? This action cannot be undone.')) {
+    if (confirm(chrome.i18n.getMessage('confirmClearCloud'))) {
         try {
             await clearCloudConfig()
             
@@ -527,10 +527,10 @@ const handleClearCloud = async () => {
             config.sync.enabled = false
             await saveGeneralSettings(config, true, true) // Save disabled state, skip sync, skip touch
 
-            toast.success('Cloud configuration cleared & Auto Sync disabled')
+            toast.success(chrome.i18n.getMessage('msgCloudCleared'))
             await loadData()
         } catch (e) {
-            toast.error('Failed to clear cloud configuration')
+            toast.error(chrome.i18n.getMessage('msgClearCloudFailed'))
         }
     }
 }

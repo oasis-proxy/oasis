@@ -6,7 +6,7 @@
       <div>
         <div class="d-flex align-items-center gap-3">
           <h2 class="fs-4 font-bold ui-text-primary m-0">
-            Temporary Rules
+            {{ $t('tempTitle') }}
           </h2>
         </div>
       </div>
@@ -16,7 +16,7 @@
           class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
         >
           <i class="bi bi-reply-fill"></i>
-          <span>Reset</span>
+          <span>{{ $t('btnResetSimple') }}</span>
         </button>
 
         <button 
@@ -25,7 +25,7 @@
           class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
         >
           <i class="bi bi-floppy-fill"></i>
-          <span>Save</span>
+          <span>{{ $t('btnSave') }}</span>
         </button>
       </div>
     </header>
@@ -37,18 +37,18 @@
         <!-- Rules Section -->
         <section v-if="isTemporaryRulesActive">
           <div class="ui-card-label">
-            <span class="label-text">Temporary Rules</span>
+            <span class="label-text">{{ $t('tempTitle') }}</span>
             <div class="d-flex align-items-center gap-2">
-              <button @click="addRule" class="ui-button-icon sm" title="Add Rule">
+              <button @click="addRule" class="ui-button-icon sm" :title="$t('btnAddRule')">
                 <i class="bi bi-plus-lg text-sm"></i>
               </button>
-               <button @click="openSmartMerge" :disabled="rules.length === 0" class="ui-button-icon sm" title="Merge Rules">
+               <button @click="openSmartMerge" :disabled="rules.length === 0" class="ui-button-icon sm" :title="$t('tempBtnMerge')">
                 <i class="bi bi-diagram-3-fill" style="font-size: 14px;"></i>
               </button>
-              <button @click="acceptAll" :disabled="rules.length === 0" class="ui-button-icon sm" title="Accept All">
+              <button @click="acceptAll" :disabled="rules.length === 0" class="ui-button-icon sm" :title="$t('tempBtnAcceptAll')">
                 <i class="bi bi-check-all" style="font-size: 16px;"></i>
               </button>
-              <button @click="clearAll" :disabled="rules.length === 0" class="ui-button-icon sm" title="Clear All">
+              <button @click="clearAll" :disabled="rules.length === 0" class="ui-button-icon sm" :title="$t('tempBtnClearAll')">
                 <i class="bi bi-trash ui-icon-sm"></i>
               </button>
             </div>
@@ -58,11 +58,11 @@
           <div class="ui-card rounded-xl border shadow-sm overflow-hidden">
             <!-- Table Header -->
             <div class="ui-card-header">
-              <div style="width: 8%;" class="text-center">Valid</div>
-              <div style="width: 16%;">Type</div>
-              <div style="width: 48%;">Pattern</div>
-              <div style="width: 20%;">Proxy</div>
-              <div style="width: 8%;" class="text-center">Action</div>
+              <div style="width: 8%;" class="text-center">{{ $t('lblValid') }}</div>
+              <div style="width: 16%;">{{ $t('lblType') }}</div>
+              <div style="width: 48%;">{{ $t('lblPattern') }}</div>
+              <div style="width: 20%;">{{ $t('lblProxy') }}</div>
+              <div style="width: 8%;" class="text-center">{{ $t('lblAction') }}</div>
             </div>
 
             <!-- Rules -->
@@ -94,10 +94,10 @@
                       style="height: 28px; max-width: none;"
                       @change="validateRule(index, rule)"
                     >
-                      <option value="wildcard">Wildcard</option>
-                      <option value="regex">Regex</option>
-                      <option value="ip">IP/CIDR</option>
-                      <option value="ruleset">Rule Set</option>
+                      <option value="wildcard">{{ $t('optWildcard') }}</option>
+                      <option value="regex">{{ $t('optRegex') }}</option>
+                      <option value="ip">{{ $t('optIP') }}</option>
+                      <option value="ruleset">{{ $t('optRuleSet') }}</option>
                     </select>
                   </div>
                   <div style="width: 48%;">
@@ -116,17 +116,17 @@
                       class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
                       style="height: 28px; max-width: none;"
                     >
-                      <option value="direct">Direct</option>
+                      <option value="direct">{{ $t('directConnect') }}</option>
                       <option v-for="proxy in proxyOptions" :key="proxy.id" :value="proxy.id">
                         {{ proxy.label }}
                       </option>
                     </select>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
-                    <button @click="acceptRule(index)" class="ui-button-icon text-success hover:text-success" title="Accept (Move to Policy)">
+                    <button @click="acceptRule(index)" class="ui-button-icon text-success hover:text-success" :title="$t('tooltipAcceptMove')">
                       <i class="bi bi-check-lg ui-icon-sm"></i>
                     </button>
-                    <button @click="deleteRule(index)" class="ui-button-icon p-0.5" title="Delete">
+                    <button @click="deleteRule(index)" class="ui-button-icon p-0.5" :title="$t('btnDelete')">
                       <i class="bi bi-trash ui-icon-sm"></i>
                     </button>
                   </div>
@@ -136,8 +136,8 @@
 
             <!-- Empty State -->
             <div v-else class="p-2 d-flex flex-column align-items-center justify-content-center text-center">
-              <p class="text-sm font-medium ui-text-primary m-0">No temporary rules.</p>
-              <p class="text-xs ui-text-secondary mt-1 max-w-xs m-0">Temporary rules created from the popup will appear here.</p>
+              <p class="text-sm font-medium ui-text-primary m-0">{{ $t('tempMsgNoRules') }}</p>
+              <p class="text-xs ui-text-secondary mt-1 max-w-xs m-0">{{ $t('tempMsgNoRulesDesc') }}</p>
             </div>
           </div>
         </section>
@@ -145,9 +145,9 @@
 
 
         <section v-else class="text-center py-10">
-            <h3 class="text-lg font-semibold ui-text-primary mb-2">Temporary Rules Unavailable</h3>
+            <h3 class="text-lg font-semibold ui-text-primary mb-2">{{ $t('tempTitleUnavailable') }}</h3>
             <p class="text-sm ui-text-secondary">
-                Temporary rules are only available when the active profile is an Auto Policy.
+                {{ $t('tempMsgUnavailable') }}
             </p>
         </section>
 
@@ -264,7 +264,7 @@ const saveChanges = async () => {
     // Save to session storage
     await chrome.storage.session.set({ tempRules: JSON.parse(JSON.stringify(rules.value)) })
     originalRules.value = JSON.parse(JSON.stringify(rules.value))
-    toast.success('Temporary rules saved')
+    toast.success(chrome.i18n.getMessage('tempMsgSaved'))
 }
 
 const addRule = () => {
@@ -284,7 +284,7 @@ const deleteRule = (index) => {
 }
 
 const clearAll = () => {
-    if (confirm('Are you sure you want to clear all temporary rules?')) {
+    if (confirm(chrome.i18n.getMessage('tempMsgClearConfirm'))) {
         rules.value = []
     }
 }
@@ -337,7 +337,7 @@ const handleSmartMergeConfirm = async ({ targetId, conflictMode, rules: optimize
 // Shared execution logic
 const executeMerge = async (targetId, conflictMode, rulesToMerge) => {
    if (!config.value || !config.value.policies || !config.value.policies[targetId]) {
-       toast.error('Target policy not found')
+       toast.error(chrome.i18n.getMessage('msgPolicyNotFound'))
        return
    }
 
@@ -387,7 +387,7 @@ const executeMerge = async (targetId, conflictMode, rulesToMerge) => {
    }
 
    await saveChanges()
-   toast.success(`Merged ${addedCount} rules, updated ${updatedCount} rules.`)
+   toast.success(chrome.i18n.getMessage('tempMsgMerged', [addedCount, updatedCount]))
    
    // Close modals
    showAcceptModal.value = false
@@ -404,7 +404,7 @@ onMounted(() => {
 onMounted(() => {
   registerUnsavedChangesChecker(() => {
     if (isDirty.value) {
-      toast.warning('You have unsaved changes. Please save or reset before leaving.')
+      toast.warning(chrome.i18n.getMessage('pacMsgUnsaved'))
       return true
     }
     return false
@@ -417,11 +417,11 @@ onBeforeUnmount(() => {
 
 const getPlaceholder = (type) => {
   switch (type) {
-    case 'wildcard': return 'e.g. *.example.com';
-    case 'regex': return 'e.g. ^https?://.*\\.example\\.com';
-    case 'ip': return 'e.g. 192.168.1.1/24';
-    case 'ruleset': return 'https://example.com/rules.txt';
-    default: return 'Pattern...';
+    case 'wildcard': return chrome.i18n.getMessage('phWildcard');
+    case 'regex': return chrome.i18n.getMessage('phRegex');
+    case 'ip': return chrome.i18n.getMessage('phIP');
+    case 'ruleset': return chrome.i18n.getMessage('phRuleSet');
+    default: return chrome.i18n.getMessage('phDefaultPattern');
   }
 };
 </script>

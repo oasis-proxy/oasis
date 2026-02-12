@@ -16,7 +16,7 @@
         
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
-          <h3 class="ui-text-primary modal-header tracking-tight m-0">RuleSet Content</h3>
+          <h3 class="ui-text-primary modal-header tracking-tight m-0">{{ $t('rscmTitle') }}</h3>
           <button 
             @click="emit('close')" 
             class="modal-close-button"
@@ -32,7 +32,7 @@
             <!-- URL Row -->
             <div v-if="url">
               <label class="d-flex flex-column gap-2 w-100 mb-0">
-                <span class="ui-text-primary text-xs font-medium leading-none">RuleSet URL</span>
+                <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('rscmLabelUrl') }}</span>
                 <div class="px-3 py-2 rounded-lg border ui-input text-xs text-slate-500 break-all font-mono" style="min-height: 32px;">
                   {{ url }}
                 </div>
@@ -42,7 +42,7 @@
             <!-- Last Updated Row -->
             <div v-if="lastUpdated">
                <label class="d-flex flex-column gap-2 w-100 mb-0">
-                <span class="ui-text-primary text-xs font-medium leading-none">Last Updated</span>
+                <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('rscmLabelLastUpdated') }}</span>
                 <div class="px-3 py-2 rounded-lg border ui-input text-xs text-slate-500" style="min-height: 32px;">
                   {{ formattedTime }}
                 </div>
@@ -52,7 +52,7 @@
             <!-- Content Display -->
             <label class="d-flex flex-column gap-2 w-100 mb-0 flex-1 overflow-hidden">
               <div class="d-flex justify-content-between align-items-center">
-                <span class="ui-text-primary text-xs font-medium leading-none">Downloaded Content</span>
+                <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('rscmLabelContent') }}</span>
                 <button 
                   v-if="url"
                   @click="handleUpdate"
@@ -61,7 +61,7 @@
                   :class="{ 'opacity-50 cursor-not-allowed': updating }"
                 >
                   <i class="bi bi-arrow-clockwise" :class="{ 'animate-spin': updating }"></i>
-                  {{ updating ? 'Updating...' : 'Update' }}
+                  {{ updating ? $t('rscmBtnUpdating') : $t('rscmBtnUpdate') }}
                 </button>
               </div>
               <textarea 
@@ -69,7 +69,7 @@
                 readonly
                 class="w-100 h-100 rounded-lg border ui-input px-3 py-2 text-xs font-mono focus:outline-none custom-scrollbar text-slate-500"
                 style="resize: none;"
-                placeholder="No content available"
+                :placeholder="$t('rscmMsgNoContent')"
               ></textarea>
             </label>
 
@@ -82,7 +82,7 @@
             @click="emit('close')"
             class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
-            Close
+            {{ $t('btnClose') }}
           </button>
         </div>
 
@@ -119,7 +119,7 @@ const visible = ref(props.show)
 const updating = ref(false)
 
 const formattedTime = computed(() => {
-  if (!props.lastUpdated) return 'Never'
+  if (!props.lastUpdated) return chrome.i18n.getMessage('rscmMsgNever')
   const date = new Date(props.lastUpdated)
   return date.toLocaleString()
 })

@@ -11,9 +11,9 @@
              v-model="proxyGroup.color"
              class="border-0 p-0 rounded-lg overflow-hidden transition-transform shadow-sm"
              style="width: 24px; height: 24px; background: none; cursor: pointer;"
-             title="Choose color"
+             :title="$t('lblChooseColor')"
            />
-           <h1 class="fs-4 font-bold ui-text-primary tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="proxyGroup.name || 'Unnamed Group'">{{ proxyGroup.name || 'Unnamed Group' }}</h1>
+           <h1 class="fs-4 font-bold ui-text-primary tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="proxyGroup.name || $t('unnamedGroup')">{{ proxyGroup.name || $t('unnamedGroup') }}</h1>
         </div>
         <div class="d-flex align-items-center gap-3">
            
@@ -23,7 +23,7 @@
              class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
            >
              <i class="bi bi-reply-fill"></i>
-             <span>Reset</span>
+             <span>{{ $t('btnResetSimple') }}</span>
            </button>
 
            <button 
@@ -32,7 +32,7 @@
              class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
            >
              <i class="bi bi-floppy-fill"></i>
-             <span>Save</span>
+             <span>{{ $t('btnSave') }}</span>
            </button>
 
            <!-- Action Menu -->
@@ -50,13 +50,13 @@
               <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
                   <li>
                     <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-pencil-square ui-text-tertiary"></i> Rename
+                        <i class="bi bi-pencil-square ui-text-tertiary"></i> {{ $t('btnRename') }}
                     </button>
                   </li>
                   <li><hr class="dropdown-divider my-1 border-subtle "></li>
                   <li>
                     <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-danger  rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-trash"></i> Delete
+                        <i class="bi bi-trash"></i> {{ $t('btnDelete') }}
                     </button>
                   </li>
               </ul>
@@ -72,8 +72,8 @@
         <!-- Proxy Host List -->
         <section>
           <div class="ui-card-label">
-            <span class="label-text">Fallback Group</span>
-            <button @click="addProxy" class="ui-button-icon sm" title="Add Proxy to Group">
+            <span class="label-text">{{ $t('pgHeaderFallback') }}</span>
+            <button @click="addProxy" class="ui-button-icon sm" :title="$t('pgTitleAddProxy')">
               <i class="bi bi-plus-lg text-sm"></i>
             </button>
           </div>
@@ -82,10 +82,10 @@
              <!-- Table Header -->
              <div class="ui-card-header">
               <div style="width: 4%;" class="text-center"></div>
-              <div style="width: 8%;">Order</div>
-              <div style="width: 32%;">Proxy Name</div>
-              <div style="width: 48%;">Address</div>
-              <div style="width: 8%;" class="text-center">Action</div>
+              <div style="width: 8%;">{{ $t('pgHeaderOrder') }}</div>
+              <div style="width: 32%;">{{ $t('pgHeaderProxyName') }}</div>
+              <div style="width: 48%;">{{ $t('pgHeaderAddress') }}</div>
+              <div style="width: 8%;" class="text-center">{{ $t('pgHeaderAction') }}</div>
             </div>
 
             <!-- List -->
@@ -122,7 +122,7 @@
                             {{ getProxyAddress(proxyId) }}
                         </div>
                         <div style="width: 8%;" class="d-flex align-items-center justify-content-center">
-                            <button @click="removeProxy(index)" class="ui-button-icon p-0.5" title="Remove">
+                            <button @click="removeProxy(index)" class="ui-button-icon p-0.5" :title="$t('btnRemove')">
                                 <i class="bi bi-trash ui-icon-sm"></i>
                             </button>
                         </div>
@@ -142,7 +142,7 @@
                                 class="form-select ui-input ui-input-sm w-100 rounded-lg border py-0 px-3"
                                 @change="(e) => updateProxyAt(index, e.target.value)"
                             >
-                                <option value="" disabled selected>Select a proxy...</option>
+                                <option value="" disabled selected>{{ $t('pgOptionSelectProxy') }}</option>
                                 <option 
                                     v-for="p in availableProxies" 
                                     :key="p.id" 
@@ -153,7 +153,7 @@
                             </select>
                         </div>
                         <div style="width: 8%;" class="d-flex align-items-center justify-content-center">
-                            <button @click="removeProxy(index)" class="ui-button-icon p-0.5 text-danger" title="Cancel">
+                            <button @click="removeProxy(index)" class="ui-button-icon p-0.5 text-danger" :title="$t('btnCancel')">
                                 <i class="bi bi-x-lg ui-icon-sm"></i>
                             </button>
                         </div>
@@ -164,7 +164,7 @@
              <!-- Empty State -->
             <div v-else class="p-4 d-flex flex-column align-items-center justify-content-center gap-2" style="min-height: 100px;">
               <i class="bi bi-layers text-3xl text-slate-300"></i>
-              <p class="text-xs text-slate-500 m-0">No proxies in this group. Add proxies to create a failover chain.</p>
+              <p class="text-xs text-slate-500 m-0">{{ $t('pgMsgNoProxies') }}</p>
             </div>
           </div>
         </section>
@@ -172,14 +172,14 @@
         <!-- Termination Strategy -->
         <section>
           <div class="ui-card-label">
-            <span class="label-text">Termination Strategy</span>
+            <span class="label-text">{{ $t('pgHeaderStrategy') }}</span>
           </div>
           <div class="ui-card rounded-xl border shadow-sm p-4">
                <div class="d-flex align-items-center justify-content-between gap-4">
                     <div class="d-flex flex-column">
-                        <span class="ui-text-primary text-sm font-medium mb-1">Final Fallback</span>
+                        <span class="ui-text-primary text-sm font-medium mb-1">{{ $t('pgLabelFinalFallback') }}</span>
                         <p class="text-xs text-slate-500 m-0">
-                            Action to take when all proxies in the chain fail.
+                            {{ $t('pgDescFinalFallback') }}
                         </p>
                     </div>
                     <div class="d-flex align-items-center gap-3">
@@ -189,8 +189,8 @@
                                 class="form-select ui-input ui-input-sm rounded-lg border py-0 px-3 w-100"
                                 :disabled="!fallbackEnabled"
                             >
-                                <option value="direct">Direct</option>
-                                <option value="reject">Reject</option>
+                                <option value="direct">{{ $t('directConnect') }}</option>
+                                <option value="reject">{{ $t('prioReject') }}</option>
                             </select>
                         </div>
                         <div class="form-check form-switch m-0 d-flex align-items-center">
@@ -200,7 +200,7 @@
                                type="checkbox" 
                                role="switch" 
                                v-model="fallbackEnabled"
-                               title="Enable Fallback Strategy"
+                               :title="$t('pgTitleEnableFallback')"
                            >
                         </div>
                     </div>
@@ -214,7 +214,7 @@
     <!-- Modals -->
     <ProxyRenameModal 
       :visible="showRenameModal" 
-      title="Rename Proxy Group"
+      :title="$t('prmTitle')"
       :currentName="proxyGroup.name || ''" 
       @close="showRenameModal = false"
       @save="handleRename"
@@ -282,7 +282,7 @@ const { dragOverIndex, handleDragStart, handleDragOver, handleDrop, handleDragEn
 
 // Helpers
 const getProxyName = (id) => {
-    if (!config.value?.proxies?.[id]) return 'Unknown Proxy'
+    if (!config.value?.proxies?.[id]) return chrome.i18n.getMessage('pgOptionUnknownProxy')
     const p = config.value.proxies[id]
     return p.label || p.host
 }
@@ -336,7 +336,7 @@ onMounted(() => {
 onMounted(() => {
   registerUnsavedChangesChecker(() => {
     if (isDirty.value) {
-      toast.warning('You have unsaved changes.')
+      toast.warning(chrome.i18n.getMessage('pacMsgUnsaved'))
       return true 
     }
     return false
@@ -365,14 +365,14 @@ const saveChanges = async () => {
     // Persist
     await saveProxyGroups(config.value.proxyGroups)
     
-    toast.success('Group saved successfully')
+    toast.success(chrome.i18n.getMessage('pgMsgSaved'))
     await loadGroupData()
 }
 
 const addProxy = () => {
     const totalProxies = Object.keys(config.value?.proxies || {}).length
     if (proxyGroup.value.proxies.length >= totalProxies) {
-        toast.warning('No more proxies available')
+        toast.warning(chrome.i18n.getMessage('pgMsgNoMoreProxies'))
         return
     }
     proxyGroup.value.proxies.push('')
@@ -390,7 +390,7 @@ const updateProxyAt = (index, id) => {
 
 
 const openRenameModal = () => {
-  if (isDirty.value) return toast.warning('Save changes first')
+  if (isDirty.value) return toast.warning(chrome.i18n.getMessage('pgMsgSaveFirst'))
   showRenameModal.value = true
 }
 
@@ -409,7 +409,7 @@ const handleRename = async (newName) => {
 const handleDelete = async () => {
     delete config.value.proxyGroups[proxyGroup.value.id]
     await saveProxyGroups(config.value.proxyGroups)
-    toast.success('Group deleted')
+    toast.success(chrome.i18n.getMessage('pgMsgDeleted'))
     router.push('/settings')
     showDeleteModal.value = false
 }

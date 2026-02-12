@@ -16,7 +16,7 @@
         
         <!-- Modal Header -->
         <div class="p-4 d-flex justify-content-between align-items-center border-b border-light ">
-          <h3 class="ui-text-primary modal-header tracking-tight m-0">Accept Rules</h3>
+          <h3 class="ui-text-primary modal-header tracking-tight m-0">{{ $t('armTitle') }}</h3>
           <button 
             @click="emit('close')" 
             class="modal-close-button"
@@ -30,12 +30,12 @@
           <div class="d-flex flex-column gap-3">
             
             <p class="text-sm text-slate-500 m-0">
-              You are about to add <strong class="text-primary">{{ ruleCount }}</strong> rules to a permanent policy.
+              {{ $t('armDesc', [ruleCount]) }}
             </p>
 
             <!-- Target Policy -->
             <label class="d-flex flex-column gap-2 w-100">
-              <span class="ui-text-primary text-xs font-medium leading-none">Target Policy</span>
+              <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('armLabelTarget') }}</span>
               <select 
                 v-model="targetPolicyId"
                 :disabled="!!forcedTargetId"
@@ -43,7 +43,7 @@
                 class="form-select ui-input w-100 rounded-lg border h-8 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
                 style="max-width: 100%;"
               >
-                <option value="">-- Select Target Policy --</option>
+                <option value="">{{ $t('armPlaceholderTarget') }}</option>
                 <option v-for="policyOption in availablePolicies" :key="policyOption.id" :value="policyOption.id">
                   {{ policyOption.name }}
                 </option>
@@ -52,7 +52,7 @@
 
             <!-- Conflict Resolution -->
             <div class="d-flex flex-column gap-2">
-              <span class="ui-text-primary text-xs font-medium leading-none">Conflict Resolution</span>
+              <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('armLabelConflict') }}</span>
               <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr;">
                 
                 <!-- Ignore Option -->
@@ -63,8 +63,8 @@
                   <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="ignore"/>
                   <span class="d-flex flex-1">
                     <span class="d-flex flex-column">
-                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">Ignore</span>
-                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Keep existing</span>
+                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptIgnore') }}</span>
+                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">{{ $t('armDescIgnore') }}</span>
                     </span>
                   </span>
                   <i v-if="conflictMode === 'ignore'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -78,8 +78,8 @@
                   <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="overwrite"/>
                   <span class="d-flex flex-1">
                     <span class="d-flex flex-column">
-                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">Overwrite</span>
-                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">Replace existing</span>
+                      <span class="block text-xs font-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptOverwrite') }}</span>
+                      <span class="mt-1 d-flex align-items-center text-xs text-slate-500">{{ $t('armDescOverwrite') }}</span>
                     </span>
                   </span>
                   <i v-if="conflictMode === 'overwrite'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
@@ -97,14 +97,14 @@
             @click="emit('close')"
             class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
           >
-            Cancel
+            {{ $t('btnCancel') }}
           </button>
           <button 
             @click="handleConfirm"
             :disabled="!isValid"
             class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Confirm
+            {{ $t('btnConfirm') }}
           </button>
         </div>
 
@@ -140,7 +140,7 @@ const conflictMode = ref('ignore')
 const availablePolicies = computed(() => {
   return Object.values(props.policies || {})
     .filter(p => p.type !== 'pac') // Only auto policies? Or allow any?
-    .map(p => ({ id: p.id, name: p.name || p.id }))
+    .map(p => ({ id: p.id, name: p.name || chrome.i18n.getMessage('unnamedPolicy') }))
 })
 
 const isValid = computed(() => {

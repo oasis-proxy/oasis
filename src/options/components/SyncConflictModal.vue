@@ -5,7 +5,7 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center p-4 border-0">
           <h5 class="modal-header ui-text-primary tracking-tight m-0 d-flex align-items-center gap-2">
-            Sync Conflict Detected
+            {{ $t('titleSyncConflict') }}
           </h5>
           <button 
             type="button"
@@ -20,7 +20,7 @@
         <!-- Body -->
         <div class="modal-body px-4 pb-4">
           <p class="text-sm text-slate-600  mb-4 text-center">
-            The version in the cloud is newer than your local version. Please choose which version to keep.
+            {{ $t('msgSyncConflict') }}
           </p>
 
           <div class="row g-4">
@@ -30,16 +30,16 @@
                     <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
                         <div>
                             <div class="d-flex align-items-center gap-2">
-                                    <h3 class="text-sm font-semibold ui-text-primary m-0">Local Version</h3>
+                                    <h3 class="text-sm font-semibold ui-text-primary m-0">{{ $t('lblLocalVersion') }}</h3>
                             </div>
-                            <p class="text-xs text-slate-500 m-0">This device</p>
+                            <p class="text-xs text-slate-500 m-0">{{ $t('lblThisDevice') }}</p>
                         </div>
                     </div>
                     
                     <div class="d-flex flex-column gap-3 position-relative z-10">
                         <!-- Last Modified -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblLastModified') }}</p>
                             <p class="text-xs font-mono ui-text-primary m-0 text-end">
                                 {{ localLastModified }}
                             </p>
@@ -47,20 +47,20 @@
                         
                         <!-- Config Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblConfigVer') }}</p>
                             <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ configVersion }}</p>
                         </div>
 
                         <div class="pt-3 border-t border-light  d-flex flex-column gap-3">
                              <!-- Proxy Hosts -->
                             <div class="d-flex justify-content-between align-items-start">
-                                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">Proxy Hosts</p>
+                                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">{{ $t('lblProxyHosts') }}</p>
                                     <span class="text-xs font-mono ui-text-primary">{{ proxyCount }}</span>
                             </div>
 
                             <!-- Policies -->
                             <div class="d-flex justify-content-between align-items-start">
-                                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">Policies</p>
+                                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">{{ $t('lblPolicies') }}</p>
                                     <span class="text-xs font-mono ui-text-primary">{{ policyCount }}</span>
                             </div>
                         </div>
@@ -74,35 +74,35 @@
                     <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
                         <div>
                             <div class="d-flex align-items-center gap-2">
-                                <h3 class="text-sm font-semibold ui-text-primary m-0">Cloud Version</h3>
+                                <h3 class="text-sm font-semibold ui-text-primary m-0">{{ $t('lblCloudVersion') }}</h3>
                             </div>
-                            <p class="text-xs text-slate-500 m-0">Remote repository</p>
+                            <p class="text-xs text-slate-500 m-0">{{ $t('lblRemoteRepo') }}</p>
                         </div>
                     </div>
 
                     <div class="d-flex flex-column gap-3 position-relative z-10">
                             <!-- Last Modified -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Last Modified</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblLastModified') }}</p>
                             <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ cloudLastModified }}</p>
                         </div>
                         
                         <!-- Config Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">Config Ver.</p>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblConfigVer') }}</p>
                             <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ cloudConfigVersion }}</p>
                         </div>
 
                         <div class="pt-3 border-t border-light  d-flex flex-column gap-3">
                              <!-- Proxy Hosts -->
                              <div class="d-flex justify-content-between align-items-start">
-                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">Proxy Hosts</p>
+                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">{{ $t('lblProxyHosts') }}</p>
                                 <span class="text-xs font-mono ui-text-primary">{{ cloudProxyCount }}</span>
                             </div>
 
                             <!-- Policies -->
                             <div class="d-flex justify-content-between align-items-start">
-                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">Policies</p>
+                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">{{ $t('lblPolicies') }}</p>
                                 <span class="text-xs font-mono ui-text-primary">{{ cloudPolicyCount }}</span>
                             </div>
                         </div>
@@ -115,14 +115,14 @@
         <!-- Footer -->
         <div class="modal-footer p-4 d-flex justify-content-end gap-3 border-0">
             <button type="button" class="btn ui-button-secondary h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="$emit('cancel')">
-                Cancel
+                {{ $t('btnCancel') }}
             </button>
             <button type="button" class="btn ui-button-danger h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="$emit('sync-cloud')">
-                Overwrite Cloud
+                {{ $t('btnOverwriteCloud') }}
             </button>
             
             <button type="button" class="btn ui-button-danger h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="$emit('sync-local')">
-                Sync from Cloud
+                {{ $t('btnSyncFromCloud') }}
             </button>
         </div>
       </div>
@@ -143,7 +143,7 @@ defineEmits(['cancel', 'sync-local', 'sync-cloud'])
 // Local Computed
 const configVersion = computed(() => props.localConfig.version ? `v${props.localConfig.version}` : 'v1')
 const localLastModified = computed(() => {
-    if (!props.localConfig.updatedAt) return 'Unknown'
+    if (!props.localConfig.updatedAt) return chrome.i18n.getMessage('lblUnknown')
     return new Date(props.localConfig.updatedAt).toLocaleString()
 })
 const proxyCount = computed(() => Object.keys(props.localConfig.proxies || {}).length)
@@ -153,7 +153,7 @@ const policyCount = computed(() => Object.keys(props.localConfig.policies || {})
 // Cloud Computed
 const cloudConfigVersion = computed(() => props.cloudConfig?.version ? `v${props.cloudConfig.version}` : '-')
 const cloudLastModified = computed(() => {
-    if (!props.cloudConfig?.timestamp) return 'Unknown'
+    if (!props.cloudConfig?.timestamp) return chrome.i18n.getMessage('lblUnknown')
     return new Date(props.cloudConfig.timestamp).toLocaleString()
 })
 const cloudProxyCount = computed(() => Object.keys(props.cloudConfig?.proxies || {}).length || 0)

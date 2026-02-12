@@ -5,7 +5,7 @@
       class="h-24 px-5 d-flex align-items-center justify-content-between border-light transition-colors"
     >
       <div>
-        <h2 class="fs-4 font-bold ui-text-primary m-0">General Settings</h2>
+        <h2 class="fs-4 font-bold ui-text-primary m-0">{{ $t('navGeneral') }}</h2>
       </div>
     </header>
 
@@ -14,19 +14,21 @@
         <!-- Basic Configuration -->
         <section>
           <div class="ui-card-label">
-            <span class="label-text">Basic Configuration</span>
+            <span class="label-text">{{ $t('sectionBasic') }}</span>
           </div>
           <div class="ui-card rounded-xl border shadow-sm transition-colors">
             <!-- Theme Style -->
             <div
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
             >
+
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Theme</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">Choose your preferred visual theme.</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblTheme') }}</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">{{ $t('descTheme') }}</p>
                 </div>
               </div>
+
               <select
                 v-model="config.ui.theme"
                 class="form-select ui-input ui-input-sm block rounded-lg border py-0 ps-2 pe-4"
@@ -42,14 +44,16 @@
             <div
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
             >
+
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">External Policy Update Cycle</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblUpdateCycle') }}</p>
                   <p class="text-xs ui-text-secondary mt-1 m-0">
-                    Frequency of checking for policy updates.
+                    {{ $t('descUpdateCycle') }}
                   </p>
                 </div>
               </div>
+
               <select
                 v-model="config.update.interval"
                 class="form-select ui-input block rounded-lg border text-xs h-8 py-0 ps-2 pe-4"
@@ -69,14 +73,16 @@
             <div
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
             >
+
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Rule Priority Order</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRulePriority') }}</p>
                   <p class="text-xs ui-text-secondary mt-1 m-0">
-                    Drag to reorder rule evaluation priority.
+                    {{ $t('descRulePriority') }}
                   </p>
                 </div>
               </div>
+
               <div class="d-flex align-items-center gap-1">
                 <template v-for="(cat, idx) in localRulePriority" :key="cat">
                   <span v-if="idx > 0" class="text-slate-300" style="font-size: 10px;"><i class="bi bi-chevron-right"></i></span>
@@ -97,7 +103,7 @@
                 </template>
                 <button
                   class="ui-button-icon ms-1"
-                  title="Reset to Default"
+                  :title="$t('btnReset')"
                   @click="resetRulePriority"
                   :disabled="isDefaultPriority"
                 >
@@ -111,13 +117,15 @@
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
             >
               <div class="d-flex items-start">
+
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Refresh On Switch</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRefreshSwitch') }}</p>
                   <p class="text-xs ui-text-secondary mt-1 m-0">
-                    Automatically refresh tab when switch proxy.
+                    {{ $t('descRefreshSwitch') }}
                   </p>
                 </div>
               </div>
+
               <div class="form-check form-switch">
                 <input
                   v-model="config.behavior.refreshOnSwitch"
@@ -134,21 +142,23 @@
         <!-- Advanced Configuration -->
         <section>
           <div class="ui-card-label">
-            <span class="label-text">Advanced Configuration</span>
+            <span class="label-text">{{ $t('sectionAdvanced') }}</span>
           </div>
           <div class="ui-card rounded-xl border shadow-sm">
             <!-- Reject Address -->
             <div
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
             >
+
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Reject Address</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRejectAddr') }}</p>
                   <p class="text-xs ui-text-secondary mt-1 m-0">
-                    Connections to this address will be dropped immediately.
+                    {{ $t('descRejectAddr') }}
                   </p>
                 </div>
               </div>
+
               <input
                 v-model.lazy="rejectAddress"
                 type="text"
@@ -162,14 +172,16 @@
             <div
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
             >
+
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Request Monitoring</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblReqMonitor') }}</p>
                   <p class="text-xs ui-text-secondary mt-1 m-0">
-                    Monitor requests and their matching proxy rules.
+                    {{ $t('descReqMonitor') }}
                   </p>
                 </div>
               </div>
+
               <div class="form-check form-switch">
                 <input
                   v-model="config.behavior.connectionMonitoring"
@@ -185,11 +197,12 @@
             <div
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
             >
+
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Context Menu</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblContextMenu') }}</p>
                   <p class="text-xs ui-text-secondary mt-1 m-0">
-                    Show proxy options in the browser right-click menu.
+                    {{ $t('descContextMenu') }}
                   </p>
                 </div>
               </div>
@@ -205,16 +218,18 @@
             </div>
 
             <div class="px-4 pt-3 pb-4 hover:bg-slate-50 transition-colors">
+
+
               <div class="d-flex align-items-center justify-content-between mb-4">
                 <div class="d-flex items-start">
                   <div>
-                    <p class="text-sm font-medium ui-text-primary m-0">IP Tags</p>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblIpTags') }}</p>
                     <p class="text-xs ui-text-secondary mt-1 m-0">
-                      Assign friendly names to IP addresses.
+                      {{ $t('descIpTags') }}
                     </p>
                   </div>
                 </div>
-                <button @click="addTag" class="ui-button-icon" title="Add Tag">
+                <button @click="addTag" class="ui-button-icon" :title="$t('btnAddTag')">
                   <i class="bi bi-plus-lg ui-icon-sm"></i>
                 </button>
               </div>
@@ -224,9 +239,9 @@
               >
                 <!-- Header -->
                 <div class="ui-card-header">
-                  <div style="width: 50%" class="px-2">IP Address</div>
-                  <div style="width: 40%" class="px-2">Tag Name</div>
-                  <div style="width: 10%" class="text-center">Action</div>
+                  <div style="width: 50%" class="px-2">{{ $t('colIp') }}</div>
+                  <div style="width: 40%" class="px-2">{{ $t('colTag') }}</div>
+                  <div style="width: 10%" class="text-center">{{ $t('colAction') }}</div>
                 </div>
 
                 <!-- List -->
@@ -309,18 +324,19 @@
         <!-- Extension Information -->
         <section>
           <div class="ui-card-label">
-            <span class="label-text">Extension Information</span>
+            <span class="label-text">{{ $t('sectionInfo') }}</span>
           </div>
           <div class="ui-card rounded-xl border shadow-sm">
             <!-- Extension Version -->
             <div
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
             >
+
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Extension Version</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblVersion') }}</p>
                   <p class="text-xs ui-text-secondary mt-1 m-0">
-                    Current version of the extension by <span class="fw-bold">Oasis</span>.
+                    {{ $t('descVersion') }}
                   </p>
                 </div>
               </div>
@@ -333,11 +349,12 @@
             <div
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
             >
+
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Github Repository</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRepo') }}</p>
                   <p class="text-xs ui-text-secondary mt-1 m-0">
-                    Source code and contributions.
+                    {{ $t('descRepo') }}
                   </p>
                 </div>
               </div>
@@ -355,11 +372,12 @@
             <div
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
             >
+
               <div class="d-flex items-start">
                 <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">Wiki Address</p>
+                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblWiki') }}</p>
                   <p class="text-xs ui-text-secondary mt-1 m-0">
-                    Documentation and guides.
+                    {{ $t('descWiki') }}
                   </p>
                 </div>
               </div>
@@ -396,9 +414,9 @@ const config = reactive(JSON.parse(JSON.stringify(DEFAULT_CONFIG)))
 
 // Config Options
 const styleOptions = [
-  { label: 'Light', value: 'light' },
-  { label: 'Dark', value: 'dark' },
-  { label: 'System', value: 'auto' }
+  { label: chrome.i18n.getMessage('themeLight'), value: 'light' },
+  { label: chrome.i18n.getMessage('themeDark'), value: 'dark' },
+  { label: chrome.i18n.getMessage('themeSystem'), value: 'auto' }
 ]
 
 // Rule Priority Order
@@ -408,7 +426,11 @@ const priorityDragIdx = ref(null)
 const priorityDragOverIdx = ref(null)
 
 const priorityLabel = (cat) => {
-  const labels = { reject: 'Reject', normal: 'Normal', temp: 'Temporary' }
+  const labels = { 
+      reject: chrome.i18n.getMessage('prioReject'), 
+      normal: chrome.i18n.getMessage('prioNormal'), 
+      temp: chrome.i18n.getMessage('prioTemp') 
+  }
   return labels[cat] || cat
 }
 
@@ -458,7 +480,7 @@ const updateIntervals = [
   { label: '1h', value: 60 },
   { label: '15min', value: 15 },
   ...(import.meta.env.MODE === 'development' ? [{ label: '2min', value: 2 }] : []),
-  { label: 'Manual', value: -1 }
+  { label: chrome.i18n.getMessage('themeManual'), value: -1 }
 ]
 
 // Computed Properties for Mapping
@@ -633,7 +655,7 @@ const saveTag = (index) => {
 
   // Re-sort local list to match new IP order
   localIpTags.value = sortTags(localIpTags.value)
-  toast.success('IP Tag saved')
+  toast.success(chrome.i18n.getMessage('msgTagSaved'))
 }
 
 const deleteTag = (index) => {
@@ -643,7 +665,7 @@ const deleteTag = (index) => {
     const newTags = { ...config.ipTags }
     delete newTags[item.originalIp]
     config.ipTags = newTags
-    toast.success('IP Tag deleted')
+    toast.success(chrome.i18n.getMessage('msgTagDeleted'))
   }
   localIpTags.value.splice(index, 1)
 }
