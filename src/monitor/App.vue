@@ -196,6 +196,7 @@
       :policies="configPolicies"
       :sourceRules="quickAddSourceRules"
       :proxies="configProxies"
+      :proxyGroups="configProxyGroups"
       :forcedTargetId="activeProfileId"
       :domainOptimize="true"
       @close="showQuickAddModal = false"
@@ -414,6 +415,7 @@ const showQuickAddModal = ref(false)
 const quickAddSourceRules = ref([])
 const configPolicies = ref({})
 const configProxies = ref({})
+const configProxyGroups = ref({})
 const activeProfileId = ref('')
 
 // Computed
@@ -539,6 +541,7 @@ async function openQuickAdd() {
   const config = await loadConfig()
   configPolicies.value = config.policies || {}
   configProxies.value = config.proxies || {}
+  configProxyGroups.value = config.proxyGroups || {}
   activeProfileId.value = config.activeProfileId || ''
 
   showQuickAddModal.value = true

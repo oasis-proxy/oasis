@@ -295,6 +295,8 @@
                         </button>
 
                       </template>
+
+
                       <button v-else @click="editTag(index)" class="ui-button-icon" title="Edit">
                         <i class="bi bi-pencil-square ui-icon-sm"></i>
                       </button>

@@ -16,7 +16,7 @@
           class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
         >
           <i class="bi bi-reply-fill"></i>
-          <span>{{ $t('btnResetSimple') }}</span>
+          <span>{{ $t('btnReset') }}</span>
         </button>
 
         <button 
@@ -117,9 +117,11 @@
                       style="height: 28px; max-width: none;"
                     >
                       <option value="direct">{{ $t('directConnect') }}</option>
-                      <option v-for="proxy in proxyOptions" :key="proxy.id" :value="proxy.id">
-                        {{ proxy.label }}
-                      </option>
+                      <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
+                        <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
+                          {{ proxy.label }}
+                        </option>
+                      </optgroup>
                     </select>
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
@@ -169,6 +171,7 @@
         :policies="config?.policies || {}"
         :sourceRules="smartMergeRules"
         :proxies="config?.proxies || {}"
+        :proxyGroups="config?.proxyGroups || {}"
         :forcedTargetId="activeAutoPolicyId"
         :domainOptimize="true"
         @close="showSmartMergeModal = false"
@@ -220,8 +223,33 @@ const loadData = async () => {
 }
 
 const proxyOptions = computed(() => {
-  if (!config.value || !config.value.proxies) return []
-  return Object.values(config.value.proxies).map(p => ({ id: p.id, label: p.label || p.name }))
+  if (!config.value) return []
+  
+  const groups = []
+  
+  // Proxies
+  if (config.value.proxies) {
+      const proxies = Object.values(config.value.proxies)
+          .map(p => ({ id: p.id, label: p.label || p.name }))
+          .sort((a, b) => a.label.localeCompare(b.label))
+          
+      if (proxies.length > 0) {
+          groups.push({ label: chrome.i18n.getMessage('lblProxyHosts'), options: proxies })
+      }
+  }
+  
+  // Proxy Groups
+  if (config.value.proxyGroups) {
+      const proxyGroups = Object.values(config.value.proxyGroups)
+          .map(g => ({ id: g.id, label: g.name }))
+          .sort((a, b) => a.label.localeCompare(b.label))
+          
+      if (proxyGroups.length > 0) {
+          groups.push({ label: chrome.i18n.getMessage('lblProxyGroups'), options: proxyGroups })
+      }
+  }
+  
+  return groups
 })
 
 const isDirty = computed(() => {

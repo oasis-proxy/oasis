@@ -46,10 +46,10 @@
                       <i class="bi bi-download text-sm"></i> {{ $t('btnExport') }}
                     </button>
                      <button @click="handleClearLocal" class="h-8 px-3 text-xs font-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-2">
-                      <i class="bi bi-trash text-sm"></i> {{ $t('btnClearLocal') }}
+                      <i class="bi bi-trash text-sm"></i> {{ $t('btnConfirm') }}
                     </button>
                     <button @click="handleClearCloud" class="h-8 px-3 text-xs font-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-2">
-                      <i class="bi bi-cloud-slash text-sm"></i> {{ $t('btnClearSync') }}
+                      <i class="bi bi-cloud-slash text-sm"></i> {{ $t('btnConfirm') }}
                     </button>
                   </div>
                 </div>

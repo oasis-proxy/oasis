@@ -214,10 +214,10 @@
                       class="form-select ui-input ui-input-sm w-100 rounded border py-0 px-1.5" 
                       @change="handleRuleTypeChange(index, rule)"
                     >
-                      <option value="wildcard">Wildcard</option>
-                      <option value="regex">Regex</option>
-                      <option value="ip">IP/CIDR</option>
-                      <option value="ruleset">Rule Set</option>
+                      <option value="wildcard">{{ $t('optWildcard') }}</option>
+                      <option value="regex">{{ $t('optRegex') }}</option>
+                      <option value="ip">{{ $t('optIP') }}</option>
+                      <option value="ruleset">{{ $t('optRuleSet') }}</option>
                     </select>
                   </div>
                   <div style="width: 44%;">
@@ -434,10 +434,10 @@
                     class="form-select ui-input ui-input-sm w-100 rounded border py-0 px-1.5" 
                     @change="handleRejectRuleTypeChange(index, rule)"
                   >
-                    <option value="wildcard">Wildcard</option>
-                    <option value="regex">Regex</option>
-                    <option value="ip">IP/CIDR</option>
-                    <option value="ruleset">Rule Set</option>
+                    <option value="wildcard">{{ $t('optWildcard') }}</option>
+                    <option value="regex">{{ $t('optRegex') }}</option>
+                    <option value="ip">{{ $t('optIP') }}</option>
+                    <option value="ruleset">{{ $t('optRuleSet') }}</option>
                   </select>
                 </div>
                 <div style="width: 44%;" class="position-relative">

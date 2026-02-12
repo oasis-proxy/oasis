@@ -191,7 +191,7 @@
           <div v-else-if="monitorResult.length === 0" class="flex-1 d-flex align-items-center justify-content-center text-secondary">
              <div class="text-center p-4">
                  <i class="bi bi-activity text-3xl mb-2 d-block opacity-50"></i>
-                 <p class="text-sm">{{ $t('popMsgNoRequests') }}</p>
+                 <p class="text-sm">{{ $t('msgNoRequests') }}</p>
                  <p class="text-xs text-muted">{{ $t('popMsgRefreshHint') }}</p>
              </div>
           </div>
@@ -287,10 +287,10 @@
             <!-- Actions Section -->
             <div class="quick-section justify-content-end gap-2 pb-3"> 
               <button @click="currentTab = 'proxy'" class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all">
-                {{ $t('cancel') }}
+                {{ $t('btnCancel') }}
               </button>
               <button @click="confirmQuickAdd" :disabled="selectedDomains.length === 0" class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg shadow-primary/30 transition-colors border-0">
-                {{ $t('confirm') }}
+                {{ $t('btnConfirm') }}
               </button>
             </div>
           </div>

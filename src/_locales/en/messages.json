@@ -38,12 +38,7 @@
   "options": {
       "message": "Options"
   },
-  "cancel": {
-      "message": "Cancel"
-  },
-  "confirm": {
-      "message": "Confirm"
-  },
+
   "addTo": {
       "message": "Add To"
   },
@@ -84,7 +79,7 @@
   "lblContextMenu": { "message": "Context Menu" },
   "descContextMenu": { "message": "Show proxy options in the browser right-click menu." },
   "lblIpTags": { "message": "IP Tags" },
-  "descIpTags": { "message": "Assign friendly names to IP addresses." },
+  "descIpTags": { "message": "Set easy-to-remember labels for IP addresses." },
   "btnAddTag": { "message": "Add Tag" },
   "colIp": { "message": "IP Address" },
   "colTag": { "message": "Tag Name" },
@@ -221,7 +216,6 @@
   "popTooltipOptions": { "message": "Options" },
   "popMsgMonitorUnavailable": { "message": "Monitoring not available." },
   "popMsgMonitorOnlyHttp": { "message": "Only HTTP/HTTPS pages are supported." },
-  "popMsgNoRequests": { "message": "No requests recorded." },
   "popMsgRefreshHint": { "message": "Refresh the page to capture traffic." },
   "popTooltipMonitor": { "message": "Open Monitor" },
   "lblHistory": { "message": "History:" },

@@ -29,7 +29,7 @@
              class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
            >
             <i class="bi bi-reply-fill"></i>
-            <span>{{ $t('btnResetSimple') }}</span>
+            <span>{{ $t('btnReset') }}</span>
            </button>
 
            <button 
