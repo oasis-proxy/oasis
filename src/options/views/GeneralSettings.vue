@@ -40,6 +40,29 @@
               </select>
             </div>
 
+            <!-- Language -->
+            <div
+              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+            >
+
+              <div class="d-flex items-start">
+                <div>
+                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblLanguage') }}</p>
+                  <p class="text-xs ui-text-secondary mt-1 m-0">{{ $t('descLanguage') }}</p>
+                </div>
+              </div>
+
+              <select
+                v-model="config.ui.language"
+                class="form-select ui-input ui-input-sm block rounded-lg border py-0 ps-2 pe-4"
+                style="width: 8rem"
+              >
+                <option v-for="option in langOptions" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
+              </select>
+            </div>
+
             <!-- Update Cycle -->
             <div
               class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
@@ -400,7 +423,7 @@
 </template>
 
 <script setup>
-import { reactive, computed, watch, onMounted, ref } from 'vue'
+import { reactive, computed, watch, onMounted, ref, inject } from 'vue'
 import { loadConfig, saveGeneralSettings } from '../../common/storage'
 import { DEFAULT_CONFIG } from '../../common/config'
 import { toast } from '../utils/toast'
@@ -414,12 +437,20 @@ const IPV4_REGEX =
 // Reactive State
 const config = reactive(JSON.parse(JSON.stringify(DEFAULT_CONFIG)))
 
-// Config Options
-const styleOptions = [
-  { label: chrome.i18n.getMessage('themeLight'), value: 'light' },
-  { label: chrome.i18n.getMessage('themeDark'), value: 'dark' },
-  { label: chrome.i18n.getMessage('themeSystem'), value: 'auto' }
-]
+const { t } = inject('i18n')
+
+// Config Options (Computed for reactivity)
+const styleOptions = computed(() => [
+  { label: t('themeLight'), value: 'light' },
+  { label: t('themeDark'), value: 'dark' },
+  { label: t('themeSystem'), value: 'auto' }
+])
+
+const langOptions = computed(() => [
+  { label: t('langAuto'), value: 'auto' },
+  { label: 'English', value: 'en' },
+  { label: '简体中文', value: 'zh_CN' }
+])
 
 // Rule Priority Order
 const DEFAULT_PRIORITY = ['reject', 'temp', 'normal']
@@ -429,9 +460,9 @@ const priorityDragOverIdx = ref(null)
 
 const priorityLabel = (cat) => {
   const labels = { 
-      reject: chrome.i18n.getMessage('prioReject'), 
-      normal: chrome.i18n.getMessage('prioNormal'), 
-      temp: chrome.i18n.getMessage('prioTemp') 
+      reject: t('prioReject'), 
+      normal: t('prioNormal'), 
+      temp: t('prioTemp') 
   }
   return labels[cat] || cat
 }

@@ -26,6 +26,7 @@ export const DEFAULT_CONFIG = {
 
   ui: {
     theme: 'auto', // 'light', 'dark', 'auto'
+    language: 'auto', // 'auto', 'en', 'zh_CN'
     showContextMenu: false
   },
 
