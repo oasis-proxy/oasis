@@ -40,12 +40,28 @@ export const i18n = {
           let msg = entry.message
           
           // Handle placeholders
-          if (placeholders) {
-            const args = Array.isArray(placeholders) ? placeholders : [placeholders]
-            args.forEach((val, index) => {
-              // Replace $1, $2, etc. (Chrome i18n syntax)
-              msg = msg.replace(`$${index + 1}`, val)
-            })
+          if (entry.placeholders && placeholders) {
+             const args = Array.isArray(placeholders) ? placeholders : [placeholders]
+             
+             // Iterate over defined placeholders in the JSON
+             // e.g. "count": { "content": "$1" }
+             Object.keys(entry.placeholders).forEach(name => {
+                 const ph = entry.placeholders[name]
+                 const content = ph.content // "$1"
+                 
+                 // Extract index from "$1", "$2" etc.
+                 const match = content.match(/\$(\d+)/)
+                 if (match) {
+                     const index = parseInt(match[1]) - 1
+                     if (index >= 0 && index < args.length) {
+                         const val = args[index]
+                         // Replace $NAME$ (case insensitive)
+                         // Regex: literal $, name, literal $
+                         const regex = new RegExp(`\\$${name}\\$`, 'gi')
+                         msg = msg.replace(regex, val)
+                     }
+                 }
+             })
           }
           return msg
         }

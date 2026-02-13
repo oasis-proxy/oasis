@@ -235,7 +235,7 @@
                       </div>
                       <div class="col-span-2">
                         <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">Port</span>
+                          <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPort') }}</span>
                           <input v-model="proxy.overrides.http.port" type="number" min="1" max="65535" :placeholder="httpOverrideScheme === 'default' ? '' : getPortPlaceholder(httpOverrideScheme)" :disabled="httpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.http, 'port')" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                         </label>
                       </div>
@@ -287,13 +287,13 @@
                       
                       <div class="col-span-7">
                         <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">Host Address</span>
+                          <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelHost') }}</span>
                           <input v-model="proxy.overrides.https.host" type="text" :placeholder="httpsOverrideScheme === 'default' ? '' : 'example.com'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
                         </label>
                       </div>
                       <div class="col-span-2">
                         <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">Port</span>
+                          <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPort') }}</span>
                           <input v-model="proxy.overrides.https.port" type="number" min="1" max="65535" :placeholder="httpsOverrideScheme === 'default' ? '' : getPortPlaceholder(httpsOverrideScheme)" :disabled="httpsOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.https, 'port')" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                         </label>
                       </div>
@@ -346,13 +346,13 @@
                       
                       <div class="col-span-7">
                         <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">Host Address</span>
+                          <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelHost') }}</span>
                           <input v-model="proxy.overrides.ftp.host" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                         </label>
                       </div>
                       <div class="col-span-2">
                         <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">Port</span>
+                          <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPort') }}</span>
                           <input v-model="proxy.overrides.ftp.port" type="number" min="1" max="65535" :placeholder="ftpOverrideScheme === 'default' ? '' : getPortPlaceholder(ftpOverrideScheme)" :disabled="ftpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.ftp, 'port')" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
                         </label>
                       </div>
