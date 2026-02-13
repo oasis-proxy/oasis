@@ -32,6 +32,20 @@ export function decodeRuleSetContent(text) {
   return text
 }
 
+/**
+ * Encode content for storage (Base64).
+ * @param {string} text 
+ * @returns {string} Base64 encoded text
+ */
+export function updateRuleSetContent(text) {
+    try {
+        return btoa(text)
+    } catch (e) {
+        // Fallback or error handling
+        return text
+    }
+}
+
 export async function fetchRuleSetContent(url) {
   try {
     const response = await fetch(url)

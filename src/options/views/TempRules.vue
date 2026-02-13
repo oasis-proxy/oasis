@@ -1,16 +1,6 @@
 <template>
-  <div class="h-100 d-flex flex-column bg-white  position-relative transition-colors">
-    
-    <!-- Header -->
-    <header class="h-24 px-5 d-flex align-items-center justify-content-between border-light  transition-colors">
-      <div>
-        <div class="d-flex align-items-center gap-3">
-          <h2 class="fs-4 font-bold ui-text-primary m-0">
-            {{ $t('tempTitle') }}
-          </h2>
-        </div>
-      </div>
-      <div class="d-flex align-items-center gap-3">
+  <BaseDetailView :title="$t('tempTitle')" maxWidth="6xl">
+    <template #actions>
         <button 
           @click="loadData"
           class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
@@ -27,13 +17,9 @@
           <i class="bi bi-floppy-fill"></i>
           <span>{{ $t('btnSave') }}</span>
         </button>
-      </div>
-    </header>
+    </template>
 
-    <!-- Content -->
-    <div class="flex-1 overflow-y-auto custom-scrollbar px-5 pt-4 pb-5">
-      <div class="max-w-6xl mx-auto d-flex flex-column gap-4 pb-5">
-        
+    <template #default>
         <!-- Rules Section -->
         <section v-if="isTemporaryRulesActive">
           <div class="ui-card-label">
@@ -149,9 +135,6 @@
             </p>
         </section>
 
-      </div>
-    </div>
-
     <!-- Modals -->
     <AcceptRulesModal
         :visible="showAcceptModal"
@@ -173,8 +156,8 @@
         @close="showSmartMergeModal = false"
         @merge="handleSmartMergeConfirm"
     />
-
-  </div>
+    </template>
+  </BaseDetailView>
 </template>
 
 <script setup>
@@ -186,6 +169,7 @@ import { toast } from '../utils/toast'
 import AcceptRulesModal from '../components/AcceptRulesModal.vue'
 import SmartRulesMergeModal from '../components/SmartRulesMergeModal.vue'
 import ProxySelect from '../components/ProxySelect.vue'
+import BaseDetailView from '../components/BaseDetailView.vue'
 
 const rules = ref([])
 const originalRules = ref([])

@@ -2,7 +2,7 @@
   <select
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
-    class="form-select ui-input w-100 rounded border py-0 px-1.5"
+    class="form-select w-100"
     :class="[customClass, sizeClass]"
     :disabled="disabled"
     :style="customStyle"
@@ -66,7 +66,7 @@ const props = defineProps({
 defineEmits(['update:modelValue'])
 
 const sizeClass = computed(() => {
-  return props.size === 'sm' ? 'h-7 text-xs' : 'h-8 text-xs' // h-7 is 28px, h-8 is 32px (tailwind/bootstrap-extended)
+  return props.size === 'sm' ? 'ui-input-sm' : 'ui-input h-8 text-xs'
 })
 
 const groupedOptions = computed(() => {

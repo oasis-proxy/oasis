@@ -1,427 +1,418 @@
 <template>
-  <div class="h-100 d-flex flex-column">
-    <!-- Header -->
-    <header
-      class="h-24 px-5 d-flex align-items-center justify-content-between border-light transition-colors"
-    >
-      <div>
-        <h2 class="fs-4 font-bold ui-text-primary m-0">{{ $t('navGeneral') }}</h2>
-      </div>
-    </header>
-
-    <div class="flex-1 overflow-y-auto custom-scrollbar px-5 pt-4 pb-5">
-      <div class="max-w-3xl mx-auto d-flex flex-column gap-5">
-        <!-- Basic Configuration -->
-        <section>
-          <div class="ui-card-label">
-            <span class="label-text">{{ $t('sectionBasic') }}</span>
-          </div>
-          <div class="ui-card rounded-xl border shadow-sm transition-colors">
-            <!-- Theme Style -->
-            <div
-              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
-            >
-
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblTheme') }}</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">{{ $t('descTheme') }}</p>
-                </div>
-              </div>
-
-              <select
-                v-model="config.ui.theme"
-                class="form-select ui-input ui-input-sm block rounded-lg border py-0 ps-2 pe-4"
-                style="width: 8rem"
-              >
-                <option v-for="option in styleOptions" :key="option.value" :value="option.value">
-                  {{ option.label }}
-                </option>
-              </select>
+  <BaseDetailView :title="$t('navGeneral')">
+      <template #default>
+        <div class="d-flex flex-column gap-5">
+            <!-- Basic Configuration -->
+            <section>
+            <div class="ui-card-label">
+                <span class="label-text">{{ $t('sectionBasic') }}</span>
             </div>
-
-            <!-- Language -->
-            <div
-              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
-            >
-
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblLanguage') }}</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">{{ $t('descLanguage') }}</p>
-                </div>
-              </div>
-
-              <select
-                v-model="config.ui.language"
-                class="form-select ui-input ui-input-sm block rounded-lg border py-0 ps-2 pe-4"
-                style="width: 8rem"
-              >
-                <option v-for="option in langOptions" :key="option.value" :value="option.value">
-                  {{ option.label }}
-                </option>
-              </select>
-            </div>
-
-            <!-- Update Cycle -->
-            <div
-              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
-            >
-
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblUpdateCycle') }}</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">
-                    {{ $t('descUpdateCycle') }}
-                  </p>
-                </div>
-              </div>
-
-              <select
-                v-model="config.update.interval"
-                class="form-select ui-input block rounded-lg border text-xs h-8 py-0 ps-2 pe-4"
-                style="width: 8rem"
-              >
-                <option
-                  v-for="interval in updateIntervals"
-                  :key="interval.value"
-                  :value="interval.value"
+            <div class="ui-card rounded-xl border shadow-sm transition-colors">
+                <!-- Theme Style -->
+                <div
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
                 >
-                  {{ interval.label }}
-                </option>
-              </select>
-            </div>
 
-            <!-- Rule Priority Order -->
-            <div
-              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
-            >
-
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRulePriority') }}</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">
-                    {{ $t('descRulePriority') }}
-                  </p>
-                </div>
-              </div>
-
-              <div class="d-flex align-items-center gap-1">
-                <template v-for="(cat, idx) in localRulePriority" :key="cat">
-                  <span v-if="idx > 0" class="text-slate-300" style="font-size: 10px;"><i class="bi bi-chevron-right"></i></span>
-                  <div
-                    class="ui-tag cursor-move d-flex align-items-center gap-1"
-                    :class="priorityTagClass(cat)"
-                    draggable="true"
-                    @dragstart="onPriorityDragStart($event, idx)"
-                    @dragover.prevent="onPriorityDragOver($event, idx)"
-                    @drop.prevent="onPriorityDrop($event, idx)"
-                    @dragend="onPriorityDragEnd"
-                    :style="priorityDragOverIdx === idx ? 'opacity: 0.4;' : ''"
-                    style="padding: 3px 8px; font-size: 11px; cursor: grab;"
-                  >
-                    <i class="bi bi-grip-vertical" style="font-size: 10px;"></i>
-                    {{ priorityLabel(cat) }}
-                  </div>
-                </template>
-                <button
-                  class="ui-button-icon ms-1"
-                  :title="$t('btnReset')"
-                  @click="resetRulePriority"
-                  :disabled="isDefaultPriority"
-                >
-                  <i class="bi bi-arrow-counterclockwise ui-icon-sm"></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- Refresh On Switch -->
-            <div
-              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
-            >
-              <div class="d-flex items-start">
-
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRefreshSwitch') }}</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">
-                    {{ $t('descRefreshSwitch') }}
-                  </p>
-                </div>
-              </div>
-
-              <div class="form-check form-switch">
-                <input
-                  v-model="config.behavior.refreshOnSwitch"
-                  class="form-check-input align-self-start"
-                  type="checkbox"
-                  role="switch"
-                  id="refreshOnSwitchSwitch"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Advanced Configuration -->
-        <section>
-          <div class="ui-card-label">
-            <span class="label-text">{{ $t('sectionAdvanced') }}</span>
-          </div>
-          <div class="ui-card rounded-xl border shadow-sm">
-            <!-- Reject Address -->
-            <div
-              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
-            >
-
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRejectAddr') }}</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">
-                    {{ $t('descRejectAddr') }}
-                  </p>
-                </div>
-              </div>
-
-              <input
-                v-model.lazy="rejectAddress"
-                type="text"
-                placeholder="127.0.0.1:65535"
-                class="form-control ui-input ui-input-sm block rounded-lg border"
-                style="width: 12rem"
-              />
-            </div>
-
-            <!-- Request Monitoring -->
-            <div
-              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
-            >
-
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblReqMonitor') }}</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">
-                    {{ $t('descReqMonitor') }}
-                  </p>
-                </div>
-              </div>
-
-              <div class="form-check form-switch">
-                <input
-                  v-model="config.behavior.connectionMonitoring"
-                  class="form-check-input align-self-start"
-                  type="checkbox"
-                  role="switch"
-                  id="connectionMonitoringSwitch"
-                />
-              </div>
-            </div>
-
-            <!-- Context Menu -->
-            <div
-              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
-            >
-
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblContextMenu') }}</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">
-                    {{ $t('descContextMenu') }}
-                  </p>
-                </div>
-              </div>
-              <div class="form-check form-switch">
-                <input
-                  v-model="config.ui.showContextMenu"
-                  class="form-check-input align-self-start"
-                  type="checkbox"
-                  role="switch"
-                  id="contextMenuSwitch"
-                />
-              </div>
-            </div>
-
-            <div class="px-4 pt-3 pb-4 hover:bg-slate-50 transition-colors">
-
-
-              <div class="d-flex align-items-center justify-content-between mb-4">
                 <div class="d-flex items-start">
-                  <div>
-                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblIpTags') }}</p>
+                    <div>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblTheme') }}</p>
+                    <p class="text-xs ui-text-secondary mt-1 m-0">{{ $t('descTheme') }}</p>
+                    </div>
+                </div>
+
+                <select
+                    v-model="config.ui.theme"
+                    class="form-select ui-input ui-input-sm block rounded-lg border py-0 ps-2 pe-4"
+                    style="width: 8rem"
+                >
+                    <option v-for="option in styleOptions" :key="option.value" :value="option.value">
+                    {{ option.label }}
+                    </option>
+                </select>
+                </div>
+
+                <!-- Language -->
+                <div
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                >
+
+                <div class="d-flex items-start">
+                    <div>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblLanguage') }}</p>
+                    <p class="text-xs ui-text-secondary mt-1 m-0">{{ $t('descLanguage') }}</p>
+                    </div>
+                </div>
+
+                <select
+                    v-model="config.ui.language"
+                    class="form-select ui-input ui-input-sm block rounded-lg border py-0 ps-2 pe-4"
+                    style="width: 8rem"
+                >
+                    <option v-for="option in langOptions" :key="option.value" :value="option.value">
+                    {{ option.label }}
+                    </option>
+                </select>
+                </div>
+
+                <!-- Update Cycle -->
+                <div
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                >
+
+                <div class="d-flex items-start">
+                    <div>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblUpdateCycle') }}</p>
                     <p class="text-xs ui-text-secondary mt-1 m-0">
-                      {{ $t('descIpTags') }}
+                        {{ $t('descUpdateCycle') }}
                     </p>
-                  </div>
-                </div>
-                <button @click="addTag" class="ui-button-icon" :title="$t('btnAddTag')">
-                  <i class="bi bi-plus-lg ui-icon-sm"></i>
-                </button>
-              </div>
-
-              <div
-                class="ui-card rounded-xl border divide-y divide-border shadow-sm overflow-hidden"
-              >
-                <!-- Header -->
-                <div class="ui-card-header">
-                  <div style="width: 50%" class="px-2">{{ $t('colIp') }}</div>
-                  <div style="width: 40%" class="px-2">{{ $t('colTag') }}</div>
-                  <div style="width: 10%" class="text-center">{{ $t('colAction') }}</div>
+                    </div>
                 </div>
 
-                <!-- List -->
-                <div v-if="localIpTags.length > 0">
-                  <div
-                    v-for="(item, index) in localIpTags"
-                    :key="index"
-                    class="d-flex align-items-center gap-1 p-2 hover:bg-slate-50 transition-colors"
-                  >
-                    <div style="width: 50%" class="px-2">
-                      <input
-                        v-if="item.isEditing"
-                        v-model="item.ip"
-                        type="text"
-                        class="form-control ui-input ui-input-sm w-100 rounded py-0 px-2 font-mono"
-                        style="height: 24px"
-                        :style="item.errors?.ip ? 'border-color: var(--ui-danger) !important;' : ''"
-                        placeholder="192.168.1.100"
-                        @keyup.enter="saveTag(index)"
-                        @keyup.esc="cancelEdit(index)"
-                        @blur="validateItem(index)"
-                      />
-                      <span v-else class="text-xs font-mono ui-text-primary">{{ item.ip }}</span>
-                    </div>
-                    <div style="width: 40%" class="px-2">
-                      <input
-                        v-if="item.isEditing"
-                        v-model="item.tag"
-                        type="text"
-                        class="form-control ui-input ui-input-sm w-100 rounded py-0 px-2"
-                        style="height: 24px"
-                        :style="item.errors?.tag ? 'border-color: var(--ui-danger) !important;' : ''"
-                        placeholder="e.g. vps, US vps"
-                        @keyup.enter="saveTag(index)"
-                        @keyup.esc="cancelEdit(index)"
-                        @blur="validateItem(index)"
-                      />
-                      <span v-else class="text-xs ui-text-primary">{{ item.tag }}</span>
-                    </div>
-                    <div
-                      style="width: 10%"
-                      class="d-flex align-items-center justify-content-center gap-1"
+                <select
+                    v-model="config.update.interval"
+                    class="form-select ui-input block rounded-lg border text-xs h-8 py-0 ps-2 pe-4"
+                    style="width: 8rem"
+                >
+                    <option
+                    v-for="interval in updateIntervals"
+                    :key="interval.value"
+                    :value="interval.value"
                     >
-                      <template v-if="item.isEditing">
-                        <button
-                          @click="saveTag(index)"
-                          class="ui-button-icon"
-                          title="Save"
+                    {{ interval.label }}
+                    </option>
+                </select>
+                </div>
+
+                <!-- Rule Priority Order -->
+                <div
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                >
+
+                <div class="d-flex items-start">
+                    <div>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRulePriority') }}</p>
+                    <p class="text-xs ui-text-secondary mt-1 m-0">
+                        {{ $t('descRulePriority') }}
+                    </p>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-1">
+                    <template v-for="(cat, idx) in localRulePriority" :key="cat">
+                    <span v-if="idx > 0" class="text-slate-300" style="font-size: 10px;"><i class="bi bi-chevron-right"></i></span>
+                    <div
+                        class="ui-tag cursor-move d-flex align-items-center gap-1"
+                        :class="priorityTagClass(cat)"
+                        draggable="true"
+                        @dragstart="onPriorityDragStart($event, idx)"
+                        @dragover.prevent="onPriorityDragOver($event, idx)"
+                        @drop.prevent="onPriorityDrop($event, idx)"
+                        @dragend="onPriorityDragEnd"
+                        :style="priorityDragOverIdx === idx ? 'opacity: 0.4;' : ''"
+                        style="padding: 3px 8px; font-size: 11px; cursor: grab;"
+                    >
+                        <i class="bi bi-grip-vertical" style="font-size: 10px;"></i>
+                        {{ priorityLabel(cat) }}
+                    </div>
+                    </template>
+                    <button
+                    class="ui-button-icon ms-1"
+                    :title="$t('btnReset')"
+                    @click="resetRulePriority"
+                    :disabled="isDefaultPriority"
+                    >
+                    <i class="bi bi-arrow-counterclockwise ui-icon-sm"></i>
+                    </button>
+                </div>
+                </div>
+
+                <!-- Refresh On Switch -->
+                <div
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                >
+                <div class="d-flex items-start">
+
+                    <div>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRefreshSwitch') }}</p>
+                    <p class="text-xs ui-text-secondary mt-1 m-0">
+                        {{ $t('descRefreshSwitch') }}
+                    </p>
+                    </div>
+                </div>
+
+                <div class="form-check form-switch">
+                    <input
+                    v-model="config.behavior.refreshOnSwitch"
+                    class="form-check-input align-self-start"
+                    type="checkbox"
+                    role="switch"
+                    id="refreshOnSwitchSwitch"
+                    />
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <!-- Advanced Configuration -->
+            <section>
+            <div class="ui-card-label">
+                <span class="label-text">{{ $t('sectionAdvanced') }}</span>
+            </div>
+            <div class="ui-card rounded-xl border shadow-sm">
+                <!-- Reject Address -->
+                <div
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                >
+
+                <div class="d-flex items-start">
+                    <div>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRejectAddr') }}</p>
+                    <p class="text-xs ui-text-secondary mt-1 m-0">
+                        {{ $t('descRejectAddr') }}
+                    </p>
+                    </div>
+                </div>
+
+                <input
+                    v-model.lazy="rejectAddress"
+                    type="text"
+                    placeholder="127.0.0.1:65535"
+                    class="form-control ui-input ui-input-sm block rounded-lg border"
+                    style="width: 12rem"
+                />
+                </div>
+
+                <!-- Request Monitoring -->
+                <div
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                >
+
+                <div class="d-flex items-start">
+                    <div>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblReqMonitor') }}</p>
+                    <p class="text-xs ui-text-secondary mt-1 m-0">
+                        {{ $t('descReqMonitor') }}
+                    </p>
+                    </div>
+                </div>
+
+                <div class="form-check form-switch">
+                    <input
+                    v-model="config.behavior.connectionMonitoring"
+                    class="form-check-input align-self-start"
+                    type="checkbox"
+                    role="switch"
+                    id="connectionMonitoringSwitch"
+                    />
+                </div>
+                </div>
+
+                <!-- Context Menu -->
+                <div
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                >
+
+                <div class="d-flex items-start">
+                    <div>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblContextMenu') }}</p>
+                    <p class="text-xs ui-text-secondary mt-1 m-0">
+                        {{ $t('descContextMenu') }}
+                    </p>
+                    </div>
+                </div>
+                <div class="form-check form-switch">
+                    <input
+                    v-model="config.ui.showContextMenu"
+                    class="form-check-input align-self-start"
+                    type="checkbox"
+                    role="switch"
+                    id="contextMenuSwitch"
+                    />
+                </div>
+                </div>
+
+                <div class="px-4 pt-3 pb-4 hover:bg-slate-50 transition-colors">
+
+
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex items-start">
+                    <div>
+                        <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblIpTags') }}</p>
+                        <p class="text-xs ui-text-secondary mt-1 m-0">
+                        {{ $t('descIpTags') }}
+                        </p>
+                    </div>
+                    </div>
+                    <button @click="addTag" class="ui-button-icon" :title="$t('btnAddTag')">
+                    <i class="bi bi-plus-lg ui-icon-sm"></i>
+                    </button>
+                </div>
+
+                <div
+                    class="ui-card rounded-xl border divide-y divide-border shadow-sm overflow-hidden"
+                >
+                    <!-- Header -->
+                    <div class="ui-card-header">
+                    <div style="width: 50%" class="px-2">{{ $t('colIp') }}</div>
+                    <div style="width: 40%" class="px-2">{{ $t('colTag') }}</div>
+                    <div style="width: 10%" class="text-center">{{ $t('colAction') }}</div>
+                    </div>
+
+                    <!-- List -->
+                    <div v-if="localIpTags.length > 0">
+                    <div
+                        v-for="(item, index) in localIpTags"
+                        :key="index"
+                        class="d-flex align-items-center gap-1 p-2 hover:bg-slate-50 transition-colors"
+                    >
+                        <div style="width: 50%" class="px-2">
+                        <input
+                            v-if="item.isEditing"
+                            v-model="item.ip"
+                            type="text"
+                            class="form-control ui-input ui-input-sm w-100 rounded py-0 px-2 font-mono"
+                            style="height: 24px"
+                            :style="item.errors?.ip ? 'border-color: var(--ui-danger) !important;' : ''"
+                            placeholder="192.168.1.100"
+                            @keyup.enter="saveTag(index)"
+                            @keyup.esc="cancelEdit(index)"
+                            @blur="validateItem(index)"
+                        />
+                        <span v-else class="text-xs font-mono ui-text-primary">{{ item.ip }}</span>
+                        </div>
+                        <div style="width: 40%" class="px-2">
+                        <input
+                            v-if="item.isEditing"
+                            v-model="item.tag"
+                            type="text"
+                            class="form-control ui-input ui-input-sm w-100 rounded py-0 px-2"
+                            style="height: 24px"
+                            :style="item.errors?.tag ? 'border-color: var(--ui-danger) !important;' : ''"
+                            placeholder="e.g. vps, US vps"
+                            @keyup.enter="saveTag(index)"
+                            @keyup.esc="cancelEdit(index)"
+                            @blur="validateItem(index)"
+                        />
+                        <span v-else class="text-xs ui-text-primary">{{ item.tag }}</span>
+                        </div>
+                        <div
+                        style="width: 10%"
+                        class="d-flex align-items-center justify-content-center gap-1"
                         >
-                          <i class="bi bi-floppy-fill ui-icon-sm"></i>
+                        <template v-if="item.isEditing">
+                            <button
+                            @click="saveTag(index)"
+                            class="ui-button-icon"
+                            title="Save"
+                            >
+                            <i class="bi bi-floppy-fill ui-icon-sm"></i>
+                            </button>
+
+                        </template>
+
+
+                        <button v-else @click="editTag(index)" class="ui-button-icon" title="Edit">
+                            <i class="bi bi-pencil-square ui-icon-sm"></i>
                         </button>
 
-                      </template>
-
-
-                      <button v-else @click="editTag(index)" class="ui-button-icon" title="Edit">
-                        <i class="bi bi-pencil-square ui-icon-sm"></i>
-                      </button>
-
-                      <button
-                        @click="deleteTag(index)"
-                        class="ui-button-icon"
-                        title="Delete"
-                      >
-                        <i class="bi bi-trash ui-icon-sm"></i>
-                      </button>
+                        <button
+                            @click="deleteTag(index)"
+                            class="ui-button-icon"
+                            title="Delete"
+                        >
+                            <i class="bi bi-trash ui-icon-sm"></i>
+                        </button>
+                        </div>
                     </div>
-                  </div>
+                    </div>
+                    <!-- Empty State -->
+                    <div
+                    v-else
+                    class="p-2 d-flex align-items-center justify-content-center"
+                    style="min-height: 44px"
+                    >
+                    <p class="text-xs text-slate-500 m-0">No tags defined.</p>
+                    </div>
                 </div>
-                <!-- Empty State -->
+                </div>
+            </div>
+            </section>
+            <!-- Extension Information -->
+            <section>
+            <div class="ui-card-label">
+                <span class="label-text">{{ $t('sectionInfo') }}</span>
+            </div>
+            <div class="ui-card rounded-xl border shadow-sm">
+                <!-- Extension Version -->
                 <div
-                  v-else
-                  class="p-2 d-flex align-items-center justify-content-center"
-                  style="min-height: 44px"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
                 >
-                  <p class="text-xs text-slate-500 m-0">No tags defined.</p>
+
+                <div class="d-flex items-start">
+                    <div>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblVersion') }}</p>
+                    <p class="text-xs ui-text-secondary mt-1 m-0">
+                        {{ $t('descVersion') }}
+                    </p>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <!-- Extension Information -->
-        <section>
-          <div class="ui-card-label">
-            <span class="label-text">{{ $t('sectionInfo') }}</span>
-          </div>
-          <div class="ui-card rounded-xl border shadow-sm">
-            <!-- Extension Version -->
-            <div
-              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
-            >
-
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblVersion') }}</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">
-                    {{ $t('descVersion') }}
-                  </p>
+                <div class="text-sm text-slate-600 font-mono bg-slate-100 px-2 py-1 rounded">
+                    v{{ extensionVersion }}
                 </div>
-              </div>
-              <div class="text-sm text-slate-600 font-mono bg-slate-100 px-2 py-1 rounded">
-                v{{ extensionVersion }}
-              </div>
-            </div>
-
-            <!-- Github Repository -->
-            <div
-              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
-            >
-
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRepo') }}</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">
-                    {{ $t('descRepo') }}
-                  </p>
                 </div>
-              </div>
-              <a
-                href="https://github.com/oasis-proxy/oasis"
-                target="_blank"
-                class="d-flex align-items-center gap-2 text-xs no-underline ui-text-secondary hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
-              >
-                <i class="bi bi-github"></i>
-                GitHub
-                <i class="bi bi-box-arrow-up-right text-[10px] opacity-50"></i>
-              </a>
-            </div>
 
-            <!-- Wiki Address -->
-            <div
-              class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
-            >
+                <!-- Github Repository -->
+                <div
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                >
 
-              <div class="d-flex items-start">
-                <div>
-                  <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblWiki') }}</p>
-                  <p class="text-xs ui-text-secondary mt-1 m-0">
-                    {{ $t('descWiki') }}
-                  </p>
+                <div class="d-flex items-start">
+                    <div>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRepo') }}</p>
+                    <p class="text-xs ui-text-secondary mt-1 m-0">
+                        {{ $t('descRepo') }}
+                    </p>
+                    </div>
                 </div>
-              </div>
-              <a
-                href="https://github.com/oasis-proxy/oasis/wiki"
-                target="_blank"
-                class="d-flex align-items-center gap-2 text-xs no-underline ui-text-secondary hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
-              >
-                <i class="bi bi-book"></i>
-                Wiki
-                <i class="bi bi-box-arrow-up-right text-[10px] opacity-50"></i>
-              </a>
+                <a
+                    href="https://github.com/oasis-proxy/oasis"
+                    target="_blank"
+                    class="d-flex align-items-center gap-2 text-xs no-underline ui-text-secondary hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+                >
+                    <i class="bi bi-github"></i>
+                    GitHub
+                    <i class="bi bi-box-arrow-up-right text-[10px] opacity-50"></i>
+                </a>
+                </div>
+
+                <!-- Wiki Address -->
+                <div
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                >
+
+                <div class="d-flex items-start">
+                    <div>
+                    <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblWiki') }}</p>
+                    <p class="text-xs ui-text-secondary mt-1 m-0">
+                        {{ $t('descWiki') }}
+                    </p>
+                    </div>
+                </div>
+                <a
+                    href="https://github.com/oasis-proxy/oasis/wiki"
+                    target="_blank"
+                    class="d-flex align-items-center gap-2 text-xs no-underline ui-text-secondary hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+                >
+                    <i class="bi bi-book"></i>
+                    Wiki
+                    <i class="bi bi-box-arrow-up-right text-[10px] opacity-50"></i>
+                </a>
+                </div>
             </div>
-          </div>
-        </section>
-      </div>
-    </div>
-  </div>
+            </section>
+        </div>
+      </template>
+  </BaseDetailView>
 </template>
 
 <script setup>
@@ -429,6 +420,7 @@ import { reactive, computed, watch, onMounted, ref, inject } from 'vue'
 import { loadConfig, saveGeneralSettings } from '../../common/storage'
 import { DEFAULT_CONFIG } from '../../common/config'
 import { toast } from '../utils/toast'
+import BaseDetailView from '../components/BaseDetailView.vue'
 
 const extensionVersion = chrome.runtime.getManifest().version
 

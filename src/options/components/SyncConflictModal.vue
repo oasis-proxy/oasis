@@ -1,32 +1,20 @@
 <template>
-  <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" style="background-color: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);">
-    <div class="modal-dialog modal-dialog-centered" style="min-width: 680px; max-width: 800px">
-      <div class="modal-content ui-card border shadow-lg rounded-2xl overflow-hidden">
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center p-4 border-0">
-          <h5 class="modal-header ui-text-primary tracking-tight m-0 d-flex align-items-center gap-2">
-            {{ $t('titleSyncConflict') }}
-          </h5>
-          <button 
-            type="button"
-            class="modal-close-button"
-            aria-label="Close"
-            @click="$emit('cancel')"
-          >
-            <i class="bi bi-x-lg text-lg"></i>
-          </button>
-        </div>
+  <BaseModal 
+    :visible="true" 
+    :title="$t('titleSyncConflict')"
+    titleClass="d-flex align-items-center gap-2"
+    maxWidth="800px"
+    @close="emit('cancel')"
+  >
+    <div class="d-flex flex-column gap-3">
+        <p class="text-sm text-slate-600  mb-4 text-center">
+        {{ $t('msgSyncConflict') }}
+        </p>
 
-        <!-- Body -->
-        <div class="modal-body px-4 pb-4">
-          <p class="text-sm text-slate-600  mb-4 text-center">
-            {{ $t('msgSyncConflict') }}
-          </p>
-
-          <div class="row g-4">
-             <!-- Local Version Card -->
-             <div class="col-6">
-                 <div class="ui-card rounded-xl border shadow-sm p-4 relative overflow-hidden group h-100">
+        <div class="row g-4">
+            <!-- Local Version Card -->
+            <div class="col-6">
+                <div class="ui-card rounded-xl border shadow-sm p-4 relative overflow-hidden group h-100">
                     <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
                         <div>
                             <div class="d-flex align-items-center gap-2">
@@ -52,7 +40,7 @@
                         </div>
 
                         <div class="pt-3 border-t border-light  d-flex flex-column gap-3">
-                             <!-- Proxy Hosts -->
+                                <!-- Proxy Hosts -->
                             <div class="d-flex justify-content-between align-items-start">
                                     <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">{{ $t('lblProxyHosts') }}</p>
                                     <span class="text-xs font-mono ui-text-primary">{{ proxyCount }}</span>
@@ -66,10 +54,10 @@
                         </div>
                     </div>
                 </div>
-             </div>
+            </div>
 
-             <!-- Cloud Version Card -->
-             <div class="col-6">
+            <!-- Cloud Version Card -->
+            <div class="col-6">
                 <div class="ui-card rounded-xl border shadow-sm p-4 relative overflow-hidden group h-100">
                     <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
                         <div>
@@ -94,8 +82,8 @@
                         </div>
 
                         <div class="pt-3 border-t border-light  d-flex flex-column gap-3">
-                             <!-- Proxy Hosts -->
-                             <div class="d-flex justify-content-between align-items-start">
+                                <!-- Proxy Hosts -->
+                                <div class="d-flex justify-content-between align-items-start">
                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">{{ $t('lblProxyHosts') }}</p>
                                 <span class="text-xs font-mono ui-text-primary">{{ cloudProxyCount }}</span>
                             </div>
@@ -108,37 +96,35 @@
                         </div>
                     </div>
                 </div>
-             </div>
-          </div>
+            </div>
         </div>
-
-        <!-- Footer -->
-        <div class="modal-footer p-4 d-flex justify-content-end gap-3 border-0">
-            <button type="button" class="btn ui-button-secondary h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="$emit('cancel')">
-                {{ $t('btnCancel') }}
-            </button>
-            <button type="button" class="btn ui-button-danger h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="$emit('sync-cloud')">
-                {{ $t('btnOverwriteCloud') }}
-            </button>
-            
-            <button type="button" class="btn ui-button-danger h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="$emit('sync-local')">
-                {{ $t('btnSyncFromCloud') }}
-            </button>
-        </div>
-      </div>
     </div>
-  </div>
+
+    <template #footer>
+        <button type="button" class="btn ui-button-secondary h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="emit('cancel')">
+            {{ $t('btnCancel') }}
+        </button>
+        <button type="button" class="btn ui-button-danger h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="emit('sync-cloud')">
+            {{ $t('btnOverwriteCloud') }}
+        </button>
+        
+        <button type="button" class="btn ui-button-danger h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="emit('sync-local')">
+            {{ $t('btnSyncFromCloud') }}
+        </button>
+    </template>
+  </BaseModal>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import BaseModal from './BaseModal.vue'
 
 const props = defineProps({
   localConfig: { type: Object, required: true },
   cloudConfig: { type: Object, default: null }
 })
 
-defineEmits(['cancel', 'sync-local', 'sync-cloud'])
+const emit = defineEmits(['cancel', 'sync-local', 'sync-cloud'])
 
 // Local Computed
 const configVersion = computed(() => props.localConfig.version ? `v${props.localConfig.version}` : 'v1')
@@ -160,5 +146,3 @@ const cloudProxyCount = computed(() => Object.keys(props.cloudConfig?.proxies ||
 const cloudPolicyCount = computed(() => Object.keys(props.cloudConfig?.policies || {}).length || 0)
 
 </script>
-
-

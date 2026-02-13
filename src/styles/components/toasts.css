@@ -18,9 +18,33 @@
   padding: 14px 16px;
   border: 1px solid var(--ui-border); 
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08); /* Fixed shadow ref, could use var if desired */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  /* Removed transition: all 0.2s ease to prevent conflict with container animation */
+}
+
+/* Pseudo-element for backdrop blur to fix rendering delay */
+.toast-content::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
   backdrop-filter: blur(10px);
-  transition: all 0.2s ease;
+  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+/* Dark mode specific background */
+@media (prefers-color-scheme: dark) {
+  .toast-content::before {
+    background-color: rgba(30, 41, 59, 0.85); /* slate-800 at 85% opacity */
+  }
+}
+
+:root.dark .toast-content::before {
+  background-color: rgba(30, 41, 59, 0.85);
 }
 
 .toast-icon-wrapper {
@@ -72,7 +96,8 @@
 /* Animation Classes (Vue Transition Group) */
 .toast-enter-active,
 .toast-leave-active {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
 
 .toast-enter-from {

@@ -1,14 +1,6 @@
 <template>
-  <div class="h-100 d-flex flex-column">
-    <!-- Header -->
-    <header class="h-24 px-5 d-flex align-items-center justify-content-between border-light  transition-colors">
-      <div>
-        <h2 class="fs-4 font-bold text-slate-900  m-0">{{ $t('lblDataSync') }}</h2>
-      </div>
-    </header>
-
-    <div class="flex-1 overflow-y-auto custom-scrollbar px-5 pt-4 pb-5">
-      <div class="max-w-5xl mx-auto">
+  <BaseDetailView :title="$t('lblDataSync')" maxWidth="5xl">
+    <template #default>
         <!-- Maintenance Operations -->
         <section class="mb-5">
              <div class="ui-card-label">
@@ -185,8 +177,6 @@
             </div>
         </div>
 
-      </div>
-    </div>
     <!-- Conflict Modal -->
     <SyncConflictModal 
         v-if="showConflictModal" 
@@ -196,8 +186,8 @@
         @sync-local="resolveConflictLocal"
         @sync-cloud="resolveConflictCloud"
     />
-
-  </div>
+    </template>
+  </BaseDetailView>
 </template>
 
 <script setup>
@@ -206,6 +196,7 @@ import { loadConfig, saveGeneralSettings, syncToCloud, syncFromCloud, exportConf
 import { DEFAULT_CONFIG } from '../../common/config'
 import { toast } from '../utils/toast'
 import SyncConflictModal from '../components/SyncConflictModal.vue'
+import BaseDetailView from '../components/BaseDetailView.vue'
 
 // Helpers
 const formatDate = (timestamp) => {

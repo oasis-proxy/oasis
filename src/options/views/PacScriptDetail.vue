@@ -1,167 +1,152 @@
 <template>
-  <div class="h-100 d-flex flex-column bg-white  position-relative transition-colors">
-    
-    <!-- Header -->
-    <!-- Header -->
-    <header class="h-24 px-5 d-flex align-items-center justify-content-between border-light  transition-colors">
-      <!-- Header / Actions -->
-      <div class="d-flex align-items-center justify-content-between w-100">
-        <div class="d-flex align-items-center gap-3">
-           <input 
+  <BaseDetailView :title="pac.name || pac.url || $t('unnamedPAC')">
+    <template #header-start>
+        <input 
              type="color" 
              v-model="pac.color"
              class="p-0 border-0 rounded-lg overflow-hidden shadow-sm transition-transform"
              style="width: 24px; height: 24px; min-width: 24px; cursor: pointer;"
              :title="$t('lblChooseColor')"
-           />
-           <h1 class="fs-4 font-bold text-slate-900 tracking-tight m-0 text-truncate" style="max-width: 300px;" :title="pac.name || pac.url">{{ pac.name || pac.url || $t('unnamedPAC') }}</h1>
-        </div>
-        <div class="d-flex align-items-center gap-3">
-           <!-- Show in Popup Switch -->
-           <div class="form-check form-switch m-0 d-flex align-items-center gap-2" :title="$t('phTitleShowPopup')">
-               <input class="form-check-input align-self-start" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="pac.showInPopup">
-               <label class="form-check-label text-xs font-medium text-slate-500" style="cursor: pointer;" for="showInPopup">{{ $t('phLabelShowPopup') }}</label>
-           </div>
-           
-           <button 
-             @click="resetChanges"
-             :disabled="!isDirty"
-             class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
-           >
-            <i class="bi bi-reply-fill"></i>
-            <span>{{ $t('btnReset') }}</span>
-           </button>
+        />
+    </template>
+    
+    <template #actions>
+        <!-- Show in Popup Switch -->
+       <div class="form-check form-switch m-0 d-flex align-items-center gap-2" :title="$t('phTitleShowPopup')">
+           <input class="form-check-input align-self-start" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="pac.showInPopup">
+           <label class="form-check-label text-xs font-medium text-slate-500" style="cursor: pointer;" for="showInPopup">{{ $t('phLabelShowPopup') }}</label>
+       </div>
+       
+       <button 
+         @click="resetChanges"
+         :disabled="!isDirty"
+         class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
+       >
+        <i class="bi bi-reply-fill"></i>
+        <span>{{ $t('btnReset') }}</span>
+       </button>
 
-           <button 
-             @click="saveChanges"
-             :disabled="!isDirty"
-             class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
-           >
-            <i class="bi bi-floppy-fill"></i>
-            <span>{{ $t('btnSave') }}</span>
-           </button>
+       <button 
+         @click="saveChanges"
+         :disabled="!isDirty"
+         class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
+       >
+        <i class="bi bi-floppy-fill"></i>
+        <span>{{ $t('btnSave') }}</span>
+       </button>
 
-           <!-- Action Menu -->
-           <div class="dropdown">
-              <button 
-                   class="ui-button-icon d-flex align-items-center justify-content-center"
-                   type="button" 
-                   data-bs-toggle="dropdown" 
-                   aria-expanded="false"
-              >
-                  <i class="bi bi-three-dots-vertical text-lg"></i>
-              </button>
-              
-              <!-- Dropdown Menu -->
-              <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
-                  <li>
-                    <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-pencil-square text-slate-400"></i> {{ $t('btnRename') }}
-                    </button>
-                  </li>
-                  <li>
-                    <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-files text-slate-400"></i> {{ $t('btnClone') }}
-                    </button>
-                  </li>
-                  <li><hr class="dropdown-divider my-1 border-subtle "></li>
-                  <li>
-                    <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-danger  rounded-md transition-colors d-flex align-items-center gap-2">
-                        <i class="bi bi-trash"></i> {{ $t('btnDelete') }}
-                    </button>
-                  </li>
-              </ul>
-           </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- Content -->
-    <div class="flex-1 overflow-y-auto custom-scrollbar px-5 pt-4 pb-5">
-      <div v-if="pac" class="max-w-3xl mx-auto d-flex flex-column gap-4 pb-5">
-        
-        <!-- Source Settings -->
-        <section>
-          <div class="ui-card-label">
-            <span class="label-text">{{ $t('pacHeaderSource') }}</span>
-          </div>
+       <!-- Action Menu -->
+       <div class="dropdown">
+          <button 
+               class="ui-button-icon d-flex align-items-center justify-content-center"
+               type="button" 
+               data-bs-toggle="dropdown" 
+               aria-expanded="false"
+          >
+              <i class="bi bi-three-dots-vertical text-lg"></i>
+          </button>
           
-          <div class="ui-card rounded-xl border shadow-sm overflow-hidden">
-             <!-- Body -->
-             <div class="px-4 pt-4 pb-4 d-flex flex-column gap-4">
-                                <!-- Source Method Radio -->
-                 <div class="ui-form-group">
-                    <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pacLabelSourceMethod') }}</span>
-                    <div class="d-flex align-items-center gap-4">
-                       <label class="d-flex align-items-center gap-2" style="cursor: pointer;">
-                          <input type="radio" value="remote" v-model="pac.mode" class="form-check-input mt-0" />
-                          <span class="text-xs text-slate-900 transition-colors">{{ $t('pacLabelRemoteUrl') }}</span>
-                       </label>
-                       <label class="d-flex align-items-center gap-2" style="cursor: pointer;">
-                          <input type="radio" value="manual" v-model="pac.mode" class="form-check-input mt-0" />
-                          <span class="text-xs text-slate-900 transition-colors">{{ $t('pacLabelManualScript') }}</span>
-                       </label>
-                    </div>
-                 </div>
-                <!-- Remote URL Input -->
-                <div v-if="pac.mode === 'remote'" class="grid grid-cols-12 gap-4">
-                     <!-- URL Input (7) -->
-                     <div class="col-span-7">
-                        <label class="ui-form-group">
-                          <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pacLabelRemoteUrl') }}</span>
-                          <input 
-                            type="text" 
-                            v-model="pac.url"
-                            @blur="fetchPacContent"
-                            :placeholder="$t('pacPlaceholderUrl')"
-                            class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
-                          />
-                        </label>
-                     </div>
+          <!-- Dropdown Menu -->
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
+              <li>
+                <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
+                    <i class="bi bi-pencil-square text-slate-400"></i> {{ $t('btnRename') }}
+                </button>
+              </li>
+              <li>
+                <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
+                    <i class="bi bi-files text-slate-400"></i> {{ $t('btnClone') }}
+                </button>
+              </li>
+              <li><hr class="dropdown-divider my-1 border-subtle "></li>
+              <li>
+                <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-danger  rounded-md transition-colors d-flex align-items-center gap-2">
+                    <i class="bi bi-trash"></i> {{ $t('btnDelete') }}
+                </button>
+              </li>
+          </ul>
+       </div>
+    </template>
 
-                    <!-- Refresh Button (2) -->
-                    <div class="col-span-2 d-flex flex-column justify-content-end align-items-start">
-                       <button @click="fetchPacContent" class="px-3 py-1 rounded-lg text-xs font-medium ui-button-secondary transition-colors d-flex align-items-center justify-content-center gap-2">
-                           <i class="bi bi-arrow-clockwise"></i> {{ $t('btnRefresh') }}
-                       </button>
-                    </div>
-
-                </div>
-
-                <!-- Manual Mode Hint -->
-                <div v-else class="text-xs text-slate-500">
-                    <i class="bi bi-info-circle me-1"></i> {{ $t('pacMsgEditable') }}
-                </div>
-
-             </div>
-          </div>
-        </section>
-
-        <!-- Script Content -->
-        <section class="d-flex flex-column" style="height: 600px;">
-            <div class="ui-card-label">
-                <span class="label-text">{{ $t('pacHeaderScript') }}</span>
-            </div>
-            <div class="ui-card rounded-xl border shadow-sm overflow-hidden d-flex flex-column h-100 w-100 flex-1">
-                <div class="ui-card-header justify-content-end">
-                    <span v-if="pac.mode === 'remote'" class="px-2 py-1 rounded bg-hover  text-xs font-mono text-slate-600 ">{{ $t('pacMsgReadOnly') }}</span>
-                    <span v-else class="px-2 py-1 rounded bg-hover  text-xs font-mono text-slate-600 ">{{ $t('pacMsgEditable') }}</span>
-                </div>
-                <div class="flex-1 position-relative">
-                    <textarea 
-                        v-model="pac.script"
-                        :readonly="pac.mode === 'remote'"
-                        class="form-control w-100 h-100 p-4 font-mono text-xs custom-scrollbar bg-white  text-slate-900 border-0 rounded-0"
-                        style="resize: none;"
-                        spellcheck="false"
-                        :placeholder="$t('pacPlaceholderScript')"
-                    ></textarea>
-                </div>
-            </div>
-        </section>
-
+    <!-- Source Settings -->
+    <section>
+      <div class="ui-card-label">
+        <span class="label-text">{{ $t('pacHeaderSource') }}</span>
       </div>
-    </div>
+      
+      <div class="ui-card rounded-xl border shadow-sm overflow-hidden">
+         <!-- Body -->
+         <div class="px-4 pt-4 pb-4 d-flex flex-column gap-4">
+            <!-- Source Method Radio -->
+             <div class="ui-form-group">
+                <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pacLabelSourceMethod') }}</span>
+                <div class="d-flex align-items-center gap-4">
+                   <label class="d-flex align-items-center gap-2" style="cursor: pointer;">
+                      <input type="radio" value="remote" v-model="pac.mode" class="form-check-input mt-0" />
+                      <span class="text-xs text-slate-900 transition-colors">{{ $t('pacLabelRemoteUrl') }}</span>
+                   </label>
+                   <label class="d-flex align-items-center gap-2" style="cursor: pointer;">
+                      <input type="radio" value="manual" v-model="pac.mode" class="form-check-input mt-0" />
+                      <span class="text-xs text-slate-900 transition-colors">{{ $t('pacLabelManualScript') }}</span>
+                   </label>
+                </div>
+             </div>
+            <!-- Remote URL Input -->
+            <div v-if="pac.mode === 'remote'" class="grid grid-cols-12 gap-4">
+                 <!-- URL Input (7) -->
+                 <div class="col-span-7">
+                    <label class="ui-form-group">
+                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pacLabelRemoteUrl') }}</span>
+                      <input 
+                        type="text" 
+                        v-model="pac.url"
+                        @blur="fetchPacContent"
+                        :placeholder="$t('pacPlaceholderUrl')"
+                        class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3"
+                      />
+                    </label>
+                 </div>
+
+                <!-- Refresh Button (2) -->
+                <div class="col-span-2 d-flex flex-column justify-content-end align-items-start">
+                   <button @click="fetchPacContent" class="px-3 py-1 rounded-lg text-xs font-medium ui-button-secondary transition-colors d-flex align-items-center justify-content-center gap-2">
+                       <i class="bi bi-arrow-clockwise"></i> {{ $t('btnRefresh') }}
+                   </button>
+                </div>
+
+            </div>
+
+            <!-- Manual Mode Hint -->
+            <div v-else class="text-xs text-slate-500">
+                <i class="bi bi-info-circle me-1"></i> {{ $t('pacMsgEditable') }}
+            </div>
+
+         </div>
+      </div>
+    </section>
+
+    <!-- Script Content -->
+    <section class="d-flex flex-column" style="height: 600px;">
+        <div class="ui-card-label">
+            <span class="label-text">{{ $t('pacHeaderScript') }}</span>
+        </div>
+        <div class="ui-card rounded-xl border shadow-sm overflow-hidden d-flex flex-column h-100 w-100 flex-1">
+            <div class="ui-card-header justify-content-end">
+                <span v-if="pac.mode === 'remote'" class="px-2 py-1 rounded bg-hover  text-xs font-mono text-slate-600 ">{{ $t('pacMsgReadOnly') }}</span>
+                <span v-else class="px-2 py-1 rounded bg-hover  text-xs font-mono text-slate-600 ">{{ $t('pacMsgEditable') }}</span>
+            </div>
+            <div class="flex-1 position-relative">
+                <textarea 
+                    v-model="pac.script"
+                    :readonly="pac.mode === 'remote'"
+                    class="form-control w-100 h-100 p-4 font-mono text-xs custom-scrollbar bg-white  text-slate-900 border-0 rounded-0"
+                    style="resize: none;"
+                    spellcheck="false"
+                    :placeholder="$t('pacPlaceholderScript')"
+                ></textarea>
+            </div>
+        </div>
+    </section>
 
     <!-- Modals -->
     <ProxyRenameModal 
@@ -183,7 +168,7 @@
       @delete="handleDelete" 
     />
 
-  </div>
+  </BaseDetailView>
 </template>
 
 <script setup>
@@ -195,6 +180,7 @@ import { toast } from '../utils/toast'
 import ProxyRenameModal from '../components/ProxyRenameModal.vue'
 import ProxyCloneModal from '../components/ProxyCloneModal.vue'
 import ProxyDeleteModal from '../components/ProxyDeleteModal.vue'
+import BaseDetailView from '../components/BaseDetailView.vue'
 
 const route = useRoute()
 const router = useRouter()

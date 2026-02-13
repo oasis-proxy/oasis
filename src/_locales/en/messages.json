@@ -73,7 +73,7 @@
   "prioReject": { "message": "Reject" },
   "prioNormal": { "message": "Normal" },
   "prioTemp": { "message": "Temporary" },
-  "btnReset": { "message": "Reset to Default" },
+  "btnReset": { "message": "Reset" },
   "lblRefreshSwitch": { "message": "Refresh On Switch" },
   "descRefreshSwitch": { "message": "Automatically refresh tab when switch proxy." },
   "sectionAdvanced": { "message": "Advanced Configuration" },
