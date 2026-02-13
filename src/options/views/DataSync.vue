@@ -46,10 +46,10 @@
                       <i class="bi bi-download text-sm"></i> {{ $t('btnExport') }}
                     </button>
                      <button @click="handleClearLocal" class="h-8 px-3 text-xs font-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-2">
-                      <i class="bi bi-trash text-sm"></i> {{ $t('btnConfirm') }}
+                      <i class="bi bi-trash text-sm"></i> {{ $t('btnClearLocal') }}
                     </button>
                     <button @click="handleClearCloud" class="h-8 px-3 text-xs font-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-2">
-                      <i class="bi bi-cloud-slash text-sm"></i> {{ $t('btnConfirm') }}
+                      <i class="bi bi-cloud-slash text-sm"></i> {{ $t('btnClearSync') }}
                     </button>
                   </div>
                 </div>
@@ -96,7 +96,7 @@
                         <div class="d-flex flex-column gap-2">
                              <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblProxyHosts') }} ({{ proxyCount }})</p>
                              <div class="d-flex flex-wrap gap-2">
-                                <span v-for="host in previewProxies" :key="host.id" class="ui-tag" :title="host.label">
+                                <span v-for="host in previewProxies" :key="host.id" class="ui-tag ui-tag-default" :title="host.label">
                                     {{ truncate(host.label, 20) }}
                                 </span>
                             </div>
@@ -146,7 +146,7 @@
                             <div class="d-flex flex-column gap-2">
                                  <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblProxyHosts') }} ({{ cloudProxyCount }})</p>
                                  <div v-if="cloudPreviewProxies.length > 0" class="d-flex flex-wrap gap-2">
-                                    <span v-for="host in cloudPreviewProxies" :key="host.id" class="ui-tag" :title="host.label">
+                                    <span v-for="host in cloudPreviewProxies" :key="host.id" class="ui-tag ui-tag-default" :title="host.label">
                                         {{ truncate(host.label, 20) }}
                                     </span>
                                 </div>

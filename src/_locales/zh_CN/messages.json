@@ -256,7 +256,7 @@
   "lblMaintenanceOps": { "message": "维护操作" },
   "lblAutoSync": { "message": "自动同步" },
   "descAutoSync": { "message": "自动在设备间同步设置。" },
-  "lblMaintenance": { "message": "维护" },
+  "lblMaintenance": { "message": "配置备份管理" },
   "descMaintenance": { "message": "管理配置数据。" },
   "btnImport": { "message": "导 入" },
   "btnExport": { "message": "导 出" },

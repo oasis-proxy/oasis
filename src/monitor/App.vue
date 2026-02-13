@@ -49,7 +49,7 @@
           >
             <div class="d-flex align-items-center justify-content-between mb-1">
               <span class="font-mono text-xs ui-text-tertiary">{{ $t('lblAllTabs') }}</span>
-              <span class="ui-tag">{{ totalRequestCount }}</span>
+              <span class="ui-tag ui-tag-default">{{ totalRequestCount }}</span>
             </div>
             <div class="d-flex align-items-center gap-2">
               <i class="bi bi-globe text-primary"></i>
@@ -67,7 +67,7 @@
           >
             <div class="d-flex align-items-center justify-content-between mb-1">
               <span class="font-mono text-xs ui-text-tertiary">{{ formatTime(tab.lastActivity) }}</span>
-              <span class="ui-tag">{{ getTabRequestCount(tab.id) }}</span>
+              <span class="ui-tag ui-tag-default">{{ getTabRequestCount(tab.id) }}</span>
             </div>
             <div class="d-flex align-items-start gap-2">
               <img v-if="tab.favIconUrl" :src="tab.favIconUrl" class="mt-1" style="width: 16px; height: 16px;" />
@@ -144,7 +144,7 @@
                <span class="text-truncate">{{ request.matchedRule || $t('lblDefault') }}</span>
             </div>
             <div style="width: 120px;" class="ui-text-primary flex-shrink-0" :title="proxies[request.proxyUsed]?.name || request.proxyUsed">
-              <span v-if="request.proxyUsed" class="ui-tag">{{ request.proxyUsed }}</span>
+              <span v-if="request.proxyUsed" class="ui-tag ui-tag-default">{{ request.proxyUsed }}</span>
               <span v-else class="ui-text-primary">-</span>
             </div>
             <div style="width: 140px;" class="text-truncate ui-text-primary d-flex align-items-center gap-2 flex-shrink-0" :title="request.ip || '-'">
@@ -157,10 +157,10 @@
               {{ request.duration ? `${request.duration}ms` : '-' }}
             </div>
             <div style="width: 60px;" class="flex-shrink-0">
-              <span class="ui-tag" :class="getMethodClass(request.method)">{{ request.method }}</span>
+              <span class="ui-tag ui-tag-default" :class="getMethodClass(request.method)">{{ request.method }}</span>
             </div>
             <div style="width: 60px;" class="flex-shrink-0">
-              <span v-if="request.status" class="ui-tag" :class="getStatusClass(request.status)">
+              <span v-if="request.status" class="ui-tag ui-tag-default" :class="getStatusClass(request.status)">
                 {{ request.status }}
               </span>
               <span v-else class="ui-tag ui-tag-warning">
