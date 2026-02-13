@@ -120,8 +120,8 @@
                      </div>
 
                     <!-- Refresh Button (2) -->
-                    <div class="col-span-2 d-flex flex-column justify-content-end">
-                       <button @click="fetchPacContent" class="w-100 px-3 py-1 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors d-flex align-items-center justify-content-center gap-2 h-8">
+                    <div class="col-span-2 d-flex flex-column justify-content-end align-items-start">
+                       <button @click="fetchPacContent" class="px-3 py-1 rounded-lg text-xs font-medium ui-button-secondary transition-colors d-flex align-items-center justify-content-center gap-2">
                            <i class="bi bi-arrow-clockwise"></i> {{ $t('btnRefresh') }}
                        </button>
                     </div>

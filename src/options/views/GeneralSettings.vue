@@ -386,10 +386,11 @@
               <a
                 href="https://github.com/oasis-proxy/oasis"
                 target="_blank"
-                class="ui-button-secondary d-flex align-items-center gap-2 px-3 py-1 rounded-lg text-xs no-underline hover:text-inherit"
+                class="d-flex align-items-center gap-2 text-xs no-underline ui-text-secondary hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
               >
                 <i class="bi bi-github"></i>
                 GitHub
+                <i class="bi bi-box-arrow-up-right text-[10px] opacity-50"></i>
               </a>
             </div>
 
@@ -409,10 +410,11 @@
               <a
                 href="https://github.com/oasis-proxy/oasis/wiki"
                 target="_blank"
-                class="ui-button-secondary d-flex align-items-center gap-2 px-3 py-1 rounded-lg text-xs no-underline hover:text-inherit"
+                class="d-flex align-items-center gap-2 text-xs no-underline ui-text-secondary hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
               >
                 <i class="bi bi-book"></i>
                 Wiki
+                <i class="bi bi-box-arrow-up-right text-[10px] opacity-50"></i>
               </a>
             </div>
           </div>
