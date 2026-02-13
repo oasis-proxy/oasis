@@ -257,17 +257,13 @@
                     />
                   </div>
                   <div style="width: 20%;">
-                     <select 
-                      v-model="rule.proxyId" 
-                      class="form-select ui-input ui-input-sm w-100 rounded border py-0 px-1.5" 
-                    >
-                      <option value="direct">Direct</option>
-                      <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
-                        <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
-                          {{ proxy.label }}
-                        </option>
-                      </optgroup>
-                    </select>
+                    <ProxySelect
+                      v-model="rule.proxyId"
+                      :proxies="config?.proxies"
+                      :proxyGroups="config?.proxyGroups"
+                      size="sm"
+                      class="w-100 py-0 px-1.5"
+                    />
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
                     <button @click="insertRuleBelow(index)" class="ui-button-icon" :title="$t('btnAddRuleBelow')">
@@ -299,17 +295,13 @@
                 </div>
               </div>
               <div style="width: 20%;">
-                <select 
+                <ProxySelect
                     v-model="policy.defaultProfileId"
-                    class="form-select ui-input ui-input-sm w-100 rounded border py-0 px-1.5" 
-                >
-                    <option value="direct">Direct</option>
-                    <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
-                        <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
-                          {{ proxy.label }}
-                        </option>
-                    </optgroup>
-                </select>
+                    :proxies="config?.proxies"
+                    :proxyGroups="config?.proxyGroups"
+                    size="sm"
+                    class="w-100 py-0 px-1.5"
+                />
               </div>
               <div style="width: 8%;"></div>
             </div>
@@ -510,7 +502,8 @@
     />
     <BatchProxyReplaceModal 
       :visible="showBatchReplaceModal" 
-      :proxyOptions="proxyOptions" 
+      :proxies="config?.proxies"
+      :proxyGroups="config?.proxyGroups"
       @close="showBatchReplaceModal = false" 
       @replace="handleBatchReplace" 
     />
@@ -541,6 +534,7 @@ import ProxyDeleteModal from '../components/ProxyDeleteModal.vue'
 import RuleSetContentModal from '../components/RuleSetContentModal.vue'
 import BatchProxyReplaceModal from '../components/BatchProxyReplaceModal.vue'
 import PolicyMergeModal from '../components/PolicyMergeModal.vue'
+import ProxySelect from '../components/ProxySelect.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -610,36 +604,7 @@ const revalidateAllRejectRules = () => {
   }
 }
 
-// Proxy options for dropdown (Grouped)
-const proxyOptions = computed(() => {
-  if (!config.value) return []
-  
-  const groups = []
-  
-  // Proxies
-  if (config.value.proxies) {
-      const proxies = Object.values(config.value.proxies)
-          .map(p => ({ id: p.id, label: p.label || p.name }))
-          .sort((a, b) => a.label.localeCompare(b.label))
-          
-      if (proxies.length > 0) {
-          groups.push({ label: 'Proxies', options: proxies })
-      }
-  }
-  
-  // Proxy Groups
-  if (config.value.proxyGroups) {
-      const proxyGroups = Object.values(config.value.proxyGroups)
-          .map(g => ({ id: g.id, label: g.name }))
-          .sort((a, b) => a.label.localeCompare(b.label))
-          
-      if (proxyGroups.length > 0) {
-          groups.push({ label: 'Proxy Groups', options: proxyGroups })
-      }
-  }
-  
-  return groups
-})
+
 
 // Load Logic
 const loadPolicyData = async () => {

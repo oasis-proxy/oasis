@@ -111,18 +111,14 @@
                     />
                   </div>
                   <div style="width: 20%;">
-                    <select 
-                      v-model="rule.proxyId" 
-                      class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
-                      style="height: 28px; max-width: none;"
-                    >
-                      <option value="direct">{{ $t('directConnect') }}</option>
-                      <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
-                        <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
-                          {{ proxy.label }}
-                        </option>
-                      </optgroup>
-                    </select>
+                    <ProxySelect
+                      v-model="rule.proxyId"
+                      :proxies="config?.proxies"
+                      :proxyGroups="config?.proxyGroups"
+                      size="sm"
+                      class="w-100 py-0 px-1.5"
+                      style="max-width: none;"
+                    />
                   </div>
                   <div style="width: 8%;" class="d-flex align-items-center justify-content-around">
                     <button @click="acceptRule(index)" class="ui-button-icon text-success hover:text-success" :title="$t('tooltipAcceptMove')">
@@ -189,6 +185,7 @@ import { validatePattern } from '../../common/validation'
 import { toast } from '../utils/toast'
 import AcceptRulesModal from '../components/AcceptRulesModal.vue'
 import SmartRulesMergeModal from '../components/SmartRulesMergeModal.vue'
+import ProxySelect from '../components/ProxySelect.vue'
 
 const rules = ref([])
 const originalRules = ref([])
@@ -222,35 +219,7 @@ const loadData = async () => {
     isInitializing.value = false
 }
 
-const proxyOptions = computed(() => {
-  if (!config.value) return []
-  
-  const groups = []
-  
-  // Proxies
-  if (config.value.proxies) {
-      const proxies = Object.values(config.value.proxies)
-          .map(p => ({ id: p.id, label: p.label || p.name }))
-          .sort((a, b) => a.label.localeCompare(b.label))
-          
-      if (proxies.length > 0) {
-          groups.push({ label: chrome.i18n.getMessage('lblProxyHosts'), options: proxies })
-      }
-  }
-  
-  // Proxy Groups
-  if (config.value.proxyGroups) {
-      const proxyGroups = Object.values(config.value.proxyGroups)
-          .map(g => ({ id: g.id, label: g.name }))
-          .sort((a, b) => a.label.localeCompare(b.label))
-          
-      if (proxyGroups.length > 0) {
-          groups.push({ label: chrome.i18n.getMessage('lblProxyGroups'), options: proxyGroups })
-      }
-  }
-  
-  return groups
-})
+
 
 const isDirty = computed(() => {
     return JSON.stringify(rules.value) !== JSON.stringify(originalRules.value)

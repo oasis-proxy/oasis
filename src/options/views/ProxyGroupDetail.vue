@@ -137,20 +137,15 @@
                             {{ index + 1 }}
                         </div>
                         <div class="flex-1 px-2">
-                            <select 
-                                style="min-width: 180px;max-width:180px !important;width:180px !important;"
-                                class="form-select ui-input ui-input-sm w-100 rounded-lg border py-0 px-3"
-                                @change="(e) => updateProxyAt(index, e.target.value)"
-                            >
-                                <option value="" disabled selected>{{ $t('pgOptionSelectProxy') }}</option>
-                                <option 
-                                    v-for="p in availableProxies" 
-                                    :key="p.id" 
-                                    :value="p.id"
-                                >
-                                    {{ p.label || p.host }} ({{ p.scheme }}://{{ p.host }}:{{ p.port }})
-                                </option>
-                            </select>
+                            <ProxySelect 
+                                :modelValue="''" 
+                                :proxies="availableProxies"
+                                :proxyGroups="availableProxyGroups"
+                                :includeDirect="false"
+                                @update:modelValue="(val) => updateProxyAt(index, val)"
+                                class="w-100 rounded-lg border py-0 px-3"
+                                style="min-width: 180px; max-width: 180px !important; width: 180px !important;"
+                            />
                         </div>
                         <div style="width: 8%;" class="d-flex align-items-center justify-content-center">
                             <button @click="removeProxy(index)" class="ui-button-icon p-0.5 text-danger" :title="$t('btnCancel')">
@@ -245,6 +240,7 @@ import { useDragDrop } from '../../common/dragDrop'
 
 import ProxyRenameModal from '../components/ProxyRenameModal.vue'
 import ProxyDeleteModal from '../components/ProxyDeleteModal.vue'
+import ProxySelect from '../components/ProxySelect.vue'
 
 // default state
 const getEmptyGroup = () => ({
@@ -302,6 +298,12 @@ const availableProxies = computed(() => {
     if (!config.value?.proxies) return []
     const currentSet = new Set(proxyGroup.value.proxies)
     return Object.values(config.value.proxies).filter(p => !currentSet.has(p.id))
+})
+
+const availableProxyGroups = computed(() => {
+    if (!config.value?.proxyGroups) return []
+    const currentSet = new Set(proxyGroup.value.proxies)
+    return Object.values(config.value.proxyGroups).filter(g => g.id !== proxyGroup.value.id && !currentSet.has(g.id))
 })
 
 // Load

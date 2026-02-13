@@ -32,38 +32,26 @@
             <!-- From Proxy Dropdown -->
             <label class="d-flex flex-column gap-2 w-100">
               <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('bpmLabelFrom') }}</span>
-              <select 
+              <ProxySelect
                 v-model="fromProxy"
-                class="form-select ui-input w-100 rounded-lg border h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
-                style="min-width: 100%; width: 100%; max-width: 100% !important;"
-              >
-                <option value="" disabled>{{ $t('bpmSelectSource') }}</option>
-                <option value="direct">DIRECT</option>
-                <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
-                  <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
-                    {{ proxy.label }}
-                  </option>
-                </optgroup>
-              </select>
+                :proxies="proxies"
+                :proxyGroups="proxyGroups"
+                :includeDirect="true"
+                class="w-100 h-10 px-3 py-2 text-xs transition-all shadow-sm"
+              />
               <p class="text-xs text-slate-500 m-0">{{ $t('bpmDescFrom') }}</p>
             </label>
 
             <!-- To Proxy Dropdown -->
             <label class="d-flex flex-column gap-2 w-100">
               <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('bpmLabelTo') }}</span>
-              <select 
+              <ProxySelect
                 v-model="toProxy"
-                class="form-select ui-input w-100 rounded-lg border h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
-                style="min-width: 100%; width: 100%; max-width: 100% !important;"
-              >
-                <option value="" disabled>{{ $t('bpmSelectTarget') }}</option>
-                <option value="direct">DIRECT</option>
-                <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
-                  <option v-for="proxy in group.options" :key="proxy.id" :value="proxy.id">
-                    {{ proxy.label }}
-                  </option>
-                </optgroup>
-              </select>
+                :proxies="proxies"
+                :proxyGroups="proxyGroups"
+                :includeDirect="true"
+                class="w-100 h-10 px-3 py-2 text-xs transition-all shadow-sm"
+              />
               <p class="text-xs text-slate-500 m-0">{{ $t('bpmDescTo') }}</p>
             </label>
 
@@ -94,19 +82,24 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
+import ProxySelect from './ProxySelect.vue'
 
 const props = defineProps({
   visible: Boolean,
-  proxyOptions: {
-    type: Array,
-    default: () => []
+  proxies: {
+    type: Object,
+    default: () => ({})
+  },
+  proxyGroups: {
+    type: Object,
+    default: () => ({})
   }
 })
 
 const emit = defineEmits(['close', 'replace'])
 
-const fromProxy = ref('')
-const toProxy = ref('')
+const fromProxy = ref('direct')
+const toProxy = ref('direct')
 
 const isValid = computed(() => {
   return fromProxy.value && toProxy.value && fromProxy.value !== toProxy.value
@@ -115,15 +108,15 @@ const isValid = computed(() => {
 const handleConfirm = () => {
   if (isValid.value) {
     emit('replace', fromProxy.value, toProxy.value)
-    fromProxy.value = ''
-    toProxy.value = ''
+    fromProxy.value = 'direct'
+    toProxy.value = 'direct'
   }
 }
 
 watch(() => props.visible, (newVal) => {
   if (!newVal) {
-    fromProxy.value = ''
-    toProxy.value = ''
+    fromProxy.value = 'direct'
+    toProxy.value = 'direct'
   }
 })
 </script>
