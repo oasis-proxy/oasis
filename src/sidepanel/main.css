@@ -12,6 +12,20 @@
 @import "../styles/components/tags.css";
 @import "../styles/components/utils.css";
 
+/* Toast Container (Match Popup) */
+.ui-toast-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+
 /* -------------------------------------------------------------------------- */
 /* Sidepanel Specific Styles                                                  */
 /* -------------------------------------------------------------------------- */

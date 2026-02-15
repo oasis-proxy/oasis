@@ -12,6 +12,7 @@
 @import "../styles/components/tags.css";
 @import "../styles/components/utils.css";
 @import "../styles/components/modals.css";
+@import "../styles/components/toasts.css";
 
 /* -------------------------------------------------------------------------- */
 /* Monitor Page Specific Styles                                               */
@@ -45,7 +46,7 @@ html, body {
 .border-end,
 .border-start,
 .border {
-  border-color: var(--ui-border) !important;
+  border-color: var(--bs-primary-subtle) !important;
 }
 
 /* Custom scrollbar */
@@ -72,7 +73,7 @@ html, body {
 }
 .tab-item:hover {
   background: var(--ui-bg-subtle);
-  border-left-color: var(--ui-border) !important;
+  border-left-color: var(--bs-primary-subtle) !important;
 }
 .tab-item.active {
   background: var(--bs-primary-subtle);
@@ -115,3 +116,17 @@ html, body {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
+
+/* Toast Container (Match Popup) */
+.ui-toast-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  z-index: 9999;
+  pointer-events: none;
+}
+

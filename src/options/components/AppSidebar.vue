@@ -306,7 +306,12 @@ const handleCreateProxy = async ({ name }) => {
         host: '',
         port: null,
         auth: null,
-        bypassList: [],
+
+        bypassList: [
+            '127.0.0.1',
+            '::1',
+            '<localhost>'
+        ],
         color: '#137fec' // Default Primary Blue
     }
 

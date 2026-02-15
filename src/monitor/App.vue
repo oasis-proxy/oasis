@@ -1,5 +1,12 @@
 <template>
   <div class="d-flex flex-column h-100">
+    <!-- Global Notifications -->
+    <div v-if="showNotification" class="ui-toast-container">
+        <div class="badge bg-secondary px-3 py-2 shadow-lg animate-fade-in text-xs opacity-95">
+            <i class="bi bi-check2 me-1"></i> {{ notificationText }}
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom" style="background: var(--ui-bg-card);">
       <div class="d-flex align-items-center gap-3">
@@ -115,14 +122,20 @@
           <div class="d-flex align-items-center gap-3 px-4 py-2 border-bottom text-xs font-semibold ui-text-tertiary text-uppercase position-sticky top-0"
                style="background: var(--ui-bg-subtle); min-width: max-content; z-index: 10;">
           <div style="width: 80px;" class="flex-shrink-0">{{ $t('colTime') }}</div>
-          <div style="width: 140px;" class="flex-shrink-0">{{ $t('colDomain') }}</div>
+          <div style="width: 140px;" class="flex-shrink-0 d-flex align-items-center gap-1">
+            {{ $t('colDomain') }} <i class="bi bi-copy text-muted opacity-50 text-xxs"></i>
+          </div>
           <div style="width: 180px;" class="flex-shrink-0">{{ $t('colPattern') }}</div>
           <div style="width: 120px;" class="flex-shrink-0">{{ $t('colProxyName') }}</div>
-          <div style="width: 140px;" class="flex-shrink-0">{{ $t('colIP') }}</div>
+          <div style="width: 140px;" class="flex-shrink-0 d-flex align-items-center gap-1">
+            {{ $t('colIP') }} <i class="bi bi-copy text-muted opacity-50 text-xxs"></i>
+          </div>
           <div style="width: 70px;" class="text-end flex-shrink-0">{{ $t('colDuration') }}</div>
           <div style="width: 60px;" class="flex-shrink-0">{{ $t('colMethod') }}</div>
           <div style="width: 60px;" class="flex-shrink-0">{{ $t('colStatus') }}</div>
-          <div style="width: 300px;" class="flex-shrink-0">{{ $t('colURL') }}</div>
+          <div style="width: 300px;" class="flex-shrink-0 d-flex align-items-center gap-1">
+            {{ $t('colURL') }} <i class="bi bi-copy text-muted opacity-50 text-xxs"></i>
+          </div>
         </div>
 
           <!-- Request List -->
@@ -134,7 +147,7 @@
             style="min-width: max-content;"
           >
             <div style="width: 80px;" class="ui-text-primary flex-shrink-0">{{ formatTime(request.startTime) }}</div>
-            <div style="width: 140px;" class="text-truncate ui-text-primary flex-shrink-0" :title="request.domain">
+            <div style="width: 140px;" class="text-truncate ui-text-primary flex-shrink-0 cursor-copy" :title="request.domain" @click="copyText(request.domain)">
               {{ request.domain }}
             </div>
             <div style="width: 180px;" class="text-truncate ui-text-primary d-flex align-items-center flex-shrink-0" :title="request.matchedRule || $t('lblDefault')">
@@ -147,8 +160,13 @@
               <span v-if="request.proxyUsed" class="ui-tag ui-tag-default">{{ request.proxyUsed }}</span>
               <span v-else class="ui-text-primary">-</span>
             </div>
-            <div style="width: 140px;" class="text-truncate ui-text-primary d-flex align-items-center gap-2 flex-shrink-0" :title="request.ip || '-'">
-              <span v-if="request.fromCache" class="ui-text-tertiary" :title="$t('lblFromCache')" style="cursor: pointer;">
+            <div 
+              style="width: 140px;" 
+              class="text-truncate ui-text-primary d-flex align-items-center gap-2 flex-shrink-0 cursor-copy" 
+              :title="request.ip || '-'"
+              @click="copyText(request.ip)"
+            >
+              <span v-if="request.fromCache" class="ui-text-tertiary" :title="$t('lblFromCache')">
                 <i class="bi bi-database-fill-check"></i>
               </span>
               <span>{{ getIpDisplay(request.ip) }}</span>
@@ -167,7 +185,12 @@
                 <i class="bi bi-arrow-repeat"></i>
               </span>
             </div>
-            <div class="text-truncate request-url ui-text-primary flex-shrink-0" style="width: 300px;" :title="request.url">
+            <div 
+              class="text-truncate request-url ui-text-primary flex-shrink-0 cursor-copy" 
+              style="width: 300px;" 
+              :title="request.url"
+              @click="copyText(request.url)"
+            >
               {{ request.url }}
             </div>
           </div>
@@ -207,6 +230,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { t } from '../common/i18n'
 import { loadConfig, savePolicies } from '../common/storage'
 import SmartRulesMergeModal from '../options/components/SmartRulesMergeModal.vue'
 
@@ -418,6 +442,11 @@ const configProxies = ref({})
 const configProxyGroups = ref({})
 const activeProfileId = ref('')
 
+// Toast state
+const showNotification = ref(false)
+const notificationText = ref('')
+let notificationTimer = null
+
 // Computed
 const sortedTabs = computed(() => {
   return Object.values(tabs.value)
@@ -471,6 +500,22 @@ function formatTime(timestamp) {
     second: '2-digit',
     fractionalSecondDigits: 3
   })
+}
+
+function copyText(text) {
+  if (!text || text === '-') return
+  navigator.clipboard.writeText(text).then(() => {
+    showToast(t('msgCopiedGeneric'))
+  })
+}
+
+const showToast = (text, duration = 2000) => {
+    notificationText.value = text
+    showNotification.value = true
+    if (notificationTimer) clearTimeout(notificationTimer)
+    notificationTimer = setTimeout(() => {
+        showNotification.value = false
+    }, duration)
 }
 
 function getHostname(url) {

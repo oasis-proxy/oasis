@@ -174,7 +174,7 @@
             <textarea 
               v-model="bypassList"
               rows="4"
-              placeholder="localhost&#10;127.0.0.1&#10;*.local"
+              placeholder="::1&#10;127.0.0.1&#10;<local>"
               class="form-control ui-input w-100 rounded-lg border text-xs font-mono py-2 px-3"
             ></textarea>
             <p class="text-xs ui-text-secondary m-0">{{ $t('phDescBypass') }}</p>

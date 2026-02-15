@@ -1,6 +1,14 @@
 <template>
   <div class="d-flex flex-column vh-100 text-body font-sans" style="min-width: 360px;">
     
+    <!-- Global Notifications (Simple Toast) -->
+    <div v-if="showSimpleToast" class="ui-toast-container">
+        <div class="badge bg-secondary px-3 py-2 shadow-lg animate-fade-in text-xs opacity-95">
+            <i class="bi bi-check2 me-1"></i> {{ simpleToastText }}
+        </div>
+    </div>
+
+    
     <!-- Header -->
     <div class="flex-shrink-0 z-sticky top-0 pt-3 px-3 shadow-sm" style="background-color: var(--ui-bg-card);">
       <div class="pb-3 d-flex align-items-center">
@@ -37,14 +45,25 @@
         <div class="d-flex flex-column justify-content-center pe-3 flex-grow-1 min-w-0">
             <!-- Filename -->
             <div class="py-1">
-                <h3 class="m-0 fw-medium text-truncate" style="font-size: 13px; line-height: 1.2; color: var(--ui-text-primary);" :title="item.filename">
+                <h3 
+                  class="m-0 fw-medium text-truncate cursor-copy" 
+                  style="font-size: 13px; line-height: 1.2; color: var(--ui-text-primary);" 
+                  :title="item.filename"
+                  @click="copyText(getFilename(item.filename))"
+                >
                     {{ truncateMiddle(getFilename(item.filename), 28) }}
                 </h3>
             </div>
+
             
             <!-- URL -->
             <div class="d-flex align-items-center gap-2 text-truncate pb-1">
-                 <p class="m-0 text-secondary text-truncate" style="font-size: 11px;" :title="item.finalUrl || item.url">
+                 <p 
+                  class="m-0 text-secondary text-truncate cursor-copy" 
+                  style="font-size: 11px;" 
+                  :title="item.finalUrl || item.url"
+                  @click="copyText(item.finalUrl || item.url)"
+                 >
                     {{ truncateMiddle(item.finalUrl || item.url, 35) }}
                  </p>
             </div>
@@ -157,9 +176,15 @@ import { loadConfig } from '../common/storage'
 
 const downloads = ref([])
 const searchQuery = ref('')
-const notification = ref(null)
+const notification = ref(null) // Complex bottom notification
 const config = ref(null)
 let notificationTimer = null
+
+// Simple Top Toast State
+const showSimpleToast = ref(false)
+const simpleToastText = ref('')
+let simpleToastTimer = null
+
 
 // Fetch downloads
 const loadDownloads = async () => {
@@ -376,13 +401,27 @@ const retryDownload = (url) => {
 }
 
 const copyLink = (url) => {
-    if (!url) return
-    navigator.clipboard.writeText(url).then(() => {
-        showNotification(t('spMsgCopied'), t('spMsgLinkCopied'))
+    copyText(url)
+}
+
+const copyText = (text) => {
+    if (!text) return
+    navigator.clipboard.writeText(text).then(() => {
+        triggerSimpleToast(t('spMsgCopied')) // Assuming spMsgCopied exists, or use generic
     }).catch(() => {
         showNotification(t('spMsgError'), t('spMsgCopyFailed'))
     })
 }
+
+const triggerSimpleToast = (text, duration = 2000) => {
+    simpleToastText.value = text
+    showSimpleToast.value = true
+    if (simpleToastTimer) clearTimeout(simpleToastTimer)
+    simpleToastTimer = setTimeout(() => {
+        showSimpleToast.value = false
+    }, duration)
+}
+
 
 const showNotification = (title, message) => {
     notification.value = { title, message }

@@ -204,7 +204,7 @@
                  <!-- Domain Column (60%) -->
                  <div class="monitor-col-domain">
                      <div 
-                        class="monitor-domain fw-medium text-truncate text-xs cursor-pointer" 
+                        class="monitor-domain fw-medium text-truncate text-xs cursor-copy" 
                         :title="$t('popTooltipCopy', [item.domain])"
                         @click="copyDomain(item.domain)"
                      >
