@@ -2,7 +2,7 @@
   <div class="d-flex flex-column h-100">
     <!-- Global Notifications -->
     <div v-if="showNotification" class="ui-toast-container">
-        <div class="badge bg-secondary px-3 py-2 shadow-lg animate-fade-in text-xs opacity-95">
+        <div :class="['ui-toast-simple-badge animate-fade-in', notificationType]">
             <i class="bi bi-check2 me-1"></i> {{ notificationText }}
         </div>
     </div>
@@ -102,6 +102,7 @@ const activeProfileId = ref('')
 // Toast state
 const showNotification = ref(false)
 const notificationText = ref('')
+const notificationType = ref('')
 let notificationTimer = null
 
 // Initialize Composables
@@ -130,11 +131,13 @@ const clearCurrentRequests = () => { clearRequests(selectedTabId.value); if (sel
 
 const copyText = (text) => {
   if (!text || text === '-') return
-  navigator.clipboard.writeText(text).then(() => showToast(t('msgCopiedGeneric')))
+  navigator.clipboard.writeText(text).then(() => showToast(t('msgCopiedGeneric'), 'success'))
 }
 
-const showToast = (text, duration = 2000) => {
-    notificationText.value = text; showNotification.value = true
+const showToast = (text, type = '', duration = 2000) => {
+    notificationText.value = text
+    notificationType.value = type
+    showNotification.value = true
     if (notificationTimer) clearTimeout(notificationTimer)
     notificationTimer = setTimeout(() => { showNotification.value = false }, duration)
 }

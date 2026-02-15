@@ -27,10 +27,10 @@ html, body {
   background: var(--bs-body-bg);
 }
 
-.text-xxs {
+/* .text-xxs {
   font-size: 10px;
   line-height: 1.2;
-}
+} */
 
 #app {
   width: 100%;
@@ -49,21 +49,6 @@ html, body {
   border-color: var(--bs-primary-subtle) !important;
 }
 
-/* Custom scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--ui-border);
-  border-radius: 20px;
-}
-.custom-scrollbar:hover::-webkit-scrollbar-thumb {
-  background-color: var(--ui-text-secondary);
-}
 
 /* Tab list item */
 .tab-item {
@@ -117,16 +102,4 @@ html, body {
   50% { opacity: 0.5; }
 }
 
-/* Toast Container (Match Popup) */
-.ui-toast-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 1.5rem;
-  z-index: 9999;
-  pointer-events: none;
-}
 

@@ -104,11 +104,12 @@
           <p class="text-xs ui-text-secondary m-0">No rules defined. Click "+" to get started.</p>
         </div>
         <div class="ui-card-footer">
-          <div style="width: 44%;" class="ms-auto d-flex align-items-center justify-content-end px-2 gap-2">
+          <div style="width: 28%;"></div>
+          <div style="width: 44%;" class="d-flex align-items-center justify-content-end px-2 gap-2">
             <i class="bi bi-arrow-return-right"></i> {{ $t('lblDefaultStrategy') }}
-            <div style="width: 200px;">
-              <ProxySelect v-model="policy.defaultProfileId" :proxies="config?.proxies" :proxyGroups="config?.proxyGroups" size="sm" class="w-100 py-0 px-1.5"/>
-            </div>
+          </div>
+          <div style="width: 20%;">
+            <ProxySelect v-model="policy.defaultProfileId" :proxies="config?.proxies" :proxyGroups="config?.proxyGroups" size="sm" class="w-100 py-0 px-1.5"/>
           </div>
           <div style="width: 8%;"></div>
         </div>

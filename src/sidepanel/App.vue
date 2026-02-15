@@ -3,7 +3,7 @@
     
     <!-- Global Notifications (Simple Toast) -->
     <div v-if="showSimpleToast" class="ui-toast-container">
-        <div class="badge bg-secondary px-3 py-2 shadow-lg animate-fade-in text-xs opacity-95">
+        <div :class="['ui-toast-simple-badge animate-fade-in', simpleToastType]">
             <i class="bi bi-check2 me-1"></i> {{ simpleToastText }}
         </div>
     </div>
@@ -173,16 +173,20 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { t } from '../common/i18n'
 import { loadConfig } from '../common/storage'
+import { getFilename, getDomain, truncateMiddle } from '../common/utils/string'
+import { useMonitorTheme } from '../composables/useMonitorTheme'
 
 const downloads = ref([])
 const searchQuery = ref('')
 const notification = ref(null) // Complex bottom notification
 const config = ref(null)
 let notificationTimer = null
+let progressInterval = null
 
 // Simple Top Toast State
 const showSimpleToast = ref(false)
 const simpleToastText = ref('')
+const simpleToastType = ref('')
 let simpleToastTimer = null
 
 
@@ -223,13 +227,67 @@ const loadDownloads = async () => {
 // Listeners
 const onCreated = (item) => {
     downloads.value.unshift(item)
+    if (item.state === 'in_progress') {
+        startProgressPolling()
+    }
 }
 
 const onChanged = (delta) => {
     const index = downloads.value.findIndex(d => d.id === delta.id)
     if (index !== -1) {
-        if (delta.state) downloads.value[index].state = delta.state.current
-        if (delta.endTime) downloads.value[index].endTime = delta.endTime.current
+        // Apply all delta changes
+        Object.keys(delta).forEach(key => {
+            if (key !== 'id' && delta[key] && delta[key].current !== undefined) {
+                downloads.value[index][key] = delta[key].current
+            }
+        })
+        
+        // Start or stop polling based on state
+        if (delta.state) {
+            if (delta.state.current === 'in_progress') {
+                startProgressPolling()
+            } else if (delta.state.current === 'complete' || delta.state.current === 'interrupted') {
+                // If all finished, the interval will stop itself on next run
+            }
+        }
+    }
+}
+
+const startProgressPolling = () => {
+    if (progressInterval) return
+    console.log('Oasis: Starting progress polling...')
+    progressInterval = setInterval(async () => {
+        const inProgress = downloads.value.filter(d => d.state === 'in_progress')
+        if (inProgress.length === 0) {
+            stopProgressPolling()
+            return
+        }
+        
+        for (const item of inProgress) {
+            try {
+                const results = await chrome.downloads.search({ id: item.id })
+                if (results && results[0]) {
+                    const latest = results[0]
+                    const index = downloads.value.findIndex(d => d.id === latest.id)
+                    if (index !== -1) {
+                        downloads.value[index].bytesReceived = latest.bytesReceived
+                        downloads.value[index].totalBytes = latest.totalBytes
+                        if (latest.filename) downloads.value[index].filename = latest.filename
+                        if (latest.state) downloads.value[index].state = latest.state
+                    }
+                }
+            } catch (e) {
+                console.warn('Poll failed for item', item.id, e)
+            }
+        }
+    }, 1000)
+}
+
+const stopProgressPolling = () => {
+    if (progressInterval) {
+        console.log('Oasis: Stopping progress polling.')
+        clearInterval(progressInterval)
+        progressInterval = null
     }
 }
 
@@ -249,34 +307,13 @@ const storageListener = async (changes, area) => {
 }
 
 // Theme management
-const mediaQuery = ref(null)
-
-const applyTheme = (theme) => {
-  const root = document.documentElement
-  root.classList.remove('dark', 'light')
-  
-  if (theme === 'auto') {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    if (prefersDark) {
-      root.classList.add('dark')
-    } else {
-      root.classList.add('light')
-    }
-  } else if (theme === 'dark') {
-    root.classList.add('dark')
-  } else {
-    root.classList.add('light')
-  }
-}
-
-const handleSystemThemeChange = () => {
-  if (config.value?.ui?.theme === 'auto') {
-    applyTheme('auto')
-  }
-}
+const { applyTheme, handleSystemThemeChange } = useMonitorTheme()
 
 onMounted(async () => {
-    loadDownloads()
+    await loadDownloads()
+    if (downloads.value.some(d => d.state === 'in_progress')) {
+        startProgressPolling()
+    }
     chrome.downloads.onCreated.addListener(onCreated)
     chrome.downloads.onChanged.addListener(onChanged)
     chrome.downloads.onErased.addListener(onErased)
@@ -287,8 +324,7 @@ onMounted(async () => {
     applyTheme(config.value.ui?.theme || 'light')
     
     // Listen for system theme changes
-    mediaQuery.value = window.matchMedia('(prefers-color-scheme: dark)')
-    mediaQuery.value.addEventListener('change', handleSystemThemeChange)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleSystemThemeChange)
 })
 
 onUnmounted(() => {
@@ -296,9 +332,8 @@ onUnmounted(() => {
     chrome.downloads.onChanged.removeListener(onChanged)
     chrome.downloads.onErased.removeListener(onErased)
     chrome.storage.onChanged.removeListener(storageListener)
-    if (mediaQuery.value) {
-        mediaQuery.value.removeEventListener('change', handleSystemThemeChange)
-    }
+    window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', handleSystemThemeChange)
+    stopProgressPolling()
 })
 
 // Computed
@@ -314,28 +349,6 @@ const filteredDownloads = computed(() => {
 
 
 // Helpers
-const getFilename = (path) => {
-    if (!path) return 'Unknown'
-    return path.split(/[/\\]/).pop()
-}
-
-const getDomain = (url) => {
-    try {
-        return new URL(url).hostname
-    } catch {
-        return url
-    }
-}
-
-const truncateMiddle = (text, maxLength) => {
-    if (!text) return ''
-    if (text.length <= maxLength) return text
-    const charsToShow = maxLength - 3
-    const frontChars = Math.ceil(charsToShow / 2)
-    const backChars = Math.floor(charsToShow / 2)
-    return text.substr(0, frontChars) + '...' + text.substr(text.length - backChars)
-}
-
 const formatTime = (isoString) => {
     if (!isoString) return ''
     const date = new Date(isoString)
@@ -407,14 +420,15 @@ const copyLink = (url) => {
 const copyText = (text) => {
     if (!text) return
     navigator.clipboard.writeText(text).then(() => {
-        triggerSimpleToast(t('spMsgCopied')) // Assuming spMsgCopied exists, or use generic
+        triggerSimpleToast(t('spMsgCopied'), 'success')
     }).catch(() => {
         showNotification(t('spMsgError'), t('spMsgCopyFailed'))
     })
 }
 
-const triggerSimpleToast = (text, duration = 2000) => {
+const triggerSimpleToast = (text, type = '', duration = 2000) => {
     simpleToastText.value = text
+    simpleToastType.value = type
     showSimpleToast.value = true
     if (simpleToastTimer) clearTimeout(simpleToastTimer)
     simpleToastTimer = setTimeout(() => {

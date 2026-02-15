@@ -100,3 +100,45 @@
   opacity: 0;
   transform: scale(0.95);
 }
+
+/* -------------------------------------------------------------------------- */
+/* Simple Badge-style Top Toast (Used as fallback or in Sidepanel/Monitor)     */
+/* -------------------------------------------------------------------------- */
+
+.ui-toast-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.ui-toast-simple-badge {
+  background-color: var(--ui-toast-simple-bg);
+  color: var(--ui-toast-simple-text);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  opacity: 0.98;
+  pointer-events: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.ui-toast-simple-badge.success {
+  background-color: var(--ui-toast-simple-success-bg);
+  color: var(--ui-toast-simple-success-text);
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+:root.dark .ui-toast-simple-badge {
+  border-color: rgba(0, 0, 0, 0.1);
+}

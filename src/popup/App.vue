@@ -1,7 +1,7 @@
 <template>
   <!-- Global Notifications -->
   <div v-if="showNotification" class="ui-toast-container">
-      <div class="badge bg-secondary px-3 py-2 shadow-lg animate-fade-in text-xs opacity-95">
+      <div :class="['ui-toast-simple-badge animate-fade-in', notificationType]">
           <i class="bi bi-check2 me-1"></i> {{ notificationText }}
       </div>
   </div>
@@ -65,6 +65,7 @@ const activeTabId = ref(null)
 const currentTabUrl = ref('')
 const showNotification = ref(false)
 const notificationText = ref('')
+const notificationType = ref('')
 let notificationTimer = null
 
 // Quick Add State
@@ -247,27 +248,28 @@ const confirmQuickAdd = async () => {
         const sessionData = await chrome.storage.session.get('tempRules')
         const tempRules = [...newRules, ...(sessionData.tempRules || [])]
         await chrome.storage.session.set({ tempRules: JSON.parse(JSON.stringify(tempRules)) })
-        showToast(t('msgRulesAddedTemp', [newRules.length]))
+        showToast(t('msgRulesAddedTemp', [newRules.length]), 'success')
     } else {
         const policyId = activeProfileId.value
         if (!config.value.policies[policyId]) return
         if (!Array.isArray(config.value.policies[policyId].rules)) config.value.policies[policyId].rules = []
         config.value.policies[policyId].rules = [...newRules, ...config.value.policies[policyId].rules]
         await saveConfig(config.value)
-        showToast(t('msgRulesAddedPolicy', [newRules.length, config.value.policies[policyId].name || 'Policy']))
+        showToast(t('msgRulesAddedPolicy', [newRules.length, config.value.policies[policyId].name || 'Policy']), 'success')
     }
     selectedDomains.value = []
     currentTab.value = 'proxy'
 }
 
-const showToast = (text, duration = 2000) => {
+const showToast = (text, type = '', duration = 2000) => {
     notificationText.value = text
+    notificationType.value = type
     showNotification.value = true
     if (notificationTimer) clearTimeout(notificationTimer)
     notificationTimer = setTimeout(() => { showNotification.value = false }, duration)
 }
 
 const copyDomain = (domain) => {
-    navigator.clipboard.writeText(domain).then(() => showToast(t('msgCopiedGeneric')))
+    navigator.clipboard.writeText(domain).then(() => showToast(t('msgCopiedGeneric'), 'success'))
 }
 </script>

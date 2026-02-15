@@ -210,168 +210,36 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
+import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '../router'
-import { loadConfig, saveProxyGroups } from '../../common/storage'
+import { saveProxyGroups } from '../../common/storage'
 import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
-import { useDragDrop } from '../../common/dragDrop'
+import { useProxyGroup } from '../../composables/useProxyGroup'
 
 import ProxyRenameModal from '../../components/proxy/ProxyRenameModal.vue'
 import ProxyDeleteModal from '../../components/proxy/ProxyDeleteModal.vue'
 import ProxySelect from '../../components/proxy/ProxySelect.vue'
 import BaseDetailView from '../../components/base/BaseDetailView.vue'
 
-// default state
-const getEmptyGroup = () => ({
-    id: '',
-    name: '',
-    type: 'group',
-    proxies: [],
-    fallback: { type: 'direct' },
-    fallbackEnabled: true, // New field
-    color: '#6366f1' // indigo
-})
-
 const route = useRoute()
 const router = useRouter()
-const config = ref(null)
-const proxyGroup = ref(getEmptyGroup())
-const originalGroup = ref(null)
+
+const {
+    proxyGroup, config, dragOverIndex, fallbackEnabled,
+    isDirty, availableProxies, availableProxyGroups,
+    loadGroupData, saveChanges, addProxy, removeProxy, 
+    updateProxyAt, handleDragStart, handleDragOver, handleDrop, 
+    handleDragEnd, getProxyName, getProxyAddress, getProxyColor
+} = useProxyGroup(route, router)
+
 const showRenameModal = ref(false)
 const showDeleteModal = ref(false)
 
-
-
-const fallbackEnabled = computed({
-    get: () => proxyGroup.value.fallbackEnabled !== false,
-    set: (val) => { proxyGroup.value.fallbackEnabled = val }
-})
-
-// Drag and Drop
-const proxiesRef = computed({
-    get: () => proxyGroup.value.proxies,
-    set: (val) => { proxyGroup.value.proxies = val }
-})
-const { dragOverIndex, handleDragStart, handleDragOver, handleDrop, handleDragEnd } = useDragDrop(proxiesRef)
-
-
-// Helpers
-const getProxyName = (id) => {
-    if (!config.value?.proxies?.[id]) return t('pgOptionUnknownProxy')
-    const p = config.value.proxies[id]
-    return p.label || p.host
-}
-
-const getProxyAddress = (id) => {
-    if (!config.value?.proxies?.[id]) return ''
-    const p = config.value.proxies[id]
-    return `${p.scheme}://${p.host}:${p.port}`
-}
-
-const getProxyColor = (id) => {
-    if (!config.value?.proxies?.[id]) return '#94a3b8'
-    return config.value.proxies[id].color
-}
-
-const availableProxies = computed(() => {
-    if (!config.value?.proxies) return []
-    const currentSet = new Set(proxyGroup.value.proxies)
-    return Object.values(config.value.proxies).filter(p => !currentSet.has(p.id))
-})
-
-const availableProxyGroups = computed(() => {
-    if (!config.value?.proxyGroups) return []
-    const currentSet = new Set(proxyGroup.value.proxies)
-    return Object.values(config.value.proxyGroups).filter(g => g.id !== proxyGroup.value.id && !currentSet.has(g.id))
-})
-
-// Load
-const loadGroupData = async () => {
-    config.value = await loadConfig()
-    const id = route.params.id
-    if (config.value?.proxyGroups?.[id]) {
-        proxyGroup.value = JSON.parse(JSON.stringify(config.value.proxyGroups[id]))
-        
-        // Defaults
-        if (!proxyGroup.value.proxies) proxyGroup.value.proxies = []
-        if (!proxyGroup.value.fallback) proxyGroup.value.fallback = { type: 'direct' }
-        if (proxyGroup.value.fallbackEnabled === undefined) proxyGroup.value.fallbackEnabled = true
-        if (!proxyGroup.value.color) proxyGroup.value.color = '#6366f1'
-
-        originalGroup.value = JSON.parse(JSON.stringify(proxyGroup.value))
-    } else {
-        router.push('/settings')
-    }
-}
-
-// Dirty Check
-const isDirty = computed(() => {
-    if (!proxyGroup.value || !originalGroup.value) return false
-    return JSON.stringify(proxyGroup.value) !== JSON.stringify(originalGroup.value)
-})
-
-onMounted(() => {
-    loadGroupData()
-})
-
-onMounted(() => {
-  registerUnsavedChangesChecker(() => {
-    if (isDirty.value) {
-      toast.warning(t('pacMsgUnsaved'))
-      return true 
-    }
-    return false
-  })
-})
-
-onBeforeUnmount(() => {
-  unregisterUnsavedChangesChecker()
-})
-
-watch(() => route.params.id, (newId, oldId) => {
-    if (newId !== oldId) loadGroupData()
-})
+const resetChanges = () => loadGroupData()
 
 // Actions
-const resetChanges = () => {
-    loadGroupData()
-}
-
-const saveChanges = async () => {
-    if (!config.value || !proxyGroup.value) return
-    
-    // Update local
-    config.value.proxyGroups[proxyGroup.value.id] = JSON.parse(JSON.stringify(proxyGroup.value))
-    
-    // Persist
-    await saveProxyGroups(config.value.proxyGroups)
-    
-    toast.success(t('pgMsgSaved'))
-    await loadGroupData()
-}
-
-const addProxy = () => {
-    const totalProxies = Object.keys(config.value?.proxies || {}).length
-    if (proxyGroup.value.proxies.length >= totalProxies) {
-        toast.warning(t('pgMsgNoMoreProxies'))
-        return
-    }
-    proxyGroup.value.proxies.push('')
-}
-
-const removeProxy = (index) => {
-    proxyGroup.value.proxies.splice(index, 1)
-}
-
-const updateProxyAt = (index, id) => {
-    if (id) {
-        proxyGroup.value.proxies[index] = id
-    }
-}
-
-
 const openRenameModal = () => {
   if (isDirty.value) return toast.warning(t('pgMsgSaveFirst'))
   showRenameModal.value = true
@@ -397,4 +265,23 @@ const handleDelete = async () => {
     showDeleteModal.value = false
 }
 
+onMounted(loadGroupData)
+
+onMounted(() => {
+  registerUnsavedChangesChecker(() => {
+    if (isDirty.value) {
+      toast.warning(t('pacMsgUnsaved'))
+      return true 
+    }
+    return false
+  })
+})
+
+onBeforeUnmount(unregisterUnsavedChangesChecker)
+
+watch(() => route.params.id, (newId, oldId) => {
+    if (newId !== oldId) loadGroupData()
+})
+
 </script>
+```
