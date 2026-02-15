@@ -22,7 +22,7 @@ jobs:
         run: npm install -g npm@latest
 
       - name: Install dependencies
-        run: npm ci || (ls -R /home/runner/.npm/_logs/ && cat /home/runner/.npm/_logs/*.log && exit 1)
+        run: npm install || (ls -R /home/runner/.npm/_logs/ && cat /home/runner/.npm/_logs/*.log && exit 1)
 
       - name: Build Project
         run: npm run build
