@@ -19,7 +19,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install && npm install vite --save-dev
 
       - name: Build Project
         run: npm run build
