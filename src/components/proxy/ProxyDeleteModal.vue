@@ -46,5 +46,5 @@ defineProps({
 
 const emit = defineEmits(['close', 'delete'])
 
-import BaseModal from './BaseModal.vue'
+import BaseModal from '../base/BaseModal.vue'
 </script>

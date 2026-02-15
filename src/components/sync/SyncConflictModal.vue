@@ -118,7 +118,7 @@
 <script setup>
 import { computed } from 'vue'
 import { t } from '../../common/i18n'
-import BaseModal from './BaseModal.vue'
+import BaseModal from '../base/BaseModal.vue'
 
 const props = defineProps({
   localConfig: { type: Object, required: true },

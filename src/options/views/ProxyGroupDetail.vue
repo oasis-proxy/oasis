@@ -218,10 +218,10 @@ import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
 import { useDragDrop } from '../../common/dragDrop'
 
-import ProxyRenameModal from '../components/ProxyRenameModal.vue'
-import ProxyDeleteModal from '../components/ProxyDeleteModal.vue'
-import ProxySelect from '../components/ProxySelect.vue'
-import BaseDetailView from '../components/BaseDetailView.vue'
+import ProxyRenameModal from '../../components/proxy/ProxyRenameModal.vue'
+import ProxyDeleteModal from '../../components/proxy/ProxyDeleteModal.vue'
+import ProxySelect from '../../components/proxy/ProxySelect.vue'
+import BaseDetailView from '../../components/base/BaseDetailView.vue'
 
 // default state
 const getEmptyGroup = () => ({

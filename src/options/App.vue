@@ -16,7 +16,7 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
-import Sidebar from './components/AppSidebar.vue'
+import Sidebar from '../components/layout/AppSidebar.vue'
 import { loadConfig } from '../common/storage'
 
 // Theme management

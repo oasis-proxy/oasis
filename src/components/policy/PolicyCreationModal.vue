@@ -29,8 +29,8 @@
             
             <!-- Auto Policy Option -->
             <label 
-            class="position-relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
-            :class="type === 'policy' ? 'border-primary bg-primary-subtle' : 'ui-card hover:border-default'"
+            class="position-relative d-flex cursor-pointer rounded-lg p-3 shadow-sm transition-all ui-selectable-card"
+            :class="{ 'active': type === 'policy' }"
             >
             <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="policy"/>
             <span class="d-flex flex-1">
@@ -44,8 +44,8 @@
 
             <!-- PAC Script Option -->
             <label 
-            class="position-relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
-            :class="type === 'pac' ? 'border-primary bg-primary-subtle' : 'ui-card hover:border-default'"
+            class="position-relative d-flex cursor-pointer rounded-lg p-3 shadow-sm transition-all ui-selectable-card"
+            :class="{ 'active': type === 'pac' }"
             >
             <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="pac"/>
             <span class="d-flex flex-1">
@@ -80,7 +80,7 @@
 
 <script setup>
 import { ref, nextTick, watch, computed } from 'vue'
-import BaseModal from './BaseModal.vue'
+import BaseModal from '../base/BaseModal.vue'
 
 const props = defineProps({
   visible: Boolean

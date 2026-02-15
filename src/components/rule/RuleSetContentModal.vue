@@ -65,7 +65,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { t } from '../../common/i18n'
-import BaseModal from './BaseModal.vue'
+import BaseModal from '../base/BaseModal.vue'
 
 const props = defineProps({
   show: {

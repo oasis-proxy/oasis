@@ -61,3 +61,23 @@
   text-transform: uppercase !important;
   letter-spacing: 0.05em !important;
 }
+
+/* Selectable Options Card (used in modals) */
+.ui-selectable-card {
+  background-color: var(--ui-bg-card) !important;
+  border: 1px solid var(--ui-border-subtle) !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.ui-selectable-card:hover {
+  border-color: var(--bs-primary) !important;
+}
+
+.ui-selectable-card.active {
+  background-color: var(--ui-bg-selected) !important;
+  border-color: var(--ui-border-selected) !important;
+}
+
+.ui-selectable-card.active .bi-check-circle-fill {
+  color: var(--bs-primary) !important;
+}

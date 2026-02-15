@@ -167,10 +167,10 @@ import { loadConfig, savePolicies } from '../../common/storage'
 import { validatePattern } from '../../common/validation'
 import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
-import AcceptRulesModal from '../components/AcceptRulesModal.vue'
-import SmartRulesMergeModal from '../components/SmartRulesMergeModal.vue'
-import ProxySelect from '../components/ProxySelect.vue'
-import BaseDetailView from '../components/BaseDetailView.vue'
+import AcceptRulesModal from '../../components/policy/AcceptRulesModal.vue'
+import SmartRulesMergeModal from '../../components/rule/SmartRulesMergeModal.vue'
+import ProxySelect from '../../components/proxy/ProxySelect.vue'
+import BaseDetailView from '../../components/base/BaseDetailView.vue'
 
 const rules = ref([])
 const originalRules = ref([])

@@ -54,7 +54,7 @@
 
 <script setup>
 import { ref, computed, nextTick, watch } from 'vue'
-import BaseModal from './BaseModal.vue'
+import BaseModal from '../base/BaseModal.vue'
 
 const props = defineProps({
   visible: Boolean,

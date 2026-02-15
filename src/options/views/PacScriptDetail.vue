@@ -178,10 +178,10 @@ import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '
 import { loadConfig, savePacs } from '../../common/storage'
 import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
-import ProxyRenameModal from '../components/ProxyRenameModal.vue'
-import ProxyCloneModal from '../components/ProxyCloneModal.vue'
-import ProxyDeleteModal from '../components/ProxyDeleteModal.vue'
-import BaseDetailView from '../components/BaseDetailView.vue'
+import ProxyRenameModal from '../../components/proxy/ProxyRenameModal.vue'
+import ProxyCloneModal from '../../components/proxy/ProxyCloneModal.vue'
+import ProxyDeleteModal from '../../components/proxy/ProxyDeleteModal.vue'
+import BaseDetailView from '../../components/base/BaseDetailView.vue'
 
 const route = useRoute()
 const router = useRouter()

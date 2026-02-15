@@ -1,5 +1,5 @@
 import { createApp, h } from 'vue'
-import AppToast from '../components/AppToast.vue'
+import AppToast from '../../components/base/AppToast.vue'
 
 let toastInstance = null
 let toastContainer = null

@@ -9,6 +9,8 @@
   --bs-primary-hover: #1170cf;
   --bs-primary-subtle: #e0f2fe;    /* e.g. cyan-100/blue-100 equivalent */
   --bs-primary-border-subtle: #bae6fd;
+  --ui-bg-selected: rgba(19, 127, 236, 0.08); /* Light subtle blue */
+  --ui-border-selected: var(--bs-primary);
   
   /* Base Colors */
   --bs-body-bg: #f3f4f6;          /* bg-background-light */
@@ -161,6 +163,8 @@
   --bs-primary-hover: #5aadff;
   --bs-primary-subtle: #1e3a5f;
   --bs-primary-border-subtle: #2c5282;
+  --ui-bg-selected: rgba(59, 158, 255, 0.15); /* Dark subtle blue */
+  --ui-border-selected: var(--bs-primary);
   
   /* Base Colors */
   --bs-body-bg: #0f172a;

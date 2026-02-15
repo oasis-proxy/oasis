@@ -227,9 +227,6 @@ body {
   overflow: hidden;
 }
 
-.monitor-item:hover {
-  background-color: var(--ui-bg-hover);
-}
 
 .monitor-domain {
   color: var(--ui-text-primary);
