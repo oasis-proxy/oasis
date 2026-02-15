@@ -80,14 +80,14 @@
           
           <div class="px-4 pt-4 pb-4 d-flex flex-column gap-3">
             <!-- Inputs Grid -->
-            <div class="grid grid-cols-12 gap-3">
+            <div class="row g-3">
               <!-- Protocol -->
-              <div class="col-span-3">
+              <div class="col-3">
                 <label class="ui-form-group">
-                  <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelProxyProtocol') }}</span>
+                  <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('phLabelProxyProtocol') }}</span>
                   <select 
                     v-model="proxy.scheme"
-                    class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
+                    class="form-select ui-input w-100 mw-100 rounded-lg border py-0 px-3"
                   >
                     <option value="http">HTTP</option>
                     <option value="https">HTTPS</option>
@@ -98,27 +98,27 @@
               </div>
               
               <!-- Host -->
-              <div class="col-span-7">
+              <div class="col-7">
                 <label class="ui-form-group">
-                  <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelHost') }}</span>
+                  <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('phLabelHost') }}</span>
                   <input 
                     v-model="proxy.host"
                     type="text" 
                     :placeholder="$t('phPlaceholderHost')"
-                    class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
+                    class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3"
                   />
                 </label>
               </div>
               
               <!-- Port -->
-              <div class="col-span-2">
+              <div class="col-2">
                 <label class="ui-form-group">
-                  <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPort') }}</span>
+                  <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblPort') }}</span>
                   <input 
                     v-model="proxy.port"
                     type="number" 
                     :placeholder="getPortPlaceholder(proxy.scheme)"
-                    class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
+                    class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3"
                     min="1"
                     max="65535"
                     @blur="validatePort(proxy, 'port')"
@@ -134,26 +134,26 @@
               {{ $t('phHeaderAuth') }}
               <span class="text-xs ui-text-secondary font-normal">{{ $t('phDescAuth') }}</span>
             </h4>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
+            <div class="row g-3">
+              <div class="col-6">
                 <label class="ui-form-group">
-                  <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblUsername') }}</span>
+                  <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblUsername') }}</span>
                   <input 
                     v-model="authUsername"
                     type="text" 
                     :placeholder="$t('phPlaceholderOptional')"
-                    class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
+                    class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3"
                   />
                 </label>
               </div>
-              <div>
+              <div class="col-6">
                 <label class="ui-form-group">
-                  <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPassword') }}</span>
+                  <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblPassword') }}</span>
                   <input 
                     v-model="authPassword"
                     type="password" 
                     :placeholder="$t('phPlaceholderOptional')"
-                    class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3"
+                    class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3"
                   />
                 </label>
               </div>
@@ -170,7 +170,7 @@
         </div>
         <div class="ui-card rounded-xl border shadow-sm p-4">
            <label class="ui-form-group">
-            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelRules') }}</span>
+            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('phLabelRules') }}</span>
             <textarea 
               v-model="bypassList"
               rows="4"
@@ -200,11 +200,11 @@
               </div>
 
               <div class="px-4 pt-3 pb-4">
-                <div class="grid grid-cols-12 gap-4">
-                  <div class="col-span-3">
+                <div class="row g-3">
+                  <div class="col-3">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblProtocol') }}</span>
-                      <select v-model="httpOverrideScheme" class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3">
+                      <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblProtocol') }}</span>
+                      <select v-model="httpOverrideScheme" class="form-select ui-input w-100 mw-100 rounded-lg border py-0 px-3">
                         <option value="default">{{ $t('phDefault') }}</option>
                         <option value="http">HTTP</option>
                         <option value="https">HTTPS</option>
@@ -214,16 +214,16 @@
                     </label>
                   </div>
                   
-                  <div class="col-span-7">
+                  <div class="col-7">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelHost') }}</span>
-                      <input v-model="proxy.overrides.http.host" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                      <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('phLabelHost') }}</span>
+                      <input v-model="proxy.overrides.http.host" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                     </label>
                   </div>
-                  <div class="col-span-2">
+                  <div class="col-2">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPort') }}</span>
-                      <input v-model="proxy.overrides.http.port" type="number" min="1" max="65535" :placeholder="httpOverrideScheme === 'default' ? '' : getPortPlaceholder(httpOverrideScheme)" :disabled="httpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.http, 'port')" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                      <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblPort') }}</span>
+                      <input v-model="proxy.overrides.http.port" type="number" min="1" max="65535" :placeholder="httpOverrideScheme === 'default' ? '' : getPortPlaceholder(httpOverrideScheme)" :disabled="httpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.http, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                     </label>
                   </div>
                 </div>
@@ -231,21 +231,21 @@
 
               <!-- HTTP Auth -->
               <div class="px-4 pt-3 pb-4 border-top border-light  transition-opacity duration-200" :class="{ 'pointer-events-none': httpOverrideScheme === 'default' }">
-                  <h4 class="text-sm font-medium text-slate-900 mb-3 tracking-wide d-flex align-items-center justify-content-between">
+                  <h4 class="text-sm fw-medium ui-text-primary mb-3 ls-wide d-flex align-items-center justify-content-between">
                       {{ $t('phHeaderAuth') }}
-                      <span class="text-xs text-slate-500 font-normal normal-case">{{ $t('phDescAuth') }}</span>
+                      <span class="text-xs ui-text-secondary font-normal normal-case">{{ $t('phDescAuth') }}</span>
                   </h4>
-                  <div class="grid grid-cols-2 gap-3">
-                      <div>
+                  <div class="row g-3">
+                      <div class="col-6">
                           <label class="ui-form-group">
-                            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblUsername') }}</span>
-                            <input v-model="proxy.overrides.http.authUsername" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblUsername') }}</span>
+                            <input v-model="proxy.overrides.http.authUsername" type="text" :placeholder="httpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                           </label>
                       </div>
-                      <div>
+                      <div class="col-6">
                           <label class="ui-form-group">
-                            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPassword') }}</span>
-                            <input v-model="proxy.overrides.http.authPassword" type="password" :placeholder="httpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblPassword') }}</span>
+                            <input v-model="proxy.overrides.http.authPassword" type="password" :placeholder="httpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                           </label>
                       </div>
                   </div>
@@ -258,11 +258,11 @@
               </div>
 
               <div class="px-4 pt-3 pb-4">
-                <div class="grid grid-cols-12 gap-4">
-                  <div class="col-span-3">
+                <div class="row g-3">
+                  <div class="col-3">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblProtocol') }}</span>
-                      <select v-model="httpsOverrideScheme" class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3">
+                      <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblProtocol') }}</span>
+                      <select v-model="httpsOverrideScheme" class="form-select ui-input w-100 mw-100 rounded-lg border py-0 px-3">
                         <option value="default">{{ $t('phDefault') }}</option>
                         <option value="http">HTTP</option>
                         <option value="https">HTTPS</option>
@@ -272,16 +272,16 @@
                     </label>
                   </div>
                   
-                  <div class="col-span-7">
+                  <div class="col-7">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelHost') }}</span>
-                      <input v-model="proxy.overrides.https.host" type="text" :placeholder="httpsOverrideScheme === 'default' ? '' : 'example.com'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border text-xs h-8 py-0 px-3" />
+                      <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('phLabelHost') }}</span>
+                      <input v-model="proxy.overrides.https.host" type="text" :placeholder="httpsOverrideScheme === 'default' ? '' : 'example.com'" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                     </label>
                   </div>
-                  <div class="col-span-2">
+                  <div class="col-2">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPort') }}</span>
-                      <input v-model="proxy.overrides.https.port" type="number" min="1" max="65535" :placeholder="httpsOverrideScheme === 'default' ? '' : getPortPlaceholder(httpsOverrideScheme)" :disabled="httpsOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.https, 'port')" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                      <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblPort') }}</span>
+                      <input v-model="proxy.overrides.https.port" type="number" min="1" max="65535" :placeholder="httpsOverrideScheme === 'default' ? '' : getPortPlaceholder(httpsOverrideScheme)" :disabled="httpsOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.https, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                     </label>
                   </div>
                 </div>
@@ -289,21 +289,21 @@
 
               <!-- HTTPS Auth -->
               <div class="px-4 pt-3 pb-4 border-top border-light  transition-opacity duration-200" :class="{ 'pointer-events-none': httpsOverrideScheme === 'default' }">
-                  <h4 class="text-sm font-medium text-slate-900 mb-3 tracking-wide d-flex align-items-center justify-content-between">
+                  <h4 class="text-sm fw-medium ui-text-primary mb-3 ls-wide d-flex align-items-center justify-content-between">
                       {{ $t('phHeaderAuth') }}
-                      <span class="text-xs text-slate-500 font-normal normal-case">{{ $t('phDescAuth') }}</span>
+                      <span class="text-xs ui-text-secondary font-normal normal-case">{{ $t('phDescAuth') }}</span>
                   </h4>
-                  <div class="grid grid-cols-2 gap-3">
-                      <div>
+                  <div class="row g-3">
+                      <div class="col-6">
                           <label class="ui-form-group">
-                            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblUsername') }}</span>
-                            <input v-model="proxy.overrides.https.authUsername" type="text" :placeholder="httpsOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblUsername') }}</span>
+                            <input v-model="proxy.overrides.https.authUsername" type="text" :placeholder="httpsOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                           </label>
                       </div>
-                      <div>
+                      <div class="col-6">
                           <label class="ui-form-group">
-                            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPassword') }}</span>
-                            <input v-model="proxy.overrides.https.authPassword" type="password" :placeholder="httpsOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblPassword') }}</span>
+                            <input v-model="proxy.overrides.https.authPassword" type="password" :placeholder="httpsOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="httpsOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                           </label>
                       </div>
                   </div>
@@ -317,11 +317,11 @@
               </div>
 
               <div class="px-4 pt-3 pb-4">
-                <div class="grid grid-cols-12 gap-3">
-                  <div class="col-span-3">
+                <div class="row g-3">
+                  <div class="col-3">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblProtocol') }}</span>
-                      <select v-model="ftpOverrideScheme" class="form-select ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3">
+                      <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblProtocol') }}</span>
+                      <select v-model="ftpOverrideScheme" class="form-select ui-input w-100 mw-100 rounded-lg border py-0 px-3">
                         <option value="default">{{ $t('phDefault') }}</option>
                         <option value="http">HTTP</option>
                         <option value="https">HTTPS</option>
@@ -331,16 +331,16 @@
                     </label>
                   </div>
                   
-                  <div class="col-span-7">
+                  <div class="col-7">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('phLabelHost') }}</span>
-                      <input v-model="proxy.overrides.ftp.host" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                      <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('phLabelHost') }}</span>
+                      <input v-model="proxy.overrides.ftp.host" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : 'example.com'" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                     </label>
                   </div>
-                  <div class="col-span-2">
+                  <div class="col-2">
                     <label class="ui-form-group">
-                      <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPort') }}</span>
-                      <input v-model="proxy.overrides.ftp.port" type="number" min="1" max="65535" :placeholder="ftpOverrideScheme === 'default' ? '' : getPortPlaceholder(ftpOverrideScheme)" :disabled="ftpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.ftp, 'port')" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                      <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblPort') }}</span>
+                      <input v-model="proxy.overrides.ftp.port" type="number" min="1" max="65535" :placeholder="ftpOverrideScheme === 'default' ? '' : getPortPlaceholder(ftpOverrideScheme)" :disabled="ftpOverrideScheme === 'default'" @blur="validatePort(proxy.overrides.ftp, 'port')" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                     </label>
                   </div>
                 </div>
@@ -348,21 +348,21 @@
 
               <!-- FTP Auth -->
               <div class="px-4 pt-3 pb-4 border-top border-light  transition-opacity duration-200" :class="{ 'pointer-events-none': ftpOverrideScheme === 'default' }">
-                  <h4 class="text-sm font-medium text-slate-900 mb-3 tracking-wide d-flex align-items-center justify-content-between">
+                  <h4 class="text-sm fw-medium ui-text-primary mb-3 ls-wide d-flex align-items-center justify-content-between">
                       {{ $t('phHeaderAuth') }}
-                      <span class="text-xs text-slate-500 font-normal normal-case">{{ $t('phDescAuth') }}</span>
+                      <span class="text-xs ui-text-secondary font-normal normal-case">{{ $t('phDescAuth') }}</span>
                   </h4>
-                  <div class="grid grid-cols-2 gap-3">
-                      <div>
+                  <div class="row g-3">
+                      <div class="col-6">
                           <label class="ui-form-group">
-                            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblUsername') }}</span>
-                            <input v-model="proxy.overrides.ftp.authUsername" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblUsername') }}</span>
+                            <input v-model="proxy.overrides.ftp.authUsername" type="text" :placeholder="ftpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                           </label>
                       </div>
-                      <div>
+                      <div class="col-6">
                           <label class="ui-form-group">
-                            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('lblPassword') }}</span>
-                            <input v-model="proxy.overrides.ftp.authPassword" type="password" :placeholder="ftpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input ui-input-sm w-100 mw-100 rounded-lg border py-0 px-3" />
+                            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('lblPassword') }}</span>
+                            <input v-model="proxy.overrides.ftp.authPassword" type="password" :placeholder="ftpOverrideScheme === 'default' ? '' : $t('phPlaceholderOptional')" :disabled="ftpOverrideScheme === 'default'" class="form-control ui-input w-100 mw-100 rounded-lg border py-0 px-3" />
                           </label>
                       </div>
                   </div>

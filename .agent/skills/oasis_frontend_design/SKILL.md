@@ -16,16 +16,26 @@ This skill provides the mandatory design specifications for the **Oasis** projec
 - **Import**: Icons are imported via CSS in `main.css`. Do not add CDN links.
 - **Example**: Use `<i class="bi bi-gear"></i>` instead of `<span class="material-symbols-outlined">settings</span>`.
 
+### 1.2 CSS Framework & Utilities
+
+- **Framework**: Bootstrap 5 + Custom CSS (`src/styles/*.css`).
+- **Tailwind CSS**: **FORBIDDEN**. Do not use or introduce Tailwind classes.
+- **Global Utilities** (Defined in `src/styles/theme.css`):
+  - **Typography**: `.text-xs` / `.fs-7` (12px), `.text-sm` (14px), `.text-3xl` (30px), `.ls-wide` (tracking 0.05em).
+  - **Layout**: `.min-h-0`, `.max-w-full`.
+  - **Effects**: `.shadow-primary-lg`, `.opacity-95`, `.cursor-pointer`, `.cursor-copy`.
+  - **Borders**: `.border-bottom-light`.
+
 ### 1.2 Typography & Sizing
 
 - **Root Font Size**: `16px` (1rem = 16px).
 - **Font Family**: `Inter`, sans-serif (`font-display`).
-- **Strict Size Classes**:
-  - `text-xs`: (12px) for badges, tiny labels.
-  - `text-sm`: (14px) for body text, section labels.
-  - `text-base`: (16px) for body text.
-  - `text-[20px]`: for sidebar icons.
-  - `text-[22px]`: for large icons.
+- **Standard Classes** (Use these global utilities):
+  - `.text-xs` / `.fs-7`: (12px) for badges, tiny labels.
+  - `.text-sm`: (14px) for body text, section labels.
+  - `.text-base`: (16px) for body text.
+  - `.text-[20px]`: for sidebar icons.
+  - `.text-[22px]`: for large icons.
 
 ### 1.3 Input Constraints
 

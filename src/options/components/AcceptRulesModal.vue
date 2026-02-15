@@ -6,18 +6,18 @@
     @close="emit('close')"
   >
     <div class="d-flex flex-column gap-3">
-        <p class="text-sm text-slate-500 m-0">
+        <p class="text-sm ui-text-secondary m-0">
             {{ $t('armDesc', [ruleCount]) }}
         </p>
 
         <!-- Target Policy -->
         <label class="d-flex flex-column gap-2 w-100">
-            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('armLabelTarget') }}</span>
+            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('armLabelTarget') }}</span>
             <select 
             v-model="targetPolicyId"
             :disabled="!!forcedTargetId"
-            :class="{'bg-slate-50  text-slate-500 cursor-not-allowed': !!forcedTargetId}"
-            class="form-select ui-input w-100 rounded-lg border h-8 px-3 text-xs transition-all shadow-sm"
+            :class="{'bg-subtle  ui-text-secondary cursor-not-allowed': !!forcedTargetId}"
+            class="form-select ui-input w-100 rounded-lg border px-3 text-xs transition-all shadow-sm"
             style="max-width: 100%;"
             >
             <option value="">{{ $t('armPlaceholderTarget') }}</option>
@@ -29,37 +29,37 @@
 
         <!-- Conflict Resolution -->
         <div class="d-flex flex-column gap-2">
-            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('armLabelConflict') }}</span>
+            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('armLabelConflict') }}</span>
             <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr;">
             
             <!-- Ignore Option -->
             <label 
-                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
-                :class="conflictMode === 'ignore' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
+                class="position-relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
+                :class="conflictMode === 'ignore' ? 'border-primary bg-primary-subtle' : 'ui-card hover:border-default'"
             >
                 <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="ignore"/>
                 <span class="d-flex flex-1">
                 <span class="d-flex flex-column">
-                    <span class="block text-xs font-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptIgnore') }}</span>
-                    <span class="mt-1 d-flex align-items-center text-xs text-slate-500">{{ $t('armDescIgnore') }}</span>
+                    <span class="d-block text-xs fw-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptIgnore') }}</span>
+                    <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">{{ $t('armDescIgnore') }}</span>
                 </span>
                 </span>
-                <i v-if="conflictMode === 'ignore'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
+                <i v-if="conflictMode === 'ignore'" class="bi bi-check-circle-fill text-primary fs-5 position-absolute top-50 end-0 translate-middle-y me-3"></i>
             </label>
 
             <!-- Overwrite Option -->
             <label 
-                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
-                :class="conflictMode === 'overwrite' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
+                class="position-relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
+                :class="conflictMode === 'overwrite' ? 'border-primary bg-primary-subtle' : 'ui-card hover:border-default'"
             >
                 <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="overwrite"/>
                 <span class="d-flex flex-1">
                 <span class="d-flex flex-column">
-                    <span class="block text-xs font-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptOverwrite') }}</span>
-                    <span class="mt-1 d-flex align-items-center text-xs text-slate-500">{{ $t('armDescOverwrite') }}</span>
+                    <span class="d-block text-xs fw-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptOverwrite') }}</span>
+                    <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">{{ $t('armDescOverwrite') }}</span>
                 </span>
                 </span>
-                <i v-if="conflictMode === 'overwrite'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
+                <i v-if="conflictMode === 'overwrite'" class="bi bi-check-circle-fill text-primary fs-5 position-absolute top-50 end-0 translate-middle-y me-3"></i>
             </label>
 
             </div>
@@ -69,14 +69,14 @@
     <template #footer>
         <button 
         @click="emit('close')"
-        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors"
+        class="px-3 py-2 rounded-lg text-xs fw-medium ui-button-secondary hover-bg-subtle transition-colors"
         >
         {{ $t('btnCancel') }}
         </button>
         <button 
         @click="handleConfirm"
         :disabled="!isValid"
-        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        class="px-3 py-2 rounded-lg text-xs fw-bold ui-button-primary shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
         {{ $t('btnConfirm') }}
         </button>

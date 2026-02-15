@@ -14,12 +14,12 @@
       <!-- Show in Popup Switch -->
       <div class="form-check form-switch m-0 d-flex align-items-center gap-2" :title="$t('phTitleShowPopup')">
           <input class="form-check-input align-self-start" style="cursor: pointer;" type="checkbox" role="switch" id="showInPopup" v-model="policy.showInPopup">
-          <label class="form-check-label text-xs font-medium ui-text-secondary" style="cursor: pointer;" for="showInPopup">{{ $t('phLabelShowPopup') }}</label>
+          <label class="form-check-label text-xs fw-medium ui-text-secondary" style="cursor: pointer;" for="showInPopup">{{ $t('phLabelShowPopup') }}</label>
       </div>
       <button 
         @click="resetChanges"
         :disabled="!isDirty"
-        class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
+        class="px-3 py-2 text-xs fw-medium ui-button-secondary rounded-lg transition-all d-flex align-items-center gap-2"
       >
         <i class="bi bi-reply-fill"></i>
         <span>{{ $t('btnReset') }}</span>
@@ -28,7 +28,7 @@
       <button 
         @click="saveChanges"
         :disabled="!isDirty"
-        class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
+        class="px-3 py-2 text-xs fw-medium ui-button-primary rounded-lg shadow-lg transition-colors d-flex align-items-center gap-2"
       >
         <i class="bi bi-floppy-fill"></i>
         <span>{{ $t('btnSave') }}</span>
@@ -48,29 +48,29 @@
          <!-- Dropdown Menu -->
          <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
              <li>
-               <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
+               <button @click="openRenameModal" class="dropdown-item w-100 text-start px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
                    <i class="bi bi-pencil-square ui-text-tertiary"></i> {{ $t('btnRename') }}
                </button>
              </li>
              <li>
-               <button @click="openCloneModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
+               <button @click="openCloneModal" class="dropdown-item w-100 text-start px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
                    <i class="bi bi-files ui-text-tertiary"></i> {{ $t('btnClone') }}
                </button>
              </li>
               <li>
-                <button @click="showPolicyMergeModal = true" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                    <i class="bi bi-diagram-3-fill text-slate-400"></i> {{ $t('lblMergePolicy') }}
+                <button @click="showPolicyMergeModal = true" class="dropdown-item w-100 text-start px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
+                    <i class="bi bi-diagram-3-fill ui-text-tertiary"></i> {{ $t('lblMergePolicy') }}
                 </button>
               </li>
               <li>
-                <button @click="handleExportPAC" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
-                    <i class="bi bi-download text-slate-400"></i> {{ $t('lblExportPAC') }}
+                <button @click="handleExportPAC" class="dropdown-item w-100 text-start px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
+                    <i class="bi bi-download ui-text-tertiary"></i> {{ $t('lblExportPAC') }}
                 </button>
               </li>
 
              <li><hr class="dropdown-divider my-1 border-subtle "></li>
              <li>
-               <button @click="openDeleteModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-danger  rounded-md transition-colors d-flex align-items-center gap-2">
+               <button @click="openDeleteModal" class="dropdown-item w-100 text-start px-3 py-2 text-xs text-danger  rounded-md transition-colors d-flex align-items-center gap-2">
                    <i class="bi bi-trash"></i> {{ $t('btnDelete') }}
                </button>
              </li>
@@ -112,7 +112,7 @@
               v-if="rule.type === 'divider'" 
               :class="[
                 'd-flex align-items-center gap-1 transition-colors',
-                dragOverIndex === index ? 'border-top border-2 border-primary bg-primary-subtle' : 'hover:bg-slate-50'
+                dragOverIndex === index ? 'border-top border-2 border-primary bg-primary-subtle' : 'hover-bg-subtle'
               ]"
               style="padding: 0px 8px; min-height: 20px;"
               @dragover.prevent="handleDragOver($event, index)"
@@ -133,12 +133,12 @@
                 <span 
                   v-if="editingDividerIndex !== index"
                   @dblclick="startEditDivider(index, rule.label)"
-                  class="text-xs font-semibold ui-text-secondary uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-2"
-                  style="user-select: none; line-height: 1;"
+                  class="text-xs fw-semibold ui-text-secondary text-uppercase cursor-pointer transition-colors px-2 d-flex align-items-center gap-2"
+                  style="user-select: none; line-height: 1; letter-spacing: 0.1em;"
                   :title="$t('descEditSection')"
                 >
                   {{ rule.label || $t('lblNewSection') }}
-                  <i class="bi bi-pencil-square ui-icon-xs opacity-60"></i>
+                  <i class="bi bi-pencil-square ui-icon-xs opacity-50"></i>
                 </span>
                 <input 
                   v-else
@@ -147,8 +147,8 @@
                   @blur="saveDividerLabel(index)"
                   @keyup.enter="saveDividerLabel(index)"
                   @keyup.esc="cancelEditDivider"
-                  class="form-control ui-input ui-input-sm font-semibold uppercase tracking-widest text-center w-auto mx-auto"
-                  style="min-width: 150px; padding: 2px 8px;"
+                  class="form-control ui-input ui-input-sm fw-semibold text-uppercase text-center w-auto mx-auto"
+                  style="min-width: 150px; padding: 2px 8px; letter-spacing: 0.1em;"
                 />
                 <div style="flex: 1; height: 1px; border-top: 1px solid var(--ui-border);" class=""></div>
               </div>
@@ -170,7 +170,7 @@
               v-else 
               :class="[
                 'd-flex align-items-center gap-1 p-2 transition-colors',
-                dragOverIndex === index ? 'border-top border-2 border-primary bg-primary-subtle' : 'hover:bg-slate-50',
+                dragOverIndex === index ? 'border-top border-2 border-primary bg-primary-subtle' : 'hover-bg-subtle',
                 !rule.valid ? 'opacity-50' : ''
               ]"
               @dragover.prevent="handleDragOver($event, index)"
@@ -179,7 +179,7 @@
             >
               <div style="width: 4%;" class="d-flex justify-content-center">
                 <i 
-                  class="bi bi-grip-vertical text-slate-400 transition-colors" 
+                  class="bi bi-grip-vertical ui-text-tertiary transition-colors" 
                   style="font-size: 12px; cursor: grab;"
                   draggable="true"
                   @dragstart="handleDragStart($event, index)" 
@@ -215,8 +215,8 @@
                     v-model="rule.pattern" 
                     type="text" 
                     placeholder="https://example.com/rules.txt" 
-                    class="form-control ui-input w-100 mw-100 rounded text-xs py-0 font-mono"
-                    :style="`height: 28px; padding-left: 8px; padding-right: 28px;${duplicateIndices.has(index) ? ' border-color: var(--bs-primary) !important;' : (validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : '')}`"
+                    class="form-control ui-input ui-input-sm w-100 mw-100 rounded py-0 font-monospace"
+                    :style="`padding-left: 8px; padding-right: 28px;${duplicateIndices.has(index) ? ' border-color: var(--bs-primary) !important;' : (validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : '')}`"
                     @focus="focusedIndex = index"
                     @blur="focusedIndex = null; validateRule(index, rule); fetchRuleSetContent(index, rule.pattern)"
                   />
@@ -238,7 +238,7 @@
                   v-model="rule.pattern" 
                   type="text" 
                   :placeholder="getPlaceholder(rule.ruleType)" 
-                  class="form-control ui-input ui-input-sm w-100 mw-100 rounded py-0 px-2 font-mono"
+                  class="form-control ui-input ui-input-sm w-100 mw-100 rounded py-0 px-2 font-monospace"
                   :style="`${duplicateIndices.has(index) ? ' border-color: var(--bs-primary) !important;' : (validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : '')}`"
                   @focus="focusedIndex = index"
                   @blur="focusedIndex = null; validateRule(index, rule)"
@@ -270,7 +270,7 @@
 
         <!-- Empty State -->
         <div v-else class="p-2 d-flex align-items-center justify-content-center" style="min-height: 44px;">
-          <p class="text-xs text-slate-500 m-0">No rules defined. Click "+" to get started.</p>
+          <p class="text-xs ui-text-secondary m-0">No rules defined. Click "+" to get started.</p>
         </div>
         <!-- Default Strategy Footer -->
         <div class="ui-card-footer">
@@ -345,12 +345,12 @@
                 <span 
                   v-if="editingRejectDividerIndex !== index"
                   @dblclick="startEditRejectDivider(index, rule.label)"
-                  class="text-xs font-semibold ui-text-secondary uppercase tracking-widest cursor-pointer hover:text-primary transition-colors px-2 d-flex align-items-center gap-1"
-                  style="user-select: none; line-height: 1;"
+                  class="text-xs fw-semibold ui-text-secondary text-uppercase cursor-pointer transition-colors px-2 d-flex align-items-center gap-1"
+                  style="user-select: none; line-height: 1; letter-spacing: 0.1em;"
                   :title="$t('descEditSection')"
                 >
                   {{ rule.label || $t('lblNewSection') }}
-                  <i class="bi bi-pencil-square ui-icon-xs opacity-60"></i>
+                  <i class="bi bi-pencil-square ui-icon-xs opacity-50"></i>
                 </span>
                 <input 
                   v-else
@@ -359,8 +359,8 @@
                   @blur="saveRejectDividerLabel(index)"
                   @keyup.enter="saveRejectDividerLabel(index)"
                   @keyup.esc="cancelEditRejectDivider"
-                  class="form-control ui-input ui-input-sm font-semibold uppercase tracking-widest text-center w-auto mx-auto"
-                  style="min-width: 150px; padding: 2px 8px;"
+                  class="form-control ui-input ui-input-sm fw-semibold text-uppercase text-center w-auto mx-auto"
+                  style="min-width: 150px; padding: 2px 8px; letter-spacing: 0.1em;"
                 />
                 <div style="flex: 1; height: 1px; border-top: 1px solid var(--ui-border);" class=""></div>
               </div>
@@ -425,15 +425,14 @@
                 v-model="rule.pattern" 
                 type="text" 
                 :placeholder="getPlaceholder(rule.ruleType)" 
-                class="form-control ui-input ui-input-sm w-100 mw-100 rounded border py-0 px-2 font-mono"
+                class="form-control ui-input ui-input-sm w-100 mw-100 rounded border py-0 px-2 font-monospace"
                 :style="`${rejectValidationErrors[index] ? ' border-color: var(--ui-danger) !important;' : ''}`"
                 @focus="focusedIndex = index"
                 @blur="focusedIndex = null; validateRejectRule(index, rule)"
               />
             </div>
             <div style="width: 20%;">
-               <div class="w-100 rounded border border-subtle ui-bg-subtle ui-text-secondary text-xs px-2 d-flex align-items-center gap-2 cursor-not-allowed" style="user-select: none; height: 28px;">
-                <span class="w-1.5 h-1.5 rounded-full bg-danger"></span>
+               <div class="w-100 rounded border border-subtle ui-input ui-input-sm ui-bg-subtle ui-text-secondary text-xs px-2 d-flex align-items-center cursor-not-allowed" style="user-select: none;">
                 {{ $t('lblReject') }}
               </div>
             </div>
@@ -453,7 +452,7 @@
       </div>
         <!-- Empty State -->
         <div v-else class="p-2 d-flex align-items-center justify-content-center" style="min-height: 44px;">
-          <p class="text-xs text-slate-500 m-0">{{ $t('msgNoRejectRules') }}</p>
+          <p class="text-xs ui-text-secondary m-0">{{ $t('msgNoRejectRules') }}</p>
         </div>
       </div>
     </section>

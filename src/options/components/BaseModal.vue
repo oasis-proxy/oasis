@@ -16,18 +16,18 @@
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
           <slot name="header">
-            <h3 class="ui-text-primary modal-header tracking-tight m-0" :class="titleClass">{{ title }}</h3>
+            <h3 class="ui-text-primary modal-header m-0 fs-5" style="letter-spacing: -0.025em;" :class="titleClass">{{ title }}</h3>
           </slot>
           <button 
             @click="$emit('close')" 
             class="modal-close-button"
           >
-            <i class="bi bi-x-lg text-lg"></i>
+            <i class="bi bi-x-lg fs-5"></i>
           </button>
         </div>
 
         <!-- Modal Body -->
-        <div class="px-4 flex-1 overflow-y-auto custom-scrollbar">
+        <div class="px-4 flex-1 overflow-y-auto custom-scrollbar" style="min-height: 0;">
           <slot></slot>
         </div>
 

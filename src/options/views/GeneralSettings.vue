@@ -10,7 +10,7 @@
             <div class="ui-card rounded-xl border shadow-sm transition-colors">
                 <!-- Theme Style -->
                 <div
-                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
                 >
 
                 <div class="d-flex items-start">
@@ -22,7 +22,7 @@
 
                 <select
                     v-model="config.ui.theme"
-                    class="form-select ui-input ui-input-sm block rounded-lg border py-0 ps-2 pe-4"
+                    class="form-select ui-input block rounded-lg border py-0 ps-2 pe-4"
                     style="width: 8rem"
                 >
                     <option v-for="option in styleOptions" :key="option.value" :value="option.value">
@@ -33,7 +33,7 @@
 
                 <!-- Language -->
                 <div
-                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
                 >
 
                 <div class="d-flex items-start">
@@ -45,7 +45,7 @@
 
                 <select
                     v-model="config.ui.language"
-                    class="form-select ui-input ui-input-sm block rounded-lg border py-0 ps-2 pe-4"
+                    class="form-select ui-input block rounded-lg border py-0 ps-2 pe-4"
                     style="width: 8rem"
                 >
                     <option v-for="option in langOptions" :key="option.value" :value="option.value">
@@ -56,7 +56,7 @@
 
                 <!-- Update Cycle -->
                 <div
-                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
                 >
 
                 <div class="d-flex items-start">
@@ -70,7 +70,7 @@
 
                 <select
                     v-model="config.update.interval"
-                    class="form-select ui-input block rounded-lg border text-xs h-8 py-0 ps-2 pe-4"
+                    class="form-select ui-input block rounded-lg border py-0 ps-2 pe-4"
                     style="width: 8rem"
                 >
                     <option
@@ -85,7 +85,7 @@
 
                 <!-- Rule Priority Order -->
                 <div
-                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
                 >
 
                 <div class="d-flex items-start">
@@ -99,7 +99,7 @@
 
                 <div class="d-flex align-items-center gap-1">
                     <template v-for="(cat, idx) in localRulePriority" :key="cat">
-                    <span v-if="idx > 0" class="text-slate-300" style="font-size: 10px;"><i class="bi bi-chevron-right"></i></span>
+                    <span v-if="idx > 0" class="ui-text-tertiary" style="font-size: 10px;"><i class="bi bi-chevron-right"></i></span>
                     <div
                         class="ui-tag cursor-move d-flex align-items-center gap-1"
                         :class="priorityTagClass(cat)"
@@ -128,7 +128,7 @@
 
                 <!-- Refresh On Switch -->
                 <div
-                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
                 >
                 <div class="d-flex items-start">
 
@@ -161,7 +161,7 @@
             <div class="ui-card rounded-xl border shadow-sm">
                 <!-- Reject Address -->
                 <div
-                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
                 >
 
                 <div class="d-flex items-start">
@@ -177,14 +177,14 @@
                     v-model.lazy="rejectAddress"
                     type="text"
                     placeholder="127.0.0.1:65535"
-                    class="form-control ui-input ui-input-sm block rounded-lg border"
-                    style="width: 12rem"
+                    class="form-control ui-input block rounded-lg border py-0 px-3 w-100"
+                    style="width: 240px !important"
                 />
                 </div>
 
                 <!-- Request Monitoring -->
                 <div
-                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
                 >
 
                 <div class="d-flex items-start">
@@ -209,7 +209,7 @@
 
                 <!-- Context Menu -->
                 <div
-                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
                 >
 
                 <div class="d-flex items-start">
@@ -231,7 +231,7 @@
                 </div>
                 </div>
 
-                <div class="px-4 pt-3 pb-4 hover:bg-slate-50 transition-colors">
+                <div class="px-4 pt-3 pb-4 hover-bg-subtle transition-colors">
 
 
                 <div class="d-flex align-items-center justify-content-between mb-4">
@@ -263,22 +263,21 @@
                     <div
                         v-for="(item, index) in localIpTags"
                         :key="index"
-                        class="d-flex align-items-center gap-1 p-2 hover:bg-slate-50 transition-colors"
+                        class="d-flex align-items-center gap-1 p-2 hover-bg-subtle transition-colors"
                     >
                         <div style="width: 50%" class="px-2">
                         <input
                             v-if="item.isEditing"
                             v-model="item.ip"
                             type="text"
-                            class="form-control ui-input ui-input-sm w-100 rounded py-0 px-2 font-mono"
-                            style="height: 24px"
+                            class="form-control ui-input ui-input-sm w-100 rounded py-0 px-2 font-monospace"
                             :style="item.errors?.ip ? 'border-color: var(--ui-danger) !important;' : ''"
                             placeholder="192.168.1.100"
                             @keyup.enter="saveTag(index)"
                             @keyup.esc="cancelEdit(index)"
                             @blur="validateItem(index)"
                         />
-                        <span v-else class="text-xs font-mono ui-text-primary">{{ item.ip }}</span>
+                        <span v-else class="text-xs font-monospace ui-text-primary">{{ item.ip }}</span>
                         </div>
                         <div style="width: 40%" class="px-2">
                         <input
@@ -286,7 +285,6 @@
                             v-model="item.tag"
                             type="text"
                             class="form-control ui-input ui-input-sm w-100 rounded py-0 px-2"
-                            style="height: 24px"
                             :style="item.errors?.tag ? 'border-color: var(--ui-danger) !important;' : ''"
                             placeholder="e.g. vps, US vps"
                             @keyup.enter="saveTag(index)"
@@ -331,7 +329,7 @@
                     class="p-2 d-flex align-items-center justify-content-center"
                     style="min-height: 44px"
                     >
-                    <p class="text-xs text-slate-500 m-0">No tags defined.</p>
+                    <p class="text-xs ui-text-secondary m-0">No tags defined.</p>
                     </div>
                 </div>
                 </div>
@@ -345,7 +343,7 @@
             <div class="ui-card rounded-xl border shadow-sm">
                 <!-- Extension Version -->
                 <div
-                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
                 >
 
                 <div class="d-flex items-start">
@@ -356,14 +354,14 @@
                     </p>
                     </div>
                 </div>
-                <div class="text-sm text-slate-600 font-mono bg-slate-100 px-2 py-1 rounded">
+                <div class="text-sm ui-text-secondary font-monospace bg-subtle px-2 py-1 rounded">
                     v{{ extensionVersion }}
                 </div>
                 </div>
 
                 <!-- Github Repository -->
                 <div
-                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
                 >
 
                 <div class="d-flex items-start">
@@ -377,7 +375,7 @@
                 <a
                     href="https://github.com/oasis-proxy/oasis"
                     target="_blank"
-                    class="d-flex align-items-center gap-2 text-xs no-underline ui-text-secondary hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+                    class="d-flex align-items-center gap-2 text-xs no-underline ui-text-secondary transition-colors hover:text-body"
                 >
                     <i class="bi bi-github"></i>
                     GitHub
@@ -387,7 +385,7 @@
 
                 <!-- Wiki Address -->
                 <div
-                class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors"
+                class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
                 >
 
                 <div class="d-flex items-start">
@@ -401,7 +399,7 @@
                 <a
                     href="https://github.com/oasis-proxy/oasis/wiki"
                     target="_blank"
-                    class="d-flex align-items-center gap-2 text-xs no-underline ui-text-secondary hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+                    class="d-flex align-items-center gap-2 text-xs no-underline ui-text-secondary transition-colors hover:text-body"
                 >
                     <i class="bi bi-book"></i>
                     Wiki

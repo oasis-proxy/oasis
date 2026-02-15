@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100 d-flex flex-column bg-white position-relative transition-colors">
+  <div class="h-100 d-flex flex-column ui-bg-card position-relative transition-colors">
     <!-- Header -->
     <header class="h-24 px-5 d-flex align-items-center justify-content-between border-light transition-colors">
       <!-- Header Left -->
@@ -7,8 +7,8 @@
         <slot name="header-start"></slot>
         <h1 
           v-if="title"
-          class="text-xl font-bold ui-text-primary tracking-tight m-0 text-truncate" 
-          style="max-width: 300px;" 
+          class="h4 fw-bold ui-text-primary m-0 text-truncate" 
+          style="max-width: 300px; letter-spacing: -0.025em;" 
           :title="title"
         >
           {{ title }}
@@ -24,7 +24,7 @@
 
     <!-- Content -->
     <div class="flex-1 overflow-y-auto custom-scrollbar px-5 pt-4 pb-5">
-      <div :class="['mx-auto d-flex flex-column gap-4 pb-5', maxWidthClass]">
+      <div class="mx-auto d-flex flex-column gap-4 pb-5" :style="maxWidthStyle">
         <slot></slot>
       </div>
     </div>
@@ -45,17 +45,19 @@ const props = defineProps({
   }
 })
 
-const maxWidthClass = computed(() => {
-  switch (props.maxWidth) {
-    case 'md': return 'max-w-md'
-    case 'lg': return 'max-w-lg'
-    case 'xl': return 'max-w-xl'
-    case '2xl': return 'max-w-2xl'
-    case '3xl': return 'max-w-3xl'
-    case '4xl': return 'max-w-4xl'
-    case '5xl': return 'max-w-5xl'
-    case '6xl': return 'max-w-6xl'
-    default: return 'max-w-3xl'
+
+
+const maxWidthStyle = computed(() => {
+  const sizes = {
+    'md': '28rem',
+    'lg': '32rem',
+    'xl': '36rem',
+    '2xl': '42rem',
+    '3xl': '48rem',
+    '4xl': '56rem',
+    '5xl': '64rem',
+    '6xl': '72rem'
   }
+  return { maxWidth: sizes[props.maxWidth] || '48rem' }
 })
 </script>

@@ -1,12 +1,12 @@
 <template>
-  <div class="bg-background-light text-slate-900 vh-100 overflow-hidden d-flex align-items-center justify-content-center p-4 transition-colors">
-    <div class="w-100 max-w-6xl h-100 max-h-[900px] ui-card rounded-2xl shadow-lg d-flex overflow-hidden border transition-colors">
+  <div class="ui-bg-default ui-text-primary vh-100 overflow-hidden d-flex align-items-center justify-content-center p-4 transition-colors">
+    <div class="w-100 h-100 ui-card rounded-4 shadow-lg d-flex overflow-hidden border transition-colors" style="max-width: 72rem; max-height: 900px;">
       
       <!-- Integrated Sidebar -->
       <Sidebar />
 
       <!-- Main Content -->
-      <main class="flex-1 d-flex flex-column bg-white transition-colors" style="min-width: 0;">
+      <main class="flex-1 d-flex flex-column ui-bg-card transition-colors" style="min-width: 0;">
           <router-view></router-view>
       </main>
 
@@ -74,3 +74,4 @@ onUnmounted(() => {
   }
 })
 </script>
+

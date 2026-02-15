@@ -7,21 +7,21 @@
     <div class="d-flex flex-column gap-3">
         <!-- Source Display -->
         <label class="d-flex flex-column gap-2 w-100">
-            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pcmLabelSource') }}</span>
-            <div class="px-3 py-2 rounded-lg bg-subtle  border border-subtle  text-xs text-slate-500 d-flex align-items-center gap-2 overflow-hidden">
-            <span class="text-truncate" :title="currentName">{{ currentName }}</span>
+            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('pcmLabelSource') }}</span>
+            <div class="ui-input px-3 rounded-lg border text-xs ui-text-secondary d-flex align-items-center gap-2 overflow-hidden">
+            <span class="text-truncate flex-grow-1" :title="currentName">{{ currentName }}</span>
             </div>
         </label>
 
         <!-- New Name Input -->
         <label class="d-flex flex-column gap-2 w-100">
-            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pcmLabelNew') }}</span>
+            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('pcmLabelNew') }}</span>
             <div class="relative group w-100">
             <input 
                 v-model="newName"
                 ref="nameInput"
                 autofocus 
-                class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs placeholder:text-slate-400 transition-all shadow-sm"
+                class="w-100 rounded-lg border ui-input px-3 text-xs transition-all shadow-sm"
                 style="min-width: 100%; width: 100%; max-width: 100% !important;" 
                 :placeholder="$t('pcmPlaceholder')" 
                 type="text"
@@ -35,14 +35,14 @@
     <template #footer>
         <button 
         @click="emit('close')"
-        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors"
+        class="px-3 py-2 rounded-lg text-xs fw-medium ui-button-secondary hover-bg-subtle transition-colors"
         >
         {{ $t('btnCancel') }}
         </button>
         <button 
         @click="handleConfirm"
         :disabled="!isValid"
-        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        class="px-3 py-2 rounded-lg text-xs fw-bold ui-button-primary shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
         {{ $t('btnClone') }}
         </button>

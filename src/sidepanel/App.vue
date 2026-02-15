@@ -10,9 +10,9 @@
 
     
     <!-- Header -->
-    <div class="flex-shrink-0 z-sticky top-0 pt-3 px-3 shadow-sm" style="background-color: var(--ui-bg-card);">
+    <div class="flex-shrink-0 position-sticky top-0 pt-3 px-3 shadow-sm z-3" style="background-color: var(--ui-bg-card);">
       <div class="pb-3 d-flex align-items-center">
-        <h2 class="fs-4 fw-bold m-0 tracking-tight" style="color: var(--ui-text-primary);">{{ $t('spTitle') }}</h2>
+        <h2 class="fs-4 fw-bold m-0 ls-tight" style="color: var(--ui-text-primary);">{{ $t('spTitle') }}</h2>
       </div>
       
       <!-- Search -->
@@ -20,8 +20,8 @@
         <div class="position-relative">
             <input 
                 type="text" 
-                class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs placeholder:text-slate-400 transition-all shadow-sm"
-                style="min-width: 100%; width: 100%; max-width: 100% !important;" 
+                class="w-100 rounded-lg border ui-input px-3 py-2 text-xs transition-colors shadow-sm"
+                style="min-width: 100%; width: 100%; max-width: 100% !important; height: 40px;" 
                 :placeholder="$t('spPlaceholderFilter')"
                 v-model="searchQuery"
             >
@@ -42,7 +42,7 @@
         class="download-item d-flex align-items-center px-3 py-3 border-bottom-light transition-colors w-100"
       >
         <!-- Info (Takes remaining space) -->
-        <div class="d-flex flex-column justify-content-center pe-3 flex-grow-1 min-w-0">
+        <div class="d-flex flex-column justify-content-center pe-3 flex-grow-1" style="min-width: 0;">
             <!-- Filename -->
             <div class="py-1">
                 <h3 

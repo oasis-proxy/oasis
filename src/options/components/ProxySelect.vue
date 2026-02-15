@@ -58,7 +58,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md', // 'sm' (28px) or 'md' (32px)
+    default: 'md', // 'sm' (24px) or 'md' (28px)
     validator: (value) => ['sm', 'md'].includes(value)
   }
 })
@@ -66,7 +66,7 @@ const props = defineProps({
 defineEmits(['update:modelValue'])
 
 const sizeClass = computed(() => {
-  return props.size === 'sm' ? 'ui-input-sm' : 'ui-input h-8 text-xs'
+  return props.size === 'sm' ? 'ui-input-sm' : 'ui-input section-input fs-7'
 })
 
 const groupedOptions = computed(() => {

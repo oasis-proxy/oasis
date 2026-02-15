@@ -7,7 +7,7 @@
     @close="emit('cancel')"
   >
     <div class="d-flex flex-column gap-3">
-        <p class="text-sm text-slate-600  mb-4 text-center">
+        <p class="text-sm ui-text-secondary  mb-4 text-center">
         {{ $t('msgSyncConflict') }}
         </p>
 
@@ -18,38 +18,38 @@
                     <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
                         <div>
                             <div class="d-flex align-items-center gap-2">
-                                    <h3 class="text-sm font-semibold ui-text-primary m-0">{{ $t('lblLocalVersion') }}</h3>
+                                    <h3 class="text-sm fw-semibold ui-text-primary m-0">{{ $t('lblLocalVersion') }}</h3>
                             </div>
-                            <p class="text-xs text-slate-500 m-0">{{ $t('lblThisDevice') }}</p>
+                            <p class="text-xs ui-text-secondary m-0">{{ $t('lblThisDevice') }}</p>
                         </div>
                     </div>
                     
                     <div class="d-flex flex-column gap-3 position-relative z-10">
                         <!-- Last Modified -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblLastModified') }}</p>
-                            <p class="text-xs font-mono ui-text-primary m-0 text-end">
+                            <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblLastModified') }}</p>
+                            <p class="text-xs font-monospace ui-text-primary m-0 text-end">
                                 {{ localLastModified }}
                             </p>
                         </div>
                         
                         <!-- Config Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblConfigVer') }}</p>
-                            <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ configVersion }}</p>
+                            <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblConfigVer') }}</p>
+                            <p class="text-xs font-monospace ui-text-primary m-0 text-end">{{ configVersion }}</p>
                         </div>
 
-                        <div class="pt-3 border-t border-light  d-flex flex-column gap-3">
+                        <div class="pt-3 border-top border-subtle  d-flex flex-column gap-3">
                                 <!-- Proxy Hosts -->
                             <div class="d-flex justify-content-between align-items-start">
-                                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">{{ $t('lblProxyHosts') }}</p>
-                                    <span class="text-xs font-mono ui-text-primary">{{ proxyCount }}</span>
+                                    <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5" style="letter-spacing: 0.05em;">{{ $t('lblProxyHosts') }}</p>
+                                    <span class="text-xs font-monospace ui-text-primary">{{ proxyCount }}</span>
                             </div>
 
                             <!-- Policies -->
                             <div class="d-flex justify-content-between align-items-start">
-                                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">{{ $t('lblPolicies') }}</p>
-                                    <span class="text-xs font-mono ui-text-primary">{{ policyCount }}</span>
+                                    <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5" style="letter-spacing: 0.05em;">{{ $t('lblPolicies') }}</p>
+                                    <span class="text-xs font-monospace ui-text-primary">{{ policyCount }}</span>
                             </div>
                         </div>
                     </div>
@@ -62,36 +62,36 @@
                     <div class="d-flex align-items-center gap-3 mb-4 position-relative z-10">
                         <div>
                             <div class="d-flex align-items-center gap-2">
-                                <h3 class="text-sm font-semibold ui-text-primary m-0">{{ $t('lblCloudVersion') }}</h3>
+                                <h3 class="text-sm fw-semibold ui-text-primary m-0">{{ $t('lblCloudVersion') }}</h3>
                             </div>
-                            <p class="text-xs text-slate-500 m-0">{{ $t('lblRemoteRepo') }}</p>
+                            <p class="text-xs ui-text-secondary m-0">{{ $t('lblRemoteRepo') }}</p>
                         </div>
                     </div>
 
                     <div class="d-flex flex-column gap-3 position-relative z-10">
                             <!-- Last Modified -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblLastModified') }}</p>
-                            <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ cloudLastModified }}</p>
+                            <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblLastModified') }}</p>
+                            <p class="text-xs font-monospace ui-text-primary m-0 text-end">{{ cloudLastModified }}</p>
                         </div>
                         
                         <!-- Config Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblConfigVer') }}</p>
-                            <p class="text-xs font-mono ui-text-primary m-0 text-end">{{ cloudConfigVersion }}</p>
+                            <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblConfigVer') }}</p>
+                            <p class="text-xs font-monospace ui-text-primary m-0 text-end">{{ cloudConfigVersion }}</p>
                         </div>
 
-                        <div class="pt-3 border-t border-light  d-flex flex-column gap-3">
+                        <div class="pt-3 border-top border-subtle  d-flex flex-column gap-3">
                                 <!-- Proxy Hosts -->
                                 <div class="d-flex justify-content-between align-items-start">
-                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">{{ $t('lblProxyHosts') }}</p>
-                                <span class="text-xs font-mono ui-text-primary">{{ cloudProxyCount }}</span>
+                                <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5" style="letter-spacing: 0.05em;">{{ $t('lblProxyHosts') }}</p>
+                                <span class="text-xs font-monospace ui-text-primary">{{ cloudProxyCount }}</span>
                             </div>
 
                             <!-- Policies -->
                             <div class="d-flex justify-content-between align-items-start">
-                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0 mt-0.5">{{ $t('lblPolicies') }}</p>
-                                <span class="text-xs font-mono ui-text-primary">{{ cloudPolicyCount }}</span>
+                                <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5" style="letter-spacing: 0.05em;">{{ $t('lblPolicies') }}</p>
+                                <span class="text-xs font-monospace ui-text-primary">{{ cloudPolicyCount }}</span>
                             </div>
                         </div>
                     </div>
@@ -101,14 +101,14 @@
     </div>
 
     <template #footer>
-        <button type="button" class="btn ui-button-secondary h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="emit('cancel')">
+        <button type="button" class="btn ui-button-secondary h-8 px-3 text-xs fw-medium rounded-lg d-flex align-items-center" @click="emit('cancel')">
             {{ $t('btnCancel') }}
         </button>
-        <button type="button" class="btn ui-button-danger h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="emit('sync-cloud')">
+        <button type="button" class="btn ui-button-danger h-8 px-3 text-xs fw-medium rounded-lg d-flex align-items-center" @click="emit('sync-cloud')">
             {{ $t('btnOverwriteCloud') }}
         </button>
         
-        <button type="button" class="btn ui-button-danger h-8 px-3 text-xs font-medium rounded-lg d-flex align-items-center" @click="emit('sync-local')">
+        <button type="button" class="btn ui-button-danger h-8 px-3 text-xs fw-medium rounded-lg d-flex align-items-center" @click="emit('sync-local')">
             {{ $t('btnSyncFromCloud') }}
         </button>
     </template>

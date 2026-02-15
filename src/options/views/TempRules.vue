@@ -76,8 +76,8 @@
                   <div style="width: 16%;">
                     <select 
                       v-model="rule.ruleType" 
-                      class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
-                      style="height: 28px; max-width: none;"
+                      class="form-select ui-input ui-input-sm w-100 rounded border py-0 px-1.5" 
+                      style="max-width: none;"
                       @change="validateRule(index, rule)"
                     >
                       <option value="wildcard">{{ $t('optWildcard') }}</option>
@@ -92,7 +92,7 @@
                       type="text" 
                       :placeholder="getPlaceholder(rule.ruleType)" 
                       class="form-control ui-input ui-input-sm w-100 mw-100 rounded border py-0 px-2 font-mono"
-                      :style="`height: 28px;${validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : ''}`"
+                      :style="`${validationErrors[index] ? ' border-color: var(--ui-danger) !important;' : ''}`"
                       @blur="validateRule(index, rule)"
                     />
                   </div>

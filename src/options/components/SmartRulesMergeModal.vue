@@ -8,14 +8,14 @@
     <div class="d-flex flex-column gap-4 h-100" style="max-height: 70vh;">
          <!-- Section 1: Target Policy -->
         <section>
-            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{{ $t('smmmSectionTarget') }}</h4>
+            <h4 class="text-xs fw-bold ui-text-secondary text-uppercase mb-2" style="letter-spacing: 0.1em;">{{ $t('smmmSectionTarget') }}</h4>
             <label class="d-flex flex-column gap-2 w-100">
                 <select 
                 v-model="targetPolicyId"
                 :disabled="!!forcedTargetId"
-                :class="{'bg-subtle  text-slate-500 cursor-not-allowed': !!forcedTargetId}"
-                class="form-select ui-input w-100 rounded-lg border px-3 text-xs transition-all shadow-sm"
-                style="max-width: 100%; height: 32px;"
+                :class="{'bg-subtle  ui-text-secondary cursor-not-allowed': !!forcedTargetId}"
+                class="form-select ui-input w-100 rounded-lg border px-3 text-xs transition-colors shadow-sm"
+                style="max-width: 100%;"
                 >
                 <option value="">{{ $t('armPlaceholderTarget') }}</option>
                 <option v-for="policyOption in availablePolicies" :key="policyOption.id" :value="policyOption.id">
@@ -28,47 +28,47 @@
             <!-- Section 2: Source Rules (Read-only) -->
         <section>
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider m-0">{{ $t('smmmSectionSource') }}</h4>
-                <span class="text-xs ui-button-secondary px-2 py-0.5 rounded-full">{{ sourceRules.length }} rules</span>
+                <h4 class="text-xs fw-bold ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.1em;">{{ $t('smmmSectionSource') }}</h4>
+                <span class="text-xs ui-button-secondary px-2 py-1 rounded-pill">{{ sourceRules.length }} rules</span>
             </div>
             
-            <div class="rounded-lg border border-light  overflow-hidden shadow-sm">
+            <div class="rounded-lg border border-subtle overflow-hidden shadow-sm">
                 <div class="ui-card-header">
                     <div style="width: 30%;">{{ $t('lblType') }}</div>
                     <div style="width: 50%;">{{ $t('lblPattern') }}</div>
                     <div style="width: 20%;">{{ $t('lblProxy') }}</div>
                 </div>
-                <div class="max-h-48 overflow-y-auto custom-scrollbar bg-white  divide-y divide-slate-100 ">
-                    <div v-for="(rule, idx) in sourceRules" :key="idx" class="d-flex align-items-center gap-2 px-3 py-2 opacity-70">
+                <div class="overflow-y-auto custom-scrollbar ui-bg-card" style="max-height: 12rem;">
+                    <div v-for="(rule, idx) in sourceRules" :key="idx" class="d-flex align-items-center gap-1 px-2 py-2 opacity-70">
                         <div style="width: 30%;">
                             <input 
                             type="text" 
-                            class="form-control ui-input w-100 rounded border text-xs py-0 px-2 bg-subtle " 
+                            class="form-control ui-input ui-input-sm w-100 rounded border py-0 px-2 bg-subtle " 
                             :value="$t('opt' + (rule.ruleType.charAt(0).toUpperCase() + rule.ruleType.slice(1))) || rule.ruleType"  
                             readonly 
-                            style="height: 28px; max-width: 100%;"
+                            style="max-width: 100%;"
                             />
                         </div>
                         <div style="width: 50%;">
                             <input 
                             type="text" 
-                            class="form-control ui-input w-100 rounded border text-xs py-0 px-2 font-mono bg-subtle " 
+                            class="form-control ui-input ui-input-sm w-100 rounded border py-0 px-2 font-monospace bg-subtle " 
                             :value="rule.pattern" 
                             readonly 
-                            style="height: 28px; max-width: 100%;"
+                            style="max-width: 100%;"
                             />
                         </div>
                         <div style="width: 20%;">
                             <input 
                             type="text" 
-                            class="form-control ui-input w-100 rounded border text-xs py-0 px-2 text-muted bg-subtle " 
+                            class="form-control ui-input ui-input-sm w-100 rounded border py-0 px-2 text-muted bg-subtle " 
                             :value="getProxyLabel(rule.proxyId)" 
                             readonly 
-                            style="height: 28px; max-width: 100%;"
+                            style="max-width: 100%;"
                             />
                         </div>
                     </div>
-                    <div v-if="sourceRules.length === 0" class="p-4 text-center text-xs text-slate-500">{{ $t('smmmMsgNoSource') }}</div>
+                    <div v-if="sourceRules.length === 0" class="p-4 text-center text-xs ui-text-secondary">{{ $t('smmmMsgNoSource') }}</div>
                 </div>
             </div>
         </section>
@@ -76,16 +76,16 @@
             <!-- Section 3: Merged Preview (Optimization) -->
         <section>
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider m-0">{{ $t('smmmSectionPreview') }}</h4>
+                <h4 class="text-xs fw-bold ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.1em;">{{ $t('smmmSectionPreview') }}</h4>
                 <div class="d-flex align-items-center gap-2">
-                    <span class="text-xs text-slate-500" v-if="mergedRules.length < sourceRules.length">
+                    <span class="text-xs ui-text-secondary" v-if="mergedRules.length < sourceRules.length">
                         {{ $t('smmmMsgOptimized', ['-' + (sourceRules.length - mergedRules.length)]) }}
                     </span>
-                    <span class="text-xs ui-button-secondary px-2 py-0.5 rounded-full">{{ mergedRules.length }} rules</span>
+                    <span class="text-xs ui-button-secondary px-2 py-1 rounded-pill">{{ mergedRules.length }} rules</span>
                 </div>
             </div>
 
-            <div class="rounded-lg border border-light  overflow-hidden shadow-sm">
+            <div class="rounded-lg border border-subtle overflow-hidden shadow-sm">
                 <!-- Header -->
                 <div class="ui-card-header">
                     <div style="width: 30%;">{{ $t('lblType') }}</div>
@@ -95,15 +95,15 @@
                 </div>
                 
                 <!-- List -->
-                    <div class="max-h-64 overflow-y-auto custom-scrollbar bg-white  divide-y divide-slate-100 ">
-                    <div v-for="(rule, idx) in mergedRules" :key="idx" class="d-flex align-items-center gap-2 px-3 py-2 hover:bg-subtle  transition-colors group">
+                    <div class="overflow-y-auto custom-scrollbar ui-bg-card" style="max-height: 16rem;">
+                    <div v-for="(rule, idx) in mergedRules" :key="idx" class="d-flex align-items-center gap-1 px-2 py-2 hover-bg-subtle  transition-colors group border-bottom border-subtle">
                         
                         <!-- Type -->
                         <div style="width: 30%;">
                             <select 
                             v-model="rule.ruleType"
-                            class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
-                            style="height: 28px; max-width: 100%;"
+                            class="form-select ui-input ui-input-sm w-100 rounded border py-0 px-1.5" 
+                            style="max-width: 100%;"
                             >
                                 <option value="wildcard">{{ $t('optWildcard') }}</option>
                                 <option value="regex">{{ $t('optRegex') }}</option>
@@ -115,8 +115,7 @@
                             <input 
                             v-model="rule.pattern"
                             type="text"
-                            class="form-control ui-input w-100 mw-100 rounded text-xs py-0 px-2 font-mono"
-                            style="height: 28px;"
+                            class="form-control ui-input ui-input-sm w-100 mw-100 rounded py-0 px-2 font-monospace"
                             />
                         </div>
                         
@@ -124,8 +123,8 @@
                         <div style="width: 20%;">
                             <select 
                             v-model="rule.proxyId"
-                            class="form-select ui-input w-100 rounded border text-xs py-0 px-1.5" 
-                            style="height: 28px; max-width: none;"
+                            class="form-select ui-input ui-input-sm w-100 rounded border py-0 px-1.5" 
+                            style="max-width: none;"
                             >
                                 <option value="direct">{{ $t('directConnect') }}</option>
                                 <optgroup v-for="group in proxyList" :key="group.label" :label="group.label">
@@ -138,54 +137,54 @@
                         <div style="width: 8%;" class="d-flex align-items-center justify-content-center">
                             <button 
                                 @click="removeMergedRule(idx)" 
-                                class="ui-button-icon p-0.5 transition-colors text-red-500 hover:bg-red-50 " 
+                                class="ui-button-icon p-1 transition-colors text-danger hover-bg-danger-subtle " 
                                 :title="$t('btnRemove')"
                             >
                                 <i class="bi bi-trash text-xs"></i>
                             </button>
                         </div>
                     </div>
-                        <div v-if="mergedRules.length === 0" class="p-4 text-center text-xs text-slate-500">{{ $t('smmmMsgNoMerge') }}</div>
+                        <div v-if="mergedRules.length === 0" class="p-4 text-center text-xs ui-text-secondary">{{ $t('smmmMsgNoMerge') }}</div>
                 </div>
             </div>
-            <p class="text-xs text-slate-500 mt-2 mb-0">
+            <p class="text-xs ui-text-secondary mt-2 mb-0">
                 {{ $t('smmmDescOptimization') }}
             </p>
         </section>
 
             <!-- Section 4: Conflict Resolution -->
         <section>
-            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{{ $t('armLabelConflict') }}</h4>
+            <h4 class="text-xs fw-bold ui-text-secondary text-uppercase mb-2" style="letter-spacing: 0.1em;">{{ $t('armLabelConflict') }}</h4>
             <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr;">
             
             <!-- Ignore Option -->
             <label 
-                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
-                :class="conflictMode === 'ignore' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
+                class="position-relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-colors"
+                :class="conflictMode === 'ignore' ? 'border-primary bg-primary-subtle' : 'ui-card hover-border-primary'"
             >
-                <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="ignore"/>
-                <span class="d-flex flex-1">
+                <input v-model="conflictMode" v-show="false" class="visually-hidden" name="conflict-mode" type="radio" value="ignore"/>
+                <span class="d-flex flex-fill">
                 <span class="d-flex flex-column">
-                    <span class="block text-xs font-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptIgnore') }}</span>
-                    <span class="mt-1 d-flex align-items-center text-xs text-slate-500">{{ $t('armDescIgnore') }}</span>
+                    <span class="d-block text-xs fw-medium mb-1" :class="conflictMode === 'ignore' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptIgnore') }}</span>
+                    <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">{{ $t('armDescIgnore') }}</span>
                 </span>
                 </span>
-                <i v-if="conflictMode === 'ignore'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
+                <i v-if="conflictMode === 'ignore'" class="bi bi-check-circle-fill text-primary text-lg position-absolute top-50 end-0 translate-middle-y me-3"></i>
             </label>
 
             <!-- Overwrite Option -->
             <label 
-                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
-                :class="conflictMode === 'overwrite' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
+                class="position-relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-colors"
+                :class="conflictMode === 'overwrite' ? 'border-primary bg-primary-subtle' : 'ui-card hover-border-primary'"
             >
-                <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="overwrite"/>
-                <span class="d-flex flex-1">
+                <input v-model="conflictMode" v-show="false" class="visually-hidden" name="conflict-mode" type="radio" value="overwrite"/>
+                <span class="d-flex flex-fill">
                 <span class="d-flex flex-column">
-                    <span class="block text-xs font-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptOverwrite') }}</span>
-                    <span class="mt-1 d-flex align-items-center text-xs text-slate-500">{{ $t('armDescOverwrite') }}</span>
+                    <span class="d-block text-xs fw-medium mb-1" :class="conflictMode === 'overwrite' ? 'text-primary' : 'ui-text-primary'">{{ $t('armOptOverwrite') }}</span>
+                    <span class="mt-1 d-flex align-items-center text-xs ui-text-secondary">{{ $t('armDescOverwrite') }}</span>
                 </span>
                 </span>
-                <i v-if="conflictMode === 'overwrite'" class="bi bi-check-circle-fill text-primary text-lg absolute top-1/2 right-3 -translate-y-1/2"></i>
+                <i v-if="conflictMode === 'overwrite'" class="bi bi-check-circle-fill text-primary text-lg position-absolute top-50 end-0 translate-middle-y me-3"></i>
             </label>
 
             </div>
@@ -195,14 +194,14 @@
     <template #footer>
         <button 
         @click="emit('close')"
-        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors"
+        class="px-3 py-2 rounded-lg text-xs fw-medium ui-button-secondary hover-bg-hover  transition-colors"
         >
         {{ $t('btnCancel') }}
         </button>
         <button 
         @click="handleConfirm"
         :disabled="!isValid"
-        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        class="px-3 py-2 rounded-lg text-xs fw-bold ui-button-primary shadow-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
         {{ $t('smmmBtnMerge', [mergedRules.length]) }}
         </button>

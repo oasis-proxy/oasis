@@ -9,11 +9,11 @@
             <div class="ui-card rounded-xl border shadow-sm transition-colors">
                 
                 <!-- Auto Sync -->
-                 <div class="d-flex align-items-center justify-content-between px-4 py-3 hover:bg-slate-50 transition-colors">
+                 <div class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors">
                   <div class="d-flex items-start">
                     <div>
-                      <p class="text-sm font-medium text-slate-900 m-0">{{ $t('lblAutoSync') }}</p>
-                      <p class="text-xs text-slate-500 mt-1 m-0">{{ $t('descAutoSync') }}</p>
+                      <p class="text-sm fw-medium ui-text-primary m-0">{{ $t('lblAutoSync') }}</p>
+                      <p class="text-xs ui-text-secondary mt-1 m-0">{{ $t('descAutoSync') }}</p>
                     </div>
                   </div>
                   <div class="form-check form-switch">
@@ -21,26 +21,26 @@
                   </div>
                 </div>
             <!-- Maintenance Buttons -->
-                <div class="d-flex align-items-center justify-content-between px-4 pt-3 pb-4 hover:bg-slate-50 transition-colors">
+                <div class="d-flex align-items-center justify-content-between px-4 pt-3 pb-4 hover-bg-subtle transition-colors">
                   <div class="d-flex items-start">
                     <div>
-                      <p class="text-sm font-medium text-slate-900 m-0">{{ $t('lblMaintenance') }}</p>
-                      <p class="text-xs text-slate-500 mt-1 m-0">{{ $t('descMaintenance') }}</p>
+                      <p class="text-sm fw-medium ui-text-primary m-0">{{ $t('lblMaintenance') }}</p>
+                      <p class="text-xs ui-text-secondary mt-1 m-0">{{ $t('descMaintenance') }}</p>
                     </div>
                   </div>
                   <div class="d-flex gap-2">
                     <input type="file" ref="fileInput" accept=".json" @change="handleImportFile" style="display: none;" />
                     
-                    <button @click="triggerImport" class="h-8 px-3 text-xs font-medium ui-button-secondary border rounded-lg transition-colors d-flex align-items-center gap-2">
+                    <button @click="triggerImport" class="fw-medium ui-button-secondary border rounded-lg transition-colors d-flex align-items-center gap-2">
                       <i class="bi bi-upload text-sm"></i> {{ $t('btnImport') }}
                     </button>
-                    <button @click="handleExport" class="h-8 px-3 text-xs font-medium ui-button-secondary border rounded-lg transition-colors d-flex align-items-center gap-2">
+                    <button @click="handleExport" class="fw-medium ui-button-secondary border rounded-lg transition-colors d-flex align-items-center gap-2">
                       <i class="bi bi-download text-sm"></i> {{ $t('btnExport') }}
                     </button>
-                     <button @click="handleClearLocal" class="h-8 px-3 text-xs font-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-2">
+                     <button @click="handleClearLocal" class="fw-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-2">
                       <i class="bi bi-trash text-sm"></i> {{ $t('btnClearLocal') }}
                     </button>
-                    <button @click="handleClearCloud" class="h-8 px-3 text-xs font-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-2">
+                    <button @click="handleClearCloud" class="fw-medium ui-button-danger border rounded-lg transition-colors d-flex align-items-center gap-2">
                       <i class="bi bi-cloud-slash text-sm"></i> {{ $t('btnClearSync') }}
                     </button>
                   </div>
@@ -66,27 +66,27 @@
                     <div class="d-flex flex-column gap-3 position-relative px-4 py-4 flex-grow-1" style="z-index: 10;">
                         <!-- Last Modified -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblLastModified') }}</p>
-                            <p class="text-xs font-mono text-slate-900 m-0 text-end">
+                            <p class="text-xs fw-medium ui-text-secondary text-uppercase" style="letter-spacing: 0.05em;">{{ $t('lblLastModified') }}</p>
+                            <p class="text-xs font-monospace ui-text-primary m-0 text-end">
                                 {{ formattedLocalLastModified || $t('lblUnknown') }}
                             </p>
                         </div>
                         
                         <!-- Config Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblConfigVer') }}</p>
-                            <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ configVersion }}</p>
+                            <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblConfigVer') }}</p>
+                            <p class="text-xs font-monospace ui-text-primary m-0 text-end">{{ configVersion }}</p>
                         </div>
 
                         <!-- Software Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblSoftwareVer') }}</p>
-                            <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ softwareVersion }}</p>
+                            <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblSoftwareVer') }}</p>
+                            <p class="text-xs font-monospace ui-text-primary m-0 text-end">{{ softwareVersion }}</p>
                         </div>
                         
                         <!-- Proxy Hosts -->
                         <div class="d-flex flex-column gap-2">
-                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblProxyHosts') }} ({{ proxyCount }})</p>
+                             <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblProxyHosts') }} ({{ proxyCount }})</p>
                              <div class="d-flex flex-wrap gap-2">
                                 <span v-for="host in previewProxies" :key="host.id" class="ui-tag ui-tag-default" :title="host.label">
                                     {{ truncate(host.label, 20) }}
@@ -96,7 +96,7 @@
 
                         <!-- Policies -->
                         <div class="d-flex flex-column gap-2">
-                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblPolicies') }} ({{ policyCount }})</p>
+                             <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblPolicies') }} ({{ policyCount }})</p>
                              <div class="d-flex flex-wrap gap-2">
                                 <span v-for="policy in previewPolicies" :key="policy.id" class="ui-tag ui-tag-primary" :title="policy.name">
                                     {{ truncate(policy.name, 20) }}
@@ -119,41 +119,41 @@
                     <div class="d-flex flex-column gap-3 position-relative px-4 py-4 flex-grow-1" style="z-index: 10;">
                          <!-- Last Modified -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblLastModified') }}</p>
-                            <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ formattedCloudLastModified }}</p>
+                            <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblLastModified') }}</p>
+                            <p class="text-xs font-monospace ui-text-primary m-0 text-end">{{ formattedCloudLastModified }}</p>
                         </div>
                         
                         <!-- Config Version -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblConfigVer') }}</p>
-                            <p class="text-xs font-mono text-slate-900 m-0 text-end">{{ cloudConfigVersion }}</p>
+                            <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblConfigVer') }}</p>
+                            <p class="text-xs font-monospace ui-text-primary m-0 text-end">{{ cloudConfigVersion }}</p>
                         </div>
 
-                        <div v-if="!cloudConfig" class="d-flex flex-column align-items-center justify-content-center py-4 text-slate-400 flex-grow-1">
+                        <div v-if="!cloudConfig" class="d-flex flex-column align-items-center justify-content-center py-4 ui-text-tertiary flex-grow-1">
                             <i class="bi bi-cloud-slash fs-2 mb-2"></i>
                             <span class="text-xs">{{ $t('msgNoCloudData') }}</span>
                         </div>
                         <div v-else class="d-flex flex-column gap-3">
                              <!-- Proxy Hosts -->
                             <div class="d-flex flex-column gap-2">
-                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblProxyHosts') }} ({{ cloudProxyCount }})</p>
+                                 <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblProxyHosts') }} ({{ cloudProxyCount }})</p>
                                  <div v-if="cloudPreviewProxies.length > 0" class="d-flex flex-wrap gap-2">
                                     <span v-for="host in cloudPreviewProxies" :key="host.id" class="ui-tag ui-tag-default" :title="host.label">
                                         {{ truncate(host.label, 20) }}
                                     </span>
                                 </div>
-                                <span v-else class="text-xs text-slate-500">-</span>
+                                <span v-else class="text-xs ui-text-secondary">-</span>
                             </div>
 
                             <!-- Policies -->
                             <div class="d-flex flex-column gap-2">
-                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider m-0">{{ $t('lblPolicies') }} ({{ cloudPolicyCount }})</p>
+                                 <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('lblPolicies') }} ({{ cloudPolicyCount }})</p>
                                  <div v-if="cloudPreviewPolicies.length > 0" class="d-flex flex-wrap gap-2">
                                     <span v-for="policy in cloudPreviewPolicies" :key="policy.id" class="ui-tag ui-tag-primary" :title="policy.name">
                                         {{ truncate(policy.name, 20) }}
                                     </span>
                                 </div>
-                                <span v-else class="text-xs text-slate-500">-</span>
+                                <span v-else class="text-xs ui-text-secondary">-</span>
                             </div>
                         </div>
                     </div>
@@ -165,13 +165,13 @@
                 <div class="flex-1 d-flex justify-content-center">
                     <button @click="handleSyncToCloud" class="d-flex align-items-center gap-2 px-4 py-2 ui-button-secondary rounded-lg border transition-all">
                         <i class="bi bi-cloud-upload" style="font-size: 12px;"></i>
-                        <span class="text-xs font-semibold">{{ $t('btnPushToCloud') }}</span>
+                        <span class="text-xs fw-semibold">{{ $t('btnPushToCloud') }}</span>
                     </button>
                 </div>
                 <div class="flex-1 d-flex justify-content-center">
                     <button @click="handleSyncFromLocal" class="d-flex align-items-center gap-2 px-4 py-2 ui-button-secondary rounded-lg border transition-all">
                         <i class="bi bi-cloud-download" style="font-size: 12px;"></i>
-                        <span class="text-xs font-semibold">{{ $t('btnPullFromCloud') }}</span>
+                        <span class="text-xs fw-semibold">{{ $t('btnPullFromCloud') }}</span>
                     </button>
                 </div>
             </div>

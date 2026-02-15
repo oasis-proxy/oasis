@@ -289,7 +289,7 @@
               <button @click="currentTab = 'proxy'" class="px-3 py-2 text-xs font-medium ui-button-secondary rounded-lg transition-all">
                 {{ $t('btnCancel') }}
               </button>
-              <button @click="confirmQuickAdd" :disabled="selectedDomains.length === 0" class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-lg shadow-primary/30 transition-colors border-0">
+              <button @click="confirmQuickAdd" :disabled="selectedDomains.length === 0" class="px-3 py-2 text-xs font-medium ui-button-primary rounded-lg shadow-primary-lg transition-colors border-0">
                 {{ $t('btnConfirm') }}
               </button>
             </div>

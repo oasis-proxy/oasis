@@ -43,7 +43,7 @@
         <!-- Dropdown Menu -->
         <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-lg overflow-hidden mt-1 p-1" style="min-width: 140px;">
             <li>
-              <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs text-slate-900 rounded-md transition-colors d-flex align-items-center gap-2">
+              <button @click="openRenameModal" class="dropdown-item w-100 text-left px-3 py-2 text-xs ui-text-primary rounded-md transition-colors d-flex align-items-center gap-2">
                   <i class="bi bi-pencil-square ui-text-tertiary"></i> {{ $t('btnRename') }}
               </button>
             </li>
@@ -84,7 +84,7 @@
                     v-if="proxyId"
                     :class="[
                         'd-flex align-items-center gap-1 p-2 transition-colors',
-                        dragOverIndex === index ? 'border-top border-2 border-primary bg-primary-subtle' : 'hover:bg-slate-50'
+                        dragOverIndex === index ? 'border-top border-2 border-primary bg-primary-subtle' : 'hover-bg-subtle'
                     ]"
                     @dragover.prevent="handleDragOver($event, index)"
                     @drop="handleDrop($event, index)"
@@ -99,14 +99,14 @@
                           @dragend="handleDragEnd"
                         ></i>
                     </div>
-                    <div style="width: 8%;" class="text-xs ui-text-secondary font-mono">
+                    <div style="width: 8%;" class="text-xs ui-text-secondary font-monospace">
                         {{ index + 1 }}
                     </div>
                     <div style="width: 32%;" class="d-flex align-items-center gap-2">
-                         <div class="w-2 h-2 rounded-full" :style="{ backgroundColor: getProxyColor(proxyId) }"></div>
-                         <span class="text-xs font-medium text-slate-700 text-truncate">{{ getProxyName(proxyId) }}</span>
+                         <div class="rounded-circle" :style="{ backgroundColor: getProxyColor(proxyId), width: '8px', height: '8px' }"></div>
+                         <span class="text-xs fw-medium ui-text-primary text-truncate">{{ getProxyName(proxyId) }}</span>
                     </div>
-                    <div style="width: 48%;" class="text-xs ui-text-secondary font-mono text-truncate">
+                    <div style="width: 48%;" class="text-xs ui-text-secondary font-monospace text-truncate">
                         {{ getProxyAddress(proxyId) }}
                     </div>
                     <div style="width: 8%;" class="d-flex align-items-center justify-content-center">
@@ -117,14 +117,14 @@
                 </div>
 
                  <!-- Editing/New Row -->
-                 <div v-else class="d-flex align-items-center gap-1 p-2 bg-slate-50 border-bottom border-light">
+                 <div v-else class="d-flex align-items-center gap-1 p-2 bg-subtle border-bottom border-light">
                     <div style="width: 4%;" class="d-flex justify-content-center">
                          <i class="bi bi-grip-vertical ui-text-tertiary opacity-50 ui-icon-sm"></i>
                     </div>
-                    <div style="width: 8%;" class="text-xs ui-text-secondary font-mono">
+                    <div style="width: 8%;" class="text-xs ui-text-secondary font-monospace">
                         {{ index + 1 }}
                     </div>
-                    <div class="flex-1 px-2">
+                    <div class="flex-fill px-2">
                         <ProxySelect 
                             :modelValue="''" 
                             :proxies="availableProxies"
@@ -146,8 +146,8 @@
         
          <!-- Empty State -->
         <div v-else class="p-4 d-flex flex-column align-items-center justify-content-center gap-2" style="min-height: 100px;">
-          <i class="bi bi-layers text-3xl text-slate-300"></i>
-          <p class="text-xs text-slate-500 m-0">{{ $t('pgMsgNoProxies') }}</p>
+          <i class="bi bi-layers fs-3 ui-text-tertiary"></i>
+          <p class="text-xs ui-text-secondary m-0">{{ $t('pgMsgNoProxies') }}</p>
         </div>
       </div>
     </section>
@@ -160,8 +160,8 @@
       <div class="ui-card rounded-xl border shadow-sm p-4">
            <div class="d-flex align-items-center justify-content-between gap-4">
                 <div class="d-flex flex-column">
-                    <span class="ui-text-primary text-sm font-medium mb-1">{{ $t('pgLabelFinalFallback') }}</span>
-                    <p class="text-xs text-slate-500 m-0">
+                    <span class="ui-text-primary text-sm fw-medium mb-1">{{ $t('pgLabelFinalFallback') }}</span>
+                    <p class="text-xs ui-text-secondary m-0">
                         {{ $t('pgDescFinalFallback') }}
                     </p>
                 </div>
@@ -169,7 +169,7 @@
                     <div style="width: 120px;" :class="{ 'opacity-50 pointer-events-none': !fallbackEnabled }">
                         <select 
                             v-model="proxyGroup.fallback.type"
-                            class="form-select ui-input ui-input-sm rounded-lg border py-0 px-3 w-100"
+                            class="form-select ui-input rounded-lg border py-0 px-3 w-100"
                             :disabled="!fallbackEnabled"
                         >
                             <option value="direct">{{ $t('directConnect') }}</option>

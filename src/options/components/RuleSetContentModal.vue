@@ -9,8 +9,8 @@
         <!-- URL Row -->
         <div v-if="url">
             <label class="d-flex flex-column gap-2 w-100 mb-0">
-            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('rscmLabelUrl') }}</span>
-            <div class="px-3 py-2 rounded-lg border ui-input text-xs text-slate-500 break-all font-mono" style="min-height: 32px;">
+            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('rscmLabelUrl') }}</span>
+            <div class="px-3 py-2 rounded-lg border ui-input text-xs ui-text-secondary break-all font-monospace" style="min-height: 28px;">
                 {{ url }}
             </div>
             </label>
@@ -19,8 +19,8 @@
         <!-- Last Updated Row -->
         <div v-if="lastUpdated">
             <label class="d-flex flex-column gap-2 w-100 mb-0">
-            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('rscmLabelLastUpdated') }}</span>
-            <div class="px-3 py-2 rounded-lg border ui-input text-xs text-slate-500" style="min-height: 32px;">
+            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('rscmLabelLastUpdated') }}</span>
+            <div class="px-3 py-2 rounded-lg border ui-input text-xs ui-text-secondary" style="min-height: 28px;">
                 {{ formattedTime }}
             </div>
             </label>
@@ -29,12 +29,12 @@
         <!-- Content Display -->
         <label class="d-flex flex-column gap-2 w-100 mb-0 flex-1 overflow-hidden">
             <div class="d-flex justify-content-between align-items-center">
-            <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('rscmLabelContent') }}</span>
+            <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('rscmLabelContent') }}</span>
             <button 
                 v-if="url"
                 @click="handleUpdate"
                 :disabled="updating"
-                class="px-2 py-1.5 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors d-flex align-items-center gap-1 border border-subtle "
+                class="px-2 py-1.5 rounded-lg text-xs fw-medium ui-button-secondary hover-bg-subtle transition-colors d-flex align-items-center gap-1 border border-subtle "
                 :class="{ 'opacity-50 cursor-not-allowed': updating }"
             >
                 <i class="bi bi-arrow-clockwise" :class="{ 'animate-spin': updating }"></i>
@@ -44,7 +44,7 @@
             <textarea 
             :value="content"
             readonly
-            class="w-100 h-100 rounded-lg border ui-input px-3 py-2 text-xs font-mono custom-scrollbar text-slate-500"
+            class="w-100 h-100 rounded-lg border ui-input px-3 py-2 text-xs font-monospace custom-scrollbar ui-text-secondary"
             style="resize: none; min-height: 320px;"
             :placeholder="$t('rscmMsgNoContent')"
             ></textarea>
@@ -54,7 +54,7 @@
     <template #footer>
         <button 
         @click="emit('close')"
-        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors"
+        class="px-3 py-2 rounded-lg text-xs fw-medium ui-button-secondary hover-bg-subtle transition-colors"
         >
         {{ $t('btnClose') }}
         </button>

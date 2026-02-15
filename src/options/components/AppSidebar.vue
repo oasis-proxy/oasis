@@ -1,7 +1,7 @@
 <template>
-  <aside class="w-72 bg-white border-end border-subtle d-flex flex-column shrink-0 transition-colors">
+  <aside class="ui-bg-card border-end border-subtle d-flex flex-column shrink-0 transition-colors" style="width: 18rem;">
     <!-- Logo / Brand with Ripple Animation -->
-    <div class="brand-section h-24 d-flex align-items-center px-3 transition-colors bg-white">
+    <div class="brand-section d-flex align-items-center px-3 transition-colors ui-bg-card" style="height: 6rem;">
       <!-- Ripple Animation Container -->
       <div class="ripple-container">
         <div class="ripple-ring ripple-1"></div>
@@ -20,7 +20,7 @@
       <!-- Fixed: Configuration -->
       <div>
         <div class="mb-2 d-flex align-items-center justify-content-between group cursor-pointer">
-          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">{{ $t('navConfig') }}</h3>
+          <h3 class="text-xs fw-semibold ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('navConfig') }}</h3>
         </div>
         <div class="d-flex flex-column gap-1">
           <router-link 
@@ -31,7 +31,7 @@
             <button 
               @click="navigate"
               class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-all group"
-              :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
+              :class="isActive ? 'nav-item-active shadow-sm text-primary fw-medium' : 'nav-item-inactive'"
             >
               <i class="bi bi-gear text-base"></i>
               <span class="text-xs text-truncate">{{ $t('navGeneral') }}</span>
@@ -85,7 +85,7 @@
       <!-- Variable: Proxy Hosts -->
       <div>
         <div class="mb-2 d-flex align-items-center justify-content-between group">
-          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">{{ $t('navProxyHosts') }}</h3>
+          <h3 class="text-xs fw-semibold ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('navProxyHosts') }}</h3>
           <button 
             @click="showProxyModal = true"
             class="ui-button-icon"
@@ -106,9 +106,9 @@
                 class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors group"
                 :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
              >
-                <i :class="['bi text-base', host.icon, (isActive || host.color) ? '' : 'text-slate-400 group-hover:text-slate-600']" :style="{ color: host.color ? host.color : undefined }"></i>
+                <i :class="['bi text-base', host.icon]" :style="{ color: (isActive || host.color) ? (host.color || 'var(--bs-primary)') : 'var(--ui-text-tertiary)' }"></i>
                 <span class="text-xs text-truncate">{{ host.name }}</span>
-                <span v-if="host.status" :class="['ml-auto w-2 h-2 rounded-full', host.statusColor]"></span>
+                <span v-if="host.status" :class="['ms-auto rounded-circle', host.statusColor]" style="width: 8px; height: 8px;"></span>
              </button>
           </router-link>
         </div>
@@ -117,7 +117,7 @@
       <!-- Variable: Proxy Host Groups -->
       <div>
         <div class="mb-2 d-flex align-items-center justify-content-between group">
-          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">{{ $t('navProxyGroups') }}</h3>
+          <h3 class="text-xs fw-semibold ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('navProxyGroups') }}</h3>
           <button 
             @click="showGroupModal = true"
             class="ui-button-icon"
@@ -138,7 +138,7 @@
                 class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors group"
                 :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
              >
-                <i class="bi bi-layers-half text-base" :class="[(isActive || group.color) ? '' : 'text-slate-400 group-hover:text-slate-600']" :style="{ color: group.color ? group.color : undefined }"></i>
+                <i class="bi bi-layers-half text-base" :style="{ color: (isActive || group.color) ? (group.color || 'var(--bs-primary)') : 'var(--ui-text-tertiary)' }"></i>
                 <span class="text-xs text-truncate">{{ group.name }}</span>
              </button>
           </router-link>
@@ -148,7 +148,7 @@
       <!-- Variable: Policy Rules -->
       <div>
         <div class="mb-2 d-flex align-items-center justify-content-between group">
-          <h3 class="text-xs font-semibold text-slate-400 tracking-wider m-0">{{ $t('navPolicyRules') }}</h3>
+          <h3 class="text-xs fw-semibold ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.05em;">{{ $t('navPolicyRules') }}</h3>
           <button 
             @click="showPolicyModal = true"
             class="ui-button-icon"
@@ -169,7 +169,7 @@
                 class="w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg transition-colors group"
                 :class="isActive ? 'nav-item-active shadow-sm text-primary font-medium' : 'nav-item-inactive'"
              >
-                <i :class="['bi text-base', rule.icon, (isActive || rule.color) ? '' : 'text-slate-400 group-hover:text-slate-600']" :style="{ color: rule.color ? rule.color : undefined }"></i>
+                <i :class="['bi text-base', rule.icon]" :style="{ color: (isActive || rule.color) ? (rule.color || 'var(--bs-primary)') : 'var(--ui-text-tertiary)' }"></i>
                 <span class="text-xs text-truncate">{{ rule.name }}</span>
              </button>
           </router-link>
