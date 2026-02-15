@@ -12,6 +12,7 @@ node_modules/
 
 # Build outputs
 dist/
+dist.zip
 
 # System Files
 .DS_Store
@@ -32,3 +33,5 @@ dist/
 
 # ESLint
 .eslintcache
+
+package-lock.json
