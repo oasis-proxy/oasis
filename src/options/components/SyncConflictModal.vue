@@ -117,6 +117,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { t } from '../../common/i18n'
 import BaseModal from './BaseModal.vue'
 
 const props = defineProps({
@@ -129,7 +130,7 @@ const emit = defineEmits(['cancel', 'sync-local', 'sync-cloud'])
 // Local Computed
 const configVersion = computed(() => props.localConfig.version ? `v${props.localConfig.version}` : 'v1')
 const localLastModified = computed(() => {
-    if (!props.localConfig.updatedAt) return chrome.i18n.getMessage('lblUnknown')
+    if (!props.localConfig.updatedAt) return t('lblUnknown')
     return new Date(props.localConfig.updatedAt).toLocaleString()
 })
 const proxyCount = computed(() => Object.keys(props.localConfig.proxies || {}).length)
@@ -139,7 +140,7 @@ const policyCount = computed(() => Object.keys(props.localConfig.policies || {})
 // Cloud Computed
 const cloudConfigVersion = computed(() => props.cloudConfig?.version ? `v${props.cloudConfig.version}` : '-')
 const cloudLastModified = computed(() => {
-    if (!props.cloudConfig?.timestamp) return chrome.i18n.getMessage('lblUnknown')
+    if (!props.cloudConfig?.timestamp) return t('lblUnknown')
     return new Date(props.cloudConfig.timestamp).toLocaleString()
 })
 const cloudProxyCount = computed(() => Object.keys(props.cloudConfig?.proxies || {}).length || 0)

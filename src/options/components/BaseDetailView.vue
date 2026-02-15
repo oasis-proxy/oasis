@@ -7,7 +7,7 @@
         <slot name="header-start"></slot>
         <h1 
           v-if="title"
-          class="fs-4 font-bold ui-text-primary tracking-tight m-0 text-truncate" 
+          class="text-xl font-bold ui-text-primary tracking-tight m-0 text-truncate" 
           style="max-width: 300px;" 
           :title="title"
         >

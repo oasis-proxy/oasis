@@ -34,7 +34,7 @@
                 v-if="url"
                 @click="handleUpdate"
                 :disabled="updating"
-                class="px-2 py-1.5 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none d-flex align-items-center gap-1 border border-subtle "
+                class="px-2 py-1.5 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors d-flex align-items-center gap-1 border border-subtle "
                 :class="{ 'opacity-50 cursor-not-allowed': updating }"
             >
                 <i class="bi bi-arrow-clockwise" :class="{ 'animate-spin': updating }"></i>
@@ -44,7 +44,7 @@
             <textarea 
             :value="content"
             readonly
-            class="w-100 h-100 rounded-lg border ui-input px-3 py-2 text-xs font-mono focus:outline-none custom-scrollbar text-slate-500"
+            class="w-100 h-100 rounded-lg border ui-input px-3 py-2 text-xs font-mono custom-scrollbar text-slate-500"
             style="resize: none; min-height: 320px;"
             :placeholder="$t('rscmMsgNoContent')"
             ></textarea>
@@ -54,7 +54,7 @@
     <template #footer>
         <button 
         @click="emit('close')"
-        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
+        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors"
         >
         {{ $t('btnClose') }}
         </button>
@@ -63,7 +63,8 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { t } from '../../common/i18n'
 import BaseModal from './BaseModal.vue'
 
 const props = defineProps({
@@ -91,7 +92,7 @@ const visible = ref(props.show)
 const updating = ref(false)
 
 const formattedTime = computed(() => {
-  if (!props.lastUpdated) return chrome.i18n.getMessage('rscmMsgNever')
+  if (!props.lastUpdated) return t('rscmMsgNever')
   const date = new Date(props.lastUpdated)
   return date.toLocaleString()
 })

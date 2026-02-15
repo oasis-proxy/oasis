@@ -67,7 +67,7 @@ input[type="color"].border-0::-webkit-color-swatch {
 .ui-form-group label,
 .ui-form-group > span.ui-text-primary,
 .ui-form-group > span:first-child {
-  font-size: 14px !important;
+  font-size: 12px !important;
 }
 
 .ui-form-group p,

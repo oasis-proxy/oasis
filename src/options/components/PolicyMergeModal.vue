@@ -11,7 +11,7 @@
             <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('pmmLabelSource') }}</span>
             <select 
             v-model="sourcePolicy"
-            class="form-select ui-input w-100 rounded-lg border h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
+            class="form-select ui-input w-100 rounded-lg border h-10 px-3 py-2 text-xs transition-all shadow-sm"
             style="min-width: 100%; width: 100%; max-width: 100% !important;"
             >
             <option value="" disabled>{{ $t('pmmSelectSource') }}</option>
@@ -45,7 +45,7 @@
             
             <!-- Ignore Option -->
             <label 
-                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
+                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
                 :class="conflictMode === 'ignore' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
             >
                 <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="ignore"/>
@@ -60,7 +60,7 @@
 
             <!-- Overwrite Option -->
             <label 
-                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
+                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
                 :class="conflictMode === 'overwrite' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
             >
                 <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="overwrite"/>
@@ -81,14 +81,14 @@
     <template #footer>
         <button 
         @click="emit('close')"
-        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
+        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors"
         >
         {{ $t('btnCancel') }}
         </button>
         <button 
         @click="handleConfirm"
         :disabled="!isValid"
-        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
         {{ $t('btnMerge') }}
         </button>

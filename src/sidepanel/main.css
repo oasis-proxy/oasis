@@ -20,7 +20,7 @@ html, body {
   height: 100vh;
   width: 100%;
   overflow: hidden;
-  font-size: var(--font-sm); /* 14px */
+  font-size: 12px; /* 12px */
 }
 
 #app {
@@ -57,8 +57,7 @@ html, body {
 .tab-btn {
   background: transparent;
   border: none;
-  font-size: 13px; /* Keep strict 13px or use xs/sm? 13 is between. Let's use sm (14) or xs (12). Previous was 13. Let's use var(--font-xs) which is 12, or sm which is 14. 12 is closer to "small UI". Let's try 13px override or var(--font-sm). User asked to use variables. I will use var(--font-sm) for consistency or add a --font-xs-plus? I'll stick to 13px if it's specific, but user asked to encapsulate ALL. I'll use var(--font-sm) (14px) and if it's too big, I'll switch to xs. Actually design usually calls for 13px in dense UI. I'll make a var --font-sm-dense: 13px in theme? No, I'll just use 13px for now to match exactly or standardize to 12. Let's standardize to var(--font-sm) (14px) for better readability. */
-  font-size: var(--font-sm);
+  font-size: 12px;
   font-weight: var(--font-weight-medium);
   color: var(--ui-text-secondary);
   padding: 4px 8px;

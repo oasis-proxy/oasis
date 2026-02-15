@@ -13,11 +13,11 @@
                 v-model="name"
                 ref="nameInput"
                 autofocus 
-                class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
+                class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs placeholder:text-slate-400 transition-all shadow-sm"
                 style="min-width: 100%; width: 100%; max-width: 100% !important;" 
                 :placeholder="$t('pocmPlaceholderName')" 
                 type="text"
-                maxlength="30"
+                maxlength="40"
                 @keydown.enter="handleConfirm"
             />
             </div>
@@ -29,7 +29,7 @@
             
             <!-- Auto Policy Option -->
             <label 
-            class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
+            class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
             :class="type === 'policy' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
             >
             <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="policy"/>
@@ -44,7 +44,7 @@
 
             <!-- PAC Script Option -->
             <label 
-            class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
+            class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
             :class="type === 'pac' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
             >
             <input v-model="type" v-show="false" class="sr-only" name="item-type" type="radio" value="pac"/>
@@ -63,14 +63,14 @@
     <template #footer>
         <button 
         @click="emit('close')"
-        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
+        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors"
         >
         {{ $t('btnCancel') }}
         </button>
         <button 
         @click="handleConfirm"
         :disabled="!name.trim()"
-        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
         {{ $t('btnConfirm') }}
         </button>

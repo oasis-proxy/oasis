@@ -11,7 +11,7 @@
     "message": "快捷添加域名"
   },
   "directConnect": {
-    "message": "直接连接"
+    "message": "直连"
   },
   "systemProxy": {
     "message": "系统代理"

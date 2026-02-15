@@ -1,7 +1,7 @@
 <template>
   <BaseModal
     :visible="visible"
-    :title="title"
+    :title="title || $t('prmTitle')"
     @close="emit('close')"
   >
     <div class="d-flex flex-column gap-3">
@@ -9,7 +9,7 @@
       <!-- Original Name (Readonly) -->
       <label class="d-flex flex-column gap-2 w-100">
         <span class="ui-text-primary text-xs font-medium leading-none">{{ $t('prmLabelOriginal') }}</span>
-        <div class="px-3 py-2 rounded-lg bg-subtle  border border-subtle  text-xs text-slate-500">
+        <div class="px-3 py-2 rounded-lg bg-subtle  border border-subtle  text-xs text-slate-500 text-truncate" :title="currentName">
           {{ currentName }}
         </div>
       </label>
@@ -22,11 +22,11 @@
             v-model="newName"
             ref="nameInput"
             autofocus 
-            class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
+            class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs placeholder:text-slate-400 transition-all shadow-sm"
             style="min-width: 100%; width: 100%; max-width: 100% !important;" 
             :placeholder="$t('prmPlaceholder')" 
             type="text"
-            maxlength="30"
+            maxlength="40"
             @keydown.enter="handleConfirm"
           />
         </div>
@@ -37,14 +37,14 @@
     <template #footer>
       <button 
         @click="emit('close')"
-        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
+        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors"
       >
         {{ $t('btnCancel') }}
       </button>
       <button 
         @click="handleConfirm"
         :disabled="!isValid"
-        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {{ $t('btnSave') }}
       </button>
@@ -64,7 +64,7 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: () => chrome.i18n.getMessage('prmTitle')
+    default: ''
   }
 })
 

@@ -210,6 +210,24 @@
                 <button onclick="downloadIcon(32, 'dark', true)" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-100 text-[10px] rounded border border-slate-600 transition-colors font-medium">32px</button>
                 <button onclick="downloadIcon(16, 'dark', true)" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-100 text-[10px] rounded border border-slate-600 transition-colors font-medium">16px</button>
             </div>
+            <div class="flex flex-wrap justify-center gap-2">
+                <span class="text-[10px] font-bold text-slate-500 uppercase w-full text-center">磨砂-蓝 (Light Blurred + White Bg)</span>
+                <button onclick="downloadIcon(256, 'light', true, true)" class="px-2 py-1 bg-white hover:bg-slate-50 text-sky-700 text-[10px] rounded border border-slate-200 transition-colors font-medium shadow-sm">256px</button>
+                <button onclick="downloadIcon(128, 'light', true, true)" class="px-2 py-1 bg-white hover:bg-slate-50 text-sky-700 text-[10px] rounded border border-slate-200 transition-colors font-medium shadow-sm">128px</button>
+                <button onclick="downloadIcon(64, 'light', true, true)" class="px-2 py-1 bg-white hover:bg-slate-50 text-sky-700 text-[10px] rounded border border-slate-200 transition-colors font-medium shadow-sm">64px</button>
+                <button onclick="downloadIcon(48, 'light', true, true)" class="px-2 py-1 bg-white hover:bg-slate-50 text-sky-700 text-[10px] rounded border border-slate-200 transition-colors font-medium shadow-sm">48px</button>
+                <button onclick="downloadIcon(32, 'light', true, true)" class="px-2 py-1 bg-white hover:bg-slate-50 text-sky-700 text-[10px] rounded border border-slate-200 transition-colors font-medium shadow-sm">32px</button>
+                <button onclick="downloadIcon(16, 'light', true, true)" class="px-2 py-1 bg-white hover:bg-slate-50 text-sky-700 text-[10px] rounded border border-slate-200 transition-colors font-medium shadow-sm">16px</button>
+            </div>
+            <div class="flex flex-wrap justify-center gap-2">
+                <span class="text-[10px] font-bold text-slate-400 uppercase w-full text-center">磨砂-白 (Dark Blurred + Dark Bg)</span>
+                <button onclick="downloadIcon(256, 'dark', true, true)" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded border border-slate-700 transition-colors font-medium shadow-sm">256px</button>
+                <button onclick="downloadIcon(128, 'dark', true, true)" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded border border-slate-700 transition-colors font-medium shadow-sm">128px</button>
+                <button onclick="downloadIcon(64, 'dark', true, true)" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded border border-slate-700 transition-colors font-medium shadow-sm">64px</button>
+                <button onclick="downloadIcon(48, 'dark', true, true)" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded border border-slate-700 transition-colors font-medium shadow-sm">48px</button>
+                <button onclick="downloadIcon(32, 'dark', true, true)" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded border border-slate-700 transition-colors font-medium shadow-sm">32px</button>
+                <button onclick="downloadIcon(16, 'dark', true, true)" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] rounded border border-slate-700 transition-colors font-medium shadow-sm">16px</button>
+            </div>
         </div>
     </section>
 
@@ -315,16 +333,27 @@
          * @param size 尺寸
          * @param theme 主题 'light' | 'dark'
          * @param useBlur 是否使用模糊
+         * @param useBg 是否使用背景颜色 (Light=White, Dark=#0f172a)
          */
-        function downloadIcon(size, theme = 'light', useBlur = false) {
+        function downloadIcon(size, theme = 'light', useBlur = false, useBg = false) {
             const canvas = document.getElementById('export-canvas');
             const ctx = canvas.getContext('2d');
             canvas.width = size; canvas.height = size;
             const scale = size / 64;
             
             ctx.clearRect(0, 0, size, size);
+
             ctx.save(); 
             ctx.scale(scale, scale);
+
+            if (useBg) {
+                ctx.beginPath();
+                // r=30 covers the outer ring (r=28, lineWidth=2 => outer edge 29)
+                ctx.arc(32, 32, 30, 0, 2 * Math.PI); 
+                ctx.fillStyle = theme === 'dark' ? '#0f172a' : '#ffffff';
+                ctx.fill();
+            }
+            
             
             const isDark = theme === 'dark';
             // #137fec -> 19, 127, 236
@@ -379,7 +408,8 @@
             
             const link = document.createElement('a');
             const suffix = useBlur ? '-blurred' : '';
-            link.download = `ripple-icon-${theme}-${size}x${size}${suffix}.png`;
+            const bgSuffix = useBg ? (theme === 'dark' ? '-darkbg' : '-whitebg') : '';
+            link.download = `ripple-icon-${theme}-${size}x${size}${suffix}${bgSuffix}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
         }

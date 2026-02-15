@@ -1,6 +1,7 @@
 
 import { DEFAULT_CONFIG } from '../common/config'
 import { loadConfig, saveConfig } from '../common/storage'
+import { t } from '../common/i18n'
 import { updatePolicyRuleSets } from '../common/ruleset'
 import { createProxyConfig, collectProxyCredentials } from '../common/proxy_config'
 
@@ -123,7 +124,7 @@ async function updateContextMenus(config) {
     if (config.ui && config.ui.showContextMenu) {
         chrome.contextMenus.create({
             id: 'oasis-quick-add',
-            title: chrome.i18n.getMessage('contextMenuQuickAdd'),
+            title: t('contextMenuQuickAdd'),
             contexts: ['page', 'link']
         })
         console.log('Oasis: Context menu enabled.')

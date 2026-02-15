@@ -29,7 +29,7 @@
                 <i class="bi bi-plus-lg text-sm"></i>
               </button>
                <button @click="openSmartMerge" :disabled="rules.length === 0" class="ui-button-icon sm" :title="$t('tempBtnMerge')">
-                <i class="bi bi-diagram-3-fill" style="font-size: 14px;"></i>
+                <i class="bi bi-diagram-3-fill" style="font-size: 12px;"></i>
               </button>
               <button @click="acceptAll" :disabled="rules.length === 0" class="ui-button-icon sm" :title="$t('tempBtnAcceptAll')">
                 <i class="bi bi-check-all" style="font-size: 16px;"></i>
@@ -165,6 +165,7 @@ import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '../router'
 import { loadConfig, savePolicies } from '../../common/storage'
 import { validatePattern } from '../../common/validation'
+import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
 import AcceptRulesModal from '../components/AcceptRulesModal.vue'
 import SmartRulesMergeModal from '../components/SmartRulesMergeModal.vue'
@@ -245,7 +246,7 @@ const saveChanges = async () => {
     // Save to session storage
     await chrome.storage.session.set({ tempRules: JSON.parse(JSON.stringify(rules.value)) })
     originalRules.value = JSON.parse(JSON.stringify(rules.value))
-    toast.success(chrome.i18n.getMessage('tempMsgSaved'))
+    toast.success(t('tempMsgSaved'))
 }
 
 const addRule = () => {
@@ -265,7 +266,7 @@ const deleteRule = (index) => {
 }
 
 const clearAll = () => {
-    if (confirm(chrome.i18n.getMessage('tempMsgClearConfirm'))) {
+    if (confirm(t('tempMsgClearConfirm'))) {
         rules.value = []
     }
 }
@@ -318,7 +319,7 @@ const handleSmartMergeConfirm = async ({ targetId, conflictMode, rules: optimize
 // Shared execution logic
 const executeMerge = async (targetId, conflictMode, rulesToMerge) => {
    if (!config.value || !config.value.policies || !config.value.policies[targetId]) {
-       toast.error(chrome.i18n.getMessage('msgPolicyNotFound'))
+       toast.error(t('msgPolicyNotFound'))
        return
    }
 
@@ -368,7 +369,7 @@ const executeMerge = async (targetId, conflictMode, rulesToMerge) => {
    }
 
    await saveChanges()
-   toast.success(chrome.i18n.getMessage('tempMsgMerged', [addedCount, updatedCount]))
+   toast.success(t('tempMsgMerged', [addedCount, updatedCount]))
    
    // Close modals
    showAcceptModal.value = false
@@ -385,7 +386,7 @@ onMounted(() => {
 onMounted(() => {
   registerUnsavedChangesChecker(() => {
     if (isDirty.value) {
-      toast.warning(chrome.i18n.getMessage('pacMsgUnsaved'))
+      toast.warning(t('pacMsgUnsaved'))
       return true
     }
     return false
@@ -398,11 +399,11 @@ onBeforeUnmount(() => {
 
 const getPlaceholder = (type) => {
   switch (type) {
-    case 'wildcard': return chrome.i18n.getMessage('phWildcard');
-    case 'regex': return chrome.i18n.getMessage('phRegex');
-    case 'ip': return chrome.i18n.getMessage('phIP');
-    case 'ruleset': return chrome.i18n.getMessage('phRuleSet');
-    default: return chrome.i18n.getMessage('phDefaultPattern');
+    case 'wildcard': return t('phWildcard');
+    case 'regex': return t('phRegex');
+    case 'ip': return t('phIP');
+    case 'ruleset': return t('phRuleSet');
+    default: return t('phDefaultPattern');
   }
 };
 </script>

@@ -176,6 +176,7 @@ import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '../router'
 import { loadConfig, savePacs } from '../../common/storage'
+import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
 import ProxyRenameModal from '../components/ProxyRenameModal.vue'
 import ProxyCloneModal from '../components/ProxyCloneModal.vue'
@@ -227,7 +228,7 @@ onMounted(() => {
 onMounted(() => {
   registerUnsavedChangesChecker(() => {
     if (isDirty.value) {
-      toast.warning(chrome.i18n.getMessage('pacMsgUnsaved'))
+      toast.warning(t('pacMsgUnsaved'))
       return true
     }
     return false
@@ -256,7 +257,7 @@ const saveChanges = async () => {
     // Persist
     await savePacs(config.value.pacs)
     
-    toast.success(chrome.i18n.getMessage('pacMsgSaved'))
+    toast.success(t('pacMsgSaved'))
     
     // Refresh
     await loadPacData()
@@ -265,7 +266,7 @@ const saveChanges = async () => {
 // Modal Handlers
 const openRenameModal = () => {
   if (isDirty.value) {
-    toast.warning(chrome.i18n.getMessage('pacMsgSaveBeforeRenaming'))
+    toast.warning(t('pacMsgSaveBeforeRenaming'))
     return
   }
   showRenameModal.value = true
@@ -273,7 +274,7 @@ const openRenameModal = () => {
 
 const openCloneModal = () => {
   if (isDirty.value) {
-    toast.warning(chrome.i18n.getMessage('pacMsgSaveBeforeCloning'))
+    toast.warning(t('pacMsgSaveBeforeCloning'))
     return
   }
   showCloneModal.value = true
@@ -287,7 +288,7 @@ const handleRename = async (newName) => {
     if (!pac.value || !config.value) return
     config.value.pacs[pac.value.id].name = newName
     await savePacs(config.value.pacs)
-    toast.success(chrome.i18n.getMessage('pacMsgRenamed'))
+    toast.success(t('pacMsgRenamed'))
     await loadPacData()
     showRenameModal.value = false
 }
@@ -300,7 +301,7 @@ const handleClone = async (newName) => {
     newPac.name = newName
     config.value.pacs[newId] = newPac
     await savePacs(config.value.pacs)
-    toast.success(chrome.i18n.getMessage('pacMsgCloned'))
+    toast.success(t('pacMsgCloned'))
     router.push(`/pac/${newId}`)
     showCloneModal.value = false
 }
@@ -309,7 +310,7 @@ const handleDelete = async () => {
     if (!pac.value || !config.value) return
     delete config.value.pacs[pac.value.id]
     await savePacs(config.value.pacs)
-    toast.success(chrome.i18n.getMessage('pacMsgDeleted'))
+    toast.success(t('pacMsgDeleted'))
     router.push('/settings')
     showDeleteModal.value = false
 }

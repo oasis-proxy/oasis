@@ -214,6 +214,7 @@ import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '../router'
 import { loadConfig, saveProxyGroups } from '../../common/storage'
+import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
 import { useDragDrop } from '../../common/dragDrop'
 
@@ -258,7 +259,7 @@ const { dragOverIndex, handleDragStart, handleDragOver, handleDrop, handleDragEn
 
 // Helpers
 const getProxyName = (id) => {
-    if (!config.value?.proxies?.[id]) return chrome.i18n.getMessage('pgOptionUnknownProxy')
+    if (!config.value?.proxies?.[id]) return t('pgOptionUnknownProxy')
     const p = config.value.proxies[id]
     return p.label || p.host
 }
@@ -318,7 +319,7 @@ onMounted(() => {
 onMounted(() => {
   registerUnsavedChangesChecker(() => {
     if (isDirty.value) {
-      toast.warning(chrome.i18n.getMessage('pacMsgUnsaved'))
+      toast.warning(t('pacMsgUnsaved'))
       return true 
     }
     return false
@@ -347,14 +348,14 @@ const saveChanges = async () => {
     // Persist
     await saveProxyGroups(config.value.proxyGroups)
     
-    toast.success(chrome.i18n.getMessage('pgMsgSaved'))
+    toast.success(t('pgMsgSaved'))
     await loadGroupData()
 }
 
 const addProxy = () => {
     const totalProxies = Object.keys(config.value?.proxies || {}).length
     if (proxyGroup.value.proxies.length >= totalProxies) {
-        toast.warning(chrome.i18n.getMessage('pgMsgNoMoreProxies'))
+        toast.warning(t('pgMsgNoMoreProxies'))
         return
     }
     proxyGroup.value.proxies.push('')
@@ -372,7 +373,7 @@ const updateProxyAt = (index, id) => {
 
 
 const openRenameModal = () => {
-  if (isDirty.value) return toast.warning(chrome.i18n.getMessage('pgMsgSaveFirst'))
+  if (isDirty.value) return toast.warning(t('pgMsgSaveFirst'))
   showRenameModal.value = true
 }
 
@@ -391,7 +392,7 @@ const handleRename = async (newName) => {
 const handleDelete = async () => {
     delete config.value.proxyGroups[proxyGroup.value.id]
     await saveProxyGroups(config.value.proxyGroups)
-    toast.success(chrome.i18n.getMessage('pgMsgDeleted'))
+    toast.success(t('pgMsgDeleted'))
     router.push('/settings')
     showDeleteModal.value = false
 }

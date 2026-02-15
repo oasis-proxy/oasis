@@ -164,13 +164,13 @@
             <div class="d-flex justify-content-center gap-4">
                 <div class="flex-1 d-flex justify-content-center">
                     <button @click="handleSyncToCloud" class="d-flex align-items-center gap-2 px-4 py-2 ui-button-secondary rounded-lg border transition-all">
-                        <i class="bi bi-cloud-upload" style="font-size: 14px;"></i>
+                        <i class="bi bi-cloud-upload" style="font-size: 12px;"></i>
                         <span class="text-xs font-semibold">{{ $t('btnPushToCloud') }}</span>
                     </button>
                 </div>
                 <div class="flex-1 d-flex justify-content-center">
                     <button @click="handleSyncFromLocal" class="d-flex align-items-center gap-2 px-4 py-2 ui-button-secondary rounded-lg border transition-all">
-                        <i class="bi bi-cloud-download" style="font-size: 14px;"></i>
+                        <i class="bi bi-cloud-download" style="font-size: 12px;"></i>
                         <span class="text-xs font-semibold">{{ $t('btnPullFromCloud') }}</span>
                     </button>
                 </div>
@@ -194,6 +194,7 @@
 import { ref, onMounted, computed, reactive } from 'vue'
 import { loadConfig, saveGeneralSettings, syncToCloud, syncFromCloud, exportConfig, importConfig, clearLocalConfig, clearCloudConfig } from '../../common/storage'
 import { DEFAULT_CONFIG } from '../../common/config'
+import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
 import SyncConflictModal from '../components/SyncConflictModal.vue'
 import BaseDetailView from '../components/BaseDetailView.vue'
@@ -381,7 +382,7 @@ const toggleAutoSync = async (event) => {
              // Then syncToCloud updates local version to +1.
              // So we avoid double increment.
              await saveGeneralSettings(config, false, true) 
-             toast.success(chrome.i18n.getMessage('msgAutoSyncEnabled'))
+             toast.success(t('msgAutoSyncEnabled'))
         }
     } else {
         // Turning OFF
@@ -393,7 +394,7 @@ const toggleAutoSync = async (event) => {
 
 const handleSyncToCloud = async () => {
     await syncToCloud(config)
-    toast.success(chrome.i18n.getMessage('msgSyncedToCloud'))
+    toast.success(t('msgSyncedToCloud'))
     showConflictModal.value = false
     await loadData()
 }
@@ -402,11 +403,11 @@ const handleSyncFromLocal = async () => {
     // Sync TO Local from Cloud
     const success = await syncFromCloud(true) // Force pull
     if (success) {
-        toast.success(chrome.i18n.getMessage('msgSyncedFromCloud'))
+        toast.success(t('msgSyncedFromCloud'))
         showConflictModal.value = false
         await loadData() // Reload local config to reflect changes
     } else {
-        toast.error(chrome.i18n.getMessage('msgSyncFromCloudFailed'))
+        toast.error(t('msgSyncFromCloudFailed'))
     }
 }
 
@@ -420,7 +421,7 @@ const resolveConflictCloud = async () => {
     // 2. Persist Local Config with Sync Enabled
     config.sync.enabled = true
     await saveGeneralSettings(config, false, true) // skipSync=false (safe, just synced), skipTouch=true
-    toast.success(chrome.i18n.getMessage('msgLocalPushedAutoSync'))
+    toast.success(t('msgLocalPushedAutoSync'))
 }
 
 const resolveConflictLocal = async () => {
@@ -437,7 +438,7 @@ const resolveConflictLocal = async () => {
         config.sync.enabled = true
         await saveGeneralSettings(config, true, true) // Save enabled state locally only
         
-        toast.success(chrome.i18n.getMessage('msgSyncedFromCloudAutoSync'))
+        toast.success(t('msgSyncedFromCloudAutoSync'))
         showConflictModal.value = false
     }
 }
@@ -465,14 +466,14 @@ const handleImportFile = async (event) => {
             const jsonString = e.target.result
             const success = await importConfig(jsonString)
             if (success) {
-                toast.success(chrome.i18n.getMessage('msgConfigImported'))
+                toast.success(t('msgConfigImported'))
                 await loadData()
             } else {
-                toast.error(chrome.i18n.getMessage('msgConfigImportFailed'))
+                toast.error(t('msgConfigImportFailed'))
             }
         } catch (err) {
             console.error(err)
-            toast.error(chrome.i18n.getMessage('msgInvalidConfig'))
+            toast.error(t('msgInvalidConfig'))
         }
         // Reset input
         event.target.value = ''
@@ -492,17 +493,17 @@ const handleExport = async () => {
         a.click()
         document.body.removeChild(a)
         URL.revokeObjectURL(url)
-        toast.success(chrome.i18n.getMessage('msgConfigExported'))
+        toast.success(t('msgConfigExported'))
     } catch (e) {
         console.error(e)
-        toast.error(chrome.i18n.getMessage('msgConfigExportFailed'))
+        toast.error(t('msgConfigExportFailed'))
     }
 }
 
 const handleClearLocal = async () => {
-    if (confirm(chrome.i18n.getMessage('confirmClearLocal'))) {
+    if (confirm(t('confirmClearLocal'))) {
         await clearLocalConfig()
-        toast.success(chrome.i18n.getMessage('msgLocalCleared'))
+        toast.success(t('msgLocalCleared'))
         // We need to reload the page or re-init state fully
         await loadData() 
         // Force refresh state variables if loadData doesn't catch everything (it usually does as it overwrites reactive config)
@@ -510,7 +511,7 @@ const handleClearLocal = async () => {
 }
 
 const handleClearCloud = async () => {
-    if (confirm(chrome.i18n.getMessage('confirmClearCloud'))) {
+    if (confirm(t('confirmClearCloud'))) {
         try {
             await clearCloudConfig()
             
@@ -518,10 +519,10 @@ const handleClearCloud = async () => {
             config.sync.enabled = false
             await saveGeneralSettings(config, true, true) // Save disabled state, skip sync, skip touch
 
-            toast.success(chrome.i18n.getMessage('msgCloudCleared'))
+            toast.success(t('msgCloudCleared'))
             await loadData()
         } catch (e) {
-            toast.error(chrome.i18n.getMessage('msgClearCloudFailed'))
+            toast.error(t('msgClearCloudFailed'))
         }
     }
 }

@@ -12,7 +12,7 @@
         <div class="position-relative">
             <input 
                 type="text" 
-                class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm"
+                class="w-100 rounded-lg border ui-input h-10 px-3 py-2 text-xs placeholder:text-slate-400 transition-all shadow-sm"
                 style="min-width: 100%; width: 100%; max-width: 100% !important;" 
                 :placeholder="$t('spPlaceholderFilter')"
                 v-model="searchQuery"
@@ -152,6 +152,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { t } from '../common/i18n'
 import { loadConfig } from '../common/storage'
 
 const downloads = ref([])
@@ -227,17 +228,20 @@ const mediaQuery = ref(null)
 
 const applyTheme = (theme) => {
   const root = document.documentElement
-  root.classList.remove('dark')
+  root.classList.remove('dark', 'light')
   
   if (theme === 'auto') {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     if (prefersDark) {
       root.classList.add('dark')
+    } else {
+      root.classList.add('light')
     }
   } else if (theme === 'dark') {
     root.classList.add('dark')
+  } else {
+    root.classList.add('light')
   }
-  // 'light' is default, no class needed
 }
 
 const handleSystemThemeChange = () => {
@@ -323,7 +327,7 @@ const openQuickAdd = async (item) => {
     const domain = getDomain(urlToUse)
     
     if (!domain) {
-        showNotification(chrome.i18n.getMessage('spMsgNotSupported'), chrome.i18n.getMessage('spMsgOnlyHttp'))
+        showNotification(t('spMsgNotSupported'), t('spMsgOnlyHttp'))
         return
     }
     
@@ -346,7 +350,7 @@ const openQuickAdd = async (item) => {
         }
     } catch(e) {
         console.error('Failed to open popup:', e)
-        showNotification(chrome.i18n.getMessage('spMsgError'), chrome.i18n.getMessage('spMsgPopupFailed'))
+        showNotification(t('spMsgError'), t('spMsgPopupFailed'))
     }
 }
 
@@ -356,7 +360,7 @@ const openFileLocation = (id) => {
 
 const cancelDownload = (id) => {
     chrome.downloads.cancel(id, () => {
-        showNotification(chrome.i18n.getMessage('spMsgCanceled'), chrome.i18n.getMessage('spMsgDownloadCanceled'))
+        showNotification(t('spMsgCanceled'), t('spMsgDownloadCanceled'))
     })
 }
 
@@ -364,9 +368,9 @@ const retryDownload = (url) => {
     if (!url) return
     chrome.downloads.download({ url }, () => {
         if (chrome.runtime.lastError) {
-             showNotification(chrome.i18n.getMessage('spMsgError'), 'Failed to restart download')
+             showNotification(t('spMsgError'), 'Failed to restart download')
         } else {
-             showNotification(chrome.i18n.getMessage('spMsgStarted'), chrome.i18n.getMessage('spMsgDownloadRestarted'))
+             showNotification(t('spMsgStarted'), t('spMsgDownloadRestarted'))
         }
     })
 }
@@ -374,9 +378,9 @@ const retryDownload = (url) => {
 const copyLink = (url) => {
     if (!url) return
     navigator.clipboard.writeText(url).then(() => {
-        showNotification(chrome.i18n.getMessage('spMsgCopied'), chrome.i18n.getMessage('spMsgLinkCopied'))
+        showNotification(t('spMsgCopied'), t('spMsgLinkCopied'))
     }).catch(() => {
-        showNotification(chrome.i18n.getMessage('spMsgError'), chrome.i18n.getMessage('spMsgCopyFailed'))
+        showNotification(t('spMsgError'), t('spMsgCopyFailed'))
     })
 }
 

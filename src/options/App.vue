@@ -24,17 +24,21 @@ const mediaQuery = ref(null)
 
 const applyTheme = (theme) => {
   const root = document.documentElement
-  root.classList.remove('dark')
+  root.classList.remove('dark', 'light')
   
   if (theme === 'auto') {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     if (prefersDark) {
       root.classList.add('dark')
+    } else {
+      root.classList.add('light')
     }
   } else if (theme === 'dark') {
     root.classList.add('dark')
+  } else {
+    // 'light' is default, explicit class needed for overrides
+    root.classList.add('light')
   }
-  // 'light' is default, no class needed
 }
 
 const handleSystemThemeChange = () => {

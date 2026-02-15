@@ -30,49 +30,49 @@ chrome.storage.onChanged.addListener((changes, area) => {
   }
 })
 
+// Standalone translation function
+export const t = (key, placeholders) => {
+  // 1. Manual Override
+  if (i18nState.language !== 'auto' && messages[i18nState.language]) {
+    const entry = messages[i18nState.language][key]
+    if (entry) {
+      let msg = entry.message
+      
+      // Handle placeholders
+      if (entry.placeholders && placeholders) {
+         const args = Array.isArray(placeholders) ? placeholders : [placeholders]
+         
+         // Iterate over defined placeholders in the JSON
+         // e.g. "count": { "content": "$1" }
+         Object.keys(entry.placeholders).forEach(name => {
+             const ph = entry.placeholders[name]
+             const content = ph.content // "$1"
+             
+             // Extract index from "$1", "$2" etc.
+             const match = content.match(/\$(\d+)/)
+             if (match) {
+                 const index = parseInt(match[1]) - 1
+                 if (index >= 0 && index < args.length) {
+                     const val = args[index]
+                     // Replace $NAME$ (case insensitive)
+                     // Regex: literal $, name, literal $
+                     const regex = new RegExp(`\\$${name}\\$`, 'gi')
+                     msg = msg.replace(regex, val)
+                 }
+             }
+         })
+      }
+      return msg
+    }
+  }
+
+  // 2. Native Chrome i18n (Auto / Fallback)
+  return chrome.i18n.getMessage(key, placeholders) || key
+}
+
 export const i18n = {
   install(app) {
-    const t = (key, placeholders) => {
-      // 1. Manual Override
-      if (i18nState.language !== 'auto' && messages[i18nState.language]) {
-        const entry = messages[i18nState.language][key]
-        if (entry) {
-          let msg = entry.message
-          
-          // Handle placeholders
-          if (entry.placeholders && placeholders) {
-             const args = Array.isArray(placeholders) ? placeholders : [placeholders]
-             
-             // Iterate over defined placeholders in the JSON
-             // e.g. "count": { "content": "$1" }
-             Object.keys(entry.placeholders).forEach(name => {
-                 const ph = entry.placeholders[name]
-                 const content = ph.content // "$1"
-                 
-                 // Extract index from "$1", "$2" etc.
-                 const match = content.match(/\$(\d+)/)
-                 if (match) {
-                     const index = parseInt(match[1]) - 1
-                     if (index >= 0 && index < args.length) {
-                         const val = args[index]
-                         // Replace $NAME$ (case insensitive)
-                         // Regex: literal $, name, literal $
-                         const regex = new RegExp(`\\$${name}\\$`, 'gi')
-                         msg = msg.replace(regex, val)
-                     }
-                 }
-             })
-          }
-          return msg
-        }
-      }
-
-      // 2. Native Chrome i18n (Auto / Fallback)
-      return chrome.i18n.getMessage(key, placeholders) || key
-    }
-
     app.config.globalProperties.$t = t
-    
     app.provide('i18n', { t })
   }
 }

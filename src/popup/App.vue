@@ -263,7 +263,7 @@
             <div class="d-flex gap-3 pb-2 px-2">
                 <!-- Proxy Host -->
                 <div class="flex-1 d-flex flex-column gap-1">
-                  <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">{{ $t('lblProxies') }}/{{ $t('lblProxyGroups') }}</label>
+                  <label class="fw-bold ui-text-secondary uppercase tracking-wider text-xs m-0">{{ $t('lblProxies') }}</label>
                   <select v-model="quickProxyId" class="form-select ui-input ui-input-sm w-100 text-xs cursor-pointer">
                     <option value="direct">{{ $t('directConnect') }}</option>
                     <optgroup v-for="group in proxyOptions" :key="group.label" :label="group.label">
@@ -303,6 +303,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { t } from '../common/i18n'
 import { loadConfig, saveConfig } from '../common/storage'
 
 const config = ref(null)
@@ -326,17 +327,20 @@ const mediaQuery = ref(null)
 
 const applyTheme = (theme) => {
   const root = document.documentElement
-  root.classList.remove('dark')
+  root.classList.remove('dark', 'light')
   
   if (theme === 'auto') {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     if (prefersDark) {
       root.classList.add('dark')
+    } else {
+      root.classList.add('light')
     }
   } else if (theme === 'dark') {
     root.classList.add('dark')
+  } else {
+    root.classList.add('light')
   }
-  // 'light' is default, no class needed
 }
 
 const handleSystemThemeChange = () => {
@@ -637,7 +641,7 @@ const proxyOptions = computed(() => {
           .sort((a, b) => a.label.localeCompare(b.label))
           
       if (proxies.length > 0) {
-          groups.push({ label: chrome.i18n.getMessage('lblProxies'), options: proxies })
+          groups.push({ label: t('lblProxies'), options: proxies })
       }
   }
   
@@ -648,7 +652,7 @@ const proxyOptions = computed(() => {
           .sort((a, b) => a.label.localeCompare(b.label))
           
       if (proxyGroups.length > 0) {
-          groups.push({ label: chrome.i18n.getMessage('lblProxyGroups'), options: proxyGroups })
+          groups.push({ label: t('lblProxyGroups'), options: proxyGroups })
       }
   }
   
@@ -684,7 +688,7 @@ const confirmQuickAdd = async () => {
         // Notify Background to re-apply if currently active
         // Actually background detects session changes to tempRules and re-applies!
         
-        toast.success(chrome.i18n.getMessage('msgRulesAddedTemp', [newRules.length]))
+        toast.success(t('msgRulesAddedTemp', [newRules.length]))
     } else {
         // Add to current policy (Persistent)
         const policyId = activeProfileId.value
@@ -699,7 +703,7 @@ const confirmQuickAdd = async () => {
         config.value.policies[policyId].rules = [...newRules, ...config.value.policies[policyId].rules]
         
         await saveConfig(config.value)
-        toast.success(chrome.i18n.getMessage('msgRulesAddedPolicy', [newRules.length, config.value.policies[policyId].name || 'Policy']))
+        toast.success(t('msgRulesAddedPolicy', [newRules.length, config.value.policies[policyId].name || 'Policy']))
     }
     
     // Clear selection and switch back
@@ -718,7 +722,7 @@ const showToast = (text, duration = 2000) => {
 
 const copyDomain = (domain) => {
     navigator.clipboard.writeText(domain).then(() => {
-        showToast(chrome.i18n.getMessage('msgCopiedGeneric'))
+        showToast(t('msgCopiedGeneric'))
     })
 }
 

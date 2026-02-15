@@ -507,7 +507,7 @@ const updateIntervals = [
   { label: '1h', value: 60 },
   { label: '15min', value: 15 },
   ...(import.meta.env.MODE === 'development' ? [{ label: '2min', value: 2 }] : []),
-  { label: chrome.i18n.getMessage('themeManual'), value: -1 }
+  { label: t('themeManual'), value: -1 }
 ]
 
 // Computed Properties for Mapping
@@ -682,7 +682,7 @@ const saveTag = (index) => {
 
   // Re-sort local list to match new IP order
   localIpTags.value = sortTags(localIpTags.value)
-  toast.success(chrome.i18n.getMessage('msgTagSaved'))
+  toast.success(t('msgTagSaved'))
 }
 
 const deleteTag = (index) => {
@@ -692,7 +692,7 @@ const deleteTag = (index) => {
     const newTags = { ...config.ipTags }
     delete newTags[item.originalIp]
     config.ipTags = newTags
-    toast.success(chrome.i18n.getMessage('msgTagDeleted'))
+    toast.success(t('msgTagDeleted'))
   }
   localIpTags.value.splice(index, 1)
 }

@@ -11,7 +11,7 @@
           <div>
               <p class="font-bold mb-1 text-red-600 ">{{ $t('pdmWarningTitle') }}</p>
               <p class="opacity-90 leading-relaxed m-0">
-                  {{ $t('pdmMsgDeleteConfirm') }} <span class="font-bold underline text-slate-900 ">{{ proxyName }}</span>? 
+                  {{ $t('pdmMsgDeleteConfirm') }} <span class="font-bold underline text-slate-900 d-inline-block text-truncate align-bottom" style="max-width: 15rem;" :title="proxyName">{{ proxyName }}</span>? 
                   {{ $t('pdmMsgDeleteIrreversible') }}
               </p>
           </div>
@@ -21,13 +21,13 @@
     <template #footer>
       <button 
         @click="emit('close')"
-        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
+        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors"
       >
         {{ $t('btnCancel') }}
       </button>
       <button 
         @click="emit('delete')"
-        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-danger shadow-md shadow-red-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
+        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-danger shadow-md shadow-red-500/20 transition-all"
       >
         {{ $t('btnDeleteForever') }}
       </button>

@@ -180,7 +180,7 @@
               <div style="width: 4%;" class="d-flex justify-content-center">
                 <i 
                   class="bi bi-grip-vertical text-slate-400 transition-colors" 
-                  style="font-size: 14px; cursor: grab;"
+                  style="font-size: 12px; cursor: grab;"
                   draggable="true"
                   @dragstart="handleDragStart($event, index)" 
                   @dragend="handleDragEnd"
@@ -511,6 +511,7 @@ import { decodeRuleSetContent, updateRuleSetContent } from '../../common/ruleset
 import { generatePacScriptFromPolicy } from '../../common/pac'
 import { validatePattern } from '../../common/validation'
 import { useDragDrop } from '../../common/dragDrop'
+import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
 import ProxyRenameModal from '../components/ProxyRenameModal.vue'
 import ProxyCloneModal from '../components/ProxyCloneModal.vue'
@@ -621,7 +622,7 @@ const loadPolicyData = async () => {
             })
         }
         if (!policy.value.name) {
-            policy.value.name = chrome.i18n.getMessage('lblAutoPolicy') || 'Auto Policy'
+            policy.value.name = t('lblAutoPolicy') || 'Auto Policy'
         }
         if (!policy.value.id) {
             policy.value.id = id
@@ -682,7 +683,7 @@ onMounted(() => {
 onMounted(() => {
   registerUnsavedChangesChecker(() => {
     if (isDirty.value) {
-      toast.warning(chrome.i18n.getMessage('phMsgUnsaved'))
+      toast.warning(t('phMsgUnsaved'))
       return true  // Has unsaved changes
     }
     return false  // No unsaved changes
@@ -712,7 +713,7 @@ const saveChanges = async () => {
     // Persist
     await savePolicies(config.value.policies)
     
-    toast.success(chrome.i18n.getMessage('msgPolicySaved') || 'Policy saved successfully')
+    toast.success(t('msgPolicySaved') || 'Policy saved successfully')
     
     // Refresh
     await loadPolicyData()
@@ -792,7 +793,7 @@ const insertDividerBelow = (index) => {
     const newDivider = {
         id: `divider_${Date.now()}`,
         type: 'divider',
-        label: chrome.i18n.getMessage('lblNewSection') || 'New Section'
+        label: t('lblNewSection') || 'New Section'
     }
     policy.value.rules.splice(index + 1, 0, newDivider)
 }
@@ -812,7 +813,7 @@ const insertRejectDividerBelow = (index) => {
     const newDivider = {
         id: `divider_${Date.now()}`,
         type: 'divider',
-        label: chrome.i18n.getMessage('lblNewSection') || 'New Section'
+        label: t('lblNewSection') || 'New Section'
     }
     policy.value.rejectRules.splice(index + 1, 0, newDivider)
 }
@@ -820,7 +821,7 @@ const insertRejectDividerBelow = (index) => {
 // Divider editing
 const startEditDivider = (index, currentLabel) => {
     editingDividerIndex.value = index
-    editingDividerLabel.value = currentLabel || chrome.i18n.getMessage('lblNewSection') || 'New Section'
+    editingDividerLabel.value = currentLabel || t('lblNewSection') || 'New Section'
     nextTick(() => {
         if (dividerInput.value && dividerInput.value[0]) {
             dividerInput.value[0].focus()
@@ -841,7 +842,7 @@ const cancelEditDivider = () => {
 
 const startEditRejectDivider = (index, currentLabel) => {
     editingRejectDividerIndex.value = index
-    editingRejectDividerLabel.value = currentLabel || chrome.i18n.getMessage('lblNewSection') || 'New Section'
+    editingRejectDividerLabel.value = currentLabel || t('lblNewSection') || 'New Section'
     nextTick(() => {
         if (rejectDividerInput.value && rejectDividerInput.value[0]) {
             rejectDividerInput.value[0].focus()
@@ -945,12 +946,12 @@ const handleRuleSetUpdate = async (newContent) => {
 }
 
 const openRenameModal = () => {
-  if (isDirty.value) return toast.warning(chrome.i18n.getMessage('phMsgRenameDirty'))
+  if (isDirty.value) return toast.warning(t('phMsgRenameDirty'))
   showRenameModal.value = true
 }
 
 const openCloneModal = () => {
-  if (isDirty.value) return toast.warning(chrome.i18n.getMessage('phMsgCloneDirty'))
+  if (isDirty.value) return toast.warning(t('phMsgCloneDirty'))
   showCloneModal.value = true
 }
 
@@ -962,7 +963,7 @@ const handleRename = async (newName) => {
     policy.value.name = newName
     await saveChanges()
     showRenameModal.value = false
-    toast.success(chrome.i18n.getMessage('phMsgRenamed'))
+    toast.success(t('phMsgRenamed'))
 }
 
 const handleClone = async (newName) => {
@@ -975,7 +976,7 @@ const handleClone = async (newName) => {
     config.value.policies[newId] = newPolicy
     await savePolicies(config.value.policies)
     
-    toast.success(chrome.i18n.getMessage('phMsgCloned'))
+    toast.success(t('phMsgCloned'))
     router.push(`/policy/${newId}`)
     showCloneModal.value = false
 }
@@ -983,7 +984,7 @@ const handleClone = async (newName) => {
 const handleDelete = async () => {
     delete config.value.policies[policy.value.id]
     await savePolicies(config.value.policies)
-    toast.success(chrome.i18n.getMessage('phMsgDeleted'))
+    toast.success(t('phMsgDeleted'))
     router.push('/settings')
     showDeleteModal.value = false
 }
@@ -1033,10 +1034,10 @@ const handleBatchReplace = (fromProxyId, toProxyId) => {
     })
     
     if (count > 0) {
-        toast.success(chrome.i18n.getMessage('bpmMsgReplaced', [count]))
+        toast.success(t('bpmMsgReplaced', [count]))
         showBatchReplaceModal.value = false
     } else {
-        toast.info(chrome.i18n.getMessage('bpmMsgNoMatch'))
+        toast.info(t('bpmMsgNoMatch'))
     }
 }
 
@@ -1053,7 +1054,7 @@ const handlePolicyMerge = async (sourcePolicyId) => {
     // Determine where to append? End of list
     policy.value.rules = [...policy.value.rules, ...newRules]
     
-    toast.success(chrome.i18n.getMessage('msgPolicyMerged'))
+    toast.success(t('msgPolicyMerged'))
     showPolicyMergeModal.value = false
 }
 

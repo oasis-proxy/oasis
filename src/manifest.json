@@ -8,9 +8,9 @@
     "default_popup": "src/popup/index.html"
   },
   "icons": {
-    "16": "src/assets/icons/light/ripple-icon-light-16x16-blurred.png",
-    "48": "src/assets/icons/light/ripple-icon-light-64x64-blurred.png",
-    "128": "src/assets/icons/light/ripple-icon-light-128x128-blurred.png"
+    "16": "src/assets/icons/light/ripple-icon-light-16x16-blurred-whitebg.png",
+    "48": "src/assets/icons/light/ripple-icon-light-64x64-blurred-whitebg.png",
+    "128": "src/assets/icons/light/ripple-icon-light-128x128-blurred-whitebg.png"
   },
   "options_ui": {
     "page": "src/options/index.html",
@@ -20,12 +20,6 @@
     "service_worker": "src/background/index.js",
     "type": "module"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["src/content/index.js"]
-    }
-  ],
   "permissions": [
     "alarms",
     "contextMenus",

@@ -14,8 +14,8 @@
                 v-model="targetPolicyId"
                 :disabled="!!forcedTargetId"
                 :class="{'bg-subtle  text-slate-500 cursor-not-allowed': !!forcedTargetId}"
-                class="form-select ui-input w-100 rounded-lg border h-8 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-sm"
-                style="max-width: 100%;"
+                class="form-select ui-input w-100 rounded-lg border px-3 text-xs transition-all shadow-sm"
+                style="max-width: 100%; height: 32px;"
                 >
                 <option value="">{{ $t('armPlaceholderTarget') }}</option>
                 <option v-for="policyOption in availablePolicies" :key="policyOption.id" :value="policyOption.id">
@@ -160,7 +160,7 @@
             
             <!-- Ignore Option -->
             <label 
-                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
+                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
                 :class="conflictMode === 'ignore' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
             >
                 <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="ignore"/>
@@ -175,7 +175,7 @@
 
             <!-- Overwrite Option -->
             <label 
-                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm focus:outline-none transition-all"
+                class="relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
                 :class="conflictMode === 'overwrite' ? 'border-primary bg-blue-50/50' : 'ui-card hover:border-default'"
             >
                 <input v-model="conflictMode" v-show="false" class="sr-only" name="conflict-mode" type="radio" value="overwrite"/>
@@ -195,14 +195,14 @@
     <template #footer>
         <button 
         @click="emit('close')"
-        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors focus:outline-none"
+        class="px-3 py-2 rounded-lg text-xs font-medium ui-button-secondary hover-bg-hover  transition-colors"
         >
         {{ $t('btnCancel') }}
         </button>
         <button 
         @click="handleConfirm"
         :disabled="!isValid"
-        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+        class="px-3 py-2 rounded-lg text-xs font-bold ui-button-primary shadow-md shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
         {{ $t('smmmBtnMerge', [mergedRules.length]) }}
         </button>
@@ -212,6 +212,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
+import { t } from '../../common/i18n'
 import BaseModal from './BaseModal.vue'
 
 const props = defineProps({
@@ -258,7 +259,7 @@ const proxyList = computed(() => {
             .sort((a, b) => a.label.localeCompare(b.label))
             
         if (proxies.length > 0) {
-            groups.push({ label: chrome.i18n.getMessage('lblProxyHosts'), options: proxies })
+            groups.push({ label: t('lblProxyHosts'), options: proxies })
         }
     }
     
@@ -269,7 +270,7 @@ const proxyList = computed(() => {
             .sort((a, b) => a.label.localeCompare(b.label))
             
         if (proxyGroups.length > 0) {
-            groups.push({ label: chrome.i18n.getMessage('lblProxyGroups'), options: proxyGroups })
+            groups.push({ label: t('lblProxyGroups'), options: proxyGroups })
         }
     }
     
@@ -279,7 +280,7 @@ const proxyList = computed(() => {
 const availablePolicies = computed(() => {
   return Object.values(props.policies || {})
     .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
-    .map(p => ({ id: p.id, name: p.name || chrome.i18n.getMessage('unnamedPolicy') }))
+    .map(p => ({ id: p.id, name: p.name || t('unnamedPolicy') }))
 })
 
 const isValid = computed(() => {
@@ -287,7 +288,7 @@ const isValid = computed(() => {
 })
 
 const getProxyLabel = (id) => {
-    if (id === 'direct') return chrome.i18n.getMessage('directConnect')
+    if (id === 'direct') return t('directConnect')
     const p = props.proxies && props.proxies[id]
     return p ? (p.label || p.name) : id
 }

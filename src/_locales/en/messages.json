@@ -12,7 +12,7 @@
     "description": "Context menu item to add domain"
   },
   "directConnect": {
-    "message": "Direct Connect"
+    "message": "Direct"
   },
   "systemProxy": {
     "message": "System Proxy"

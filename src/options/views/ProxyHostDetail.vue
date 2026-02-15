@@ -399,6 +399,7 @@ import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '../router'
 import { loadConfig, saveProxies } from '../../common/storage'
+import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
 import ProxyRenameModal from '../components/ProxyRenameModal.vue'
 import ProxyCloneModal from '../components/ProxyCloneModal.vue'
@@ -580,7 +581,7 @@ watch(() => route.params.id, (newId, oldId) => {
 onMounted(() => {
   registerUnsavedChangesChecker(() => {
     if (isDirty.value) {
-      toast.warning(chrome.i18n.getMessage('phMsgUnsaved'))
+      toast.warning(t('phMsgUnsaved'))
       return true  // Has unsaved changes
     }
     return false  // No unsaved changes
@@ -637,7 +638,7 @@ const saveChanges = async () => {
   // Save Proxies only
   await saveProxies(config.value.proxies)
   
-  toast.success(chrome.i18n.getMessage('phMsgSaved'))
+  toast.success(t('phMsgSaved'))
   
   // Reload
   await loadProxyData()
@@ -649,7 +650,7 @@ const saveChanges = async () => {
 
 const openRenameModal = () => {
   if (isDirty.value) {
-    toast.warning(chrome.i18n.getMessage('phMsgRenameDirty'))
+    toast.warning(t('phMsgRenameDirty'))
     return
   }
   showRenameModal.value = true
@@ -657,7 +658,7 @@ const openRenameModal = () => {
 
 const openCloneModal = () => {
   if (isDirty.value) {
-    toast.warning(chrome.i18n.getMessage('phMsgCloneDirty'))
+    toast.warning(t('phMsgCloneDirty'))
     return
   }
   showCloneModal.value = true
@@ -692,7 +693,7 @@ const openDeleteModal = () => {
   }
 
   if (usedInPolicies.length > 0) {
-    toast.warning(`${chrome.i18n.getMessage('phMsgDeleteUsed')} ${usedInPolicies.join(', ')}`)
+    toast.warning(`${t('phMsgDeleteUsed')} ${usedInPolicies.join(', ')}`)
     return
   }
 
@@ -707,7 +708,7 @@ const handleRename = async (newName) => {
   
   // Save
   await saveProxies(config.value.proxies)
-  toast.success(chrome.i18n.getMessage('phMsgRenamed'))
+  toast.success(t('phMsgRenamed'))
   await loadProxyData()
   showRenameModal.value = false
 }
@@ -728,7 +729,7 @@ const handleClone = async (newName) => {
   // Save
   await saveProxies(config.value.proxies)
   
-  toast.success(chrome.i18n.getMessage('phMsgCloned'))
+  toast.success(t('phMsgCloned'))
   
   // Navigate to new proxy
   router.push(`/host/${newId}`)
@@ -744,7 +745,7 @@ const handleDelete = async () => {
   // Save
   await saveProxies(config.value.proxies)
   
-  toast.success(chrome.i18n.getMessage('phMsgDeleted'))
+  toast.success(t('phMsgDeleted'))
   
   // Navigate away
   router.push('/settings')

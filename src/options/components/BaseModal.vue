@@ -10,7 +10,7 @@
       <!-- Modal Card -->
       <div 
         class="ui-card w-100 d-flex flex-column overflow-hidden rounded-xl shadow-lg"
-        :style="{ maxWidth: maxWidth, transform: visible ? 'scale(1)' : 'scale(0.95)', transition: 'transform 0.3s ease' }"
+        :style="{ maxWidth: maxWidth, maxHeight: '85vh', transform: visible ? 'scale(1)' : 'scale(0.95)', transition: 'transform 0.3s ease' }"
       >
         
         <!-- Modal Header -->
@@ -27,7 +27,7 @@
         </div>
 
         <!-- Modal Body -->
-        <div class="px-4 flex-1">
+        <div class="px-4 flex-1 overflow-y-auto custom-scrollbar">
           <slot></slot>
         </div>
 

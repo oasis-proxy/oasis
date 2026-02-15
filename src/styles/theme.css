@@ -53,7 +53,7 @@
 
   /* Typography */
   --font-xs: 12px;
-  --font-sm: 14px;
+  --font-sm: 12px;
   --font-base: 16px;
   --font-lg: 18px;
   --font-xl: 20px;
@@ -95,6 +95,10 @@
   --ui-nav-active-bg: #e0f2fe;     /* Navigation active background (light blue) */
   --ui-notification-bg: #1e293b;   /* Notification background (dark slate) */
   --ui-backdrop: #000;             /* Modal backdrop */
+  
+  /* Toasts */
+  --ui-toast-bg: rgba(255, 255, 255, 0.85);
+  --ui-toast-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -155,4 +159,7 @@
   --ui-radio-border: #64748b;      /* More visible radio border in dark */
   --ui-nav-active-bg: #1e3a5f;     /* Navigation active background (dark blue) */
   --ui-notification-bg: #1e293b;   /* Notification background (dark slate) */
+  
+  /* Toasts */
+  --ui-toast-bg: rgba(30, 41, 59, 0.85);
 }

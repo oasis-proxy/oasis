@@ -204,6 +204,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { loadConfig, saveProxies, savePolicies, savePacs, saveProxyGroups } from '../../common/storage'
 import { hasUnsavedChanges } from '../router'
+import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
 import PolicyCreationModal from './PolicyCreationModal.vue'
 import ProxyCreationModal from './ProxyCreationModal.vue'
@@ -231,7 +232,7 @@ const proxyGroupsList = computed(() => {
     if (!config.value?.proxyGroups) return []
     return Object.values(config.value.proxyGroups).map(g => ({
         id: g.id,
-        name: g.name || chrome.i18n.getMessage('unnamedGroup'),
+        name: g.name || t('unnamedGroup'),
         color: g.color,
         type: 'group'
     }))
@@ -246,7 +247,7 @@ const policyRules = computed(() => {
         Object.values(config.value.pacs).forEach(pac => {
             rules.push({
                 id: pac.id,
-                name: pac.name || pac.url || chrome.i18n.getMessage('unnamedPAC'), // Support 'name' property
+                name: pac.name || pac.url || t('unnamedPAC'), // Support 'name' property
                 icon: 'bi-file-earmark-code', // Distinct icon for PAC
                 color: pac.color,
                 type: 'pac'
@@ -310,7 +311,7 @@ const handleCreateProxy = async ({ name }) => {
     }
 
     await saveProxies(latestConfig.proxies)
-    toast.success(chrome.i18n.getMessage('msgProxyCreated'))
+    toast.success(t('msgProxyCreated'))
     showProxyModal.value = false
     router.push(`/host/${id}`)
 }
@@ -348,10 +349,10 @@ const handleCreatePolicy = async ({ name, type }) => {
 
     if (type === 'pac') {
        await savePacs(latestConfig.pacs)
-       toast.success(chrome.i18n.getMessage('msgPACCreated'))
+       toast.success(t('msgPACCreated'))
     } else {
        await savePolicies(latestConfig.policies)
-       toast.success(chrome.i18n.getMessage('msgPolicyCreated'))
+       toast.success(t('msgPolicyCreated'))
     }
     
     // Navigation
@@ -380,7 +381,7 @@ const handleCreateProxyGroup = async ({ name }) => {
     }
     
     await saveProxyGroups(latestConfig.proxyGroups)
-    toast.success(chrome.i18n.getMessage('msgGroupCreated'))
+    toast.success(t('msgGroupCreated'))
     showGroupModal.value = false
     router.push(`/group/${id}`)
 }
