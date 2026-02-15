@@ -48,7 +48,9 @@ export async function loadConfig() {
     if (sessionResult.tempRules) {
         runtimeConfig.tempRules = sessionResult.tempRules
     }
-  } catch (e) {}
+  } catch (e) {
+    console.error('Failed to load temporary rules:', e)
+  }
 
   return runtimeConfig
 }

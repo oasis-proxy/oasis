@@ -6,7 +6,7 @@ import { createProxyConfig, collectProxyCredentials } from '../common/proxy_conf
 import { updateMonitoringState } from './monitoring'
 import { initRequestMonitor } from './requestMonitor'
 import { updateContextMenus } from './contextMenu'
-import { setupUpdateAlarm, checkUpdates } from './updater'
+import { setupUpdateAlarm } from './updater'
 
 // Store proxy authentication credentials
 // Map structure: "host:port" -> { username, password }

@@ -187,5 +187,5 @@ onMounted(() => {
     })
 })
 onBeforeUnmount(() => unregisterUnsavedChangesChecker())
-watch(() => route.params.id, () => loadProxyData())
+watch(() => route.params.id, (newId) => loadProxyData(newId))
 </script>

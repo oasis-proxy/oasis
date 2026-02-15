@@ -8,26 +8,16 @@ export function useProxyHost(id, router) {
   const originalProxy = ref(null)
   const config = ref(null)
 
-  const getEmptyProxyState = (proxyId = '') => ({
-    id: proxyId,
-    label: '',
-    showInPopup: true,
-    scheme: 'http',
-    host: '',
-    port: null,
-    color: '#137fec',
-    auth: { username: '', password: '' },
-    bypassList: [],
-    overrides: {
-      http: { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' },
-      https: { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' },
-      ftp: { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
-    }
-  })
 
-  const loadProxyData = async () => {
+
+  // Reactive ID
+  const currentId = ref(id)
+
+  const loadProxyData = async (newId = null) => {
+    if (newId) currentId.value = newId
+    
     config.value = await loadConfig()
-    const targetProxy = config.value?.proxies?.[id]
+    const targetProxy = config.value?.proxies?.[currentId.value]
     
     if (targetProxy) {
       // Deep copy to local state
