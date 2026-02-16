@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
+  <!-- 
+    appid: Your Extension ID. 
+           If you have a fixed 'key' in manifest.json, this ID will differ from the dev ID.
+           You can find this ID in chrome://extensions after installing the CRX.
+  -->
+  <app appid='APPID_CODE'>
+    <!--
+      codebase: The URL to the .crx file.
+      version: The version of the extension in the .crx file.
+    -->
+    <updatecheck codebase='CODEBASE_URL' version='VERSION' />
+  </app>
+</gupdate>
