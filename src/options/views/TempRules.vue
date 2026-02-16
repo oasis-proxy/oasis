@@ -192,7 +192,13 @@ const acceptAll = () => {
 }
 
 const openSmartMerge = () => {
-    mergeSourceIndices.value = [] // All
+    // Only select valid wildcard rules for smart merge
+    // This ensures only these rules are removed after merge, preserving other rules (IP, Ruleset, etc.)
+    mergeSourceIndices.value = rules.value
+        .map((r, i) => ({ ...r, index: i }))
+        .filter(r => r.ruleType === 'wildcard' && r.pattern && r.pattern.trim())
+        .map(r => r.index)
+        
     showSmartMergeModal.value = true
 }
 

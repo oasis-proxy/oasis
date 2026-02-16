@@ -9,13 +9,14 @@ export function parseAutoProxyRules(content) {
   // Basic check for Base64 (common for gfwlist)
   let decoded = content;
   try {
-      // Improved check for Base64
-      // 1. Must not contain whitespace
-      // 2. Length must be multiple of 4
-      // 3. Must match Base64 charset
+      // Improved check for Base64 (relaxed for GFWList)
+      // Strip whitespace including newlines before checking
+      const cleanContent = content.replace(/\s/g, '');
       const base64Regex = /^[A-Za-z0-9+/]*={0,2}$/;
-      if (!content.includes('\n') && !content.includes(' ') && content.length % 4 === 0 && base64Regex.test(content)) {
-        const decodedCandidate = atob(content);
+      
+      if (cleanContent.length > 0 && cleanContent.length % 4 === 0 && base64Regex.test(cleanContent)) {
+        // Try decoding
+        const decodedCandidate = atob(cleanContent);
         // Sanity check: decoded content should look like text (no binary control chars)
         // AutoProxy rules are text, so we expect mostly printable items + newlines
         // If it has many control chars, it's likely not what we want

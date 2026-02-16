@@ -33,7 +33,13 @@ chrome.runtime.onStartup.addListener(async () => {
     const config = await loadConfig()
     await applyProxySettings(config)
     await updateContextMenus(config)
+    await updateContextMenus(config)
     await updateMonitoringState()
+    
+    // Ensure update alarm is scheduled
+    if (config.update && config.update.interval !== undefined) {
+        setupUpdateAlarm(config.update.interval)
+    }
 })
 
 // Listen for configuration changes
@@ -45,10 +51,17 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
         console.log('Oasis: Config changed, re-applying settings...')
         const config = await loadConfig()
         
-        // 0. Update Alarms if interval changed
-        const newInterval = config.update && config.update.interval
-        if (newInterval !== undefined) {
-             setupUpdateAlarm(newInterval)
+        // 0. Update Alarms only if interval changed
+        if (changes.config && changes.config.newValue && changes.config.oldValue) {
+            const newInterval = changes.config.newValue.update?.interval
+            const oldInterval = changes.config.oldValue.update?.interval
+            if (newInterval !== oldInterval && newInterval !== undefined) {
+                 setupUpdateAlarm(newInterval)
+            }
+        } else if (changes.config && changes.config.newValue && !changes.config.oldValue) {
+            // First time config load or something weird, safe to set up
+            const newInterval = changes.config.newValue.update?.interval
+            if (newInterval !== undefined) setupUpdateAlarm(newInterval)
         }
 
         // 1. Re-apply Proxy Settings

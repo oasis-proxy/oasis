@@ -356,8 +356,76 @@ const handleBatchReplace = (fromId, toId) => {
     let count = 0; policy.value.rules.forEach(r => { if (r.type !== 'divider' && r.proxyId === fromId) { r.proxyId = toId; count++ } })
     if (count > 0) { toast.success(t('bpmMsgReplaced', [count])); showBatchReplaceModal.value = false } else toast.info(t('bpmMsgNoMatch'))
 }
-const handlePolicyMerge = (sourceId) => {
-    const s = config.value.policies[sourceId]; if (s) { policy.value.rules = [...policy.value.rules, ...JSON.parse(JSON.stringify(s.rules))]; toast.success(t('msgPolicyMerged')); showPolicyMergeModal.value = false }
+const handlePolicyMerge = ({ sourceId, conflictMode, importNormal, importReject }) => {
+    const s = config.value.policies[sourceId]
+    if (!s) return
+
+    let mergedCount = 0
+
+    // Helper for merging a rule list
+    const mergeCheck = (targetList, sourceList, mode) => {
+        const sourceRules = JSON.parse(JSON.stringify(sourceList))
+        const newRules = []
+        const indicesToRemove = new Set()
+
+        sourceRules.forEach(sr => {
+            if (sr.type === 'divider') return // Skip dividers for now? Or import them? Usually skip in simple merge. Let's skip.
+            
+            // Check conflict
+            const existingIndex = targetList.findIndex(tr => 
+                tr.type !== 'divider' && tr.ruleType === sr.ruleType && tr.pattern === sr.pattern
+            )
+
+            if (existingIndex !== -1) {
+                if (mode === 'overwrite') {
+                    indicesToRemove.add(existingIndex)
+                    // Re-generate ID to be safe
+                    sr.id = `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`
+                    newRules.push(sr)
+                }
+                // ignore: do nothing
+            } else {
+                sr.id = `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`
+                newRules.push(sr)
+            }
+        })
+
+        if (indicesToRemove.size > 0) {
+            // Filter in place? No, can't assign to prop if passed by ref.
+            // But here we are passing array by ref from the caller scope? 
+            // We need to modify policy.value.rules directly.
+            // This helper is tricky. Let's inline logic or return changes.
+            return { newRules, indicesToRemove }
+        }
+        return { newRules, indicesToRemove }
+    }
+
+    if (importNormal && s.rules) {
+        const { newRules, indicesToRemove } = mergeCheck(policy.value.rules, s.rules, conflictMode)
+        if (indicesToRemove.size > 0) {
+            policy.value.rules = policy.value.rules.filter((_, i) => !indicesToRemove.has(i))
+        }
+        if (newRules.length > 0) {
+            policy.value.rules = [...policy.value.rules, ...newRules]
+            mergedCount += newRules.length
+        }
+    }
+
+    if (importReject && s.rejectRules) {
+        const { newRules, indicesToRemove } = mergeCheck(policy.value.rejectRules, s.rejectRules, conflictMode)
+        if (indicesToRemove.size > 0) {
+            policy.value.rejectRules = policy.value.rejectRules.filter((_, i) => !indicesToRemove.has(i))
+        }
+        if (newRules.length > 0) {
+            policy.value.rejectRules = [...policy.value.rejectRules, ...newRules]
+            mergedCount += newRules.length
+        }
+    }
+
+    if (mergedCount > 0) toast.success(t('msgPolicyMerged'))
+    else toast.info(t('bpmMsgNoMatch')) // Or "No new rules merged"
+    
+    showPolicyMergeModal.value = false
 }
 const openSmartMerge = () => {
     // Extract wildcard rules with exact domain patterns (no *, no . prefix)
@@ -441,7 +509,14 @@ const handleRejectSmartMerge = ({ conflictMode, rules: mergedRules }) => {
     else toast.success(t('msgPolicyMerged'))
 }
 const handleExportPAC = () => {
-    const pac = generatePacScriptFromPolicy(policy.value, config.value.proxies, config.value.proxyGroups)
+    const pac = generatePacScriptFromPolicy(
+        policy.value, 
+        config.value.proxies, 
+        config.value.reject, 
+        [], 
+        config.value.rulePriority, 
+        config.value.proxyGroups
+    )
     const blob = new Blob([pac], { type: 'application/x-ns-proxy-autoconfig' }); const url = URL.createObjectURL(blob); const a = document.createElement('a')
     a.href = url; a.download = `${policy.value.name || 'proxy'}.pac`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url)
 }
