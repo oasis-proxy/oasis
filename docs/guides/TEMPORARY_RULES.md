@@ -17,10 +17,10 @@ Temporary rules are primarily generated via the **"Quick Add"** workflow:
 1. Open the extension **Popup**.
 2. Switch to the **"Quick"** tab.
 3. Select the desired domains from the list of captured failed requests.
-4. In the "Add To" dropdown, select **"Temporary (Session)"**.
+4. In the "Add To" dropdown, select **"Temporary (Session)"** (or a specific Policy).
 5. Click **Confirm**.
 
-The selected domains will immediately apply the chosen proxy and appear in the "Temporary Rules" list in the sidebar.
+The selected domains will apply the chosen proxy immediately and appear in the "Temporary Rules" sidebar list.
 
 ---
 
@@ -42,7 +42,7 @@ Access the management interface by clicking **"Temporary Rules"** in the sidebar
 Oasis implements a strict page-switching protection mechanism:
 
 - **Locked State**: If there are unsaved modifications on the current page, sidebar navigation is locked.
-- **Unlocking**: One must click the **Save** button at the top of the page to apply changes, or click **Reset** to discard edits and revert to the last saved state.
+- **Unlocking**: Click the **Save** button at the top of the page to apply changes, or click **Reset** to discard edits and revert to the last saved state.
 - **Purpose**: Prevents accidental loss of routing rules or proxy configurations during editing.
 
 ---

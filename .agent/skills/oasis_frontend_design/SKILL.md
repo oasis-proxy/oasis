@@ -220,13 +220,23 @@ Use these classes instead of raw Tailwind utilities for settings pages:
 
 - **Class**: `.form-check .form-switch`
 - **Dark Mode**:
-  - **Unchecked**: Background `#4b5563` (Gray-600) (NOT Black).
+  - **Unchecked**: Background `#4b5563` (Gray-600).
   - **Checked**: Primary Color.
   - **Knob**: White / Light Gray.
 
----
+### 2.7 Modals
 
-**Usage**: Read this file before creating or modifying any Vue components or HTML files to ensure UI consistency.
+- **Container**: `.modal-content`
+  - Background: `--ui-bg-card`
+  - Border: None (Shadow handles depth)
+  - Radius: `16px`
+  - Shadow: `0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)`
+- **Header**:
+  - Class: `.modal-header`
+  - Border: Bottom `1px solid var(--ui-border-subtle)`
+  - Title: `text-lg font-semibold ui-text-primary`
+- **Body**: `.modal-body p-6`
+- **Footer**: `.modal-footer` (Optional, right-aligned actions)
 
 ### 2.8 Toast Notifications
 
@@ -251,13 +261,36 @@ Use these classes instead of raw Tailwind utilities for settings pages:
 - **Warning**: `#f59e0b` (amber) - `bi-exclamation-triangle-fill`
 - **Info**: `#3b82f6` (blue) - `bi-info-circle-fill`
 
-**Usage**:
+**Legacy / Simple Toasts**:
 
-```javascript
-import { toast } from '@/options/utils/toast'
+- For simple confirmations (e.g., "Copied"), use `.ui-toast-simple-badge`.
+- Style: Small, centered/bottom, dark semi-transparent pill.
 
-toast.success('Changes saved successfully')
-toast.error('Failed to save changes')
-toast.warning('You have unsaved changes')
-toast.info('Loading data...')
-```
+---
+
+## 3. Directory Structure Standards
+
+### 3.1 Vue Components
+
+- **Atomic Design**:
+  - `components/common/`: Reusable, domain-agnostic (e.g., `Toast.vue`, `Modal.vue`).
+  - `components/layout/`: Structural (e.g., `AppSidebar.vue`, `AppHeader.vue`).
+  - `components/rule/`: Logic-specific (e.g., `RulePreviewRow.vue`, `SmartRulesMergeModal.vue`).
+  - `components/monitor/`: Monitor-specific.
+  - `components/popup/`: Popup-specific.
+
+### 3.2 Assets
+
+- `src/assets/`: Static images, fonts.
+- `src/styles/`: Global CSS.
+  - `main.css`: Entry point.
+  - `theme.css`: Variables.
+  - `utilities.css`: Custom utility classes not in Bootstrap.
+
+### 3.3 Logic
+
+- `src/common/`: Shared utilities (storage, i18n, config schemas).
+- `src/composables/`: Vue composables (`useMonitorData.js`, `useMonitorMatcher.js`).
+- `src/background/`: Service worker scripts.
+
+**Usage**: Read this file before creating or modifying any Vue components or HTML files to ensure UI consistency and architectural integrity.

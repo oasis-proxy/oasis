@@ -42,13 +42,32 @@ Oasis supports four primary rule types:
 - **Add Single Rule**: Click the **(+)** icon at the top of the "Normal Rules" card.
 - **Add RuleSet**: After adding a new rule row, switch the "Rule Type" dropdown to **Rule Set** and enter the subscription URL.
 - **Add Divider**: Click the "Folder/Storage" icon in the action column of any rule row to insert an editable category header into the list.
-- **Batch Replace**: Click the **"List/Check"** icon at the top of the card to replace all instances of one proxy with another within the current policy.
+
+### Batch Operations
+
+- **Batch Replace Proxy**: Click the **"List/Check"** icon at the top of the card. This feature allows replacing all instances of a specific proxy with another within the current policy.
+- **AutoProxy Preview**: Provides real-time AutoProxy preview and copy functionality for source rules (Wildcard and Regex types).
+- **Rule Merge (Smart Merge)**: Offers consolidation for exact match domain rules. Supports automatically merging subdomains sharing the same root domain into a wildcard rule, replacing the original rules to simplify the rule set.
+
+### Policy Merge (Smart Merge)
+
+The **Policy Merge** feature allows importing rules from another policy into the current one with intelligent conflict resolution. Accessed via the **Action Menu** (three dots) in the header:
+
+- **Source Selection**: Choose any existing Auto Policy as the source.
+- **Rule Types**: Select whether to import "Normal Rules", "Reject Rules", or both.
+- **Conflict Resolution**:
+  - **Ignore**: Skips importing rules that already exist in the destination policy.
+  - **Overwrite**: Updates existing rules in the destination with the version from the source.
 
 ### RuleSet Management
 
 - **Format Support**: Subscriptions support **AutoProxy (Base64)** and **AutoProxy Plain Text** formats.
 - **Offline Resilience**: The system automatically caches content locally, ensuring the routing policy remains functional even if the subscription link is offline.
 - **Real-time Inspection**: Use the "View Content" feature to inspect the downloaded and parsed rule list in real-time.
+
+### External RuleSet Preview
+
+- **Preview**: Click the **"Eye"** icon in the header to view the entire policy (including all rules and subscribed RuleSets) as a generated AutoProxy file.
 
 ---
 
