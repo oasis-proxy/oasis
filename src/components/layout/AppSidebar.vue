@@ -58,12 +58,12 @@ const {
 // Inline NavGroup component to avoid creating another file for a tiny wrapper
 const NavGroup = defineComponent({
   props: ['title'],
-  emits: ['add'],
-  setup(props, { slots, emit }) {
+
+  setup(props, { slots, emit, attrs }) {
     return () => h('div', [
       h('div', { class: 'mb-2 d-flex align-items-center justify-content-between group' }, [
         h('h3', { class: 'text-xs fw-semibold ui-text-secondary text-uppercase m-0', style: { letterSpacing: '0.05em' } }, props.title),
-        slots.add ? slots.add() : (emit ? h('button', { class: 'ui-button-icon', onClick: () => emit('add') }, [h('i', { class: 'bi bi-plus-lg text-sm' })]) : null)
+        slots.add ? slots.add() : (attrs.onAdd ? h('button', { class: 'ui-button-icon', onClick: () => emit('add') }, [h('i', { class: 'bi bi-plus-lg text-sm' })]) : null)
       ]),
       h('div', { class: 'd-flex flex-column gap-1' }, slots.default?.())
     ])

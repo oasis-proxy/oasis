@@ -107,7 +107,7 @@ const {
 
 const getProxyLabel = (id) => {
   if (id === 'direct') return t('directConnect')
-  if (id === 'reject') return 'Reject'
+  if (id === 'reject') return t('lblReject')
   const p = props.proxies && props.proxies[id]
   if (p) return p.label || p.name || id
   const g = props.proxyGroups && props.proxyGroups[id]
