@@ -130,7 +130,7 @@ body {
 }
 
 .profile-item.active {
-  background-color: rgba(var(--bs-primary-rgb), 0.1);
+  /* background-color: rgba(var(--bs-primary-rgb), 0.1); */
 }
 
 .profile-icon {

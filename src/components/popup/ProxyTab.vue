@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   activeProfileId: String,
   hostProxies: Array,
   pacScripts: Array,
@@ -111,24 +111,14 @@ defineProps({
 })
 defineEmits(['select'])
 
-const isActive = (id, activeProfileId) => {
-  // This needs to be checked carefully because isActive is a prop here
+const isActive = (id) => {
+  return props.activeProfileId === id
 }
-// Actually let's use a computed or just pass isActive logic
-</script>
 
-<script>
-export default {
-    methods: {
-        isActive(id) {
-            return this.activeProfileId === id
-        },
-        getIconStyle(profile) {
-            if (this.isActive(profile.id)) {
-                return { color: profile.color || 'var(--bs-primary)' }
-            }
-            return { color: profile.color || '#4b5563' }
-        }
-    }
+const getIconStyle = (profile) => {
+  if (isActive(profile.id)) {
+      return { color: 'var(--bs-primary)' }
+  }
+  return { color: profile.color || 'var(--ui-text-secondary)' }
 }
 </script>

@@ -89,13 +89,16 @@ const handleSystemThemeChange = () => {
     if (config.value?.ui?.theme === 'auto') applyTheme('auto')
 }
 
+// Revert to storage-based monitor (compatible with background/monitoring.js)
 const storageListener = (changes, area) => {
     if (area === 'local' && changes.config?.newValue?.ui?.theme) {
         applyTheme(changes.config.newValue.ui.theme)
     }
     if (area === 'session' && activeTabId.value) {
         const key = `monitor_${activeTabId.value}`
-        if (changes[key]) monitorResult.value = changes[key].newValue || []
+        if (changes[key]) {
+             monitorResult.value = changes[key].newValue || []
+        }
     }
 }
 
@@ -119,7 +122,13 @@ onMounted(async () => {
       await chrome.storage.session.remove('quickAddIntent')
   }
 
-  const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
+  // Get Active Tab
+  let tabs = await chrome.tabs.query({ active: true, currentWindow: true })
+  if (tabs.length === 0) {
+      // Fallback for some contexts
+      tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
+  }
+  
   if (tabs.length > 0) {
       activeTabId.value = tabs[0].id
       currentTabUrl.value = tabs[0].url
