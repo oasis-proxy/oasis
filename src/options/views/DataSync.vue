@@ -96,7 +96,13 @@ const onImportFile = async (e) => {
   const file = e.target.files[0]; if (!file) return
   const reader = new FileReader(); reader.onload = async (ev) => {
     try {
-      if (await importConfig(ev.target.result)) { toast.success(t('msgConfigImported')); await loadLocalData(); await loadCloudData() }
+      if (await importConfig(ev.target.result)) { 
+        toast.success(t('msgConfigImported')); 
+        // Trigger immediate update of external resources (RuleSets, PACs)
+        chrome.runtime.sendMessage({ type: 'TRIGGER_UPDATE' });
+        await loadLocalData(); 
+        await loadCloudData() 
+      }
       else toast.error(t('msgConfigImportFailed'))
     } catch (err) { toast.error(t('msgInvalidConfig')) }
     e.target.value = ''

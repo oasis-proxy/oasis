@@ -30,7 +30,7 @@
         :disabled="!!lockedProxy"
       >
         <option value="direct">{{ $t('directConnect') }}</option>
-        <option value="reject">Reject</option>
+        <option v-if="allowReject || rule.proxyId === 'reject'" value="reject">{{ $t('lblReject') }}</option>
         <optgroup v-for="group in proxyList" :key="group.label" :label="group.label">
           <option v-for="p in group.options" :key="p.id" :value="p.id">{{ p.label }}</option>
         </optgroup>
@@ -54,7 +54,8 @@
 defineProps({
   rule: Object,
   proxyList: Array,
-  lockedProxy: String
+  lockedProxy: String,
+  allowReject: Boolean
 })
 const emit = defineEmits(['remove'])
 </script>

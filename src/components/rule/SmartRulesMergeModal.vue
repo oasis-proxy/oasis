@@ -50,7 +50,15 @@
             <div style="width: 8%;" class="text-center">{{ $t('lblAction').toUpperCase() }}</div>
           </div>
           <div class="overflow-y-auto custom-scrollbar ui-bg-card" style="max-height: 16rem;">
-            <RulePreviewRow v-for="(rule, idx) in mergedRules" :key="idx" :rule="rule" :proxyList="proxyList" :lockedProxy="lockedProxy" @remove="removeMergedRule(idx)" />
+            <RulePreviewRow 
+              v-for="(rule, idx) in mergedRules" 
+              :key="idx" 
+              :rule="rule" 
+              :proxyList="proxyList" 
+              :lockedProxy="lockedProxy" 
+              :allowReject="lockedProxy === 'reject'"
+              @remove="removeMergedRule(idx)" 
+            />
             <div v-if="mergedRules.length === 0" class="p-4 text-center text-xs ui-text-secondary">{{ $t('smmmMsgNoMerge') }}</div>
           </div>
         </div>

@@ -88,6 +88,8 @@ export function useDataSync() {
         showConflictModal.value = true
       } else {
         await saveGeneralSettings(config, false, true)
+        // Trigger immediate sync to ensure data is pushed and user gets feedback
+        await handleSyncToCloud()
         toast.success(t('msgAutoSyncEnabled'))
       }
     } else {

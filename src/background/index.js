@@ -209,6 +209,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             .catch(error => sendResponse({ success: false, error: error.message }))
         return true
     }
+    if (request.type === 'TRIGGER_UPDATE') {
+        import('./updater').then(({ checkUpdates }) => {
+            checkUpdates().then(changed => {
+                sendResponse({ success: true, changed })
+            }).catch(error => {
+                sendResponse({ success: false, error: error.message })
+            })
+        })
+        return true
+    }
 })
 
 // Initialize Forward-only Request Monitor
