@@ -27,8 +27,10 @@
         v-model="rule.proxyId"
         class="form-select ui-input ui-input-sm w-100 rounded border py-0 px-1.5" 
         style="max-width: none;"
+        :disabled="!!lockedProxy"
       >
         <option value="direct">{{ $t('directConnect') }}</option>
+        <option value="reject">Reject</option>
         <optgroup v-for="group in proxyList" :key="group.label" :label="group.label">
           <option v-for="p in group.options" :key="p.id" :value="p.id">{{ p.label }}</option>
         </optgroup>
@@ -51,7 +53,8 @@
 <script setup>
 defineProps({
   rule: Object,
-  proxyList: Array
+  proxyList: Array,
+  lockedProxy: String
 })
 const emit = defineEmits(['remove'])
 </script>

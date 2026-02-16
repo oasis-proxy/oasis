@@ -186,6 +186,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             .catch(error => sendResponse({ success: false, error: error.message }))
         return true
     }
+    if (request.type === 'FETCH_RULESET') {
+        fetch(request.url)
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`)
+                return response.text()
+            })
+            .then(content => sendResponse({ success: true, content }))
+            .catch(error => sendResponse({ success: false, error: error.message }))
+        return true
+    }
 })
 
 // Initialize Forward-only Request Monitor

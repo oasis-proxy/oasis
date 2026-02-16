@@ -5,18 +5,18 @@
          style="background: var(--ui-bg-subtle); min-width: max-content; z-index: 10;">
       <div style="width: 80px;" class="flex-shrink-0">{{ $t('colTime') }}</div>
       <div style="width: 140px;" class="flex-shrink-0 d-flex align-items-center gap-1">
-        {{ $t('colDomain') }} <i class="bi bi-copy text-muted opacity-50 text-xxs"></i>
+        {{ $t('colDomain') }} <i class="bi bi-clipboard text-muted opacity-50 text-xxs"></i>
       </div>
       <div style="width: 180px;" class="flex-shrink-0">{{ $t('colPattern') }}</div>
       <div style="width: 120px;" class="flex-shrink-0">{{ $t('colProxyName') }}</div>
       <div style="width: 140px;" class="flex-shrink-0 d-flex align-items-center gap-1">
-        {{ $t('colIP') }} <i class="bi bi-copy text-muted opacity-50 text-xxs"></i>
+        {{ $t('colIP') }} <i class="bi bi-clipboard text-muted opacity-50 text-xxs"></i>
       </div>
       <div style="width: 70px;" class="text-end flex-shrink-0">{{ $t('colDuration') }}</div>
       <div style="width: 60px;" class="flex-shrink-0">{{ $t('colMethod') }}</div>
       <div style="width: 60px;" class="flex-shrink-0">{{ $t('colStatus') }}</div>
       <div style="width: 300px;" class="flex-shrink-0 d-flex align-items-center gap-1">
-        {{ $t('colURL') }} <i class="bi bi-copy text-muted opacity-50 text-xxs"></i>
+        {{ $t('colURL') }} <i class="bi bi-clipboard text-muted opacity-50 text-xxs"></i>
       </div>
     </div>
 

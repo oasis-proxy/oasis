@@ -154,14 +154,19 @@ const handleQuickAddMerge = async ({ targetId, conflictMode, rules: mergedRules 
   const config = await loadConfig(); const targetPolicy = config.policies?.[targetId]; if (!targetPolicy) return
   if (!targetPolicy.rules) targetPolicy.rules = []
   const newRulesToAdd = []
+  const indicesToRemove = new Set()
   mergedRules.forEach(rule => {
     const existingIndex = targetPolicy.rules.findIndex(r => r.type !== 'divider' && r.ruleType === rule.ruleType && r.pattern === rule.pattern)
     if (existingIndex !== -1) {
-      if (conflictMode === 'overwrite') { targetPolicy.rules[existingIndex].proxyId = rule.proxyId; targetPolicy.rules[existingIndex].valid = rule.valid !== false }
+      if (conflictMode === 'overwrite') {
+        indicesToRemove.add(existingIndex)
+        newRulesToAdd.push({ ...rule, id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`, type: 'rule', valid: true })
+      }
     } else {
       newRulesToAdd.push({ ...rule, id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`, type: 'rule', valid: true })
     }
   })
+  if (indicesToRemove.size > 0) targetPolicy.rules = targetPolicy.rules.filter((_, i) => !indicesToRemove.has(i))
   if (newRulesToAdd.length > 0) targetPolicy.rules.unshift(...newRulesToAdd)
   config.policies[targetId] = targetPolicy; await savePolicies(config.policies); showQuickAddModal.value = false
 }

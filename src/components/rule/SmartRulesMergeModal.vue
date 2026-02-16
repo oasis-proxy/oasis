@@ -38,7 +38,7 @@
         <div class="d-flex justify-content-between align-items-center mb-2">
           <h4 class="text-xs fw-bold ui-text-secondary text-uppercase m-0" style="letter-spacing: 0.1em;">{{ $t('smmmSectionPreview') }}</h4>
           <div class="d-flex align-items-center gap-2">
-            <span class="text-xs ui-text-secondary" v-if="mergedRules.length < sourceRules.length">{{ $t('smmmMsgOptimized', ['-' + (sourceRules.length - mergedRules.length)]) }}</span>
+            <span class="text-xs ui-text-secondary" v-if="mergedRules.length < sourceRules.length">{{ $t('smmmMsgOptimized', [sourceRules.length - mergedRules.length]) }}</span>
             <span class="text-xs ui-button-secondary px-2 py-1 rounded-pill">{{ mergedRules.length }} rules</span>
           </div>
         </div>
@@ -50,7 +50,7 @@
             <div style="width: 8%;" class="text-center">{{ $t('lblAction').toUpperCase() }}</div>
           </div>
           <div class="overflow-y-auto custom-scrollbar ui-bg-card" style="max-height: 16rem;">
-            <RulePreviewRow v-for="(rule, idx) in mergedRules" :key="idx" :rule="rule" :proxyList="proxyList" @remove="removeMergedRule(idx)" />
+            <RulePreviewRow v-for="(rule, idx) in mergedRules" :key="idx" :rule="rule" :proxyList="proxyList" :lockedProxy="lockedProxy" @remove="removeMergedRule(idx)" />
             <div v-if="mergedRules.length === 0" class="p-4 text-center text-xs ui-text-secondary">{{ $t('smmmMsgNoMerge') }}</div>
           </div>
         </div>
@@ -58,7 +58,7 @@
       </section>
 
       <!-- Section 4: Conflict Resolution -->
-      <section>
+      <section v-if="!hideConflict">
         <h4 class="text-xs fw-bold ui-text-secondary text-uppercase mb-2" style="letter-spacing: 0.1em;">{{ $t('armLabelConflict') }}</h4>
         <ConflictModeSelector v-model="conflictMode" />
       </section>
@@ -85,7 +85,9 @@ const props = defineProps({
   forcedTargetId: String,
   proxies: Object,
   proxyGroups: Object,
-  domainOptimize: Boolean
+  domainOptimize: Boolean,
+  lockedProxy: String,
+  hideConflict: Boolean
 })
 
 const emit = defineEmits(['close', 'merge'])
@@ -97,7 +99,11 @@ const {
 
 const getProxyLabel = (id) => {
   if (id === 'direct') return t('directConnect')
+  if (id === 'reject') return 'Reject'
   const p = props.proxies && props.proxies[id]
-  return p ? (p.label || p.name) : id
+  if (p) return p.label || p.name || id
+  const g = props.proxyGroups && props.proxyGroups[id]
+  if (g) return g.name || id
+  return id
 }
 </script>

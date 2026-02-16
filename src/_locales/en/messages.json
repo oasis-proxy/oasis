@@ -406,6 +406,16 @@
   "lblRequestsSuffix": { "message": "Requests" },
   "lblProxyHosts": { "message": "Proxy Hosts" },
   "lblPolicies": { "message": "Policies" },
+  "msgPolicyMerged": { "message": "Policy merged successfully" },
   "btnBatchReplace": { "message": "Batch Replace" },
-  "msgPolicySaved": { "message": "Policy saved successfully" }
+  "msgPolicySaved": { "message": "Policy saved successfully" },
+  "appmTitle": { "message": "AutoProxy Preview" },
+  "appmFilterAll": { "message": "All" },
+  "appmFilterProxy": { "message": "Proxy" },
+  "appmFilterType": { "message": "Type" },
+  "appmCopied": { "message": "Copied!" },
+  "appmCountSuffix": { "message": "rules" },
+  "appmBtnPreview": { "message": "AutoProxy Preview" },
+  "appmBtnCopy": { "message": "Copy to clipboard" },
+  "appmDesc": { "message": "Preview rules converted to AutoProxy format. Wildcard and regex rules are included; IP/CIDR rules are excluded." }
 }

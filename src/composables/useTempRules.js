@@ -99,6 +99,7 @@ export function useTempRules() {
         let addedCount = 0
         let updatedCount = 0
         const newRulesToAdd = []
+        const indicesToRemove = new Set()
 
         rulesToMerge.forEach(tempRule => {
             const existingIndex = targetPolicy.rules.findIndex(r => 
@@ -107,16 +108,20 @@ export function useTempRules() {
 
             if (existingIndex !== -1) {
                 if (conflictMode === 'overwrite') {
-                    targetPolicy.rules[existingIndex].proxyId = tempRule.proxyId
-                    targetPolicy.rules[existingIndex].valid = tempRule.valid
+                    indicesToRemove.add(existingIndex)
+                    newRulesToAdd.push({ ...tempRule, id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}` })
                     updatedCount++
                 }
+                // ignore: skip entirely
             } else {
                 newRulesToAdd.push({ ...tempRule, id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}` })
                 addedCount++
             }
         })
         
+        if (indicesToRemove.size > 0) {
+            targetPolicy.rules = targetPolicy.rules.filter((_, i) => !indicesToRemove.has(i))
+        }
         if (newRulesToAdd.length > 0) targetPolicy.rules.unshift(...newRulesToAdd)
 
         config.value.policies[targetId] = targetPolicy

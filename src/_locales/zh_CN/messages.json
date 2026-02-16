@@ -155,6 +155,7 @@
   "lblPolicies": { "message": "策略" },
   "btnBatchReplace": { "message": "批量替换" },
   "msgPolicySaved": { "message": "策略已保存" },
+  "msgPolicyMerged": { "message": "策略合并成功" },
 
   "phHeaderNormalRules": { "message": "普通规则" },
   "phHeaderRejectRules": { "message": "拒绝规则" },
@@ -407,5 +408,14 @@
   "pdmMsgDeleteConfirm": { "message": "确定要删除" },
   "pdmMsgDeleteIrreversible": { "message": "此操作不可逆，将永久删除此配置。" },
   "btnDeleteForever": { "message": "确认删除" },
-  "suffixCopy": { "message": " 副本" }
+  "suffixCopy": { "message": " 副本" },
+  "appmTitle": { "message": "AutoProxy 预览" },
+  "appmFilterAll": { "message": "全部" },
+  "appmFilterProxy": { "message": "代理" },
+  "appmFilterType": { "message": "类型" },
+  "appmCopied": { "message": "已复制！" },
+  "appmCountSuffix": { "message": "条规则" },
+  "appmBtnPreview": { "message": "AutoProxy 预览" },
+  "appmBtnCopy": { "message": "复制到剪贴板" },
+  "appmDesc": { "message": "预览转换为 AutoProxy 格式的规则。仅包含通配符和正则规则，不包含 IP/CIDR 规则。" }
 }

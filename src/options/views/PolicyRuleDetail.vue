@@ -39,6 +39,8 @@
       <div class="ui-card-label">
         <span class="label-text">{{ $t('phHeaderNormalRules') }}</span>
         <div class="d-flex align-items-center gap-2">
+          <button @click="openSmartMerge" class="ui-button-icon sm" :title="$t('smmmTitle')"><i class="bi bi-diagram-3 ui-icon-md"></i></button>
+          <button @click="showAutoProxyPreview = true" class="ui-button-icon sm" :title="$t('appmBtnPreview')"><i class="bi bi-filetype-txt ui-icon-md"></i></button>
           <button @click="showBatchReplaceModal = true" class="ui-button-icon sm" :title="$t('btnBatchReplace')"><i class="bi bi-list-check ui-icon-md"></i></button>
           <button @click="addRule()" class="ui-button-icon sm" :title="$t('btnAddRule')"><i class="bi bi-plus-lg text-sm"></i></button>
         </div>
@@ -89,7 +91,7 @@
               @type-change="handleRuleTypeChange(index, rule)"
               @open-ruleset="openRuleSetModal(rule, index)"
               @focus="focusedIndex = index"
-              @blur="focusedIndex = null; validateRule(index, rule); rule.ruleType === 'ruleset' && fetchRuleSetContent(index, rule.pattern)"
+              @blur="focusedIndex = null; validateRule(index, policy.rules[index]); policy.rules[index].ruleType === 'ruleset' && fetchRuleSetContent(index, policy.rules[index].pattern)"
               @add-below="insertRuleBelow(index)"
               @add-divider-below="insertDividerBelow(index)"
               @delete="deleteRule(index)"
@@ -120,7 +122,11 @@
     <section class="mt-4">
       <div class="ui-card-label">
         <span class="label-text">{{ $t('phHeaderRejectRules') }}</span>
-        <button @click="addRejectRule()" class="ui-button-icon sm" :title="$t('btnAddRejectRule')"><i class="bi bi-plus-lg text-sm"></i></button>
+        <div class="d-flex align-items-center gap-2">
+          <button @click="openRejectSmartMerge" class="ui-button-icon sm" :title="$t('smmmTitle')"><i class="bi bi-diagram-3 ui-icon-md"></i></button>
+          <button @click="showRejectAutoProxyPreview = true" class="ui-button-icon sm" :title="$t('appmBtnPreview')"><i class="bi bi-filetype-txt ui-icon-md"></i></button>
+          <button @click="addRejectRule()" class="ui-button-icon sm" :title="$t('btnAddRejectRule')"><i class="bi bi-plus-lg text-sm"></i></button>
+        </div>
       </div>
 
       <div class="ui-card rounded-xl border shadow-sm overflow-hidden">
@@ -186,6 +192,10 @@
     <RuleSetContentModal :show="showRuleSetModal" :content="selectedRuleSetContent" :url="selectedRuleSetUrl" :lastUpdated="selectedRuleSetLastUpdated" @close="showRuleSetModal = false" @update="handleRuleSetUpdate"/>
     <BatchProxyReplaceModal :visible="showBatchReplaceModal" :proxies="config?.proxies" :proxyGroups="config?.proxyGroups" @close="showBatchReplaceModal = false" @replace="handleBatchReplace"/>
     <PolicyMergeModal :visible="showPolicyMergeModal" :currentPolicyId="policy.id" :policies="config?.policies || {}" @close="showPolicyMergeModal = false" @merge="handlePolicyMerge" />
+    <AutoProxyPreviewModal :visible="showAutoProxyPreview" :rules="policy.rules" :proxies="config?.proxies" :proxyGroups="config?.proxyGroups" @close="showAutoProxyPreview = false" />
+    <SmartRulesMergeModal :visible="showSmartMerge" :policies="config?.policies || {}" :sourceRules="smartMergeSourceRules" :proxies="config?.proxies" :proxyGroups="config?.proxyGroups" :forcedTargetId="policy.id" :domainOptimize="true" @close="showSmartMerge = false" @merge="handleSmartMerge" />
+    <AutoProxyPreviewModal :visible="showRejectAutoProxyPreview" :rules="policy.rejectRules" :proxies="config?.proxies" :proxyGroups="config?.proxyGroups" :hideProxyFilter="true" @close="showRejectAutoProxyPreview = false" />
+    <SmartRulesMergeModal :visible="showRejectSmartMerge" :policies="config?.policies || {}" :sourceRules="rejectSmartMergeSourceRules" :proxies="config?.proxies" :proxyGroups="config?.proxyGroups" :forcedTargetId="policy.id" :domainOptimize="true" lockedProxy="reject" :hideConflict="true" @close="showRejectSmartMerge = false" @merge="handleRejectSmartMerge" />
   </BaseDetailView>
 </template>
 
@@ -207,6 +217,8 @@ import ProxyDeleteModal from '../../components/proxy/ProxyDeleteModal.vue'
 import RuleSetContentModal from '../../components/rule/RuleSetContentModal.vue'
 import BatchProxyReplaceModal from '../../components/proxy/BatchProxyReplaceModal.vue'
 import PolicyMergeModal from '../../components/policy/PolicyMergeModal.vue'
+import AutoProxyPreviewModal from '../../components/policy/AutoProxyPreviewModal.vue'
+import SmartRulesMergeModal from '../../components/rule/SmartRulesMergeModal.vue'
 import ProxySelect from '../../components/proxy/ProxySelect.vue'
 import BaseDetailView from '../../components/base/BaseDetailView.vue'
 import PolicyRuleRow from '../../components/policy/PolicyRuleRow.vue'
@@ -241,6 +253,12 @@ const showDeleteModal = ref(false)
 const showRuleSetModal = ref(false)
 const showBatchReplaceModal = ref(false)
 const showPolicyMergeModal = ref(false)
+const showAutoProxyPreview = ref(false)
+const showSmartMerge = ref(false)
+const smartMergeSourceRules = ref([])
+const showRejectAutoProxyPreview = ref(false)
+const showRejectSmartMerge = ref(false)
+const rejectSmartMergeSourceRules = ref([])
 const selectedRuleSetContent = ref('')
 const selectedRuleSetUrl = ref('')
 const selectedRuleSetLastUpdated = ref(null)
@@ -258,6 +276,7 @@ const loadPolicyData = async () => {
         policy.value = JSON.parse(JSON.stringify(config.value.policies[id]))
         if (!Array.isArray(policy.value.rules)) policy.value.rules = []
         if (!Array.isArray(policy.value.rejectRules)) policy.value.rejectRules = []
+        if (policy.value.showInPopup === undefined) policy.value.showInPopup = true
         originalPolicy.value = JSON.parse(JSON.stringify(policy.value))
         nextTick(() => { revalidateAllRules(); revalidateAllRejectRules() })
     } else router.push('/settings')
@@ -303,13 +322,21 @@ const openRuleSetModal = (rule, index) => {
     showRuleSetModal.value = true
 }
 
-const handleRuleSetUpdate = (newContent) => {
+const handleRuleSetUpdate = async () => {
     if (selectedRuleSetIndex.value !== null) {
-        const rule = policy.value.rules[selectedRuleSetIndex.value]
-        rule.ruleSet.content = updateRuleSetContent(newContent)
-        rule.ruleSet.lastUpdated = Date.now()
-        showRuleSetModal.value = false
-        toast.success('RuleSet updated in memory. Remember to Save Policy.')
+        const index = selectedRuleSetIndex.value
+        const rule = policy.value.rules[index]
+        const url = rule.ruleSet?.sourceUrl || rule.pattern
+        if (!url) return
+
+        await fetchRuleSetContent(index, url, true)
+
+        // Refresh the modal's displayed content
+        const updated = policy.value.rules[index]
+        if (updated.ruleSet?.content) {
+            selectedRuleSetContent.value = decodeRuleSetContent(updated.ruleSet.content)
+            selectedRuleSetLastUpdated.value = updated.ruleSet.lastUpdated
+        }
     }
 }
 
@@ -331,6 +358,87 @@ const handleBatchReplace = (fromId, toId) => {
 }
 const handlePolicyMerge = (sourceId) => {
     const s = config.value.policies[sourceId]; if (s) { policy.value.rules = [...policy.value.rules, ...JSON.parse(JSON.stringify(s.rules))]; toast.success(t('msgPolicyMerged')); showPolicyMergeModal.value = false }
+}
+const openSmartMerge = () => {
+    // Extract wildcard rules with exact domain patterns (no *, no . prefix)
+    smartMergeSourceRules.value = policy.value.rules
+        .filter(r => r.type !== 'divider' && r.ruleType === 'wildcard' && r.pattern && !r.pattern.includes('*') && !r.pattern.startsWith('.'))
+        .map(r => ({ ruleType: r.ruleType, pattern: r.pattern, proxyId: r.proxyId || 'direct' }))
+    showSmartMerge.value = true
+}
+const handleSmartMerge = ({ conflictMode, rules: mergedRules }) => {
+    // Remove original exact-domain wildcard rules that were used as source
+    const sourcePatterns = new Set(smartMergeSourceRules.value.map(r => r.pattern))
+    policy.value.rules = policy.value.rules.filter(r => {
+        if (r.type === 'divider') return true
+        if (r.ruleType !== 'wildcard') return true
+        if (!r.pattern || r.pattern.includes('*') || r.pattern.startsWith('.')) return true
+        return !sourcePatterns.has(r.pattern)
+    })
+
+    // Handle conflicts with remaining rules
+    const newRules = []
+    const indicesToRemove = new Set()
+    mergedRules.forEach(mr => {
+        const existingIndex = policy.value.rules.findIndex(r =>
+            r.type !== 'divider' && r.ruleType === mr.ruleType && r.pattern === mr.pattern
+        )
+        if (existingIndex !== -1) {
+            if (conflictMode === 'overwrite') {
+                indicesToRemove.add(existingIndex)
+                newRules.push({ id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`, type: 'rule', ruleType: mr.ruleType, pattern: mr.pattern, proxyId: mr.proxyId, valid: true })
+            }
+            // ignore: skip
+        } else {
+            newRules.push({ id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`, type: 'rule', ruleType: mr.ruleType, pattern: mr.pattern, proxyId: mr.proxyId, valid: true })
+        }
+    })
+    if (indicesToRemove.size > 0) {
+        policy.value.rules = policy.value.rules.filter((_, i) => !indicesToRemove.has(i))
+    }
+    if (newRules.length > 0) policy.value.rules.unshift(...newRules)
+    showSmartMerge.value = false
+    const diff = smartMergeSourceRules.value.length - mergedRules.length
+    if (diff > 0) toast.success(t('smmmMsgOptimized', [diff]))
+    else toast.success(t('msgPolicyMerged'))
+}
+const openRejectSmartMerge = () => {
+    rejectSmartMergeSourceRules.value = (policy.value.rejectRules || [])
+        .filter(r => r.type !== 'divider' && r.ruleType === 'wildcard' && r.pattern && !r.pattern.includes('*') && !r.pattern.startsWith('.'))
+        .map(r => ({ ruleType: r.ruleType, pattern: r.pattern, proxyId: 'reject' }))
+    showRejectSmartMerge.value = true
+}
+const handleRejectSmartMerge = ({ conflictMode, rules: mergedRules }) => {
+    const sourcePatterns = new Set(rejectSmartMergeSourceRules.value.map(r => r.pattern))
+    policy.value.rejectRules = policy.value.rejectRules.filter(r => {
+        if (r.type === 'divider') return true
+        if (r.ruleType !== 'wildcard') return true
+        if (!r.pattern || r.pattern.includes('*') || r.pattern.startsWith('.')) return true
+        return !sourcePatterns.has(r.pattern)
+    })
+    const newRules = []
+    const indicesToRemove = new Set()
+    mergedRules.forEach(mr => {
+        const existingIndex = policy.value.rejectRules.findIndex(r =>
+            r.type !== 'divider' && r.ruleType === mr.ruleType && r.pattern === mr.pattern
+        )
+        if (existingIndex !== -1) {
+            if (conflictMode === 'overwrite') {
+                indicesToRemove.add(existingIndex)
+                newRules.push({ id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`, type: 'rule', ruleType: mr.ruleType, pattern: mr.pattern, proxyId: mr.proxyId, valid: true })
+            }
+        } else {
+            newRules.push({ id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`, type: 'rule', ruleType: mr.ruleType, pattern: mr.pattern, proxyId: mr.proxyId, valid: true })
+        }
+    })
+    if (indicesToRemove.size > 0) {
+        policy.value.rejectRules = policy.value.rejectRules.filter((_, i) => !indicesToRemove.has(i))
+    }
+    if (newRules.length > 0) policy.value.rejectRules.unshift(...newRules)
+    showRejectSmartMerge.value = false
+    const diff = rejectSmartMergeSourceRules.value.length - mergedRules.length
+    if (diff > 0) toast.success(t('smmmMsgOptimized', [diff]))
+    else toast.success(t('msgPolicyMerged'))
 }
 const handleExportPAC = () => {
     const pac = generatePacScriptFromPolicy(policy.value, config.value.proxies, config.value.proxyGroups)

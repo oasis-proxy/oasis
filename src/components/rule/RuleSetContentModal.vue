@@ -10,7 +10,7 @@
         <div v-if="url">
             <label class="d-flex flex-column gap-2 w-100 mb-0">
             <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('rscmLabelUrl') }}</span>
-            <div class="px-3 py-2 rounded-lg border ui-input text-xs ui-text-secondary break-all font-monospace" style="min-height: 28px;">
+            <div class="d-flex align-items-center px-3 py-2 rounded-lg border ui-input text-xs ui-text-secondary break-all font-monospace" style="min-height: 28px;">
                 {{ url }}
             </div>
             </label>
@@ -20,7 +20,7 @@
         <div v-if="lastUpdated">
             <label class="d-flex flex-column gap-2 w-100 mb-0">
             <span class="ui-text-primary text-xs fw-medium lh-1">{{ $t('rscmLabelLastUpdated') }}</span>
-            <div class="px-3 py-2 rounded-lg border ui-input text-xs ui-text-secondary" style="min-height: 28px;">
+            <div class="d-flex align-items-center px-3 py-2 rounded-lg border ui-input text-xs ui-text-secondary" style="min-height: 28px;">
                 {{ formattedTime }}
             </div>
             </label>
@@ -44,8 +44,8 @@
             <textarea 
             :value="content"
             readonly
-            class="w-100 h-100 rounded-lg border ui-input px-3 py-2 text-xs font-monospace custom-scrollbar ui-text-secondary"
-            style="resize: none; min-height: 320px;"
+            class="w-100 rounded-lg border ui-input px-3 py-2 text-xs font-monospace custom-scrollbar ui-text-secondary"
+            style="resize: none; flex: 1; min-height: 0;"
             :placeholder="$t('rscmMsgNoContent')"
             ></textarea>
         </label>

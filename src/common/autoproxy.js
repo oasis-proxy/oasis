@@ -148,6 +148,73 @@ export function convertAutoProxyToInternalRules(parsedRules, defaultRuleType = '
 }
 
 /**
+ * Converts internal rules back to AutoProxy format for display.
+ * @param {Array} rules - Internal rules array from policy.rules
+ * @param {Object} config - Config object containing proxies and proxyGroups
+ * @returns {Array<{line: string, ruleType: string, proxyId: string, proxyName: string}>}
+ */
+export function convertInternalToAutoProxy(rules, config = {}) {
+  const resolveProxyName = (proxyId) => {
+    if (!proxyId || proxyId === 'direct') return 'Direct'
+    if (proxyId === 'reject') return 'Reject'
+    const proxy = config.proxies?.[proxyId]
+    if (proxy) return proxy.label || proxy.name || proxyId
+    const group = config.proxyGroups?.[proxyId]
+    if (group) return group.name || proxyId
+    return proxyId
+  }
+
+  const result = []
+
+  for (const rule of rules) {
+    if (rule.type === 'divider') continue
+    if (rule.ruleType === 'ruleset') continue
+    if (rule.ruleType === 'ip') continue
+
+    let line = ''
+    const pattern = rule.pattern || ''
+    const ruleType = rule.ruleType || 'wildcard'
+
+    if (ruleType === 'regex') {
+      line = `/${pattern.replace(/\//g, '\\/')}/`
+    } else if (ruleType === 'wildcard') {
+      if (pattern.startsWith('**.')) {
+        // **.google.com → *.google.com (subdomain-only)
+        line = `*${pattern.substring(2)}`
+      } else if (pattern.startsWith('*.')) {
+        // *.google.com → ||google.com
+        line = `||${pattern.substring(2)}`
+      } else if (pattern.startsWith('.')) {
+        // .google.com → ||google.com
+        line = `||${pattern.substring(1)}`
+      } else if (pattern.startsWith('*') && pattern.endsWith('*') && !pattern.slice(1, -1).includes('*')) {
+        // *keyword* → keyword
+        line = pattern.slice(1, -1)
+      } else {
+        line = pattern
+      }
+    } else {
+      line = pattern
+    }
+
+    // Whitelist prefix
+    if (rule.isWhitelist) {
+      line = `@@${line}`
+    }
+
+    result.push({
+      line,
+      ruleType,
+      proxyId: rule.proxyId || 'direct',
+      proxyName: resolveProxyName(rule.proxyId),
+      valid: rule.valid !== false
+    })
+  }
+
+  return result
+}
+
+/**
  * Helper function to escape special regex characters.
  * @param {string} str
  * @returns {string}

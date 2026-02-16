@@ -86,10 +86,10 @@ export function usePolicyRules(rulesRef, options = {}) {
   const { dragOverIndex, handleDragStart, handleDragOver, handleDrop, handleDragEnd } = useDragDrop(rulesRef)
 
   // RuleSet Logic
-  const fetchRuleSetContent = async (index, url) => {
+  const fetchRuleSetContent = async (index, url, force = false) => {
     if (!url) return
     const rule = rulesRef.value[index]
-    if (rule.ruleSet?.sourceUrl === url && rule.ruleSet?.content) return
+    if (!force && rule.ruleSet?.sourceUrl === url && rule.ruleSet?.content) return
 
     fetchingRuleSetIndex.value = index
     try {
