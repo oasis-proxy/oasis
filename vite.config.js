@@ -3,6 +3,8 @@ import vue from "@vitejs/plugin-vue";
 import { crx } from "@crxjs/vite-plugin";
 import manifest from "./src/manifest.json";
 import { resolve } from "path";
+import fs from "fs";
+import path from "path";
 
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
@@ -27,7 +29,17 @@ export default defineConfig(({ mode }) => {
             dest: ''
           }
         ]
-      })
+      }),
+      {
+        name: 'remove-dot-vite',
+        closeBundle() {
+          const dotVitePath = path.resolve(__dirname, 'dist/.vite');
+          if (fs.existsSync(dotVitePath)) {
+            fs.rmSync(dotVitePath, { recursive: true, force: true });
+            console.log(`[vite] Removed ${dotVitePath}`);
+          }
+        }
+      }
     ],
     build: {
       rollupOptions: {
