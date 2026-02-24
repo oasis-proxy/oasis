@@ -176,15 +176,10 @@
               @dragover="handleDragOver($event, index)"
               @drop="handleDrop($event, index)"
               @dragend="handleDragEnd"
-              @type-change="handleRuleTypeChange(index, rule)"
+              @type-change="handleRuleTypeChange(index, $event)"
               @open-ruleset="openRuleSetModal(rule, index)"
               @focus="focusedIndex = index"
-              @blur="
-                focusedIndex = null
-                validateRule(index, policy.rules[index])
-                policy.rules[index].ruleType === 'ruleset' &&
-                  fetchRuleSetContent(index, policy.rules[index].pattern)
-              "
+              @blur="handleRuleBlur(index, policy.rules[index])"
               @add-below="insertRuleBelow(index)"
               @add-divider-below="insertDividerBelow(index)"
               @delete="deleteRule(index)"
@@ -552,6 +547,12 @@ const saveChanges = async () => {
 const handleRuleTypeChange = (index, rule) => {
   validateRule(index, rule)
   if (rule.ruleType === 'ruleset' && rule.pattern?.trim()) fetchRuleSetContent(index, rule.pattern)
+}
+
+const handleRuleBlur = (index, rule) => {
+  focusedIndex.value = null
+  validateRule(index, rule)
+  if (rule.ruleType === 'ruleset') fetchRuleSetContent(index, rule.pattern)
 }
 
 const openRuleSetModal = (rule, index) => {

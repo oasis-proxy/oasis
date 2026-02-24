@@ -116,9 +116,12 @@ const isActive = (id) => {
 }
 
 const getIconStyle = (profile) => {
+  if (profile.color) {
+    return { color: profile.color }
+  }
   if (isActive(profile.id)) {
     return { color: 'var(--bs-primary)' }
   }
-  return { color: profile.color || 'var(--ui-text-secondary)' }
+  return { color: 'var(--ui-text-secondary)' }
 }
 </script>

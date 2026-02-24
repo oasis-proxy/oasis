@@ -35,10 +35,7 @@
       <select
         :value="rule.ruleType"
         class="form-select ui-input ui-input-sm w-100 rounded border py-0 px-1.5"
-        @change="
-          update('ruleType', $event.target.value)
-          $emit('type-change', rule)
-        "
+        @change="handleRuleTypeChange"
       >
         <option value="wildcard">{{ $t('optWildcard') }}</option>
         <option value="regex">{{ $t('optRegex') }}</option>
@@ -148,6 +145,13 @@ const emit = defineEmits([
 
 const update = (key, val) => {
   emit('update:rule', { ...props.rule, [key]: val })
+}
+
+const handleRuleTypeChange = (event) => {
+  const newType = event.target.value
+  const updatedRule = { ...props.rule, ruleType: newType }
+  emit('update:rule', updatedRule)
+  emit('type-change', updatedRule)
 }
 
 const getPlaceholder = (type) => {
