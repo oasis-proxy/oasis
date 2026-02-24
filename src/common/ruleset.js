@@ -1,4 +1,3 @@
-
 /**
  * Common utilities for handling RuleSets (remote policy rules).
  */
@@ -11,7 +10,7 @@
 
 /**
  * Try to decode content if it looks like Base64.
- * @param {string} text 
+ * @param {string} text
  * @returns {string} Decoded text or original text
  */
 export function decodeRuleSetContent(text) {
@@ -34,16 +33,16 @@ export function decodeRuleSetContent(text) {
 
 /**
  * Encode content for storage (Base64).
- * @param {string} text 
+ * @param {string} text
  * @returns {string} Base64 encoded text
  */
 export function updateRuleSetContent(text) {
-    try {
-        return btoa(text)
-    } catch (e) {
-        // Fallback or error handling
-        return text
-    }
+  try {
+    return btoa(text)
+  } catch (e) {
+    // Fallback or error handling
+    return text
+  }
 }
 
 export async function fetchRuleSetContent(url) {
@@ -51,10 +50,10 @@ export async function fetchRuleSetContent(url) {
     const response = await fetch(url)
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     let text = await response.text()
-    
+
     // Process content based on format (Base64 detection)
     text = decodeRuleSetContent(text)
-    
+
     const now = Date.now()
     return {
       content: text,
@@ -70,7 +69,6 @@ export async function fetchRuleSetContent(url) {
   }
 }
 
-
 /**
  * Update RuleSets for a given policy.
  * @param {object} policy - The policy object containing rules.
@@ -83,40 +81,39 @@ export async function updatePolicyRuleSets(policy) {
   if (!rules || !Array.isArray(rules)) return false
 
   for (const rule of rules) {
-      // Check if rule has a subscription URL (RuleSet)
-      // Use rule.pattern as the source of truth for URL
-      if (rule.ruleType === 'ruleset' && rule.pattern && rule.pattern.trim()) {
-          const url = rule.pattern.trim()
-          
-          try {
-             // console.log(`Oasis: Updating RuleSet for policy...`) // Logging can be handled by caller or optionally passed
-             const result = await fetchRuleSetContent(url)
+    // Check if rule has a subscription URL (RuleSet)
+    // Use rule.pattern as the source of truth for URL
+    if (rule.ruleType === 'ruleset' && rule.pattern && rule.pattern.trim()) {
+      const url = rule.pattern.trim()
 
-             // Initialize ruleSet object if missing
-             if (!rule.ruleSet) rule.ruleSet = {}
+      try {
+        // console.log(`Oasis: Updating RuleSet for policy...`) // Logging can be handled by caller or optionally passed
+        const result = await fetchRuleSetContent(url)
 
-             if (!result.fetchError) {
-                // Success
-                rule.ruleSet.content = result.content
-                rule.ruleSet.lastUpdated = result.lastUpdated
-                rule.ruleSet.lastFetched = result.lastFetched
-                rule.ruleSet.fetchError = null
-                configChanged = true
-             } else {
-                // Error
-                rule.ruleSet.fetchError = result.fetchError
-                rule.ruleSet.lastFetched = result.lastFetched
-                configChanged = true // Save error state
-             }
-              
-          } catch (e) {
-              // Should be caught by fetchRuleSetContent, but safe to have extra catch
-              console.error('Unexpected error updating ruleset', e)
-              if (!rule.ruleSet) rule.ruleSet = {}
-              rule.ruleSet.fetchError = e.message
-              configChanged = true
-          }
+        // Initialize ruleSet object if missing
+        if (!rule.ruleSet) rule.ruleSet = {}
+
+        if (!result.fetchError) {
+          // Success
+          rule.ruleSet.content = result.content
+          rule.ruleSet.lastUpdated = result.lastUpdated
+          rule.ruleSet.lastFetched = result.lastFetched
+          rule.ruleSet.fetchError = null
+          configChanged = true
+        } else {
+          // Error
+          rule.ruleSet.fetchError = result.fetchError
+          rule.ruleSet.lastFetched = result.lastFetched
+          configChanged = true // Save error state
+        }
+      } catch (e) {
+        // Should be caught by fetchRuleSetContent, but safe to have extra catch
+        console.error('Unexpected error updating ruleset', e)
+        if (!rule.ruleSet) rule.ruleSet = {}
+        rule.ruleSet.fetchError = e.message
+        configChanged = true
       }
+    }
   }
   return configChanged
 }

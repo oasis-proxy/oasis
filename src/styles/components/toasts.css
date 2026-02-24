@@ -16,7 +16,7 @@
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  border: 1px solid var(--ui-border); 
+  border: 1px solid var(--ui-border);
   border-radius: 12px;
   box-shadow: var(--ui-toast-shadow);
   position: relative;
@@ -27,16 +27,17 @@
 
 /* Pseudo-element for backdrop blur to fix rendering delay */
 .toast-content::before {
-  content: "";
+  content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: -1;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   background-color: var(--ui-toast-bg);
 }
-
-
 
 .toast-icon-wrapper {
   display: flex;
@@ -72,22 +73,40 @@
 }
 
 /* Type-specific Toast styles */
-.toast-success .toast-icon { color: var(--ui-success); }
-.toast-success .toast-content { border-left: 3px solid var(--ui-success); }
+.toast-success .toast-icon {
+  color: var(--ui-success);
+}
+.toast-success .toast-content {
+  border-left: 3px solid var(--ui-success);
+}
 
-.toast-error .toast-icon { color: var(--ui-danger); }
-.toast-error .toast-content { border-left: 3px solid var(--ui-danger); }
+.toast-error .toast-icon {
+  color: var(--ui-danger);
+}
+.toast-error .toast-content {
+  border-left: 3px solid var(--ui-danger);
+}
 
-.toast-warning .toast-icon { color: var(--ui-warning); }
-.toast-warning .toast-content { border-left: 3px solid var(--ui-warning); }
+.toast-warning .toast-icon {
+  color: var(--ui-warning);
+}
+.toast-warning .toast-content {
+  border-left: 3px solid var(--ui-warning);
+}
 
-.toast-info .toast-icon { color: var(--ui-info); }
-.toast-info .toast-content { border-left: 3px solid var(--ui-info); }
+.toast-info .toast-icon {
+  color: var(--ui-info);
+}
+.toast-info .toast-content {
+  border-left: 3px solid var(--ui-info);
+}
 
 /* Animation Classes (Vue Transition Group) */
 .toast-enter-active,
 .toast-leave-active {
-  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 

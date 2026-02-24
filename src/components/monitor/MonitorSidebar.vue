@@ -1,10 +1,10 @@
 <template>
-  <aside class="d-flex flex-column border-end" style="width: 320px; background: var(--ui-bg-card);">
+  <aside class="d-flex flex-column border-end" style="width: 320px; background: var(--ui-bg-card)">
     <div class="flex-1 overflow-y-auto custom-scrollbar">
       <!-- All Requests Option -->
-      <div 
+      <div
         class="tab-item px-3 py-2"
-        :class="{ 'active': selectedTabId === null }"
+        :class="{ active: selectedTabId === null }"
         @click="$emit('select', null)"
       >
         <div class="d-flex align-items-center justify-content-between mb-1">
@@ -18,11 +18,11 @@
       </div>
 
       <!-- Individual Tabs -->
-      <div 
-        v-for="tab in tabs" 
+      <div
+        v-for="tab in tabs"
         :key="tab.id"
         class="tab-item px-3 py-2 border-top"
-        :class="{ 'active': selectedTabId === tab.id }"
+        :class="{ active: selectedTabId === tab.id }"
         @click="$emit('select', tab.id)"
       >
         <div class="d-flex align-items-center justify-content-between mb-1">
@@ -30,10 +30,17 @@
           <span class="ui-tag ui-tag-default">{{ getRequestCountForTab(tab.id) }}</span>
         </div>
         <div class="d-flex align-items-start gap-2">
-          <img v-if="tab.favIconUrl" :src="tab.favIconUrl" class="mt-1" style="width: 16px; height: 16px;" />
+          <img
+            v-if="tab.favIconUrl"
+            :src="tab.favIconUrl"
+            class="mt-1"
+            style="width: 16px; height: 16px"
+          />
           <i v-else class="bi bi-file-earmark ui-text-tertiary mt-1"></i>
-          <div class="flex-1 min-w-0" style="max-width: calc(100% - 24px);">
-            <p class="text-sm font-medium ui-text-primary text-truncate m-0">{{ tab.title || $t('lblUntitled') }}</p>
+          <div class="flex-1 min-w-0" style="max-width: calc(100% - 24px)">
+            <p class="text-sm font-medium ui-text-primary text-truncate m-0">
+              {{ tab.title || $t('lblUntitled') }}
+            </p>
             <p class="text-xs ui-text-secondary text-truncate m-0">{{ getHostname(tab.url) }}</p>
           </div>
         </div>

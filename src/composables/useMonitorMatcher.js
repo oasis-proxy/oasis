@@ -14,13 +14,13 @@ export function useMonitorMatcher() {
     try {
       const config = await loadConfig()
       const activeId = config.activeProfileId
-      
+
       if (config.policies?.[activeId]) {
         currentPolicy.value = config.policies[activeId]
         proxies.value = config.proxies || {}
         proxyGroups.value = config.proxyGroups || {}
         ipTags.value = config.ipTags || {}
-        
+
         const sessionData = await chrome.storage.session.get('tempRules')
         tempRules.value = sessionData?.tempRules || []
 
@@ -28,14 +28,15 @@ export function useMonitorMatcher() {
         if (currentPolicy.value.rules) {
           for (const rule of currentPolicy.value.rules) {
             if (rule.type === 'divider' || rule.valid === false) continue
-            
+
             if (rule.ruleType === 'ruleset' && rule.ruleSet?.content) {
               try {
                 const parsed = parseAutoProxyRules(rule.ruleSet.content)
-                const internal = convertAutoProxyToInternalRules(parsed).map(r => ({
+                const internal = convertAutoProxyToInternalRules(parsed).map((r) => ({
                   ...r,
                   proxyId: rule.proxyId,
-                  fromRuleset: rule.ruleSet.sourceUrl || rule.ruleSet.name || rule.pattern || 'Ruleset'
+                  fromRuleset:
+                    rule.ruleSet.sourceUrl || rule.ruleSet.name || rule.pattern || 'Ruleset'
                 }))
                 expandedRules.value.push(...internal)
               } catch (e) {
@@ -54,7 +55,7 @@ export function useMonitorMatcher() {
 
   function testRuleMatch(rule, url, host) {
     if (!rule.pattern) return false
-    
+
     switch (rule.ruleType) {
       case 'wildcard': {
         const pattern = rule.pattern
@@ -80,7 +81,10 @@ export function useMonitorMatcher() {
         }
       }
       case 'ip':
-        return host === rule.pattern || (rule.pattern.includes('/') && host.startsWith(rule.pattern.split('/')[0]))
+        return (
+          host === rule.pattern ||
+          (rule.pattern.includes('/') && host.startsWith(rule.pattern.split('/')[0]))
+        )
       default:
         return false
     }
@@ -89,52 +93,60 @@ export function useMonitorMatcher() {
   function getProxyName(proxyId) {
     if (!proxyId || proxyId === 'direct') return 'Direct'
     if (proxyId === 'reject') return 'Reject'
-    
+
     // Check individual proxies
     if (proxies.value[proxyId]) {
       const proxy = proxies.value[proxyId]
       const name = proxy.label || proxy.name || proxy.host || proxyId
       return name.length > 20 ? name.substring(0, 20) + '...' : name
     }
-    
+
     // Check proxy groups
     if (proxyGroups.value[proxyId]) {
       const group = proxyGroups.value[proxyId]
       const name = group.name || proxyId
       return name.length > 20 ? name.substring(0, 20) + '...' : name
     }
-    
+
     return proxyId.length > 20 ? proxyId.substring(0, 20) + '...' : proxyId
   }
 
   function matchRule(url) {
     if (!currentPolicy.value) return { rule: null, proxy: null, ruleSource: null }
-    
+
     try {
       const urlObj = new URL(url)
       const host = urlObj.hostname
-      
+
       for (const rule of tempRules.value) {
         if (rule.valid === false) continue
         if (testRuleMatch(rule, url, host)) {
           return { rule: rule.pattern, proxy: getProxyName(rule.proxyId), ruleSource: null }
         }
       }
-      
-      for (const rule of (currentPolicy.value.rejectRules || [])) {
+
+      for (const rule of currentPolicy.value.rejectRules || []) {
         if (rule.type === 'divider' || rule.valid === false) continue
         if (testRuleMatch(rule, url, host)) {
           return { rule: rule.pattern, proxy: 'Reject', ruleSource: null }
         }
       }
-      
+
       for (const rule of expandedRules.value) {
         if (testRuleMatch(rule, url, host)) {
-          return { rule: rule.pattern, proxy: getProxyName(rule.proxyId), ruleSource: rule.fromRuleset }
+          return {
+            rule: rule.pattern,
+            proxy: getProxyName(rule.proxyId),
+            ruleSource: rule.fromRuleset
+          }
         }
       }
-      
-      return { rule: 'Default', proxy: getProxyName(currentPolicy.value.defaultProfileId), ruleSource: null }
+
+      return {
+        rule: 'Default',
+        proxy: getProxyName(currentPolicy.value.defaultProfileId),
+        ruleSource: null
+      }
     } catch (e) {
       return { rule: null, proxy: null, ruleSource: null }
     }

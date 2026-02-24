@@ -13,12 +13,7 @@ let toastContainer = null
  * @param {boolean} options.showClose - Show close button
  */
 export function showToast(options) {
-  const {
-    message,
-    type = 'info',
-    duration = 3000,
-    showClose = true
-  } = options
+  const { message, type = 'info', duration = 3000, showClose = true } = options
 
   // Remove existing toast
   if (toastInstance) {

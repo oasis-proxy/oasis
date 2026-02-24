@@ -7,48 +7,48 @@
   --bs-primary: #137fec;
   --bs-primary-rgb: 19, 127, 236;
   --bs-primary-hover: #1170cf;
-  --bs-primary-subtle: #e0f2fe;    /* e.g. cyan-100/blue-100 equivalent */
+  --bs-primary-subtle: #e0f2fe; /* e.g. cyan-100/blue-100 equivalent */
   --bs-primary-border-subtle: #bae6fd;
   --ui-bg-selected: rgba(19, 127, 236, 0.08); /* Light subtle blue */
   --ui-border-selected: var(--bs-primary);
-  
+
   /* Base Colors */
-  --bs-body-bg: #f3f4f6;          /* bg-background-light */
-  --bs-body-color: #0f172a;       /* slate-900 */
-  
+  --bs-body-bg: #f3f4f6; /* bg-background-light */
+  --bs-body-color: #0f172a; /* slate-900 */
+
   /* Semantic Backgrounds */
   --ui-bg-card: #ffffff;
-  --ui-bg-default: #f3f4f6;       /* bg-background-light */
-  --ui-bg-subtle: #f8fafc;        /* slate-50 */
-  --ui-bg-hover: #f1f5f9;         /* slate-100 */
-  --ui-bg-active: #e2e8f0;        /* slate-200 */
-  
+  --ui-bg-default: #f3f4f6; /* bg-background-light */
+  --ui-bg-subtle: #f8fafc; /* slate-50 */
+  --ui-bg-hover: #f1f5f9; /* slate-100 */
+  --ui-bg-active: #e2e8f0; /* slate-200 */
+
   /* Semantic Text */
-  --ui-text-primary: #0f172a;     /* slate-900 */
-  --ui-text-secondary: #64748b;   /* slate-500 */
-  --ui-text-tertiary: #94a3b8;    /* slate-400 */
+  --ui-text-primary: #0f172a; /* slate-900 */
+  --ui-text-secondary: #64748b; /* slate-500 */
+  --ui-text-tertiary: #94a3b8; /* slate-400 */
   --ui-text-inverse: #ffffff;
-  
+
   /* Borders */
-  --ui-border: #cbd5e1;           /* slate-300 */
-  --ui-border-subtle: #e2e8f0;    /* slate-200 */
-  --ui-border-light: #f1f5f9;     /* slate-100 */
-  
+  --ui-border: #cbd5e1; /* slate-300 */
+  --ui-border-subtle: #e2e8f0; /* slate-200 */
+  --ui-border-light: #f1f5f9; /* slate-100 */
+
   /* Status Colors */
   --ui-success: #10b981;
   --ui-success-bg: #dcfce7;
   --ui-success-border: #bbf7d0;
-  
-  --ui-danger: #ef4444;           /* or red-600 #dc2626? */
+
+  --ui-danger: #ef4444; /* or red-600 #dc2626? */
   --ui-danger-hover: #b91c1c;
   --ui-danger-bg: #fee2e2;
   --ui-danger-border: #fecaca;
   --ui-danger-text: #dc2626;
 
   --ui-warning: #f59e0b;
-  --ui-warning-bg: #fef3c7;       /* amber-100 (approx) */
+  --ui-warning-bg: #fef3c7; /* amber-100 (approx) */
   --ui-warning-border: #fde68a;
-  
+
   --ui-info: #3b82f6;
   --ui-info-bg: #e0f2fe;
   --ui-info-border: #bae6fd;
@@ -66,7 +66,7 @@
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  
+
   /* Palette (Icon Colors) */
   --ui-icon-blue-bg: #eff6ff;
   --ui-icon-blue-text: #2563eb;
@@ -90,14 +90,14 @@
   /* Additional Slate Colors */
   --color-slate-600: #475569;
   --color-slate-700: #334155;
-  
+
   /* Component Specific */
-  --ui-bg-card-header: #f8fafc;    /* Slightly different from card body */
-  --ui-radio-border: #cbd5e1;      /* Radio button border */
-  --ui-nav-active-bg: #e0f2fe;     /* Navigation active background (light blue) */
-  --ui-notification-bg: #1e293b;   /* Notification background (dark slate) */
-  --ui-backdrop: #000;             /* Modal backdrop */
-  
+  --ui-bg-card-header: #f8fafc; /* Slightly different from card body */
+  --ui-radio-border: #cbd5e1; /* Radio button border */
+  --ui-nav-active-bg: #e0f2fe; /* Navigation active background (light blue) */
+  --ui-notification-bg: #1e293b; /* Notification background (dark slate) */
+  --ui-backdrop: #000; /* Modal backdrop */
+
   /* Toasts */
   --ui-toast-bg: rgba(255, 255, 255, 0.85);
   --ui-toast-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -114,15 +114,16 @@
 }
 
 .cursor-copy {
-    cursor: copy !important;
+  cursor: copy !important;
 }
 
 .cursor-pointer {
-    cursor: pointer !important;
+  cursor: pointer !important;
 }
 
 /* Typography Utilities */
-.fs-7, .text-xs {
+.fs-7,
+.text-xs {
   font-size: 0.75rem !important; /* 12px */
 }
 
@@ -130,11 +131,13 @@
   font-size: 0.875rem !important; /* 14px */
 }
 
-.ls-wide, .tracking-wider {
+.ls-wide,
+.tracking-wider {
   letter-spacing: 0.05em !important;
 }
 
-.ls-widest, .tracking-widest {
+.ls-widest,
+.tracking-widest {
   letter-spacing: 0.1em !important;
 }
 
@@ -157,7 +160,6 @@
   background-color: var(--ui-bg-hover) !important;
 }
 
-
 /* -------------------------------------------------------------------------- */
 /* Theme Variables (Dark Mode)                                                */
 /* -------------------------------------------------------------------------- */
@@ -171,34 +173,34 @@
   --bs-primary-border-subtle: #2c5282;
   --ui-bg-selected: rgba(59, 158, 255, 0.15); /* Dark subtle blue */
   --ui-border-selected: var(--bs-primary);
-  
+
   /* Base Colors */
   --bs-body-bg: #0f172a;
   --bs-body-color: #f1f5f9;
-  
+
   /* Semantic Backgrounds */
   --ui-bg-card: #1e293b;
   --ui-bg-default: #0f172a;
   --ui-bg-subtle: #1e293b;
   --ui-bg-hover: #334155;
   --ui-bg-active: #475569;
-  
+
   /* Semantic Text */
   --ui-text-primary: #f1f5f9;
   --ui-text-secondary: #94a3b8;
   --ui-text-tertiary: #64748b;
   --ui-text-inverse: #0f172a;
-  
+
   /* Borders */
   --ui-border: #475569;
   --ui-border-subtle: #334155;
   --ui-border-light: #1e293b;
-  
+
   /* Status Colors */
   --ui-success: #34d399;
   --ui-success-bg: #064e3b;
   --ui-success-border: #047857;
-  
+
   --ui-danger: #f87171;
   --ui-danger-hover: #ef4444;
   --ui-danger-bg: #450a0a;
@@ -208,17 +210,17 @@
   --ui-warning: #fbbf24;
   --ui-warning-bg: #451a03;
   --ui-warning-border: #78350f;
-  
+
   --ui-info: #60a5fa;
   --ui-info-bg: #172554;
   --ui-info-border: #1e3a8a;
-  
+
   /* Component Specific */
-  --ui-bg-card-header: #475569;    /* Distinct from card body in dark mode */
-  --ui-radio-border: #64748b;      /* More visible radio border in dark */
-  --ui-nav-active-bg: #1e3a5f;     /* Navigation active background (dark blue) */
-  --ui-notification-bg: #1e293b;   /* Notification background (dark slate) */
-  
+  --ui-bg-card-header: #475569; /* Distinct from card body in dark mode */
+  --ui-radio-border: #64748b; /* More visible radio border in dark */
+  --ui-nav-active-bg: #1e3a5f; /* Navigation active background (dark blue) */
+  --ui-notification-bg: #1e293b; /* Notification background (dark slate) */
+
   /* Toasts */
   --ui-toast-bg: rgba(30, 41, 59, 0.85);
 
@@ -244,7 +246,8 @@
   line-height: 1.625 !important;
 }
 
-.ls-tight, .tracking-tight {
+.ls-tight,
+.tracking-tight {
   letter-spacing: -0.025em !important;
 }
 
@@ -258,7 +261,9 @@
 
 /* Colored Shadows */
 .shadow-primary-lg {
-  box-shadow: 0 10px 15px -3px rgba(var(--bs-primary-rgb), 0.4), 0 4px 6px -2px rgba(var(--bs-primary-rgb), 0.2) !important;
+  box-shadow:
+    0 10px 15px -3px rgba(var(--bs-primary-rgb), 0.4),
+    0 4px 6px -2px rgba(var(--bs-primary-rgb), 0.2) !important;
 }
 
 .border-bottom-light {

@@ -52,8 +52,10 @@
   padding: 0.5rem !important;
   background-color: var(--ui-bg-subtle) !important;
   border-top: 1px solid var(--ui-border-light) !important;
-  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-  
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+
   /* Typography matching header */
   font-size: var(--font-xs) !important;
   font-weight: var(--font-weight-semibold) !important;

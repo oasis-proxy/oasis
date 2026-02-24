@@ -1,4 +1,3 @@
-
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { fetchRuleSetContent } from '../ruleset'
 
@@ -26,7 +25,7 @@ describe('fetchRuleSetContent', () => {
     // 'Hello World' in base64 is 'SGVsbG8gV29ybGQ='
     const original = 'Hello World'
     const base64Content = 'SGVsbG8gV29ybGQ='
-    
+
     global.fetch.mockResolvedValue({
       ok: true,
       text: () => Promise.resolve(base64Content)
@@ -41,7 +40,7 @@ describe('fetchRuleSetContent', () => {
     // 'Hello World' with newlines
     const base64Content = 'SGVsbG8g\nV29ybGQ='
     const original = 'Hello World'
-    
+
     global.fetch.mockResolvedValue({
       ok: true,
       text: () => Promise.resolve(base64Content)
@@ -52,23 +51,23 @@ describe('fetchRuleSetContent', () => {
   })
 
   it('should treat invalid base64-looking content as plain text', async () => {
-      // Looks like base64 characters but invalid padding or length for pure base64 if heavily modified?
-      // Actually standard atob might throw.
-      // Let's try something that matches regex but fails atob?
-      // Regex is /^[A-Za-z0-9+/]+=*$/
-      // "abcde" length 5, %4 != 0. atob throws.
-      const content = 'abcde' 
-      // Regex matches?
-      // /^[A-Za-z0-9+/]+=*$/.test('abcde') -> true.
-      
-      global.fetch.mockResolvedValue({
-        ok: true,
-        text: () => Promise.resolve(content)
-      })
+    // Looks like base64 characters but invalid padding or length for pure base64 if heavily modified?
+    // Actually standard atob might throw.
+    // Let's try something that matches regex but fails atob?
+    // Regex is /^[A-Za-z0-9+/]+=*$/
+    // "abcde" length 5, %4 != 0. atob throws.
+    const content = 'abcde'
+    // Regex matches?
+    // /^[A-Za-z0-9+/]+=*$/.test('abcde') -> true.
 
-      const result = await fetchRuleSetContent('https://example.com/invalid')
-      // atob('abcde') throws
-      // The code should catch and return original 'abcde'
-      expect(result.content).toBe(content)
+    global.fetch.mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(content)
+    })
+
+    const result = await fetchRuleSetContent('https://example.com/invalid')
+    // atob('abcde') throws
+    // The code should catch and return original 'abcde'
+    expect(result.content).toBe(content)
   })
 })

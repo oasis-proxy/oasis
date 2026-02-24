@@ -8,7 +8,7 @@ export function usePolicyRules(rulesRef, options = {}) {
   const validationErrors = ref({})
   const focusedIndex = ref(null)
   const fetchingRuleSetIndex = ref(null)
-  
+
   const validateRule = (index, rule) => {
     if (rule.type === 'divider') return
     const result = validatePattern(rule.ruleType, rule.pattern)
@@ -29,10 +29,15 @@ export function usePolicyRules(rulesRef, options = {}) {
     if (focusedIndex.value === null) return new Set()
     const focusedRule = rulesRef.value[focusedIndex.value]
     if (!focusedRule || focusedRule.type === 'divider') return new Set()
-    
+
     const duplicates = new Set()
     rulesRef.value.forEach((rule, index) => {
-      if (rule.type !== 'divider' && rule.ruleType === focusedRule.ruleType && rule.pattern === focusedRule.pattern && rule.pattern.trim() !== '') {
+      if (
+        rule.type !== 'divider' &&
+        rule.ruleType === focusedRule.ruleType &&
+        rule.pattern === focusedRule.pattern &&
+        rule.pattern.trim() !== ''
+      ) {
         duplicates.add(index)
       }
     })
@@ -83,7 +88,8 @@ export function usePolicyRules(rulesRef, options = {}) {
     nextTick(() => revalidateAll())
   }
 
-  const { dragOverIndex, handleDragStart, handleDragOver, handleDrop, handleDragEnd } = useDragDrop(rulesRef)
+  const { dragOverIndex, handleDragStart, handleDragOver, handleDrop, handleDragEnd } =
+    useDragDrop(rulesRef)
 
   // RuleSet Logic
   const fetchRuleSetContent = async (index, url, force = false) => {

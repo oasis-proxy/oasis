@@ -4,7 +4,7 @@
     <div class="mb-2">
       <h3 class="section-heading">{{ $t('defaults') }}</h3>
       <div>
-        <label 
+        <label
           class="profile-item"
           :class="{ active: isActive('direct') }"
           @click="$emit('select', 'direct')"
@@ -18,7 +18,7 @@
           </div>
         </label>
 
-        <label 
+        <label
           class="profile-item"
           :class="{ active: isActive('system') }"
           @click="$emit('select', 'system')"
@@ -38,7 +38,7 @@
     <div v-if="hostProxies.length > 0" class="mb-2">
       <h3 class="section-heading">{{ $t('hostProxy') }}</h3>
       <div>
-        <label 
+        <label
           v-for="profile in hostProxies"
           :key="profile.id"
           class="profile-item"
@@ -60,7 +60,7 @@
     <div v-if="pacScripts.length > 0" class="mb-2">
       <h3 class="section-heading">{{ $t('pacScript') }}</h3>
       <div>
-        <label 
+        <label
           v-for="profile in pacScripts"
           :key="profile.id"
           class="profile-item"
@@ -82,7 +82,7 @@
     <div v-if="autoPolicies.length > 0" class="mb-2">
       <h3 class="section-heading">{{ $t('autoPolicy') }}</h3>
       <div>
-        <label 
+        <label
           v-for="profile in autoPolicies"
           :key="profile.id"
           class="profile-item"
@@ -117,7 +117,7 @@ const isActive = (id) => {
 
 const getIconStyle = (profile) => {
   if (isActive(profile.id)) {
-      return { color: 'var(--bs-primary)' }
+    return { color: 'var(--bs-primary)' }
   }
   return { color: profile.color || 'var(--ui-text-secondary)' }
 }

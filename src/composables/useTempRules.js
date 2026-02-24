@@ -5,150 +5,171 @@ import { t } from '../common/i18n'
 import { toast } from '../options/utils/toast'
 
 export function useTempRules() {
-    const rules = ref([])
-    const originalRules = ref([])
-    const config = ref(null)
-    const validationErrors = ref({})
-    const isInitializing = ref(true)
-    const showAcceptModal = ref(false)
-    const showSmartMergeModal = ref(false)
-    const mergeSourceIndices = ref([])
+  const rules = ref([])
+  const originalRules = ref([])
+  const config = ref(null)
+  const validationErrors = ref({})
+  const isInitializing = ref(true)
+  const showAcceptModal = ref(false)
+  const showSmartMergeModal = ref(false)
+  const mergeSourceIndices = ref([])
 
-    // Load Configuration and Temp Rules
-    const loadData = async () => {
-        config.value = await loadConfig()
-        const sessionData = await chrome.storage.session.get('tempRules')
-        const loadedRules = sessionData.tempRules || []
-        
-        rules.value = JSON.parse(JSON.stringify(loadedRules)).map(rule => ({
-            ...rule,
-            valid: rule.valid ?? true,
-            ruleType: rule.ruleType || 'wildcard',
-            proxyId: rule.proxyId || 'direct'
-        }))
+  // Load Configuration and Temp Rules
+  const loadData = async () => {
+    config.value = await loadConfig()
+    const sessionData = await chrome.storage.session.get('tempRules')
+    const loadedRules = sessionData.tempRules || []
 
-        originalRules.value = JSON.parse(JSON.stringify(rules.value))
-        validationErrors.value = {}
-        isInitializing.value = false
+    rules.value = JSON.parse(JSON.stringify(loadedRules)).map((rule) => ({
+      ...rule,
+      valid: rule.valid ?? true,
+      ruleType: rule.ruleType || 'wildcard',
+      proxyId: rule.proxyId || 'direct'
+    }))
+
+    originalRules.value = JSON.parse(JSON.stringify(rules.value))
+    validationErrors.value = {}
+    isInitializing.value = false
+  }
+
+  const isDirty = computed(
+    () => JSON.stringify(rules.value) !== JSON.stringify(originalRules.value)
+  )
+
+  const activeAutoPolicyId = computed(() => {
+    if (!config.value || !config.value.activeProfileId) return ''
+    const id = config.value.activeProfileId
+    return config.value.policies && config.value.policies[id] ? id : ''
+  })
+
+  const isTemporaryRulesActive = computed(() => !!activeAutoPolicyId.value)
+
+  const validateRule = (index, rule) => {
+    const result = validatePattern(rule.ruleType, rule.pattern)
+    if (result.valid) {
+      delete validationErrors.value[index]
+    } else {
+      validationErrors.value[index] = result.message
     }
+  }
 
-    const isDirty = computed(() => JSON.stringify(rules.value) !== JSON.stringify(originalRules.value))
+  const saveChanges = async () => {
+    await chrome.storage.session.set({ tempRules: JSON.parse(JSON.stringify(rules.value)) })
+    originalRules.value = JSON.parse(JSON.stringify(rules.value))
+    toast.success(t('tempMsgSaved'))
+  }
 
-    const activeAutoPolicyId = computed(() => {
-        if (!config.value || !config.value.activeProfileId) return ''
-        const id = config.value.activeProfileId
-        return (config.value.policies && config.value.policies[id]) ? id : ''
+  const addRule = () => {
+    rules.value.unshift({
+      id: `temp_${Date.now()}`,
+      type: 'rule',
+      ruleType: 'wildcard',
+      pattern: '',
+      valid: true,
+      proxyId: 'direct'
     })
+  }
 
-    const isTemporaryRulesActive = computed(() => !!activeAutoPolicyId.value)
+  const deleteRule = (index) => rules.value.splice(index, 1)
 
-    const validateRule = (index, rule) => {
-        const result = validatePattern(rule.ruleType, rule.pattern)
-        if (result.valid) {
-            delete validationErrors.value[index]
-        } else {
-            validationErrors.value[index] = result.message
+  const clearAll = () => {
+    if (confirm(t('tempMsgClearConfirm'))) rules.value = []
+  }
+
+  const selectedRulesForMerge = computed(() => {
+    if (mergeSourceIndices.value.length > 0) {
+      return mergeSourceIndices.value.map((i) => rules.value[i])
+    }
+    return rules.value
+  })
+
+  const smartMergeRules = computed(() => {
+    return selectedRulesForMerge.value.filter(
+      (r) => r.ruleType === 'wildcard' && r.pattern && r.pattern.trim() !== ''
+    )
+  })
+
+  const executeMerge = async (targetId, conflictMode, rulesToMerge) => {
+    if (!config.value?.policies?.[targetId]) {
+      toast.error(t('msgPolicyNotFound'))
+      return
+    }
+
+    const targetPolicy = config.value.policies[targetId]
+    if (!targetPolicy.rules) targetPolicy.rules = []
+
+    let addedCount = 0
+    let updatedCount = 0
+    const newRulesToAdd = []
+    const indicesToRemove = new Set()
+
+    rulesToMerge.forEach((tempRule) => {
+      const existingIndex = targetPolicy.rules.findIndex(
+        (r) =>
+          r.type !== 'divider' && r.ruleType === tempRule.ruleType && r.pattern === tempRule.pattern
+      )
+
+      if (existingIndex !== -1) {
+        if (conflictMode === 'overwrite') {
+          indicesToRemove.add(existingIndex)
+          newRulesToAdd.push({
+            ...tempRule,
+            id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`
+          })
+          updatedCount++
         }
-    }
-
-    const saveChanges = async () => {
-        await chrome.storage.session.set({ tempRules: JSON.parse(JSON.stringify(rules.value)) })
-        originalRules.value = JSON.parse(JSON.stringify(rules.value))
-        toast.success(t('tempMsgSaved'))
-    }
-
-    const addRule = () => {
-        rules.value.unshift({
-            id: `temp_${Date.now()}`,
-            type: 'rule',
-            ruleType: 'wildcard',
-            pattern: '',
-            valid: true,
-            proxyId: 'direct'
+        // ignore: skip entirely
+      } else {
+        newRulesToAdd.push({
+          ...tempRule,
+          id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`
         })
-    }
-
-    const deleteRule = (index) => rules.value.splice(index, 1)
-
-    const clearAll = () => {
-        if (confirm(t('tempMsgClearConfirm'))) rules.value = []
-    }
-
-    const selectedRulesForMerge = computed(() => {
-        if (mergeSourceIndices.value.length > 0) {
-            return mergeSourceIndices.value.map(i => rules.value[i])
-        }
-        return rules.value
+        addedCount++
+      }
     })
 
-    const smartMergeRules = computed(() => {
-        return selectedRulesForMerge.value.filter(r => 
-            r.ruleType === 'wildcard' && r.pattern && r.pattern.trim() !== ''
-        )
-    })
+    if (indicesToRemove.size > 0) {
+      targetPolicy.rules = targetPolicy.rules.filter((_, i) => !indicesToRemove.has(i))
+    }
+    if (newRulesToAdd.length > 0) targetPolicy.rules.unshift(...newRulesToAdd)
 
-    const executeMerge = async (targetId, conflictMode, rulesToMerge) => {
-        if (!config.value?.policies?.[targetId]) {
-            toast.error(t('msgPolicyNotFound'))
-            return
-        }
+    config.value.policies[targetId] = targetPolicy
+    await savePolicies(config.value.policies)
 
-        const targetPolicy = config.value.policies[targetId]
-        if (!targetPolicy.rules) targetPolicy.rules = []
-
-        let addedCount = 0
-        let updatedCount = 0
-        const newRulesToAdd = []
-        const indicesToRemove = new Set()
-
-        rulesToMerge.forEach(tempRule => {
-            const existingIndex = targetPolicy.rules.findIndex(r => 
-                r.type !== 'divider' && r.ruleType === tempRule.ruleType && r.pattern === tempRule.pattern
-            )
-
-            if (existingIndex !== -1) {
-                if (conflictMode === 'overwrite') {
-                    indicesToRemove.add(existingIndex)
-                    newRulesToAdd.push({ ...tempRule, id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}` })
-                    updatedCount++
-                }
-                // ignore: skip entirely
-            } else {
-                newRulesToAdd.push({ ...tempRule, id: `rule_${Date.now()}_${Math.random().toString(36).substr(2, 5)}` })
-                addedCount++
-            }
-        })
-        
-        if (indicesToRemove.size > 0) {
-            targetPolicy.rules = targetPolicy.rules.filter((_, i) => !indicesToRemove.has(i))
-        }
-        if (newRulesToAdd.length > 0) targetPolicy.rules.unshift(...newRulesToAdd)
-
-        config.value.policies[targetId] = targetPolicy
-        await savePolicies(config.value.policies)
-
-        // Cleanup
-        if (mergeSourceIndices.value.length > 0) {
-            const indices = [...mergeSourceIndices.value].sort((a, b) => b - a)
-            indices.forEach(i => rules.value.splice(i, 1))
-        } else {
-            rules.value = []
-        }
-
-        await saveChanges()
-        toast.success(t('tempMsgMerged', [addedCount, updatedCount]))
-        
-        showAcceptModal.value = false
-        showSmartMergeModal.value = false
-        mergeSourceIndices.value = []
+    // Cleanup
+    if (mergeSourceIndices.value.length > 0) {
+      const indices = [...mergeSourceIndices.value].sort((a, b) => b - a)
+      indices.forEach((i) => rules.value.splice(i, 1))
+    } else {
+      rules.value = []
     }
 
-    return {
-        rules, config, validationErrors, isDirty, 
-        activeAutoPolicyId, isTemporaryRulesActive,
-        showAcceptModal, showSmartMergeModal,
-        selectedRulesForMerge, smartMergeRules,
-        loadData, validateRule, saveChanges, addRule,
-        deleteRule, clearAll, executeMerge, mergeSourceIndices
-    }
+    await saveChanges()
+    toast.success(t('tempMsgMerged', [addedCount, updatedCount]))
+
+    showAcceptModal.value = false
+    showSmartMergeModal.value = false
+    mergeSourceIndices.value = []
+  }
+
+  return {
+    rules,
+    config,
+    validationErrors,
+    isDirty,
+    activeAutoPolicyId,
+    isTemporaryRulesActive,
+    showAcceptModal,
+    showSmartMergeModal,
+    selectedRulesForMerge,
+    smartMergeRules,
+    loadData,
+    validateRule,
+    saveChanges,
+    addRule,
+    deleteRule,
+    clearAll,
+    executeMerge,
+    mergeSourceIndices
+  }
 }

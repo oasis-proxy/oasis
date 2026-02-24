@@ -8,30 +8,49 @@ export function useProxyHost(id, router) {
   const originalProxy = ref(null)
   const config = ref(null)
 
-
-
   // Reactive ID
   const currentId = ref(id)
 
   const loadProxyData = async (newId = null) => {
     if (newId) currentId.value = newId
-    
+
     config.value = await loadConfig()
     const targetProxy = config.value?.proxies?.[currentId.value]
-    
+
     if (targetProxy) {
       // Deep copy to local state
       proxy.value = JSON.parse(JSON.stringify(targetProxy))
-      
+
       // Data Normalization
       if (!proxy.value.bypassList) {
         proxy.value.bypassList = ['127.0.0.1', '::1', '<localhost>']
       }
       if (!proxy.value.overrides) proxy.value.overrides = {}
-      if (!proxy.value.overrides.http) proxy.value.overrides.http = { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
-      if (!proxy.value.overrides.https) proxy.value.overrides.https = { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
-      if (!proxy.value.overrides.ftp) proxy.value.overrides.ftp = { scheme: 'default', host: '', port: null, authUsername: '', authPassword: '' }
-      
+      if (!proxy.value.overrides.http)
+        proxy.value.overrides.http = {
+          scheme: 'default',
+          host: '',
+          port: null,
+          authUsername: '',
+          authPassword: ''
+        }
+      if (!proxy.value.overrides.https)
+        proxy.value.overrides.https = {
+          scheme: 'default',
+          host: '',
+          port: null,
+          authUsername: '',
+          authPassword: ''
+        }
+      if (!proxy.value.overrides.ftp)
+        proxy.value.overrides.ftp = {
+          scheme: 'default',
+          host: '',
+          port: null,
+          authUsername: '',
+          authPassword: ''
+        }
+
       if (!proxy.value.color) proxy.value.color = '#137fec'
       if (proxy.value.showInPopup === undefined) proxy.value.showInPopup = true
 
@@ -48,7 +67,7 @@ export function useProxyHost(id, router) {
 
   const saveChanges = async () => {
     if (!config.value || !proxy.value) return
-    
+
     const payload = JSON.parse(JSON.stringify(proxy.value))
 
     // Apply default ports
@@ -65,10 +84,10 @@ export function useProxyHost(id, router) {
 
     // Clean up overrides
     if (payload.overrides) {
-      ['http', 'https', 'ftp'].forEach(key => {
+      ;['http', 'https', 'ftp'].forEach((key) => {
         const o = payload.overrides[key]
         if (o && o.scheme !== 'default' && !o.port) {
-          const defaultPort = o.scheme === 'http' ? 8080 : (o.scheme === 'https' ? 443 : 1080)
+          const defaultPort = o.scheme === 'http' ? 8080 : o.scheme === 'https' ? 443 : 1080
           o.port = defaultPort
         }
       })

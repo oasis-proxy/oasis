@@ -71,7 +71,11 @@
         </div>
       </div>
       <!-- Empty State -->
-      <div v-else class="p-2 d-flex align-items-center justify-content-center" style="min-height: 44px">
+      <div
+        v-else
+        class="p-2 d-flex align-items-center justify-content-center"
+        style="min-height: 44px"
+      >
         <p class="text-xs ui-text-secondary m-0">No tags defined.</p>
       </div>
     </div>
@@ -88,19 +92,30 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const localIpTags = ref([])
-const IPV4_REGEX = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+const IPV4_REGEX =
+  /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
 
 const sortTags = (tags) => {
   return tags.sort((a, b) => {
-    const numA = a.ip.split('.').map(n => parseInt(n) || 0).reduce((acc, n) => acc * 256 + n, 0)
-    const numB = b.ip.split('.').map(n => parseInt(n) || 0).reduce((acc, n) => acc * 256 + n, 0)
+    const numA = a.ip
+      .split('.')
+      .map((n) => parseInt(n) || 0)
+      .reduce((acc, n) => acc * 256 + n, 0)
+    const numB = b.ip
+      .split('.')
+      .map((n) => parseInt(n) || 0)
+      .reduce((acc, n) => acc * 256 + n, 0)
     return numA - numB
   })
 }
 
 const syncToLocal = () => {
   const tags = Object.entries(props.modelValue || {}).map(([ip, tag]) => ({
-    ip, tag, isEditing: false, originalIp: ip, errors: { ip: false, tag: false }
+    ip,
+    tag,
+    isEditing: false,
+    originalIp: ip,
+    errors: { ip: false, tag: false }
   }))
   localIpTags.value = sortTags(tags)
 }
@@ -108,7 +123,13 @@ const syncToLocal = () => {
 watch(() => props.modelValue, syncToLocal, { immediate: true, deep: true })
 
 function addTag() {
-  localIpTags.value.unshift({ ip: '', tag: '', isEditing: true, originalIp: null, errors: { ip: false, tag: false } })
+  localIpTags.value.unshift({
+    ip: '',
+    tag: '',
+    isEditing: true,
+    originalIp: null,
+    errors: { ip: false, tag: false }
+  })
 }
 
 function editTag(index) {
@@ -129,15 +150,15 @@ function cancelEdit(index) {
 function validateItem(index) {
   const item = localIpTags.value[index]
   const errors = { ip: !IPV4_REGEX.test(item.ip), tag: !item.tag }
-  
+
   if (!errors.ip) {
-      const isDuplicateIp = localIpTags.value.some((t, i) => i !== index && t.ip === item.ip)
-      if (isDuplicateIp) errors.ip = true
+    const isDuplicateIp = localIpTags.value.some((t, i) => i !== index && t.ip === item.ip)
+    if (isDuplicateIp) errors.ip = true
   }
-  
+
   if (!errors.tag) {
-      const isDuplicateTag = localIpTags.value.some((t, i) => i !== index && t.tag === item.tag)
-      if (isDuplicateTag) errors.tag = true
+    const isDuplicateTag = localIpTags.value.some((t, i) => i !== index && t.tag === item.tag)
+    if (isDuplicateTag) errors.tag = true
   }
 
   item.errors = errors
@@ -146,15 +167,15 @@ function validateItem(index) {
 
 function saveTag(index) {
   if (!validateItem(index)) return
-  
+
   const newTags = { ...props.modelValue }
   const item = localIpTags.value[index]
-  
+
   if (item.originalIp && item.originalIp !== item.ip) {
     delete newTags[item.originalIp]
   }
   newTags[item.ip] = item.tag
-  
+
   emit('update:modelValue', newTags)
   item.isEditing = false
   item.originalIp = item.ip

@@ -9,7 +9,7 @@
   >
     <option v-if="includeDirect" value="direct">{{ $t('directConnect') || 'Direct' }}</option>
     <option v-if="includeReject" value="reject">{{ $t('lblReject') || 'Reject' }}</option>
-    
+
     <optgroup v-for="group in groupedOptions" :key="group.label" :label="group.label">
       <option v-for="option in group.options" :key="option.id" :value="option.id">
         {{ option.label }}
@@ -75,7 +75,7 @@ const groupedOptions = computed(() => {
   // Proxies
   if (props.proxies) {
     const proxyList = Object.values(props.proxies)
-      .map(p => ({ id: p.id, label: p.label || p.name }))
+      .map((p) => ({ id: p.id, label: p.label || p.name }))
       .sort((a, b) => a.label.localeCompare(b.label))
 
     if (proxyList.length > 0) {
@@ -86,7 +86,7 @@ const groupedOptions = computed(() => {
   // Proxy Groups
   if (props.proxyGroups) {
     const groupList = Object.values(props.proxyGroups)
-      .map(g => ({ id: g.id, label: g.name }))
+      .map((g) => ({ id: g.id, label: g.name }))
       .sort((a, b) => a.label.localeCompare(b.label))
 
     if (groupList.length > 0) {

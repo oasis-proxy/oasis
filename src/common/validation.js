@@ -12,7 +12,7 @@ export function validatePattern(ruleType, pattern) {
   if (!pattern || !pattern.trim()) {
     return { valid: false, message: 'Pattern is required' }
   }
-  
+
   switch (ruleType) {
     case 'ruleset':
       return validateRuleSetUrl(pattern)
@@ -62,36 +62,36 @@ export function validateIpCidr(pattern) {
   const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/
   const cidrPattern = /^(\d{1,3}\.){3}\d{1,3}\/\d{1,2}$/
   const ipv6Pattern = /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$/
-  
+
   const trimmed = pattern.trim()
-  
+
   // IPv4 validation
   if (ipv4Pattern.test(trimmed)) {
     const octets = trimmed.split('.')
-    const valid = octets.every(o => parseInt(o) >= 0 && parseInt(o) <= 255)
-    return valid 
+    const valid = octets.every((o) => parseInt(o) >= 0 && parseInt(o) <= 255)
+    return valid
       ? { valid: true, message: '' }
       : { valid: false, message: 'IP octets must be 0-255' }
   }
-  
+
   // CIDR validation
   if (cidrPattern.test(trimmed)) {
     const [ip, mask] = trimmed.split('/')
     const octets = ip.split('.')
     const maskNum = parseInt(mask)
-    const validOctets = octets.every(o => parseInt(o) >= 0 && parseInt(o) <= 255)
+    const validOctets = octets.every((o) => parseInt(o) >= 0 && parseInt(o) <= 255)
     const validMask = maskNum >= 0 && maskNum <= 32
-    
+
     if (validOctets && validMask) {
       return { valid: true, message: '' }
     }
     return { valid: false, message: 'Invalid IP or CIDR mask' }
   }
-  
+
   // IPv6 validation
   if (ipv6Pattern.test(trimmed)) {
     return { valid: true, message: '' }
   }
-  
+
   return { valid: false, message: 'Invalid IP or CIDR format' }
 }

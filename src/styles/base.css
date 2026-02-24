@@ -7,13 +7,19 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, system-ui;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif,
+    system-ui;
   background-color: var(--bs-body-bg);
   -webkit-font-smoothing: antialiased;
 }
 
 /* Reset Lists */
-ul { padding: 0; margin: 0; list-style: none; }
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
 
 /* -------------------------------------------------------------------------- */
 /* Global Scrollbar Patterns                                                 */

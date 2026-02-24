@@ -23,20 +23,20 @@ export function useDragDrop(rulesRef, onDropCallback = null) {
   const handleDrop = (event, dropIndex) => {
     event.preventDefault()
     if (draggedIndex === null || draggedIndex === dropIndex) return
-    
+
     const draggedItem = rulesRef.value[draggedIndex]
     const newRules = [...rulesRef.value]
-    
+
     // Remove from old position
     newRules.splice(draggedIndex, 1)
-    
+
     // Insert at new position
     const insertIndex = draggedIndex < dropIndex ? dropIndex - 1 : dropIndex
     newRules.splice(insertIndex, 0, draggedItem)
-    
+
     rulesRef.value = newRules
     dragOverIndex.value = null
-    
+
     // Call optional callback
     if (onDropCallback) {
       onDropCallback()

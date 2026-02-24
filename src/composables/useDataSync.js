@@ -1,7 +1,13 @@
 import { ref, reactive, computed } from 'vue'
-import { 
-  loadConfig, saveGeneralSettings, syncToCloud, syncFromCloud, 
-  exportConfig, importConfig, clearLocalConfig, clearCloudConfig 
+import {
+  loadConfig,
+  saveGeneralSettings,
+  syncToCloud,
+  syncFromCloud,
+  exportConfig,
+  importConfig,
+  clearLocalConfig,
+  clearCloudConfig
 } from '../common/storage'
 import { DEFAULT_CONFIG } from '../common/config'
 import { t } from '../common/i18n'
@@ -116,9 +122,18 @@ export function useDataSync() {
   }
 
   return {
-    config, cloudConfig, showConflictModal, softwareVersion, cloudNewer,
-    loadLocalData, loadCloudData, handleSyncToCloud, handleSyncFromCloud,
-    toggleAutoSync, resolveConflictCloud, resolveConflictLocal,
+    config,
+    cloudConfig,
+    showConflictModal,
+    softwareVersion,
+    cloudNewer,
+    loadLocalData,
+    loadCloudData,
+    handleSyncToCloud,
+    handleSyncFromCloud,
+    toggleAutoSync,
+    resolveConflictCloud,
+    resolveConflictLocal,
     cancelAutoSync: async () => {
       showConflictModal.value = false
       config.sync.enabled = false

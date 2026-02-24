@@ -6,7 +6,11 @@ export function useMonitorData(historyLimit, matchFn) {
 
   function getHostname(url) {
     if (!url) return ''
-    try { return new URL(url).hostname } catch { return url }
+    try {
+      return new URL(url).hostname
+    } catch {
+      return url
+    }
   }
 
   async function updateTabInfo(tabId) {
@@ -60,7 +64,7 @@ export function useMonitorData(historyLimit, matchFn) {
   }
 
   function updateRequest(requestId, updates) {
-    const index = requests.value.findIndex(r => r.id === requestId)
+    const index = requests.value.findIndex((r) => r.id === requestId)
     if (index !== -1) {
       const req = requests.value[index]
       const newRequest = { ...req, ...updates }
@@ -73,15 +77,28 @@ export function useMonitorData(historyLimit, matchFn) {
 
   function handleMessage(message) {
     if (message.type === 'REQUEST_STARTED') addRequest(message.request)
-    else if (message.type === 'REQUEST_COMPLETED') updateRequest(message.requestId, { endTime: message.endTime, status: message.status, duration: message.duration, ip: message.ip, fromCache: message.fromCache })
-    else if (message.type === 'REQUEST_REDIRECTED') updateRequest(message.requestId, { redirected: true, redirectUrl: message.redirectUrl })
-    else if (message.type === 'REQUEST_ERROR') updateRequest(message.requestId, { endTime: message.endTime, status: 0, error: message.error })
+    else if (message.type === 'REQUEST_COMPLETED')
+      updateRequest(message.requestId, {
+        endTime: message.endTime,
+        status: message.status,
+        duration: message.duration,
+        ip: message.ip,
+        fromCache: message.fromCache
+      })
+    else if (message.type === 'REQUEST_REDIRECTED')
+      updateRequest(message.requestId, { redirected: true, redirectUrl: message.redirectUrl })
+    else if (message.type === 'REQUEST_ERROR')
+      updateRequest(message.requestId, {
+        endTime: message.endTime,
+        status: 0,
+        error: message.error
+      })
   }
 
   function clearRequests(tabId = null) {
     if (tabId !== null) {
-      requests.value = requests.value.filter(r => r.tabId !== tabId)
-      if (requests.value.filter(r => r.tabId === tabId).length === 0) delete tabs.value[tabId]
+      requests.value = requests.value.filter((r) => r.tabId !== tabId)
+      if (requests.value.filter((r) => r.tabId === tabId).length === 0) delete tabs.value[tabId]
     } else {
       requests.value = []
       tabs.value = {}

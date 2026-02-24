@@ -19,7 +19,9 @@
   background-color: transparent !important;
   border: 0 !important;
   color: var(--ui-text-tertiary) !important;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
   padding: 0.25rem; /* nice to have */
   display: flex;
   align-items: center;
@@ -31,7 +33,6 @@
   background-color: transparent !important;
   color: var(--ui-text-secondary) !important;
 }
-
 
 /* Modal Content overrides if necessary, usually Bootstrap classes handled well but colors might need enforcing */
 .modal-content {

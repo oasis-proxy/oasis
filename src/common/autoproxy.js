@@ -4,75 +4,79 @@
  * @returns {Array<{pattern: string, type: string, isWhitelist: boolean}>}
  */
 export function parseAutoProxyRules(content) {
-  const rules = [];
-  
+  const rules = []
+
   // Basic check for Base64 (common for gfwlist)
-  let decoded = content;
+  let decoded = content
   try {
-      // Improved check for Base64 (relaxed for GFWList)
-      // Strip whitespace including newlines before checking
-      const cleanContent = content.replace(/\s/g, '');
-      const base64Regex = /^[A-Za-z0-9+/]*={0,2}$/;
-      
-      if (cleanContent.length > 0 && cleanContent.length % 4 === 0 && base64Regex.test(cleanContent)) {
-        // Try decoding
-        const decodedCandidate = atob(cleanContent);
-        // Sanity check: decoded content should look like text (no binary control chars)
-        // AutoProxy rules are text, so we expect mostly printable items + newlines
-        // If it has many control chars, it's likely not what we want
-        // eslint-disable-next-line no-control-regex
-        if (!/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(decodedCandidate)) {
-           decoded = decodedCandidate;
-        }
+    // Improved check for Base64 (relaxed for GFWList)
+    // Strip whitespace including newlines before checking
+    const cleanContent = content.replace(/\s/g, '')
+    const base64Regex = /^[A-Za-z0-9+/]*={0,2}$/
+
+    if (
+      cleanContent.length > 0 &&
+      cleanContent.length % 4 === 0 &&
+      base64Regex.test(cleanContent)
+    ) {
+      // Try decoding
+      const decodedCandidate = atob(cleanContent)
+      // Sanity check: decoded content should look like text (no binary control chars)
+      // AutoProxy rules are text, so we expect mostly printable items + newlines
+      // If it has many control chars, it's likely not what we want
+
+      if (!/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(decodedCandidate)) {
+        decoded = decodedCandidate
       }
+    }
   } catch (e) {
-      // Not base64, assume plain text
+    // Not base64, assume plain text
   }
 
-  const lines = decoded.split(/\r?\n/);
+  const lines = decoded.split(/\r?\n/)
 
   for (let line of lines) {
-    line = line.trim();
-    if (!line || line.startsWith('!') || line.startsWith('[')) continue; // Skip comments and sections
+    line = line.trim()
+    if (!line || line.startsWith('!') || line.startsWith('[')) continue // Skip comments and sections
 
-    let isWhitelist = false;
+    let isWhitelist = false
     if (line.startsWith('@@')) {
-      isWhitelist = true;
-      line = line.substring(2);
+      isWhitelist = true
+      line = line.substring(2)
     }
 
-    let pattern = line;
-    let type = 'keyword'; // Default to keyword search
+    let pattern = line
+    let type = 'keyword' // Default to keyword search
 
     if (pattern.startsWith('/')) {
-        // Regex /pattern/
-        if (pattern.endsWith('/')) {
-             pattern = pattern.substring(1, pattern.length - 1);
-             type = 'regex';
-        } else {
-            // Invalid regex format, treat as keyword or ignore?
-            // Treating as wildcard/keyword for now unless strict regex
-        }
+      // Regex /pattern/
+      if (pattern.endsWith('/')) {
+        pattern = pattern.substring(1, pattern.length - 1)
+        type = 'regex'
+      } else {
+        // Invalid regex format, treat as keyword or ignore?
+        // Treating as wildcard/keyword for now unless strict regex
+      }
     } else if (pattern.startsWith('||')) {
-        // Domain anchor
-        pattern = pattern.substring(2);
-        type = 'domain'; 
+      // Domain anchor
+      pattern = pattern.substring(2)
+      type = 'domain'
     } else if (pattern.startsWith('|')) {
-        // Start anchor
-        pattern = pattern.substring(1);
-        type = 'full_url_start'; // Special handling needed usually
+      // Start anchor
+      pattern = pattern.substring(1)
+      type = 'full_url_start' // Special handling needed usually
     } else if (pattern.endsWith('|')) {
-        // End anchor
-        pattern = pattern.substring(0, pattern.length - 1);
-        type = 'full_url_end'; // Special handling needed
+      // End anchor
+      pattern = pattern.substring(0, pattern.length - 1)
+      type = 'full_url_end' // Special handling needed
     } else if (pattern.startsWith('.')) {
-        // Treat .example.com as wildcard (supported by pac.js directly)
-        type = 'wildcard';
+      // Treat .example.com as wildcard (supported by pac.js directly)
+      type = 'wildcard'
     } else {
-        // Plain keyword or wildcard (if contains *)
-        if (pattern.includes('*')) {
-            type = 'wildcard';
-        }
+      // Plain keyword or wildcard (if contains *)
+      if (pattern.includes('*')) {
+        type = 'wildcard'
+      }
     }
 
     rules.push({
@@ -80,10 +84,10 @@ export function parseAutoProxyRules(content) {
       type,
       isWhitelist,
       original: line
-    });
+    })
   }
 
-  return rules;
+  return rules
 }
 
 /**
@@ -93,48 +97,48 @@ export function parseAutoProxyRules(content) {
  * @returns {Array<{ruleType: string, pattern: string}>}
  */
 export function convertAutoProxyToInternalRules(parsedRules, defaultRuleType = 'wildcard') {
-  const internalRules = [];
+  const internalRules = []
 
   for (const rule of parsedRules) {
-    let ruleType = defaultRuleType;
-    let pattern = rule.pattern;
-    const isWhitelist = rule.isWhitelist;
+    let ruleType = defaultRuleType
+    let pattern = rule.pattern
+    const isWhitelist = rule.isWhitelist
 
     switch (rule.type) {
       case 'regex':
-        ruleType = 'regex';
-        break;
+        ruleType = 'regex'
+        break
       case 'domain':
         // Domain rules like ||example.com should be strict wildcard
-        ruleType = 'wildcard';
+        ruleType = 'wildcard'
         // Convert to *.domain.com to trigger optimized dnsDomainIs path in PAC
-        pattern = `*.${pattern}`;
-        break;
+        pattern = `*.${pattern}`
+        break
       case 'wildcard':
-        ruleType = 'wildcard';
-        break;
+        ruleType = 'wildcard'
+        break
       case 'keyword':
         // Keywords can be treated as wildcard with * on both sides
-        ruleType = 'wildcard';
+        ruleType = 'wildcard'
         if (!pattern.includes('*')) {
-          pattern = `*${pattern}*`;
+          pattern = `*${pattern}*`
         }
-        break;
+        break
       case 'full_url_start':
       case 'full_url_end':
         // These need regex for proper matching
-        ruleType = 'regex';
+        ruleType = 'regex'
         if (rule.type === 'full_url_start') {
-          pattern = `^${escapeRegex(pattern)}`;
+          pattern = `^${escapeRegex(pattern)}`
         } else {
-          pattern = `${escapeRegex(pattern)}$`;
+          pattern = `${escapeRegex(pattern)}$`
         }
-        break;
+        break
       default:
         // Default to wildcard
-        ruleType = 'wildcard';
+        ruleType = 'wildcard'
         if (!pattern.includes('*')) {
-          pattern = `*${pattern}*`;
+          pattern = `*${pattern}*`
         }
     }
 
@@ -142,10 +146,10 @@ export function convertAutoProxyToInternalRules(parsedRules, defaultRuleType = '
       ruleType,
       pattern,
       isWhitelist
-    });
+    })
   }
 
-  return internalRules;
+  return internalRules
 }
 
 /**
@@ -188,7 +192,11 @@ export function convertInternalToAutoProxy(rules, config = {}) {
       } else if (pattern.startsWith('.')) {
         // .google.com → ||google.com
         line = `||${pattern.substring(1)}`
-      } else if (pattern.startsWith('*') && pattern.endsWith('*') && !pattern.slice(1, -1).includes('*')) {
+      } else if (
+        pattern.startsWith('*') &&
+        pattern.endsWith('*') &&
+        !pattern.slice(1, -1).includes('*')
+      ) {
         // *keyword* → keyword
         line = pattern.slice(1, -1)
       } else {
@@ -221,5 +229,5 @@ export function convertInternalToAutoProxy(rules, config = {}) {
  * @returns {string}
  */
 function escapeRegex(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }

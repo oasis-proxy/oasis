@@ -21,32 +21,32 @@
     "message": "Defaults"
   },
   "hostProxy": {
-      "message": "Host Proxy"
+    "message": "Host Proxy"
   },
   "pacScript": {
-      "message": "PAC Script"
+    "message": "PAC Script"
   },
   "autoPolicy": {
-      "message": "Auto Policy"
+    "message": "Auto Policy"
   },
   "monitor": {
-      "message": "Monitor"
+    "message": "Monitor"
   },
   "quick": {
-      "message": "Quick"
+    "message": "Quick"
   },
   "options": {
-      "message": "Options"
+    "message": "Options"
   },
 
   "addTo": {
-      "message": "Add To"
+    "message": "Add To"
   },
   "currentPolicy": {
-      "message": "Current Policy"
+    "message": "Current Policy"
   },
   "temporarySession": {
-      "message": "Temporary (Session)"
+    "message": "Temporary (Session)"
   },
   "navConfig": { "message": "Configuration" },
   "navGeneral": { "message": "General Settings" },
@@ -123,7 +123,9 @@
   "phDescAuth": { "message": "Leave blank if not required" },
   "phHeaderBypass": { "message": "Bypass Rules" },
   "phLabelRules": { "message": "Rules" },
-  "phDescBypass": { "message": "Requests to these domains or IPs will bypass the proxy. Supports wildcards (e.g. *.google.com)." },
+  "phDescBypass": {
+    "message": "Requests to these domains or IPs will bypass the proxy. Supports wildcards (e.g. *.google.com)."
+  },
   "phHeaderAdvanced": { "message": "Advanced Protocol Overrides" },
   "phLabelHost": { "message": "Host Address" },
   "phLabelProxyProtocol": { "message": "Proxy Protocol" },
@@ -276,33 +278,50 @@
   "msgInvalidConfig": { "message": "Invalid configuration file" },
   "msgConfigExported": { "message": "Configuration exported" },
   "msgConfigExportFailed": { "message": "Failed to export configuration" },
-  "confirmClearLocal": { "message": "Are you sure you want to clear LOCAL configuration? This will reset everything to defaults and disable Auto Sync." },
+  "confirmClearLocal": {
+    "message": "Are you sure you want to clear LOCAL configuration? This will reset everything to defaults and disable Auto Sync."
+  },
   "msgLocalCleared": { "message": "Local configuration cleared" },
-  "confirmClearCloud": { "message": "Are you sure you want to clear CLOUD configuration? This action cannot be undone." },
+  "confirmClearCloud": {
+    "message": "Are you sure you want to clear CLOUD configuration? This action cannot be undone."
+  },
   "msgCloudCleared": { "message": "Cloud configuration cleared & Auto Sync disabled" },
   "msgClearCloudFailed": { "message": "Failed to clear cloud configuration" },
 
   "titleSyncConflict": { "message": "Sync Conflict Detected" },
-  "msgSyncConflict": { "message": "The version in the cloud is newer than your local version. Please choose which version to keep." },
+  "msgSyncConflict": {
+    "message": "The version in the cloud is newer than your local version. Please choose which version to keep."
+  },
   "lblThisDevice": { "message": "This device" },
   "lblRemoteRepo": { "message": "Remote repository" },
 
   "btnOverwriteCloud": { "message": "Overwrite Cloud" },
   "btnSyncFromCloud": { "message": "Sync from Cloud" },
-  "popTooltipCopy": { "message": "Click to copy: $DOMAIN$", "placeholders": { "domain": { "content": "$1" } } },
+  "popTooltipCopy": {
+    "message": "Click to copy: $DOMAIN$",
+    "placeholders": { "domain": { "content": "$1" } }
+  },
   "popTitleQuickAdd": { "message": "Select domains to proxy from current page" },
   "popMsgNoFailedRequests": { "message": "No failed requests." },
   "popMsgPageWorking": { "message": "Page is working correctly." },
   "lblProxies": { "message": "Proxies" },
   "lblProxyGroups": { "message": "Proxy Groups" },
-  "msgRulesAddedTemp": { "message": "$COUNT$ rules added to Session (Temp)", "placeholders": { "count": { "content": "$1" } } },
-  "msgRulesAddedPolicy": { "message": "$COUNT$ rules added to $POLICY$", "placeholders": { "count": { "content": "$1" }, "policy": { "content": "$2" } } },
+  "msgRulesAddedTemp": {
+    "message": "$COUNT$ rules added to Session (Temp)",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "msgRulesAddedPolicy": {
+    "message": "$COUNT$ rules added to $POLICY$",
+    "placeholders": { "count": { "content": "$1" }, "policy": { "content": "$2" } }
+  },
   "msgCopiedGeneric": { "message": "Copied to clipboard" },
   "btnResetSimple": { "message": "Reset" },
   "btnRefresh": { "message": "Refresh" },
   "lblChooseColor": { "message": "Choose color" },
   "pacPlaceholderUrl": { "message": "https://example.com/config.pac" },
-  "pacPlaceholderScript": { "message": "// Enter your PAC script here\nfunction FindProxyForURL(url, host) {\n  return 'DIRECT';\n}" },
+  "pacPlaceholderScript": {
+    "message": "// Enter your PAC script here\nfunction FindProxyForURL(url, host) {\n  return 'DIRECT';\n}"
+  },
   "pacHeaderSource": { "message": "PAC Source" },
   "pacHeaderScript": { "message": "Script Content" },
   "pacLabelSourceMethod": { "message": "Source Method" },
@@ -326,7 +345,9 @@
   "pgHeaderProxyName": { "message": "Proxy Name" },
   "pgHeaderAddress": { "message": "Address" },
   "pgHeaderAction": { "message": "Action" },
-  "pgMsgNoProxies": { "message": "No proxies in this group. Add proxies to create a failover chain." },
+  "pgMsgNoProxies": {
+    "message": "No proxies in this group. Add proxies to create a failover chain."
+  },
   "pgOptionSelectProxy": { "message": "Select a proxy..." },
   "pgMsgNoMoreProxies": { "message": "No more proxies available" },
   "pgMsgSaved": { "message": "Group saved successfully" },
@@ -338,10 +359,15 @@
   "tempBtnClearAll": { "message": "Clear All" },
   "tempMsgNoRules": { "message": "No temporary rules." },
   "tempMsgNoRulesDesc": { "message": "Temporary rules created from the popup will appear here." },
-  "tempMsgUnavailable": { "message": "Temporary rules are only available when the active profile is an Auto Policy." },
+  "tempMsgUnavailable": {
+    "message": "Temporary rules are only available when the active profile is an Auto Policy."
+  },
   "tempMsgSaved": { "message": "Temporary rules saved" },
   "tempMsgClearConfirm": { "message": "Are you sure you want to clear all temporary rules?" },
-  "tempMsgMerged": { "message": "Merged $ADDED$ rules, updated $UPDATED$ rules.", "placeholders": { "added": { "content": "$1" }, "updated": { "content": "$2" } } },
+  "tempMsgMerged": {
+    "message": "Merged $ADDED$ rules, updated $UPDATED$ rules.",
+    "placeholders": { "added": { "content": "$1" }, "updated": { "content": "$2" } }
+  },
   "rscmTitle": { "message": "RuleSet Content" },
   "rscmLabelUrl": { "message": "RuleSet URL" },
   "rscmLabelLastUpdated": { "message": "Last Updated" },
@@ -350,7 +376,10 @@
   "rscmBtnUpdating": { "message": "Updating..." },
   "rscmMsgNever": { "message": "Never" },
   "armTitle": { "message": "Accept Rules" },
-  "armDesc": { "message": "You are about to add $COUNT$ rules to a permanent policy.", "placeholders": { "count": { "content": "$1" } } },
+  "armDesc": {
+    "message": "You are about to add $COUNT$ rules to a permanent policy.",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "armLabelTarget": { "message": "Target Policy" },
   "armPlaceholderTarget": { "message": "-- Select Target Policy --" },
   "armLabelConflict": { "message": "Conflict Resolution" },
@@ -363,11 +392,19 @@
   "smmmSectionTarget": { "message": "Target Policy" },
   "smmmSectionSource": { "message": "Source Rules" },
   "smmmSectionPreview": { "message": "Merged Preview" },
-  "smmmMsgOptimized": { "message": "Optimized: $COUNT$ rules", "placeholders": { "count": { "content": "$1" } } },
+  "smmmMsgOptimized": {
+    "message": "Optimized: $COUNT$ rules",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "smmmMsgNoSource": { "message": "No rules selected." },
   "smmmMsgNoMerge": { "message": "No rules to merge." },
-  "smmmDescOptimization": { "message": "Rules have been automatically optimized. You can further edit them here before merging." },
-  "smmmBtnMerge": { "message": "Merge $COUNT$ Rules", "placeholders": { "count": { "content": "$1" } } },
+  "smmmDescOptimization": {
+    "message": "Rules have been automatically optimized. You can further edit them here before merging."
+  },
+  "smmmBtnMerge": {
+    "message": "Merge $COUNT$ Rules",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "pgTitleAddProxy": { "message": "Add Proxy to Group" },
   "btnRemove": { "message": "Remove" },
   "pgOptionUnknownProxy": { "message": "Unknown Proxy" },
@@ -399,7 +436,9 @@
   "pdmTitle": { "message": "Delete Proxy Host" },
   "pdmWarningTitle": { "message": "Warning: Destructive Action" },
   "pdmMsgDeleteConfirm": { "message": "Are you sure you want to delete" },
-  "pdmMsgDeleteIrreversible": { "message": "This action cannot be undone and will permanently remove this proxy configuration." },
+  "pdmMsgDeleteIrreversible": {
+    "message": "This action cannot be undone and will permanently remove this proxy configuration."
+  },
   "btnDeleteForever": { "message": "Delete Forever" },
   "suffixCopy": { "message": " Copy" },
   "lblUntitled": { "message": "Untitled" },
@@ -417,5 +456,7 @@
   "appmCountSuffix": { "message": "rules" },
   "appmBtnPreview": { "message": "AutoProxy Preview" },
   "appmBtnCopy": { "message": "Copy to clipboard" },
-  "appmDesc": { "message": "Preview rules converted to AutoProxy format. Wildcard and regex rules are included; IP/CIDR rules are excluded." }
+  "appmDesc": {
+    "message": "Preview rules converted to AutoProxy format. Wildcard and regex rules are included; IP/CIDR rules are excluded."
+  }
 }

@@ -1,15 +1,18 @@
 <template>
-  <div class="ui-bg-default ui-text-primary vh-100 overflow-hidden d-flex align-items-center justify-content-center p-4 transition-colors">
-    <div class="w-100 h-100 ui-card rounded-4 shadow-lg d-flex overflow-hidden border transition-colors" style="max-width: 72rem; max-height: 900px;">
-      
+  <div
+    class="ui-bg-default ui-text-primary vh-100 overflow-hidden d-flex align-items-center justify-content-center p-4 transition-colors"
+  >
+    <div
+      class="w-100 h-100 ui-card rounded-4 shadow-lg d-flex overflow-hidden border transition-colors"
+      style="max-width: 72rem; max-height: 900px"
+    >
       <!-- Integrated Sidebar -->
       <Sidebar />
 
       <!-- Main Content -->
-      <main class="flex-1 d-flex flex-column ui-bg-card transition-colors" style="min-width: 0;">
-          <router-view></router-view>
+      <main class="flex-1 d-flex flex-column ui-bg-card transition-colors" style="min-width: 0">
+        <router-view></router-view>
       </main>
-
     </div>
   </div>
 </template>
@@ -25,7 +28,7 @@ const mediaQuery = ref(null)
 const applyTheme = (theme) => {
   const root = document.documentElement
   root.classList.remove('dark', 'light')
-  
+
   if (theme === 'auto') {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     if (prefersDark) {
@@ -42,7 +45,7 @@ const applyTheme = (theme) => {
 }
 
 const handleSystemThemeChange = () => {
-  loadConfig().then(config => {
+  loadConfig().then((config) => {
     if (config.ui?.theme === 'auto') {
       applyTheme('auto')
     }
@@ -52,11 +55,11 @@ const handleSystemThemeChange = () => {
 onMounted(async () => {
   const config = await loadConfig()
   applyTheme(config.ui?.theme || 'light')
-  
+
   // Listen for system theme changes
   mediaQuery.value = window.matchMedia('(prefers-color-scheme: dark)')
   mediaQuery.value.addEventListener('change', handleSystemThemeChange)
-  
+
   // Listen for config changes from storage
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area === 'local' && changes.config) {
@@ -74,4 +77,3 @@ onUnmounted(() => {
   }
 })
 </script>
-

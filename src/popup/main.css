@@ -1,28 +1,29 @@
-@import "bootstrap/dist/css/bootstrap.min.css";
-@import "bootstrap-icons/font/bootstrap-icons.css";
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
 /* Shared Modular Styles */
-@import "../styles/theme.css";
-@import "../styles/base.css";
-@import "../styles/components/buttons.css";
-@import "../styles/components/inputs.css";
-@import "../styles/components/dropdowns.css";
-@import "../styles/components/cards.css";
-@import "../styles/components/nav.css";
-@import "../styles/components/tags.css";
-@import "../styles/components/toasts.css";
-@import "../styles/components/utils.css";
+@import '../styles/theme.css';
+@import '../styles/base.css';
+@import '../styles/components/buttons.css';
+@import '../styles/components/inputs.css';
+@import '../styles/components/dropdowns.css';
+@import '../styles/components/cards.css';
+@import '../styles/components/nav.css';
+@import '../styles/components/tags.css';
+@import '../styles/components/toasts.css';
+@import '../styles/components/utils.css';
 
 /* -------------------------------------------------------------------------- */
 /* Popup Specific Styles                                                      */
 /* -------------------------------------------------------------------------- */
 
-html { 
+html {
   font-size: 12px; /* 12px */
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -36,7 +37,6 @@ body {
   flex-direction: column;
   margin: 0 auto;
 }
-
 
 /* Header */
 .popup-header {
@@ -89,7 +89,6 @@ body {
 }
 
 /* Header buttons */
-
 
 /* Main content */
 .popup-main {
@@ -183,9 +182,16 @@ body {
 }
 
 /* Custom scrollbar override */
-.popup-main::-webkit-scrollbar { width: 6px; }
-.popup-main::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; }
-.popup-main::-webkit-scrollbar-thumb:hover { background-color: rgba(156, 163, 175, 0.7); }
+.popup-main::-webkit-scrollbar {
+  width: 6px;
+}
+.popup-main::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 20px;
+}
+.popup-main::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.7);
+}
 
 /* Monitor Tab Styles */
 .monitor-container {
@@ -215,7 +221,6 @@ body {
   gap: 0.375rem;
   overflow: hidden;
 }
-
 
 .monitor-domain {
   color: var(--ui-text-primary);

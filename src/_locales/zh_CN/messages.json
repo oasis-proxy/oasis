@@ -20,31 +20,31 @@
     "message": "默认"
   },
   "hostProxy": {
-      "message": "主机代理"
+    "message": "主机代理"
   },
   "pacScript": {
-      "message": "PAC 脚本"
+    "message": "PAC 脚本"
   },
   "autoPolicy": {
-      "message": "自动策略"
+    "message": "自动策略"
   },
   "monitor": {
-      "message": "监视器"
+    "message": "监视器"
   },
   "quick": {
-      "message": "快速添加"
+    "message": "快速添加"
   },
   "options": {
-      "message": "选项"
+    "message": "选项"
   },
   "addTo": {
-      "message": "添加到"
+    "message": "添加到"
   },
   "currentPolicy": {
-      "message": "当前策略"
+    "message": "当前策略"
   },
   "temporarySession": {
-      "message": "临时 (会话)"
+    "message": "临时 (会话)"
   },
   "navConfig": { "message": "配置" },
   "navGeneral": { "message": "通用设置" },
@@ -121,7 +121,9 @@
   "phDescAuth": { "message": "如果不需要，请留空" },
   "phHeaderBypass": { "message": "绕过规则" },
   "phLabelRules": { "message": "规则" },
-  "phDescBypass": { "message": "对这些域名或 IP 的请求将绕过代理。支持通配符 (例如 *.google.com)。" },
+  "phDescBypass": {
+    "message": "对这些域名或 IP 的请求将绕过代理。支持通配符 (例如 *.google.com)。"
+  },
   "phHeaderAdvanced": { "message": "高级协议覆盖" },
   "phLabelHost": { "message": "主机地址" },
   "phLabelProxyProtocol": { "message": "代理协议" },
@@ -296,20 +298,31 @@
 
   "btnOverwriteCloud": { "message": "覆盖云端" },
   "btnSyncFromCloud": { "message": "从云端同步" },
-  "popTooltipCopy": { "message": "点击复制: $DOMAIN$", "placeholders": { "domain": { "content": "$1" } } },
+  "popTooltipCopy": {
+    "message": "点击复制: $DOMAIN$",
+    "placeholders": { "domain": { "content": "$1" } }
+  },
   "popTitleQuickAdd": { "message": "从当前页面选择要代理的域名" },
   "popMsgNoFailedRequests": { "message": "没有失败的请求。" },
   "popMsgPageWorking": { "message": "页面工作常。" },
   "lblProxies": { "message": "代理服务器" },
   "lblProxyGroups": { "message": "代理组" },
-  "msgRulesAddedTemp": { "message": "$COUNT$ 条规则已添加到会话（临时）", "placeholders": { "count": { "content": "$1" } } },
-  "msgRulesAddedPolicy": { "message": "$COUNT$ 条规则已添加到 $POLICY$", "placeholders": { "count": { "content": "$1" }, "policy": { "content": "$2" } } },
+  "msgRulesAddedTemp": {
+    "message": "$COUNT$ 条规则已添加到会话（临时）",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "msgRulesAddedPolicy": {
+    "message": "$COUNT$ 条规则已添加到 $POLICY$",
+    "placeholders": { "count": { "content": "$1" }, "policy": { "content": "$2" } }
+  },
   "msgCopiedGeneric": { "message": "已复制到剪贴板" },
   "btnResetSimple": { "message": "重 置" },
   "btnRefresh": { "message": "刷 新" },
   "lblChooseColor": { "message": "选择颜色" },
   "pacPlaceholderUrl": { "message": "https://example.com/config.pac" },
-  "pacPlaceholderScript": { "message": "// 在此输入 PAC 脚本\nfunction FindProxyForURL(url, host) {\n  return 'DIRECT';\n}" },
+  "pacPlaceholderScript": {
+    "message": "// 在此输入 PAC 脚本\nfunction FindProxyForURL(url, host) {\n  return 'DIRECT';\n}"
+  },
   "pacHeaderSource": { "message": "PAC 来源" },
   "pacHeaderScript": { "message": "脚本内容" },
   "pacLabelSourceMethod": { "message": "来源方式" },
@@ -348,7 +361,10 @@
   "tempMsgUnavailable": { "message": "临时规则仅在活动配置文件为自动策略时可用。" },
   "tempMsgSaved": { "message": "临时规则已保存" },
   "tempMsgClearConfirm": { "message": "确定要清除所有临时规则吗？" },
-  "tempMsgMerged": { "message": "合并了 $ADDED$ 条规则，更新了 $UPDATED$ 条规则。", "placeholders": { "added": { "content": "$1" }, "updated": { "content": "$2" } } },
+  "tempMsgMerged": {
+    "message": "合并了 $ADDED$ 条规则，更新了 $UPDATED$ 条规则。",
+    "placeholders": { "added": { "content": "$1" }, "updated": { "content": "$2" } }
+  },
   "rscmTitle": { "message": "规则集内容" },
   "rscmLabelUrl": { "message": "规则集 URL" },
   "rscmLabelLastUpdated": { "message": "最后更新" },
@@ -357,7 +373,10 @@
   "rscmBtnUpdating": { "message": "更新中..." },
   "rscmMsgNever": { "message": "从未" },
   "armTitle": { "message": "接受规则" },
-  "armDesc": { "message": "即将添加 $COUNT$ 条规则到永久策略。", "placeholders": { "count": { "content": "$1" } } },
+  "armDesc": {
+    "message": "即将添加 $COUNT$ 条规则到永久策略。",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "armLabelTarget": { "message": "目标策略" },
   "armPlaceholderTarget": { "message": "-- 选择目标策略 --" },
   "armLabelConflict": { "message": "冲突解决" },
@@ -370,11 +389,17 @@
   "smmmSectionTarget": { "message": "目标策略" },
   "smmmSectionSource": { "message": "源规则" },
   "smmmSectionPreview": { "message": "合并预览" },
-  "smmmMsgOptimized": { "message": "已优化：$COUNT$ 条规则", "placeholders": { "count": { "content": "$1" } } },
+  "smmmMsgOptimized": {
+    "message": "已优化：$COUNT$ 条规则",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "smmmMsgNoSource": { "message": "未选择规则。" },
   "smmmMsgNoMerge": { "message": "没有可合并的规则。" },
   "smmmDescOptimization": { "message": "规则已自动优化，合并前可在此进一步编辑。" },
-  "smmmBtnMerge": { "message": "合并 $COUNT$ 条规则", "placeholders": { "count": { "content": "$1" } } },
+  "smmmBtnMerge": {
+    "message": "合并 $COUNT$ 条规则",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "pgTitleAddProxy": { "message": "添加到组" },
   "btnRemove": { "message": "移 除" },
   "pgOptionUnknownProxy": { "message": "未知代理" },
@@ -417,5 +442,7 @@
   "appmCountSuffix": { "message": "条规则" },
   "appmBtnPreview": { "message": "AutoProxy 预览" },
   "appmBtnCopy": { "message": "复制到剪贴板" },
-  "appmDesc": { "message": "预览转换为 AutoProxy 格式的规则。仅包含通配符和正则规则，不包含 IP/CIDR 规则。" }
+  "appmDesc": {
+    "message": "预览转换为 AutoProxy 格式的规则。仅包含通配符和正则规则，不包含 IP/CIDR 规则。"
+  }
 }

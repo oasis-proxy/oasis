@@ -1,20 +1,11 @@
 <template>
   <Teleport to="body">
     <Transition name="toast">
-      <div 
-        v-if="visible" 
-        class="toast-container"
-        :class="`toast-${type}`"
-      >
+      <div v-if="visible" class="toast-container" :class="`toast-${type}`">
         <div class="toast-content">
           <i :class="iconClass" class="toast-icon"></i>
           <span class="toast-message">{{ message }}</span>
-          <button 
-            v-if="showClose"
-            @click="close" 
-            class="ui-button-icon"
-            aria-label="Close"
-          >
+          <button v-if="showClose" @click="close" class="ui-button-icon" aria-label="Close">
             <i class="bi bi-x-lg"></i>
           </button>
         </div>
@@ -83,12 +74,13 @@ onMounted(() => {
   startTimer()
 })
 
-watch(() => props.message, () => {
-  if (timer) {
-    clearTimeout(timer)
+watch(
+  () => props.message,
+  () => {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    startTimer()
   }
-  startTimer()
-})
+)
 </script>
-
-

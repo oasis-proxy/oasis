@@ -1,5 +1,8 @@
 <template>
-  <div class="brand-section d-flex align-items-center px-3 transition-colors ui-bg-card" style="height: 6rem;">
+  <div
+    class="brand-section d-flex align-items-center px-3 transition-colors ui-bg-card"
+    style="height: 6rem"
+  >
     <!-- Ripple Animation Container -->
     <div class="ripple-container">
       <div class="ripple-ring ripple-1"></div>
@@ -8,8 +11,16 @@
       <div class="ripple-core"></div>
     </div>
     <!-- Brand Text -->
-    <img src="../../assets/img/oasis-proxy-primary-96px.png" alt="Oasis Proxy" class="brand-text logo-primary">
-    <img src="../../assets/img/oasis-proxy-white-96px.png" alt="Oasis Proxy" class="brand-text logo-white">
+    <img
+      src="../../assets/img/oasis-proxy-primary-96px.png"
+      alt="Oasis Proxy"
+      class="brand-text logo-primary"
+    />
+    <img
+      src="../../assets/img/oasis-proxy-white-96px.png"
+      alt="Oasis Proxy"
+      class="brand-text logo-white"
+    />
   </div>
 </template>
 
@@ -62,23 +73,65 @@
 }
 
 @keyframes ripple-1 {
-  0%   { width: 64px; height: 64px; border-width: 2px; opacity: var(--ripple-op-1); filter: blur(2px); }
-  100% { width: 80px; height: 80px; border-width: 0px; opacity: 0; filter: blur(2px); }
+  0% {
+    width: 64px;
+    height: 64px;
+    border-width: 2px;
+    opacity: var(--ripple-op-1);
+    filter: blur(2px);
+  }
+  100% {
+    width: 80px;
+    height: 80px;
+    border-width: 0px;
+    opacity: 0;
+    filter: blur(2px);
+  }
 }
 
 @keyframes ripple-2 {
-  0%   { width: 48px; height: 48px; border-width: 2px; opacity: var(--ripple-op-2); filter: blur(2px); }
-  100% { width: 60px; height: 60px; border-width: 1px; opacity: 0; filter: blur(1px); }
+  0% {
+    width: 48px;
+    height: 48px;
+    border-width: 2px;
+    opacity: var(--ripple-op-2);
+    filter: blur(2px);
+  }
+  100% {
+    width: 60px;
+    height: 60px;
+    border-width: 1px;
+    opacity: 0;
+    filter: blur(1px);
+  }
 }
 
 @keyframes ripple-3 {
-  0%   { width: 32px; height: 32px; border-width: 2px; opacity: var(--ripple-op-3); filter: blur(1px); }
-  100% { width: 36px; height: 36px; border-width: 2px; opacity: 0; filter: blur(1px); }
+  0% {
+    width: 32px;
+    height: 32px;
+    border-width: 2px;
+    opacity: var(--ripple-op-3);
+    filter: blur(1px);
+  }
+  100% {
+    width: 36px;
+    height: 36px;
+    border-width: 2px;
+    opacity: 0;
+    filter: blur(1px);
+  }
 }
 
-.ripple-1 { animation: ripple-1 2s infinite ease-out; }
-.ripple-2 { animation: ripple-2 2s infinite ease-out; }
-.ripple-3 { animation: ripple-3 2s infinite ease-out; }
+.ripple-1 {
+  animation: ripple-1 2s infinite ease-out;
+}
+.ripple-2 {
+  animation: ripple-2 2s infinite ease-out;
+}
+.ripple-3 {
+  animation: ripple-3 2s infinite ease-out;
+}
 
 :root.dark .brand-section {
   --ripple-color: #ffffff;
@@ -91,7 +144,13 @@
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
-.logo-white { display: none; }
-:root.dark .logo-primary { display: none; }
-:root.dark .logo-white { display: block; }
+.logo-white {
+  display: none;
+}
+:root.dark .logo-primary {
+  display: none;
+}
+:root.dark .logo-white {
+  display: block;
+}
 </style>

@@ -1,5 +1,7 @@
 <template>
-  <div class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors">
+  <div
+    class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
+  >
     <div class="d-flex items-start">
       <div>
         <p class="text-sm font-medium ui-text-primary m-0">{{ $t('lblRulePriority') }}</p>
@@ -9,7 +11,7 @@
 
     <div class="d-flex align-items-center gap-1">
       <template v-for="(cat, idx) in modelValue" :key="cat">
-        <span v-if="idx > 0" class="ui-text-tertiary" style="font-size: 10px;">
+        <span v-if="idx > 0" class="ui-text-tertiary" style="font-size: 10px">
           <i class="bi bi-chevron-right"></i>
         </span>
         <div
@@ -21,9 +23,9 @@
           @drop.prevent="onDrop($event, idx)"
           @dragend="onDragEnd"
           :style="dragOverIdx === idx ? 'opacity: 0.4;' : ''"
-          style="padding: 3px 8px; font-size: 11px; cursor: grab;"
+          style="padding: 3px 8px; font-size: 11px; cursor: grab"
         >
-          <i class="bi bi-grip-vertical" style="font-size: 10px;"></i>
+          <i class="bi bi-grip-vertical" style="font-size: 10px"></i>
           {{ priorityLabel(cat) }}
         </div>
       </template>
@@ -52,7 +54,9 @@ const dragIdx = ref(null)
 const dragOverIdx = ref(null)
 const DEFAULT_PRIORITY = ['reject', 'temp', 'normal']
 
-const isDefault = computed(() => JSON.stringify(props.modelValue) === JSON.stringify(DEFAULT_PRIORITY))
+const isDefault = computed(
+  () => JSON.stringify(props.modelValue) === JSON.stringify(DEFAULT_PRIORITY)
+)
 
 function priorityLabel(cat) {
   const labels = { reject: 'Reject', normal: 'Normal', temp: 'Temporary' }

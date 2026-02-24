@@ -1,25 +1,24 @@
-@import "bootstrap/dist/css/bootstrap.min.css";
-@import "bootstrap-icons/font/bootstrap-icons.css";
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
 /* Shared Modular Styles */
-@import "../styles/theme.css";
-@import "../styles/base.css";
-@import "../styles/components/buttons.css";
-@import "../styles/components/inputs.css";
-@import "../styles/components/dropdowns.css";
-@import "../styles/components/cards.css";
-@import "../styles/components/nav.css";
-@import "../styles/components/tags.css";
-@import "../styles/components/toasts.css";
-@import "../styles/components/utils.css";
-
-
+@import '../styles/theme.css';
+@import '../styles/base.css';
+@import '../styles/components/buttons.css';
+@import '../styles/components/inputs.css';
+@import '../styles/components/dropdowns.css';
+@import '../styles/components/cards.css';
+@import '../styles/components/nav.css';
+@import '../styles/components/tags.css';
+@import '../styles/components/toasts.css';
+@import '../styles/components/utils.css';
 
 /* -------------------------------------------------------------------------- */
 /* Sidepanel Specific Styles                                                  */
 /* -------------------------------------------------------------------------- */
 
-html, body {
+html,
+body {
   height: 100vh;
   width: 100%;
   overflow: hidden;
@@ -75,7 +74,7 @@ html, body {
 }
 
 .tab-btn.active {
-  background-color: var(--ui-bg-hover); 
+  background-color: var(--ui-bg-hover);
   color: var(--bs-primary);
   font-weight: var(--font-weight-semibold);
 }
@@ -88,7 +87,6 @@ html, body {
 }
 
 /* Header buttons */
-
 
 /* Main content */
 .popup-main {
@@ -139,7 +137,7 @@ html, body {
   align-items: center;
   justify-content: center;
   border-radius: 0.25rem;
-  color: var(--ui-text-secondary); 
+  color: var(--ui-text-secondary);
 }
 
 .profile-item.active .profile-icon {
@@ -182,9 +180,16 @@ html, body {
 }
 
 /* Custom scrollbar override */
-.popup-main::-webkit-scrollbar { width: 6px; }
-.popup-main::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; }
-.popup-main::-webkit-scrollbar-thumb:hover { background-color: rgba(156, 163, 175, 0.7); }
+.popup-main::-webkit-scrollbar {
+  width: 6px;
+}
+.popup-main::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 20px;
+}
+.popup-main::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.7);
+}
 
 /* Monitor Tab Styles */
 .monitor-container {
@@ -193,7 +198,7 @@ html, body {
 }
 
 .monitor-item {
-  border-bottom-color: var(--ui-bg-hover); 
+  border-bottom-color: var(--ui-bg-hover);
 }
 
 .monitor-item:hover {

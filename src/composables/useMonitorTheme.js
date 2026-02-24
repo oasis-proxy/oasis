@@ -11,7 +11,7 @@ export function useMonitorTheme() {
   const applyTheme = (theme) => {
     const root = document.documentElement
     root.classList.remove('dark')
-    
+
     if (theme === 'auto') {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
       isDark.value = prefersDark
