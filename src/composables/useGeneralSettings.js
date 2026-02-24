@@ -11,22 +11,36 @@ export function useGeneralSettings() {
     isInitializing.value = true
     const loaded = await loadConfig()
     Object.assign(config, loaded)
-    
+
     if (config.rulePriority && Array.isArray(config.rulePriority)) {
       localRulePriority.value = [...config.rulePriority]
     }
-    
+
     // Tiny delay to ensure Object.assign doesn't trigger immediate watch/save
     setTimeout(() => {
       isInitializing.value = false
     }, 100)
   }
 
-  watch(config, (newVal) => {
-    if (!isInitializing.value) {
-      saveGeneralSettings(JSON.parse(JSON.stringify(newVal)))
-    }
-  }, { deep: true })
+  watch(
+    config,
+    async (newVal) => {
+      if (!isInitializing.value) {
+        const configCopy = JSON.parse(JSON.stringify(newVal))
+        await saveGeneralSettings(configCopy)
+
+        // Update local reactive config with the new version and timestamp
+        // to ensure subsequent saves increment correctly
+        isInitializing.value = true
+        config.version = configCopy.version
+        config.updatedAt = configCopy.updatedAt
+        setTimeout(() => {
+          isInitializing.value = false
+        }, 50)
+      }
+    },
+    { deep: true }
+  )
 
   const updateRulePriority = (newPriority) => {
     localRulePriority.value = [...newPriority]

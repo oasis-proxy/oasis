@@ -27,18 +27,18 @@ export const DEFAULT_CONFIG = {
   ui: {
     theme: 'auto', // 'light', 'dark', 'auto'
     language: 'auto', // 'auto', 'en', 'zh_CN'
-    showContextMenu: false
+    showContextMenu: true
   },
 
   update: {
     // Global update interval for external resources (RuleSets and PACs)
     // 0 = Manual, 15 = 15 min, 60 = 1 hr, 720 = 12 hr, 1440 = 24 hr
-    interval: -1 
+    interval: 1440
   },
 
   behavior: {
-    refreshOnSwitch: false,
-    connectionMonitoring: false
+    refreshOnSwitch: true,
+    connectionMonitoring: true
   },
 
   sync: {
@@ -53,8 +53,8 @@ export const DEFAULT_CONFIG = {
   ipTags: {},
 
   // --- Profiles (Storage Keys: 'proxies', 'pacs', 'policies') ---
-  
-  // Map of Proxy Servers (Key: ID) 
+
+  // Map of Proxy Servers (Key: ID)
   proxies: {},
 
   // Map of PAC Scripts (Key: ID)
@@ -66,7 +66,7 @@ export const DEFAULT_CONFIG = {
 
   /**
    * Map of Auto Policies (Key: ID).
-   * 
+   *
    * Schema:
    * {
    *   id: string,               // Unique ID
@@ -74,12 +74,12 @@ export const DEFAULT_CONFIG = {
    *   name: string,             // Display name
    *   color: string,            // UI color (hex)
    *   defaultProfileId: string, // ID of profile to use if no rules match
-   *   
+   *
    *   // Rules Lists (Ordered)
    *   rules: Array<Rule>,       // Standard proxy rules
    *   rejectRules: Array<Rule>, // Rejection/Blocking rules (Processed first)
    * }
-   * 
+   *
    * Rule Object Schema:
    * {
    *   type: 'rule' | 'divider', // 'divider' is a visual separator
@@ -87,7 +87,7 @@ export const DEFAULT_CONFIG = {
    *   pattern: string,          // Matching pattern or RuleSet URL (Source of Truth)
    *   proxyId: string,          // Target proxy ID
    *   label: string,            // Optional label (for dividers)
-   *   
+   *
    *   // RuleSet Cache (Populated by background script)
    *   ruleSet: {
    *     content: string,        // Raw content (stripped during cloud sync)
@@ -99,13 +99,12 @@ export const DEFAULT_CONFIG = {
    */
   policies: {},
 
-
   // --- Singletons (Storage Keys: 'system', 'direct', 'reject') ---
-  
+
   system: { id: 'system', type: 'system', label: 'System' },
-  
+
   direct: { id: 'direct', type: 'direct', label: 'Direct' },
-  
+
   reject: {
     id: 'reject',
     type: 'reject',
