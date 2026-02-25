@@ -108,7 +108,8 @@ export async function clearConfig() {
     'policies',
     'system',
     'direct',
-    'reject'
+    'reject',
+    'sync_state'
   ]
   await chrome.storage.local.remove(keys)
   await clearSessionRules()

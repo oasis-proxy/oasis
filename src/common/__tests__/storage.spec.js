@@ -102,7 +102,8 @@ describe('storage', () => {
         'policies',
         'system',
         'direct',
-        'reject'
+        'reject',
+        'sync_state'
       ]
       expect(storageLocal.remove).toHaveBeenCalledWith(keys)
       expect(storageSession.remove).toHaveBeenCalledWith('tempRules')

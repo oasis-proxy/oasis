@@ -75,14 +75,37 @@ export async function triggerAutoSync(config) {
   if (config.sync && config.sync.enabled) {
     // Load the latest local config to get updated version and timestamp
     const latestConfig = await loadConfig()
-    await syncToCloud(latestConfig)
+    try {
+      await syncToCloud(latestConfig)
+    } catch (e) {
+      if (e.message === 'SYNC_CONFLICT') {
+        console.warn('Auto Sync aborted due to conflict. Disabling auto-sync to prevent data overwrite.')
+        config.sync.enabled = false
+        // Save the disabled state immediately without triggering another sync
+        await saveConfig(config, true, true)
+        
+        // Notify the user via Chrome Notifications
+        try {
+          chrome.notifications.create('oasis-sync-conflict', {
+            type: 'basic',
+            iconUrl: chrome.runtime.getURL('icons/128.png'),
+            title: chrome.i18n.getMessage('titleSyncConflict') || 'Sync Conflict Detected',
+            message: chrome.i18n.getMessage('msgSyncConflictStatus') || 'Automatic sync was disabled to prevent overwriting cloud data. Please resolve the conflict in settings.'
+          })
+        } catch (notifErr) {
+          console.error('Failed to show notification', notifErr)
+        }
+      } else {
+        console.error('Auto sync failed:', e)
+      }
+    }
   }
 }
 
 /**
  * Sync Local Config to Cloud.
  */
-export async function syncToCloud(config) {
+export async function syncToCloud(config, force = false) {
   const payload = JSON.parse(JSON.stringify(config))
   const currentVersion = payload.version || 1
 
@@ -109,13 +132,41 @@ export async function syncToCloud(config) {
 
   try {
     const allKeys = await chrome.storage.sync.get(null)
+    
+    if (!force && allKeys.sync_meta) {
+      const cloudVersion = allKeys.sync_meta.version || 0
+      const localState = await chrome.storage.local.get('sync_state')
+      let lastSyncedVersion = localState.sync_state?.lastSyncedVersion ?? -1
+      
+      // Migration edge case: local device has data, cloud has data, but local never recorded lastSyncedVersion.
+      // If local version is at least the cloud version, assume local is the valid master and sync_state was simply introduced late.
+      if (lastSyncedVersion === -1) {
+        if (currentVersion >= cloudVersion || cloudVersion === 0) {
+          lastSyncedVersion = cloudVersion
+        } else {
+          lastSyncedVersion = 0 // Fallback to 0 if cloud is strictly newer and local is unaware
+        }
+      }
+
+      // If cloud version is greater than the version this device last synced/pulled, we have a conflict
+      if (cloudVersion > lastSyncedVersion) {
+        throw new Error('SYNC_CONFLICT')
+      }
+    }
+
     const keysToRemove = Object.keys(allKeys).filter(
       (k) => k.startsWith('sync_chunk_') || k === 'config' || k === 'sync_preview'
     )
     if (keysToRemove.length > 0) await chrome.storage.sync.remove(keysToRemove)
     await chrome.storage.sync.set(storageData)
+    
+    // Update local last synced version
+    await chrome.storage.local.set({ sync_state: { lastSyncedVersion: currentVersion } })
   } catch (e) {
-    console.error('Failed to sync to cloud:', e)
+    if (e.message !== 'SYNC_CONFLICT') {
+      console.error('Failed to sync to cloud:', e)
+    }
+    throw e
   }
 }
 
@@ -161,6 +212,10 @@ export async function syncFromCloud(force = false) {
 
       await hydrateConfig(newConfig)
       await saveConfig(newConfig, true)
+      
+      // Update local last synced version to match the newly pulled cloud version
+      await chrome.storage.local.set({ sync_state: { lastSyncedVersion: uniqueVersion } })
+      
       return true
     }
     return false

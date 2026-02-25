@@ -66,12 +66,25 @@ export function useDataSync() {
     cloudNewer.value = cloudVer > localVer
   }
 
-  const handleSyncToCloud = async () => {
-    await syncToCloud(config)
-    toast.success(t('msgSyncedToCloud'))
-    showConflictModal.value = false
-    await loadLocalData()
-    await loadCloudData()
+  const handleSyncToCloud = async (force = false) => {
+    try {
+      await syncToCloud(config, force)
+      toast.success(t('msgSyncedToCloud'))
+      showConflictModal.value = false
+      await loadLocalData()
+      await loadCloudData()
+      return true
+    } catch (e) {
+      if (e.message === 'SYNC_CONFLICT') {
+        // Fetch latest cloud data so the modal shows accurate compare info
+        await loadCloudData()
+        showConflictModal.value = true
+        toast.error(t('msgSyncConflictStatus') || 'Sync conflict detected.')
+      } else {
+        toast.error('Failed to sync to cloud')
+      }
+      return false
+    }
   }
 
   const handleSyncFromCloud = async () => {
@@ -95,8 +108,14 @@ export function useDataSync() {
       } else {
         await saveGeneralSettings(config, false, true)
         // Trigger immediate sync to ensure data is pushed and user gets feedback
-        await handleSyncToCloud()
-        toast.success(t('msgAutoSyncEnabled'))
+        const success = await handleSyncToCloud()
+        if (success) {
+          toast.success(t('msgAutoSyncEnabled'))
+        } else {
+          // Revert auto sync if push failed
+          config.sync.enabled = false
+          await saveGeneralSettings(config, true, true)
+        }
       }
     } else {
       await saveGeneralSettings(config, true, true)
@@ -104,10 +123,12 @@ export function useDataSync() {
   }
 
   const resolveConflictCloud = async () => {
-    await handleSyncToCloud()
-    config.sync.enabled = true
-    await saveGeneralSettings(config, false, true)
-    toast.success(t('msgLocalPushedAutoSync'))
+    const success = await handleSyncToCloud(true)
+    if (success) {
+      config.sync.enabled = true
+      await saveGeneralSettings(config, false, true)
+      toast.success(t('msgLocalPushedAutoSync'))
+    }
   }
 
   const resolveConflictLocal = async () => {

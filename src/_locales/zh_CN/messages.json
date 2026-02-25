@@ -302,6 +302,9 @@
 
   "titleSyncConflict": { "message": "检测到同步冲突" },
   "msgSyncConflict": { "message": "云端版本比本地版本更新。请选择要保留的版本。" },
+  "msgSyncConflictStatus": {
+    "message": "为防止覆盖云端数据，自动同步已禁用。请在重新启用前先解决冲突。"
+  },
   "lblThisDevice": { "message": "此设备" },
   "lblRemoteRepo": { "message": "远程仓库" },
 
