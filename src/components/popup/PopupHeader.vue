@@ -35,7 +35,7 @@
         <i class="bi bi-layout-sidebar-reverse ui-icon-md"></i>
       </button>
       <button
-        v-if="showMonitorTab"
+        v-if="showMonitorIcon"
         @click="$emit('openMonitor')"
         class="ui-button-icon"
         :title="$t('popTooltipMonitor')"
@@ -53,6 +53,7 @@
 defineProps({
   currentTab: String,
   showMonitorTab: Boolean,
+  showMonitorIcon: Boolean,
   showQuickTab: Boolean
 })
 defineEmits(['update:currentTab', 'openSidePanel', 'openMonitor', 'openOptions'])

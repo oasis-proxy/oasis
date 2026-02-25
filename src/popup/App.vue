@@ -9,6 +9,7 @@
   <PopupHeader
     v-model:currentTab="currentTab"
     :showMonitorTab="showMonitorTab"
+    :showMonitorIcon="showMonitorIcon"
     :showQuickTab="showQuickTab"
     @openSidePanel="openSidePanel"
     @openMonitor="openMonitor"
@@ -213,6 +214,7 @@ const openSidePanel = async () => {
 }
 
 const isProtocolSupported = computed(() => /^https?:/.test(currentTabUrl.value))
+const showMonitorIcon = computed(() => !!config.value?.behavior?.connectionMonitoring)
 const showMonitorTab = computed(
   () => !!config.value?.behavior?.connectionMonitoring && isProtocolSupported.value
 )
