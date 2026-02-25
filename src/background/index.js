@@ -36,7 +36,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   // Open changelog on install or update
   const CHANGELOG_URL_EN = 'https://github.com/oasis-proxy/oasis/wiki/Changelog'
   const CHANGELOG_URL_ZH = 'https://github.com/oasis-proxy/oasis/wiki/ZH-Changelog'
-  
+
   const targetUrl = lang.startsWith('zh') ? CHANGELOG_URL_ZH : CHANGELOG_URL_EN
 
   if (details.reason === 'install' || details.reason === 'update') {

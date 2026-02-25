@@ -134,9 +134,11 @@ onMounted(async () => {
     currentTabUrl.value = tabs[0].url
   }
 
-  if (showMonitorTab.value && !contextMenuDomain.value) {
-    currentTab.value = 'monitor'
-    loadMonitorData()
+  if (showMonitorTab.value) {
+    await loadMonitorData()
+    if (!contextMenuDomain.value && monitorResult.value.length > 0) {
+      currentTab.value = 'monitor'
+    }
   }
 })
 
@@ -210,8 +212,10 @@ const openSidePanel = async () => {
   }
 }
 
-const showMonitorTab = computed(() => !!config.value?.behavior?.connectionMonitoring)
 const isProtocolSupported = computed(() => /^https?:/.test(currentTabUrl.value))
+const showMonitorTab = computed(
+  () => !!config.value?.behavior?.connectionMonitoring && isProtocolSupported.value
+)
 const loadMonitorData = async () => {
   if (activeTabId.value) {
     const key = `monitor_${activeTabId.value}`
@@ -221,7 +225,7 @@ const loadMonitorData = async () => {
 }
 
 const showQuickTab = computed(() => {
-  if (!config.value?.behavior?.connectionMonitoring) return false
+  if (!config.value?.behavior?.connectionMonitoring || !isProtocolSupported.value) return false
   const policy = config.value?.policies?.[activeProfileId.value]
   return (
     policy &&
