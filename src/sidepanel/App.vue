@@ -379,6 +379,14 @@ const openQuickAdd = async (item) => {
     return
   }
 
+  const activeProfileId = config.value?.activeProfileId
+  const isAutoPolicy = activeProfileId && config.value?.policies?.[activeProfileId]
+
+  if (!isAutoPolicy) {
+    showNotification(t('spMsgError'), t('spMsgRequireAutoPolicy'))
+    return
+  }
+
   // Set Intent
   await chrome.storage.session.set({
     quickAddIntent: {

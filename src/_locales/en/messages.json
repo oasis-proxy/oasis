@@ -210,6 +210,7 @@
   "spActionRetry": { "message": "Re-download" },
   "spMsgNotSupported": { "message": "Not Supported" },
   "spMsgOnlyHttp": { "message": "Only HTTP/HTTPS links are supported" },
+  "spMsgRequireAutoPolicy": { "message": "Quick add is only available when using an Auto Policy" },
   "spMsgError": { "message": "Error" },
   "spMsgPopupFailed": { "message": "Failed to open Quick Add popup" },
   "spMsgCanceled": { "message": "Canceled" },

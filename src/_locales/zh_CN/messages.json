@@ -215,6 +215,7 @@
   "spActionRetry": { "message": "重新下载" },
   "spMsgNotSupported": { "message": "不支持" },
   "spMsgOnlyHttp": { "message": "仅支持 HTTP/HTTPS 链接" },
+  "spMsgRequireAutoPolicy": { "message": "快捷添加规则仅在使用自动策略时可用" },
   "spMsgError": { "message": "错误" },
   "spMsgPopupFailed": { "message": "打开快速添加弹窗失败" },
   "spMsgCanceled": { "message": "已取消" },
