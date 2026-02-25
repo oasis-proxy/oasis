@@ -448,6 +448,14 @@
   "lblPolicies": { "message": "Policies" },
   "msgPolicyMerged": { "message": "Policy merged successfully" },
   "btnBatchReplace": { "message": "Batch Replace" },
+  "bpmMsgReplaced": {
+    "message": "\"Batch Proxy Replace\" changed $COUNT$ rule(s) from $SOURCE$ to $TARGET$.",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "source": { "content": "$2" },
+      "target": { "content": "$3" }
+    }
+  },
   "msgPolicySaved": { "message": "Policy saved successfully" },
   "appmTitle": { "message": "AutoProxy Preview" },
   "appmFilterAll": { "message": "All" },

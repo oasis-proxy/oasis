@@ -156,6 +156,14 @@
   "lblProxyHosts": { "message": "代理主机" },
   "lblPolicies": { "message": "策略" },
   "btnBatchReplace": { "message": "批量替换" },
+  "bpmMsgReplaced": {
+    "message": "“批量替换代理” 成功将 $COUNT$ 条规则的代理从 $SOURCE$ 替换为 $TARGET$。",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "source": { "content": "$2" },
+      "target": { "content": "$3" }
+    }
+  },
   "msgPolicySaved": { "message": "策略已保存" },
   "msgPolicyMerged": { "message": "策略合并成功" },
 

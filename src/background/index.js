@@ -42,6 +42,11 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === 'install' || details.reason === 'update') {
     chrome.tabs.create({ url: targetUrl })
   }
+
+  // Open options page on first install
+  if (details.reason === 'install') {
+    chrome.runtime.openOptionsPage()
+  }
 })
 
 // Listen for startup

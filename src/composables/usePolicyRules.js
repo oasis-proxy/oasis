@@ -4,7 +4,7 @@ import { useDragDrop } from '../common/dragDrop'
 import { t } from '../common/i18n'
 
 export function usePolicyRules(rulesRef, options = {}) {
-  const { onRulesChanged } = options
+  const { onRulesChanged, defaultProxyId = 'direct' } = options
   const validationErrors = ref({})
   const focusedIndex = ref(null)
   const fetchingRuleSetIndex = ref(null)
@@ -51,7 +51,7 @@ export function usePolicyRules(rulesRef, options = {}) {
       ruleType: 'wildcard',
       pattern: '',
       valid: true,
-      proxyId: 'direct',
+      proxyId: defaultProxyId,
       ruleSet: {}
     }
     if (atEnd) rulesRef.value.push(newRule)
@@ -66,7 +66,7 @@ export function usePolicyRules(rulesRef, options = {}) {
       ruleType: 'wildcard',
       pattern: '',
       valid: true,
-      proxyId: 'direct',
+      proxyId: defaultProxyId,
       ruleSet: {}
     }
     rulesRef.value.splice(index + 1, 0, newRule)
