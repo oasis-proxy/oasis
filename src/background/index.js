@@ -1,5 +1,5 @@
 import { DEFAULT_CONFIG } from '../common/config'
-import { loadConfig, saveConfig } from '../common/storage'
+import { loadConfig, saveConfig, syncFromCloud } from '../common/storage'
 import { createProxyConfig, collectProxyCredentials } from '../common/proxy_config'
 
 // Domain-specific modules
@@ -52,14 +52,22 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 // Listen for startup
 chrome.runtime.onStartup.addListener(async () => {
   const config = await loadConfig()
-  await applyProxySettings(config)
-  await updateContextMenus(config)
-  await updateContextMenus(config)
-  await updateMonitoringState()
+  let synced = false
+  if (config.sync && config.sync.enabled) {
+    console.log('Oasis: Checking cloud sync on startup...')
+    synced = await syncFromCloud()
+  }
+
+  if (!synced) {
+    await applyProxySettings(config)
+    await updateContextMenus(config)
+    await updateMonitoringState()
+  }
 
   // Ensure update alarm is scheduled
-  if (config.update && config.update.interval !== undefined) {
-    setupUpdateAlarm(config.update.interval)
+  const finalConfig = synced ? await loadConfig() : config
+  if (finalConfig.update && finalConfig.update.interval !== undefined) {
+    setupUpdateAlarm(finalConfig.update.interval)
   }
 })
 
@@ -107,6 +115,11 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
     console.log('Oasis: Temp rules changed, re-applying settings...')
     const config = await loadConfig()
     await applyProxySettings(config)
+  }
+
+  if (area === 'sync' && changes.sync_meta) {
+    console.log('Oasis: Cloud sync data changed, attempting to sync to local...')
+    await syncFromCloud()
   }
 })
 
