@@ -4,13 +4,11 @@ import { loadConfig } from '../common/storage'
 // Background only forwards webRequest events to Monitor page, no storage here.
 // Monitor page manages its own in-memory storage (cleared on refresh/close).
 
-export function initRequestMonitor() {
-  chrome.webRequest.onBeforeRequest.addListener(onRequestStartHandler, { urls: ['<all_urls>'] })
-  chrome.webRequest.onCompleted.addListener(onRequestCompletedHandler, { urls: ['<all_urls>'] })
-  chrome.webRequest.onBeforeRedirect.addListener(onRequestRedirectHandler, { urls: ['<all_urls>'] })
-  chrome.webRequest.onErrorOccurred.addListener(onRequestErrorHandler, { urls: ['<all_urls>'] })
-  console.log('Oasis: Request Monitor initialized (forward-only mode).')
-}
+chrome.webRequest.onBeforeRequest.addListener(onRequestStartHandler, { urls: ['<all_urls>'] })
+chrome.webRequest.onCompleted.addListener(onRequestCompletedHandler, { urls: ['<all_urls>'] })
+chrome.webRequest.onBeforeRedirect.addListener(onRequestRedirectHandler, { urls: ['<all_urls>'] })
+chrome.webRequest.onErrorOccurred.addListener(onRequestErrorHandler, { urls: ['<all_urls>'] })
+console.log('Oasis: Request Monitor initialized (forward-only mode).')
 
 // Check if we should monitor usage (Auto Policy Active AND Monitoring Enabled)
 async function shouldMonitorRequest() {

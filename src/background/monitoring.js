@@ -1,58 +1,48 @@
 import { loadConfig } from '../common/storage'
 
-let isMonitoringEnabled = false
+// Helper to resolve monitoring state on-the-fly to handle Service Worker restarts (P1)
+async function isMonitoringActive() {
+  const config = await loadConfig()
+  return config.behavior && config.behavior.connectionMonitoring
+}
+
 const monitorMap = new Map() // tabId -> Map<domain, { ips: Set<string>, types: Set<string> }>
 
-// Helper to update monitoring state
+// Keep for compatibility but we don't use it to unregister listeners anymore
 export async function updateMonitoringState() {
-  const config = await loadConfig()
-  const enabled = config.behavior && config.behavior.connectionMonitoring
-
-  if (enabled && !isMonitoringEnabled) {
-    startMonitoring()
-  } else if (!enabled && isMonitoringEnabled) {
-    stopMonitoring()
+  const enabled = await isMonitoringActive()
+  if (!enabled) {
+    console.log('Oasis: Monitoring disabled.')
+    
+    // Clear in-memory Map
+    monitorMap.clear()
+    
+    // Clear ONLY monitor_* keys to avoid wiping other session data (P2)
+    const sessionData = await chrome.storage.session.get(null)
+    const monitorKeys = Object.keys(sessionData).filter(key => key.startsWith('monitor_'))
+    if (monitorKeys.length > 0) {
+      await chrome.storage.session.remove(monitorKeys)
+    }
+  } else {
+    console.log('Oasis: Monitoring enabled.')
   }
-  isMonitoringEnabled = !!enabled
 }
 
-function startMonitoring() {
-  chrome.webRequest.onResponseStarted.addListener(onResponseStartedHandler, {
-    urls: ['<all_urls>']
-  })
-  chrome.webRequest.onErrorOccurred.addListener(onErrorOccurredHandler, { urls: ['<all_urls>'] })
-  chrome.webNavigation.onBeforeNavigate.addListener(onBeforeNavigateHandler)
-  chrome.tabs.onRemoved.addListener(onTabRemovedHandler)
-  console.log('Oasis: Monitoring started.')
-}
-
-function stopMonitoring() {
-  if (chrome.webRequest.onResponseStarted.hasListener(onResponseStartedHandler)) {
-    chrome.webRequest.onResponseStarted.removeListener(onResponseStartedHandler)
-  }
-  if (chrome.webRequest.onErrorOccurred.hasListener(onErrorOccurredHandler)) {
-    chrome.webRequest.onErrorOccurred.removeListener(onErrorOccurredHandler)
-  }
-  if (chrome.webNavigation.onBeforeNavigate.hasListener(onBeforeNavigateHandler)) {
-    chrome.webNavigation.onBeforeNavigate.removeListener(onBeforeNavigateHandler)
-  }
-  if (chrome.tabs.onRemoved.hasListener(onTabRemovedHandler)) {
-    chrome.tabs.onRemoved.removeListener(onTabRemovedHandler)
-  }
-  // Clear storage
-  monitorMap.clear()
-  chrome.storage.session.clear()
-  console.log('Oasis: Monitoring stopped.')
-}
+// Statically register events to avoid service worker sleep issues in MV3
+chrome.webRequest.onCompleted.addListener(onCompletedHandler, { urls: ['<all_urls>'] })
+chrome.webRequest.onErrorOccurred.addListener(onErrorOccurredHandler, { urls: ['<all_urls>'] })
+chrome.webNavigation.onBeforeNavigate.addListener(onBeforeNavigateHandler)
+chrome.tabs.onRemoved.addListener(onTabRemovedHandler)
 
 // Handlers
-function onResponseStartedHandler(details) {
-  if (details.tabId === -1 || !details.ip) return
+async function onCompletedHandler(details) {
+  const active = await isMonitoringActive()
+  if (!active || details.tabId === -1) return
 
   try {
     const url = new URL(details.url)
     const domain = url.hostname
-    const ip = details.ip
+    const ip = details.ip || ''
 
     // Store in memory
     let tabData = monitorMap.get(details.tabId)
@@ -62,14 +52,18 @@ function onResponseStartedHandler(details) {
     }
 
     let domainData = tabData.get(domain)
+    let isNewDomain = false
     if (!domainData) {
       domainData = { ip: '', error: '' }
       tabData.set(domain, domainData)
+      isNewDomain = true
     }
 
     // Update to latest IP, clear error if success
-    if (domainData.ip !== ip || domainData.error) {
-      domainData.ip = ip
+    if (isNewDomain || (ip && domainData.ip !== ip) || domainData.error) {
+      if (ip) {
+        domainData.ip = ip
+      }
       domainData.error = ''
       scheduleSessionSync(details.tabId)
     }
@@ -78,8 +72,9 @@ function onResponseStartedHandler(details) {
   }
 }
 
-function onErrorOccurredHandler(details) {
-  if (details.tabId === -1) return
+async function onErrorOccurredHandler(details) {
+  const active = await isMonitoringActive()
+  if (!active || details.tabId === -1) return
 
   try {
     const url = new URL(details.url)
@@ -107,7 +102,9 @@ function onErrorOccurredHandler(details) {
   }
 }
 
-function onBeforeNavigateHandler(details) {
+async function onBeforeNavigateHandler(details) {
+  const active = await isMonitoringActive()
+  if (!active) return
   // Clear data for this tab on main frame navigation
   if (details.frameId === 0) {
     monitorMap.delete(details.tabId)
@@ -115,7 +112,9 @@ function onBeforeNavigateHandler(details) {
   }
 }
 
-function onTabRemovedHandler(tabId) {
+async function onTabRemovedHandler(tabId) {
+  const active = await isMonitoringActive()
+  if (!active) return
   monitorMap.delete(tabId)
   // Remove from session storage immediately
   const key = `monitor_${tabId}`

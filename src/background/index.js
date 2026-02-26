@@ -4,7 +4,7 @@ import { createProxyConfig, collectProxyCredentials } from '../common/proxy_conf
 
 // Domain-specific modules
 import { updateMonitoringState } from './monitoring'
-import { initRequestMonitor } from './requestMonitor'
+import './requestMonitor'
 import { updateContextMenus } from './contextMenu'
 import { setupUpdateAlarm, checkUpdates } from './updater'
 
@@ -254,5 +254,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 })
 
-// Initialize Forward-only Request Monitor
-initRequestMonitor()
+// The Request Monitor initializes on import
