@@ -62,6 +62,8 @@
 </template>
 
 <script setup>
+import { normalizeIp } from '../../common/validation'
+
 const props = defineProps({
   isProtocolSupported: Boolean,
   monitorResult: Array,
@@ -71,8 +73,10 @@ const props = defineProps({
 defineEmits(['copy'])
 
 const formatIp = (ip) => {
-  if (props.ipTags && props.ipTags[ip]) {
-    return props.ipTags[ip]
+  if (!ip) return ip
+  const cleanIp = normalizeIp(ip)
+  if (props.ipTags && (props.ipTags[cleanIp] || props.ipTags[ip])) {
+    return props.ipTags[cleanIp] || props.ipTags[ip]
   }
   return ip
 }

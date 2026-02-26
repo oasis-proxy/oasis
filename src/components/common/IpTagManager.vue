@@ -84,6 +84,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { normalizeIp, validateIp } from '../../common/validation'
 
 const props = defineProps({
   modelValue: { type: Object, default: () => ({}) }
@@ -92,11 +93,22 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const localIpTags = ref([])
-const IPV4_REGEX =
-  /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
 
 const sortTags = (tags) => {
   return tags.sort((a, b) => {
+    const isIPv6A = a.ip.includes(':')
+    const isIPv6B = b.ip.includes(':')
+
+    // Always put IPv4 before IPv6
+    if (isIPv6A && !isIPv6B) return 1
+    if (!isIPv6A && isIPv6B) return -1
+
+    // For IPv6, fallback to simple string locale compare
+    if (isIPv6A && isIPv6B) {
+      return a.ip.localeCompare(b.ip)
+    }
+
+    // For IPv4, sort logically
     const numA = a.ip
       .split('.')
       .map((n) => parseInt(n) || 0)
@@ -149,10 +161,13 @@ function cancelEdit(index) {
 
 function validateItem(index) {
   const item = localIpTags.value[index]
-  const errors = { ip: !IPV4_REGEX.test(item.ip), tag: !item.tag }
+  const errors = { ip: !validateIp(item.ip).valid, tag: !item.tag }
 
   if (!errors.ip) {
-    const isDuplicateIp = localIpTags.value.some((t, i) => i !== index && t.ip === item.ip)
+    const itemNorm = normalizeIp(item.ip)
+    const isDuplicateIp = localIpTags.value.some(
+      (t, i) => i !== index && t.ip && normalizeIp(t.ip) === itemNorm
+    )
     if (isDuplicateIp) errors.ip = true
   }
 
@@ -171,14 +186,18 @@ function saveTag(index) {
   const newTags = { ...props.modelValue }
   const item = localIpTags.value[index]
 
-  if (item.originalIp && item.originalIp !== item.ip) {
+  const uniformIp = normalizeIp(item.ip)
+
+  if (item.originalIp && item.originalIp !== uniformIp) {
+    // If the original IP was a different normalized string, remove it
     delete newTags[item.originalIp]
   }
-  newTags[item.ip] = item.tag
+  newTags[uniformIp] = item.tag
 
   emit('update:modelValue', newTags)
   item.isEditing = false
-  item.originalIp = item.ip
+  item.ip = uniformIp
+  item.originalIp = uniformIp
 }
 
 function deleteTag(index) {

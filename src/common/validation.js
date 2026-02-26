@@ -1,6 +1,7 @@
 /**
  * Validation utilities for rule patterns
  */
+import * as ipaddr from 'ipaddr.js'
 
 /**
  * Validates a rule pattern based on its type
@@ -54,44 +55,85 @@ export function validateRegex(pattern) {
 }
 
 /**
+ * Validates strictly a single IP address (no CIDR)
+ * @param {string} pattern - IP to validate
+ * @returns {{valid: boolean, message: string}}
+ */
+export function validateIp(pattern) {
+  const trimmed = pattern.trim()
+  if (!trimmed) {
+    return { valid: false, message: 'IP is required' }
+  }
+
+  // Reject CIDR notation immediately
+  if (trimmed.includes('/')) {
+    return { valid: false, message: 'CIDR notation not allowed here' }
+  }
+
+  // Check if it's a raw IP
+  try {
+    const cleanIp = trimmed.replace(/^\[|\]$/g, '')
+    if (ipaddr.isValid(cleanIp)) {
+      const parsed = ipaddr.parse(cleanIp)
+      // ipaddr.js allows loose IPv4 like '192.168.1'. We want strict 4 octets.
+      if (parsed.kind() === 'ipv4' && cleanIp.split('.').length !== 4) {
+        return { valid: false, message: 'Invalid IPv4 format' }
+      }
+      return { valid: true, message: '' }
+    }
+  } catch (e) {
+    // ipaddr.isValid doesn't throw, but parse might if malformed string bypasses somehow
+  }
+
+  return { valid: false, message: 'Invalid IP format' }
+}
+
+/**
  * Validates an IP address or CIDR notation
  * @param {string} pattern - IP or CIDR to validate
  * @returns {{valid: boolean, message: string}}
  */
 export function validateIpCidr(pattern) {
-  const ipv4Pattern = /^(\d{1,3}\.){3}\d{1,3}$/
-  const cidrPattern = /^(\d{1,3}\.){3}\d{1,3}\/\d{1,2}$/
-  const ipv6Pattern = /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$/
-
   const trimmed = pattern.trim()
-
-  // IPv4 validation
-  if (ipv4Pattern.test(trimmed)) {
-    const octets = trimmed.split('.')
-    const valid = octets.every((o) => parseInt(o) >= 0 && parseInt(o) <= 255)
-    return valid
-      ? { valid: true, message: '' }
-      : { valid: false, message: 'IP octets must be 0-255' }
+  if (!trimmed) {
+    return { valid: false, message: 'IP or CIDR is required' }
   }
 
-  // CIDR validation
-  if (cidrPattern.test(trimmed)) {
-    const [ip, mask] = trimmed.split('/')
-    const octets = ip.split('.')
-    const maskNum = parseInt(mask)
-    const validOctets = octets.every((o) => parseInt(o) >= 0 && parseInt(o) <= 255)
-    const validMask = maskNum >= 0 && maskNum <= 32
-
-    if (validOctets && validMask) {
+  // Check if it's a CIDR
+  if (trimmed.includes('/')) {
+    try {
+      const parsed = ipaddr.parseCIDR(trimmed)
       return { valid: true, message: '' }
+    } catch (e) {
+      return { valid: false, message: 'Invalid IP CIDR format' }
     }
-    return { valid: false, message: 'Invalid IP or CIDR mask' }
   }
 
-  // IPv6 validation
-  if (ipv6Pattern.test(trimmed)) {
-    return { valid: true, message: '' }
-  }
+  // Fallback to strict IP validation
+  return validateIp(trimmed)
+}
 
-  return { valid: false, message: 'Invalid IP or CIDR format' }
+/**
+ * Normalizes an IP address (especially for IPv6 shorthands)
+ * @param {string} ip - IP address to normalize
+ * @returns {string} - Normalized IP address, or original string if invalid
+ */
+export function normalizeIp(ip) {
+  if (!ip) return ip
+  const cleanIp = ip.replace(/^\[|\]$/g, '')
+  try {
+    let parsed = ipaddr.parse(cleanIp)
+    
+    // Convert IPv4-mapped IPv6 back to native IPv4 to prevent dupes
+    if (parsed.kind() === 'ipv6' && parsed.isIPv4MappedAddress()) {
+      parsed = parsed.toIPv4Address()
+    }
+
+    if (parsed.kind() === 'ipv6') {
+      return parsed.toNormalizedString()
+    }
+    return parsed.toString()
+  } catch (e) {
+    return cleanIp
+  }
 }

@@ -75,6 +75,8 @@
 </template>
 
 <script setup>
+import { normalizeIp } from '../../common/validation'
+
 const props = defineProps({
   request: { type: Object, required: true },
   ipTags: { type: Object, default: () => ({}) }
@@ -96,7 +98,8 @@ function formatTime(timestamp) {
 
 function getIpDisplay(ip) {
   if (!ip) return '-'
-  return props.ipTags[ip] || ip
+  const cleanIp = normalizeIp(ip)
+  return props.ipTags[cleanIp] || props.ipTags[ip] || ip
 }
 
 const getMethodClass = (method) => {
