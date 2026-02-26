@@ -1,6 +1,8 @@
 import { ref } from 'vue'
 import { loadConfig } from '../common/storage'
 import { parseAutoProxyRules, convertAutoProxyToInternalRules } from '../common/autoproxy'
+import { normalizeIp } from '../common/validation'
+import * as ipaddr from 'ipaddr.js'
 
 export function useMonitorMatcher() {
   const currentPolicy = ref(null)
@@ -80,11 +82,34 @@ export function useMonitorMatcher() {
           return false
         }
       }
-      case 'ip':
-        return (
-          host === rule.pattern ||
-          (rule.pattern.includes('/') && host.startsWith(rule.pattern.split('/')[0]))
-        )
+      case 'ip': {
+        try {
+          const hostIpStr = host.replace(/^\[|\]$/g, '')
+          if (!ipaddr.isValid(hostIpStr)) {
+            // Not an IP address (e.g. domain name). IP rules shouldn't match domains in the monitor.
+            // Fallback: exact match if not CIDR
+            if (!rule.pattern.includes('/')) {
+              return host === rule.pattern
+            }
+            return false
+          }
+          
+          const hostIp = ipaddr.parse(hostIpStr)
+          
+          if (rule.pattern.includes('/')) {
+            const parsedCidr = ipaddr.parseCIDR(rule.pattern)
+            return hostIp.match(parsedCidr)
+          } else {
+            return normalizeIp(hostIpStr) === normalizeIp(rule.pattern)
+          }
+        } catch (e) {
+          // Fallback legacy behavior
+          if (rule.pattern.includes('/')) {
+            return host.startsWith(rule.pattern.split('/')[0])
+          }
+          return host === rule.pattern
+        }
+      }
       default:
         return false
     }

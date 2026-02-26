@@ -1,4 +1,6 @@
 import { parseAutoProxyRules, convertAutoProxyToInternalRules } from './autoproxy.js'
+import { normalizeIp } from './validation.js'
+import * as ipaddr from 'ipaddr.js'
 
 // generatePacScript and generateProxyStrings have been removed as they relied on outdated config structure.
 // Use generatePacScriptFromPolicy for individual policies.
@@ -146,10 +148,35 @@ export function generatePacScriptFromPolicy(
       }
       case 'ip':
         if (rule.pattern.includes('/')) {
-          const [ip, cidr] = rule.pattern.split('/')
-          return `isInNet(host, "${ip}", "${cidrToNetmask(cidr)}")`
+          try {
+            const parsed = ipaddr.parseCIDR(rule.pattern)
+            const ip = parsed[0]
+            if (ip.kind() === 'ipv6') {
+              return `isInNetEx(host, "${rule.pattern}")`
+            } else {
+              const [ipStr, cidrStr] = rule.pattern.split('/')
+              return `isInNet(host, "${ipStr}", "${cidrToNetmask(cidrStr)}")`
+            }
+          } catch (e) {
+            const [ip, cidr] = rule.pattern.split('/')
+            return `isInNet(host, "${ip}", "${cidrToNetmask(cidr)}")`
+          }
         }
-        return `host === "${rule.pattern}"`
+        // Not a CIDR notation: check exact match
+        try {
+          // It could be IPv4 or IPv6
+          const parsed = ipaddr.parse(rule.pattern)
+          if (parsed.kind() === 'ipv6') {
+            // Using isInNetEx with /128 makes the browser natively handle 
+            // the complexities of bracketed [fe80::1] vs raw fe80::1
+            const normalizedIp = parsed.toNormalizedString()
+            return `isInNetEx(host, "${normalizedIp}/128")`
+          }
+        } catch (e) {
+          // Ignore, fallback to exact string matching
+        }
+
+        return `host === "${normalizeIp(rule.pattern)}"`
       case 'ruleset':
         return null
       default:

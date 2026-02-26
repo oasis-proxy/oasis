@@ -142,10 +142,28 @@ describe('generatePacScriptFromPolicy', () => {
           ruleType: 'ip',
           pattern: '10.0.0.0/8',
           proxyId: 'proxy1'
+        },
+        {
+          ruleType: 'ip',
+          pattern: '2001:db8::/32',
+          proxyId: 'proxy1'
+        },
+        {
+          ruleType: 'ip',
+          pattern: '2001:db8:0::1',
+          proxyId: 'proxy1'
         }
       ]
     }
     const script = generatePacScriptFromPolicy(policyWithCidr, mockProxies)
+    
+    // IPv4 CIDR uses isInNet + Netmask
     expect(script).toContain('isInNet(host, "10.0.0.0", "255.0.0.0")')
+    
+    // IPv6 CIDR uses isInNetEx natively
+    expect(script).toContain('isInNetEx(host, "2001:db8::/32")')
+    
+    // IPv6 exact match uses normalized IP string comparison
+    expect(script).toContain('isInNetEx(host, "2001:db8:0:0:0:0:0:1/128")')
   })
 })
