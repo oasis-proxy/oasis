@@ -49,7 +49,7 @@
               </button>
             </div>
           </div>
-          
+
           <div
             class="d-flex align-items-center justify-content-between px-4 py-3 pb-4 hover-bg-subtle transition-colors"
           >
@@ -182,11 +182,13 @@ const handleUpdateAllRules = () => {
   chrome.runtime.sendMessage({ type: 'TRIGGER_UPDATE' }, (res) => {
     isUpdatingRules.value = false
     if (chrome.runtime.lastError || !res || !res.success) {
-      toast.error(t('msgUpdateAllFailed', 'Failed to update external policies'))
+      toast.error(t('msgUpdateAllFailed'))
     } else if (res.errors && res.errors.length > 0) {
-      toast.error(t('msgUpdateAllFailed', 'Failed to update external policies') + ': ' + res.errors[0])
+      toast.error(
+        t('msgUpdateAllFailed') + ': ' + res.errors[0]
+      )
     } else {
-      toast.success(t('msgUpdateAllSuccess', 'External policies updated successfully'))
+      toast.success(t('msgUpdateAllSuccess'))
     }
   })
 }

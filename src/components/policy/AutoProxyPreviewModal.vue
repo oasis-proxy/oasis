@@ -13,7 +13,7 @@
         style="max-width: 140px"
       >
         <option value="">{{ $t('appmFilterAll') }} {{ $t('appmFilterProxy') }}</option>
-        <option value="direct">Direct</option>
+        <option value="direct">{{ $t('optDirect') }}</option>
         <option v-for="opt in proxyOptions" :key="opt.id" :value="opt.id">{{ opt.label }}</option>
       </select>
 

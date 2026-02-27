@@ -141,6 +141,8 @@
   "phMsgRenamed": { "message": "代理已重命名" },
   "phMsgCloned": { "message": "代理已克隆" },
   "phMsgDeleted": { "message": "代理已删除" },
+  "msgNoRulesDefined": { "message": "尚未定义规则。点击 \"+\" 开始添加。" },
+  "msgNoTagsDefined": { "message": "尚未定义标签。" },
   "msgUpdateAllSuccess": { "message": "已成功更新外部策略" },
   "msgUpdateAllFailed": { "message": "更新外部策略失败" },
   "btnUpdateAllRuleSets": { "message": "更新外部策略" },

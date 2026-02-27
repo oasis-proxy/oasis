@@ -71,12 +71,8 @@
         </div>
       </div>
       <!-- Empty State -->
-      <div
-        v-else
-        class="p-2 d-flex align-items-center justify-content-center"
-        style="min-height: 44px"
-      >
-        <p class="text-xs ui-text-secondary m-0">No tags defined.</p>
+      <div v-else class="text-center py-4">
+        <p class="text-xs ui-text-secondary m-0">{{ $t('msgNoTagsDefined') }}</p>
       </div>
     </div>
   </div>

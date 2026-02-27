@@ -84,7 +84,7 @@ export async function checkUpdates() {
   } else {
     console.log('Oasis: No updates found.')
   }
-  
+
   return { changed: configChanged, errors }
 }
 

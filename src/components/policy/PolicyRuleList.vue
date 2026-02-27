@@ -112,7 +112,7 @@
         style="min-height: 44px"
       >
         <p class="text-xs ui-text-secondary m-0">
-          {{ isReject ? $t('msgNoRejectRules') : 'No rules defined. Click "+" to get started.' }}
+          {{ isReject ? $t('msgNoRejectRules') : $t('msgNoRulesDefined') }}
         </p>
       </div>
 

@@ -230,7 +230,9 @@ const sanitizeForDirtyCheck = (p) => {
 }
 
 const isDirty = computed(
-  () => JSON.stringify(sanitizeForDirtyCheck(policy.value)) !== JSON.stringify(sanitizeForDirtyCheck(originalPolicy.value))
+  () =>
+    JSON.stringify(sanitizeForDirtyCheck(policy.value)) !==
+    JSON.stringify(sanitizeForDirtyCheck(originalPolicy.value))
 )
 
 onMounted(() => {
