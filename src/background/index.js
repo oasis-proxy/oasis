@@ -252,6 +252,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       })
     return true
   }
+  if (request.type === 'APPLY_TEMP_RULES') {
+    // Write the new tempRules and immediately apply proxy settings,
+    // then ACK — caller can await this message to guarantee the PAC
+    // script is in effect before the next tab navigation.
+    ;(async () => {
+      try {
+        await chrome.storage.session.set({ tempRules: request.rules })
+        const config = await loadConfig()
+        await applyProxySettings(config)
+        sendResponse({ success: true })
+      } catch (e) {
+        sendResponse({ success: false, error: e.message })
+      }
+    })()
+    return true  // keep message channel open for async response
+  }
 })
 
 // The Request Monitor initializes on import

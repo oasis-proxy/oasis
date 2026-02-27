@@ -1,4 +1,4 @@
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onUnmounted } from 'vue'
 
 export function useMonitorData(historyLimit, matchFn) {
   const requests = ref([])
@@ -13,25 +13,39 @@ export function useMonitorData(historyLimit, matchFn) {
     }
   }
 
+  function isHttpTab(url) {
+    return typeof url === 'string' && (url.startsWith('http://') || url.startsWith('https://'))
+  }
+
   async function updateTabInfo(tabId) {
     try {
       const tab = await chrome.tabs.get(tabId)
+      // Only track http/https tabs — skip chrome://, chrome-extension://, etc.
+      const url = tab.url || tab.pendingUrl || ''
+      if (!isHttpTab(url)) return
       tabs.value[tabId] = {
         id: tabId,
         title: tab.title,
-        url: tab.url,
+        url,
         favIconUrl: tab.favIconUrl,
         lastActivity: Date.now(),
         requestCount: (tabs.value[tabId]?.requestCount || 0) + 1
       }
     } catch {
+      // chrome.tabs.get failed — tab is likely closed.
+      // Preserve any previously stored title/URL so the sidebar still shows
+      // meaningful info for closed tabs.
+      const existing = tabs.value[tabId]
+      // If we never tracked this tab (no existing entry), skip it.
+      if (!existing) return
       tabs.value[tabId] = {
         id: tabId,
-        title: `Tab ${tabId}`,
-        url: '',
-        favIconUrl: '',
+        title: existing.title || `Tab ${tabId}`,
+        url: existing.url || '',
+        favIconUrl: existing.favIconUrl || '',
         lastActivity: Date.now(),
-        requestCount: (tabs.value[tabId]?.requestCount || 0) + 1
+        requestCount: (existing.requestCount || 0) + 1,
+        closed: existing.closed ?? false
       }
     }
   }
@@ -104,6 +118,30 @@ export function useMonitorData(historyLimit, matchFn) {
       tabs.value = {}
     }
   }
+
+  // When a tracked tab finishes loading, refresh its title/URL.
+  // This handles tabs opened via right-click ("Open in new tab") where the
+  // initial updateTabInfo call races against page load and only sees "New Tab".
+  function onTabUpdated(tabId, changeInfo) {
+    if (changeInfo.status === 'complete' && tabs.value[tabId]) {
+      updateTabInfo(tabId)
+    }
+  }
+  chrome.tabs.onUpdated.addListener(onTabUpdated)
+
+  // When a tracked tab is closed, mark it as closed rather than removing it.
+  // The sidebar will show a 'Closed' badge for these tabs.
+  function onTabRemoved(tabId) {
+    if (tabs.value[tabId]) {
+      tabs.value[tabId] = { ...tabs.value[tabId], closed: true }
+    }
+  }
+  chrome.tabs.onRemoved.addListener(onTabRemoved)
+
+  onUnmounted(() => {
+    chrome.tabs.onUpdated.removeListener(onTabUpdated)
+    chrome.tabs.onRemoved.removeListener(onTabRemoved)
+  })
 
   watch(historyLimit, (newLimit) => {
     while (requests.value.length > newLimit) requests.value.shift()

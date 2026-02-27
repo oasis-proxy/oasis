@@ -57,3 +57,12 @@
   border-color: var(--ui-info-border);
   color: var(--ui-info);
 }
+
+/* Closed/Muted Tag (for closed tabs) */
+.ui-tag-closed {
+  background-color: var(--ui-border-subtle);
+  border-color: transparent;
+  color: var(--ui-text-tertiary);
+  font-weight: 600;
+  font-size: 9px;
+}

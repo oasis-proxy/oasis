@@ -54,6 +54,14 @@
               <i class="bi bi-plus-circle text-sm"></i>
             </button>
             <button
+              v-if="selectedTabId && isAutoPolicyActive"
+              @click="showAutoFixModal = true"
+              class="ui-button-icon d-flex align-items-center gap-1"
+              :title="$t('tooltipAutoFix')"
+            >
+              <i class="bi bi-magic text-sm"></i>
+            </button>
+            <button
               @click="clearCurrentRequests"
               class="ui-button-icon d-flex align-items-center gap-1"
               :title="selectedTabId ? $t('btnClearTab') : $t('btnClearAll')"
@@ -89,6 +97,15 @@
       @close="showQuickAddModal = false"
       @merge="handleQuickAddMerge"
     />
+
+    <AutoFixModal
+      :visible="showAutoFixModal"
+      :tabId="selectedTabId"
+      :proxies="configProxies"
+      :proxyGroups="configProxyGroups"
+      :autoFix="autoFix"
+      @close="showAutoFixModal = false"
+    />
   </div>
 </template>
 
@@ -101,18 +118,21 @@ import { loadConfig, savePolicies } from '../common/storage'
 import { useMonitorTheme } from '../composables/useMonitorTheme'
 import { useMonitorMatcher } from '../composables/useMonitorMatcher'
 import { useMonitorData } from '../composables/useMonitorData'
+import { useAutoFix } from '../composables/useAutoFix'
 
 // Components
 import MonitorHeader from '../components/monitor/MonitorHeader.vue'
 import MonitorSidebar from '../components/monitor/MonitorSidebar.vue'
 import MonitorRequestTable from '../components/monitor/MonitorRequestTable.vue'
 import SmartRulesMergeModal from '../components/rule/SmartRulesMergeModal.vue'
+import AutoFixModal from '../components/monitor/AutoFixModal.vue'
 
 // State
 const historyLimit = ref(1000)
 const searchQuery = ref('')
 const selectedTabId = ref(null)
 const showQuickAddModal = ref(false)
+const showAutoFixModal = ref(false)
 const quickAddSourceRules = ref([])
 const configPolicies = ref({})
 const configProxies = ref({})
@@ -133,8 +153,14 @@ const { requests, tabs, handleMessage, clearRequests, getHostname } = useMonitor
   historyLimit,
   matchRule
 )
+const autoFix = useAutoFix(requests, tabs)
 
 // Computed
+const isAutoPolicyActive = computed(() => {
+  if (!activeProfileId.value || !configPolicies.value) return false
+  const policy = configPolicies.value[activeProfileId.value]
+  return !!(policy && (policy.rules !== undefined || policy.defaultProfileId !== undefined))
+})
 const sortedTabs = computed(() =>
   Object.values(tabs.value)
     .filter((tab) => tab.requestCount > 0)
@@ -238,8 +264,17 @@ const handleQuickAddMerge = async ({ targetId, conflictMode, rules: mergedRules 
 }
 
 // Lifecycle Hooks
-onMounted(async () => {
+const loadConfigData = async () => {
   const config = await loadConfig()
+  configPolicies.value = config.policies || {}
+  configProxies.value = config.proxies || {}
+  configProxyGroups.value = config.proxyGroups || {}
+  activeProfileId.value = config.activeProfileId || ''
+  return config
+}
+
+onMounted(async () => {
+  const config = await loadConfigData()
   applyTheme(config.ui?.theme || 'light')
   await loadMatcherConfig()
   const mql = window.matchMedia('(prefers-color-scheme: dark)')
@@ -252,6 +287,7 @@ onMounted(async () => {
     if (area === 'local' && changes.config) {
       applyTheme(changes.config.newValue?.ui?.theme)
       loadMatcherConfig()
+      loadConfigData()
     }
   })
   chrome.runtime.onMessage.addListener(handleMessage)

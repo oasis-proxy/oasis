@@ -470,5 +470,48 @@
   "appmBtnCopy": { "message": "Copy to clipboard" },
   "appmDesc": {
     "message": "Preview rules converted to AutoProxy format. Wildcard and regex rules are included; IP/CIDR rules are excluded."
-  }
+  },
+
+  "afmTitle": { "message": "Policy Assistant" },
+  "afmSubtitleSetup": { "message": "Step 1 of 2 — Configure debugging parameters" },
+  "afmSubtitleRunning": { "message": "Step 2 of 2 — Auto-routing failing domains" },
+  "afmLabelProxy": { "message": "Select Proxy" },
+  "afmPlaceholderProxy": { "message": "Select a proxy..." },
+  "afmDescProxy": { "message": "Failed domains will be routed through this proxy." },
+  "afmLabelMaxRetries": { "message": "Max Rounds" },
+  "afmLabelWaitWindow": { "message": "Wait Window" },
+  "afmDescInfo": {
+    "message": "Policy Assistant reloads the selected tab, collects failed requests, and adds wildcard rules to a temporary session. It repeats until no new errors appear or max rounds is reached."
+  },
+  "afmStatusRunning": {
+    "message": "Round $ROUND$ / $MAX$ — waiting for page...",
+    "placeholders": { "round": { "content": "$1" }, "max": { "content": "$2" } }
+  },
+  "afmStatusDone": { "message": "✓ Fix complete — no new errors" },
+  "afmStatusFailed": {
+    "message": "✕ Max rounds ($MAX$) reached",
+    "placeholders": { "max": { "content": "$1" } }
+  },
+  "afmStatusStopped": { "message": "● Stopped" },
+  "afmLabelLastAdded": { "message": "Added This Round" },
+  "afmLabelAllFixed": {
+    "message": "All Fixed Domains ($COUNT$)",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "afmMsgWaiting": { "message": "Waiting for error events..." },
+  "afmBtnStart": { "message": "Start" },
+  "afmBtnStop": { "message": "Stop" },
+  "afmBtnRetry": { "message": "Retry" },
+  "afmBtnViewRules": { "message": "View Temp Rules" },
+  "tooltipAutoFix": { "message": "Policy Assistant — auto-route failing domains" },
+  "afmLabelTargetUrl": { "message": "Target URL" },
+  "afmLabelRoundHistory": { "message": "Round History" },
+  "afmRoundBadge": {
+    "message": "Round $ROUND$",
+    "placeholders": { "round": { "content": "$1" } }
+  },
+  "afmRoundCaptured": { "message": "Captured errors" },
+  "afmRoundFixed": { "message": "Newly routed" },
+  "afmLabelFixedWithRound": { "message": "Routed Domains" },
+  "lblTabClosed": { "message": "Closed" }
 }

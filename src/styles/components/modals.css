@@ -49,3 +49,30 @@
   opacity: 0.5; /* Default bootstrap is decent, but ensure consistency */
   background-color: var(--ui-backdrop);
 }
+
+/* -------------------------------------------------------------------------- */
+/* Policy Assistant (AutoFix) spinner                                         */
+/* -------------------------------------------------------------------------- */
+@keyframes pa-spin { to { transform: rotate(360deg); } }
+
+.pa-spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid var(--ui-border-subtle);
+  border-top-color: var(--ui-primary, #137fec);
+  border-radius: 50%;
+  animation: pa-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+.pa-spinner-sm {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--ui-border-subtle);
+  border-top-color: var(--ui-primary, #137fec);
+  border-radius: 50%;
+  animation: pa-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}

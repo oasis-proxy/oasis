@@ -27,18 +27,28 @@
       >
         <div class="d-flex align-items-center justify-content-between mb-1">
           <span class="font-mono text-xs ui-text-tertiary">{{ formatTime(tab.lastActivity) }}</span>
-          <span class="ui-tag ui-tag-default">{{ getRequestCountForTab(tab.id) }}</span>
+          <div class="d-flex align-items-center gap-1">
+            <!-- Closed badge -->
+            <span
+              v-if="tab.closed"
+              class="ui-tag ui-tag-closed"
+            >{{ $t('lblTabClosed') }}</span>
+            <span class="ui-tag ui-tag-default">{{ getRequestCountForTab(tab.id) }}</span>
+          </div>
         </div>
         <div class="d-flex align-items-start gap-2">
           <img
-            v-if="tab.favIconUrl"
+            v-if="tab.favIconUrl && !tab.closed"
             :src="tab.favIconUrl"
             class="mt-1"
             style="width: 16px; height: 16px"
           />
-          <i v-else class="bi bi-file-earmark ui-text-tertiary mt-1"></i>
+          <i v-else class="bi mt-1"
+             :class="tab.closed ? 'bi-x-circle ui-text-tertiary' : 'bi-file-earmark ui-text-tertiary'"
+          ></i>
           <div class="flex-1 min-w-0" style="max-width: calc(100% - 24px)">
-            <p class="text-sm font-medium ui-text-primary text-truncate m-0">
+            <p class="text-sm font-medium text-truncate m-0"
+               :class="tab.closed ? 'ui-text-tertiary' : 'ui-text-primary'">
               {{ tab.title || $t('lblUntitled') }}
             </p>
             <p class="text-xs ui-text-secondary text-truncate m-0">{{ getHostname(tab.url) }}</p>
