@@ -14,6 +14,16 @@ export function usePolicyRules(rulesRef, options = {}) {
     const result = validatePattern(rule.ruleType, rule.pattern)
     if (result.valid) {
       delete validationErrors.value[index]
+
+      // Auto-fetch ruleset content if it's a valid new/modified ruleset URL
+      if (rule.ruleType === 'ruleset' && rule.pattern?.trim()) {
+        const needsFetch = !rule.ruleSet?.content || rule.ruleSet?.url !== rule.pattern
+        const hasFailedRecently = rule.ruleSet?.fetchError && rule.ruleSet?.url === rule.pattern
+
+        if (needsFetch && !hasFailedRecently) {
+          fetchRuleSetContent(index, rule.pattern)
+        }
+      }
     } else {
       validationErrors.value[index] = result.message
     }
@@ -95,13 +105,13 @@ export function usePolicyRules(rulesRef, options = {}) {
   const fetchRuleSetContent = async (index, url, force = false) => {
     if (!url) return
     const rule = rulesRef.value[index]
-    if (!force && rule.ruleSet?.sourceUrl === url && rule.ruleSet?.content) return
+    if (!force && rule.ruleSet?.url === url && rule.ruleSet?.content) return
 
     fetchingRuleSetIndex.value = index
     try {
       const response = await chrome.runtime.sendMessage({ type: 'FETCH_RULESET', url })
       if (response?.success) {
-        rule.ruleSet = { sourceUrl: url, content: response.content, lastUpdated: Date.now() }
+        rule.ruleSet = { url, content: response.content, lastUpdated: Date.now() }
       }
     } catch (e) {
       console.error('Fetch ruleset error', e)

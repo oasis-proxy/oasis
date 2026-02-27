@@ -167,7 +167,7 @@ export function generatePacScriptFromPolicy(
           // It could be IPv4 or IPv6
           const parsed = ipaddr.parse(rule.pattern)
           if (parsed.kind() === 'ipv6') {
-            // Using isInNetEx with /128 makes the browser natively handle 
+            // Using isInNetEx with /128 makes the browser natively handle
             // the complexities of bracketed [fe80::1] vs raw fe80::1
             const normalizedIp = parsed.toNormalizedString()
             return `isInNetEx(host, "${normalizedIp}/128")`

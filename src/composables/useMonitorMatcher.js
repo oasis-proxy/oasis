@@ -93,9 +93,9 @@ export function useMonitorMatcher() {
             }
             return false
           }
-          
+
           const hostIp = ipaddr.parse(hostIpStr)
-          
+
           if (rule.pattern.includes('/')) {
             const parsedCidr = ipaddr.parseCIDR(rule.pattern)
             return hostIp.match(parsedCidr)

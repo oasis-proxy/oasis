@@ -2,6 +2,12 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { exportConfig, importConfig, clearConfig, saveConfig } from '../storage'
 import { DEFAULT_CONFIG } from '../config'
 
+vi.mock('../ruleset', () => ({
+  fetchRuleSetContent: vi.fn(),
+  decodeRuleSetContent: vi.fn((text) => text),
+  updateRuleSetContent: vi.fn((text) => text)
+}))
+
 // Mock chrome.storage
 const storageLocal = {
   get: vi.fn(),
@@ -125,6 +131,79 @@ describe('storage', () => {
       expect(savedCall.config).toBeDefined()
       expect(savedCall.proxies).toEqual({ p1: { id: 'p1' } })
       expect(savedCall.policies).toEqual({ po1: { id: 'po1' } })
+    })
+  })
+
+  describe('hydrateConfig', () => {
+    it('should fetch ruleset content for rules with ruleType=ruleset and pattern', async () => {
+      const { fetchRuleSetContent } = await import('../ruleset')
+      fetchRuleSetContent.mockResolvedValue({
+        content: 'mock-content',
+        lastUpdated: 1000,
+        lastFetched: 1000,
+        fetchError: null
+      })
+
+      const config = {
+        policies: {
+          p1: {
+            id: 'p1',
+            rules: [{ ruleType: 'ruleset', pattern: 'https://example.com/rules.txt' }]
+          }
+        }
+      }
+
+      const { hydrateConfig } = await import('../storage/sync')
+      await hydrateConfig(config)
+
+      const rule = config.policies.p1.rules[0]
+      expect(fetchRuleSetContent).toHaveBeenCalledWith('https://example.com/rules.txt')
+      expect(rule.ruleSet.content).toBe('mock-content')
+      expect(rule.ruleSet.url).toBe('https://example.com/rules.txt')
+    })
+
+    it('should fallback to local cache if fetch fails', async () => {
+      const { fetchRuleSetContent } = await import('../ruleset')
+      // Simulate fetch failure
+      fetchRuleSetContent.mockResolvedValue({
+        fetchError: 'Network Error',
+        lastFetched: 2000
+      })
+
+      // Setup local storage mock with cached content
+      storageLocal.get.mockResolvedValue({
+        policies: {
+          p2: {
+            // different policy ID to test cross-policy search
+            id: 'p2',
+            rules: [
+              {
+                ruleType: 'ruleset',
+                pattern: 'https://example.com/rules.txt',
+                ruleSet: { content: 'cached-content', lastUpdated: 500 }
+              }
+            ]
+          }
+        }
+      })
+
+      const config = {
+        policies: {
+          p1: {
+            id: 'p1',
+            rules: [{ ruleType: 'ruleset', pattern: 'https://example.com/rules.txt' }]
+          }
+        }
+      }
+
+      const { hydrateConfig } = await import('../storage/sync')
+      await hydrateConfig(config)
+
+      const rule = config.policies.p1.rules[0]
+      expect(fetchRuleSetContent).toHaveBeenCalledWith('https://example.com/rules.txt')
+      // Should retain original fallback content
+      expect(rule.ruleSet.content).toBe('cached-content')
+      expect(rule.ruleSet.fetchError).toBe('Network Error')
     })
   })
 })

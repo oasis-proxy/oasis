@@ -72,7 +72,7 @@ describe('validation.js', () => {
       const form1 = normalizeIp('2001:db8:0::1')
       const form2 = normalizeIp('2001:db8::1')
       const form3 = normalizeIp('2001:0db8:0000:0000:0000:0000:0000:0001')
-      
+
       expect(form1).toBe(form2)
       expect(form2).toBe(form3)
     })

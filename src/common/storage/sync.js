@@ -30,20 +30,51 @@ export function optimizePayload(config) {
  * Hydrate remote resources into the config.
  */
 export async function hydrateConfig(config) {
+  const localConfig = await loadConfig().catch(() => null)
   const promises = []
   if (config.policies) {
     Object.values(config.policies).forEach((policy) => {
+      // Find matching local policy to use as fallback
+      const localPolicy = localConfig?.policies?.[policy.id]
       if (policy.rules && Array.isArray(policy.rules)) {
         policy.rules.forEach((rule) => {
           if (
             rule.ruleType === 'ruleset' &&
-            rule.ruleSet &&
-            rule.ruleSet.url &&
-            !rule.ruleSet.content
+            rule.pattern &&
+            rule.pattern.trim() &&
+            (!rule.ruleSet || !rule.ruleSet.content)
           ) {
+            const url = rule.pattern.trim()
+            if (!rule.ruleSet) rule.ruleSet = {}
             promises.push(
-              fetchRuleSetContent(rule.ruleSet.url).then((result) => {
-                if (!result.fetchError) rule.ruleSet.content = result.content
+              fetchRuleSetContent(url).then((result) => {
+                if (!result.fetchError) {
+                  rule.ruleSet.content = result.content
+                  rule.ruleSet.fetchError = null
+                  rule.ruleSet.lastUpdated = result.lastUpdated
+                } else {
+                  // Fallback to local cache if download fails
+                  rule.ruleSet.fetchError = result.fetchError
+                  // Try to find ANY matching ruleset cache locally by URL
+                  let foundCache = null
+                  if (localConfig?.policies) {
+                    for (const p of Object.values(localConfig.policies)) {
+                      const match = p.rules?.find(
+                        (r) => r.ruleType === 'ruleset' && r.pattern === url && r.ruleSet?.content
+                      )
+                      if (match) {
+                        foundCache = match.ruleSet
+                        break
+                      }
+                    }
+                  }
+                  if (foundCache) {
+                    rule.ruleSet.content = foundCache.content
+                    rule.ruleSet.lastUpdated = foundCache.lastUpdated
+                  }
+                }
+                rule.ruleSet.url = url
+                rule.ruleSet.lastFetched = result.lastFetched
               })
             )
           }
@@ -79,18 +110,22 @@ export async function triggerAutoSync(config) {
       await syncToCloud(latestConfig)
     } catch (e) {
       if (e.message === 'SYNC_CONFLICT') {
-        console.warn('Auto Sync aborted due to conflict. Disabling auto-sync to prevent data overwrite.')
+        console.warn(
+          'Auto Sync aborted due to conflict. Disabling auto-sync to prevent data overwrite.'
+        )
         config.sync.enabled = false
         // Save the disabled state immediately without triggering another sync
         await saveConfig(config, true, true)
-        
+
         // Notify the user via Chrome Notifications
         try {
           chrome.notifications.create('oasis-sync-conflict', {
             type: 'basic',
             iconUrl: chrome.runtime.getURL('icons/128.png'),
             title: chrome.i18n.getMessage('titleSyncConflict') || 'Sync Conflict Detected',
-            message: chrome.i18n.getMessage('msgSyncConflictStatus') || 'Automatic sync was disabled to prevent overwriting cloud data. Please resolve the conflict in settings.'
+            message:
+              chrome.i18n.getMessage('msgSyncConflictStatus') ||
+              'Automatic sync was disabled to prevent overwriting cloud data. Please resolve the conflict in settings.'
           })
         } catch (notifErr) {
           console.error('Failed to show notification', notifErr)
@@ -132,12 +167,12 @@ export async function syncToCloud(config, force = false) {
 
   try {
     const allKeys = await chrome.storage.sync.get(null)
-    
+
     if (!force && allKeys.sync_meta) {
       const cloudVersion = allKeys.sync_meta.version || 0
       const localState = await chrome.storage.local.get('sync_state')
       let lastSyncedVersion = localState.sync_state?.lastSyncedVersion ?? -1
-      
+
       // Migration edge case: local device has data, cloud has data, but local never recorded lastSyncedVersion.
       // If local version is at least the cloud version, assume local is the valid master and sync_state was simply introduced late.
       if (lastSyncedVersion === -1) {
@@ -159,7 +194,7 @@ export async function syncToCloud(config, force = false) {
     )
     if (keysToRemove.length > 0) await chrome.storage.sync.remove(keysToRemove)
     await chrome.storage.sync.set(storageData)
-    
+
     // Update local last synced version
     await chrome.storage.local.set({ sync_state: { lastSyncedVersion: currentVersion } })
   } catch (e) {
@@ -212,10 +247,10 @@ export async function syncFromCloud(force = false) {
 
       await hydrateConfig(newConfig)
       await saveConfig(newConfig, true)
-      
+
       // Update local last synced version to match the newly pulled cloud version
       await chrome.storage.local.set({ sync_state: { lastSyncedVersion: uniqueVersion } })
-      
+
       return true
     }
     return false

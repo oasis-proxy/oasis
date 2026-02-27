@@ -53,7 +53,11 @@
 /* -------------------------------------------------------------------------- */
 /* Policy Assistant (AutoFix) spinner                                         */
 /* -------------------------------------------------------------------------- */
-@keyframes pa-spin { to { transform: rotate(360deg); } }
+@keyframes pa-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .pa-spinner {
   display: inline-block;

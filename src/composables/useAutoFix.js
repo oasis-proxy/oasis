@@ -57,17 +57,20 @@ function waitForTabComplete(tabId, timeoutMs = 60000) {
     const timer = setTimeout(() => settle(() => reject(new Error('Tab load timed out'))), timeoutMs)
 
     // Check current state before registering listener to eliminate race window
-    chrome.tabs.get(tabId).then((tab) => {
-      if (tab.status === 'complete') {
-        settle(resolve)
-        return
-      }
-      // Tab is still loading — register listener now
-      chrome.tabs.onUpdated.addListener(listener)
-      listenerRegistered = true
-    }).catch(() => {
-      settle(() => reject(new Error('Tab not found')))
-    })
+    chrome.tabs
+      .get(tabId)
+      .then((tab) => {
+        if (tab.status === 'complete') {
+          settle(resolve)
+          return
+        }
+        // Tab is still loading — register listener now
+        chrome.tabs.onUpdated.addListener(listener)
+        listenerRegistered = true
+      })
+      .catch(() => {
+        settle(() => reject(new Error('Tab not found')))
+      })
   })
 }
 
@@ -79,10 +82,10 @@ function waitForTabComplete(tabId, timeoutMs = 60000) {
  */
 export function useAutoFix(requests, tabs) {
   const status = ref('idle') // 'idle' | 'running' | 'done' | 'failed' | 'stopped'
-  const fixedDomains = ref([])     // [{ domain, round }] — all domains added so far, with round number
+  const fixedDomains = ref([]) // [{ domain, round }] — all domains added so far, with round number
   const currentRound = ref(0)
   const maxRetries = ref(5)
-  const targetUrl = ref('')         // resolved URL that is actually being navigated to
+  const targetUrl = ref('') // resolved URL that is actually being navigated to
   /**
    * roundHistory — one entry per completed round:
    * { round: Number, capturedDomains: String[], newDomains: String[] }
@@ -92,7 +95,7 @@ export function useAutoFix(requests, tabs) {
   const roundHistory = ref([])
 
   let aborted = false
-  let running = false  // guard against concurrent start() calls
+  let running = false // guard against concurrent start() calls
 
   /**
    * Collect error domains for a tabId from requests added after `fromIndex`.
@@ -213,7 +216,7 @@ export function useAutoFix(requests, tabs) {
    * Main AutoFix loop.
    */
   async function start({ tabId, proxyId, maxRetriesParam, waitWindow }) {
-    if (running) return   // prevent concurrent loops
+    if (running) return // prevent concurrent loops
     running = true
     aborted = false
     status.value = 'running'
@@ -246,7 +249,11 @@ export function useAutoFix(requests, tabs) {
           const timer = setTimeout(resolve, waitWindow * 1000)
           // Allow stop() to interrupt the wait
           const check = setInterval(() => {
-            if (aborted) { clearTimeout(timer); clearInterval(check); resolve() }
+            if (aborted) {
+              clearTimeout(timer)
+              clearInterval(check)
+              resolve()
+            }
           }, 200)
           // Clear interval when timer fires normally
           setTimeout(() => clearInterval(check), waitWindow * 1000 + 100)
@@ -255,7 +262,10 @@ export function useAutoFix(requests, tabs) {
 
         // Collect error domains for THIS round only (requests added after baseline).
         // capturedDomains (wildcards) drive rule logic; rawDomains (hostnames) drive display.
-        const { raw: rawDomains, wildcards: capturedDomains } = collectErrorDomains(tabId, roundRequestBaseline)
+        const { raw: rawDomains, wildcards: capturedDomains } = collectErrorDomains(
+          tabId,
+          roundRequestBaseline
+        )
         const fixedSet = new Set(fixedDomains.value.map((e) => e.domain))
         const newDomains = capturedDomains.filter((w) => !fixedSet.has(w))
         const newDomainSet = new Set(newDomains)
@@ -263,13 +273,16 @@ export function useAutoFix(requests, tabs) {
         const newRawDomains = rawDomains.filter((d) => newDomainSet.has(toWildcard(d)))
 
         // Record the round snapshot
-        roundHistory.value = [...roundHistory.value, {
-          round: currentRound.value,
-          capturedDomains,   // wildcards — for rule tracking
-          newDomains,        // wildcards — for rule tracking
-          rawDomains,        // full hostnames — for display
-          newRawDomains      // full hostnames of newly routed — for display
-        }]
+        roundHistory.value = [
+          ...roundHistory.value,
+          {
+            round: currentRound.value,
+            capturedDomains, // wildcards — for rule tracking
+            newDomains, // wildcards — for rule tracking
+            rawDomains, // full hostnames — for display
+            newRawDomains // full hostnames of newly routed — for display
+          }
+        ]
 
         if (newDomains.length === 0) {
           // No more new errors — success

@@ -120,8 +120,9 @@ export async function clearConfig() {
  */
 export async function exportConfig() {
   const config = await loadConfig()
-  optimizePayload(config)
-  return JSON.stringify(config, null, 2)
+  const payload = JSON.parse(JSON.stringify(config))
+  optimizePayload(payload)
+  return JSON.stringify(payload, null, 2)
 }
 
 /**

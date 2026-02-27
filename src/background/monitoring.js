@@ -13,13 +13,13 @@ export async function updateMonitoringState() {
   const enabled = await isMonitoringActive()
   if (!enabled) {
     console.log('Oasis: Monitoring disabled.')
-    
+
     // Clear in-memory Map
     monitorMap.clear()
-    
+
     // Clear ONLY monitor_* keys to avoid wiping other session data (P2)
     const sessionData = await chrome.storage.session.get(null)
-    const monitorKeys = Object.keys(sessionData).filter(key => key.startsWith('monitor_'))
+    const monitorKeys = Object.keys(sessionData).filter((key) => key.startsWith('monitor_'))
     if (monitorKeys.length > 0) {
       await chrome.storage.session.remove(monitorKeys)
     }

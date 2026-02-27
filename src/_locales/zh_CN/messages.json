@@ -468,7 +468,9 @@
   "afmDescProxy": { "message": "失败的域名将通过此代理转发。" },
   "afmLabelMaxRetries": { "message": "最大轮次" },
   "afmLabelWaitWindow": { "message": "等待窗口" },
-  "afmDescInfo": { "message": "AutoFix 会重新加载选中的标签页，收集失败请求，并将通配符规则添加到临时会话中，直到无新错误或达到最大轮次为止。" },
+  "afmDescInfo": {
+    "message": "AutoFix 会重新加载选中的标签页，收集失败请求，并将通配符规则添加到临时会话中，直到无新错误或达到最大轮次为止。"
+  },
   "afmStatusRunning": {
     "message": "第 $ROUND$ / $MAX$ 轮 — 等待页面加载...",
     "placeholders": { "round": { "content": "$1" }, "max": { "content": "$2" } }

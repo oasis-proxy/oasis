@@ -266,13 +266,11 @@ watch(
 
 const handleRuleTypeChange = (index, rule) => {
   validateRule(index, rule)
-  if (rule.ruleType === 'ruleset' && rule.pattern?.trim()) fetchRuleSetContent(index, rule.pattern)
 }
 
 const handleRuleBlur = (index, rule) => {
   focusedIndex.value = null
   validateRule(index, rule)
-  if (rule.ruleType === 'ruleset') fetchRuleSetContent(index, rule.pattern)
 }
 
 const openRuleSetModal = (rule, index) => {
@@ -282,7 +280,7 @@ const openRuleSetModal = (rule, index) => {
     return
   }
   selectedRuleSetContent.value = decodeRuleSetContent(rule.ruleSet.content)
-  selectedRuleSetUrl.value = rule.ruleSet.sourceUrl || rule.pattern
+  selectedRuleSetUrl.value = rule.ruleSet.url || rule.pattern
   selectedRuleSetLastUpdated.value = rule.ruleSet.lastUpdated
   selectedRuleSetIndex.value = index
   showRuleSetModal.value = true
@@ -292,7 +290,7 @@ const handleRuleSetUpdate = async () => {
   if (selectedRuleSetIndex.value !== null) {
     const index = selectedRuleSetIndex.value
     const rule = localRules.value[index]
-    const url = rule.ruleSet?.sourceUrl || rule.pattern
+    const url = rule.ruleSet?.url || rule.pattern
     if (!url) return
 
     await fetchRuleSetContent(index, url, true)

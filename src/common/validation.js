@@ -123,7 +123,7 @@ export function normalizeIp(ip) {
   const cleanIp = ip.replace(/^\[|\]$/g, '')
   try {
     let parsed = ipaddr.parse(cleanIp)
-    
+
     // Convert IPv4-mapped IPv6 back to native IPv4 to prevent dupes
     if (parsed.kind() === 'ipv6' && parsed.isIPv4MappedAddress()) {
       parsed = parsed.toIPv4Address()

@@ -242,7 +242,7 @@ watch(
 const resetChanges = () => loadPolicyData()
 const saveChanges = async () => {
   if (!config.value || !policy.value) return
-  policy.value.rejectRules.forEach(r => {
+  policy.value.rejectRules.forEach((r) => {
     if (r.type === 'rule') r.proxyId = 'reject'
   })
   config.value.policies[policy.value.id] = JSON.parse(JSON.stringify(policy.value))
