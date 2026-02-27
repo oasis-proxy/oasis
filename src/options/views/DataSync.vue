@@ -27,8 +27,31 @@
               />
             </div>
           </div>
+
+          <!-- Update RuleSets -->
           <div
-            class="d-flex align-items-center justify-content-between px-4 pt-3 pb-4 hover-bg-subtle transition-colors"
+            class="d-flex align-items-center justify-content-between px-4 py-3 hover-bg-subtle transition-colors"
+          >
+            <div class="d-flex items-start">
+              <div>
+                <p class="text-sm fw-medium ui-text-primary m-0">{{ $t('lblUpdateAllRules') }}</p>
+                <p class="text-xs ui-text-secondary mt-1 m-0">{{ $t('descUpdateAllRules') }}</p>
+              </div>
+            </div>
+            <div class="d-flex gap-2">
+              <button
+                @click="handleUpdateAllRules"
+                :disabled="isUpdatingRules"
+                class="fw-medium ui-button-secondary border rounded-lg transition-colors d-flex align-items-center gap-2 px-3 py-1.5"
+              >
+                <i class="bi bi-arrow-clockwise" :class="{ 'animate-spin': isUpdatingRules }"></i>
+                <span class="text-sm">{{ $t('btnUpdateAllRuleSets') }}</span>
+              </button>
+            </div>
+          </div>
+          
+          <div
+            class="d-flex align-items-center justify-content-between px-4 py-3 pb-4 hover-bg-subtle transition-colors"
           >
             <div class="d-flex items-start">
               <div>
@@ -149,6 +172,24 @@ const {
   resolveConflictLocal,
   cancelAutoSync
 } = useDataSync()
+
+const isUpdatingRules = ref(false)
+
+const handleUpdateAllRules = () => {
+  if (isUpdatingRules.value) return
+  isUpdatingRules.value = true
+
+  chrome.runtime.sendMessage({ type: 'TRIGGER_UPDATE' }, (res) => {
+    isUpdatingRules.value = false
+    if (chrome.runtime.lastError || !res || !res.success) {
+      toast.error(t('msgUpdateAllFailed', 'Failed to update external policies'))
+    } else if (res.errors && res.errors.length > 0) {
+      toast.error(t('msgUpdateAllFailed', 'Failed to update external policies') + ': ' + res.errors[0])
+    } else {
+      toast.success(t('msgUpdateAllSuccess', 'External policies updated successfully'))
+    }
+  })
+}
 
 onMounted(async () => {
   await loadLocalData()

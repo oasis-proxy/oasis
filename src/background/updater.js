@@ -23,6 +23,7 @@ export async function setupUpdateAlarm(intervalMinutes) {
 export async function checkUpdates() {
   const config = await loadConfig()
   let configChanged = false
+  const errors = []
 
   // 1. Update Remote PAC Scripts
   if (config.pacs) {
@@ -42,10 +43,14 @@ export async function checkUpdates() {
               console.log(`Oasis: PAC script '${pac.name}' updated.`)
             }
           } else {
-            console.error(`Oasis: Failed to fetch PAC '${pac.name}': HTTP ${response.status}`)
+            const err = `Failed to fetch PAC '${pac.name}': HTTP ${response.status}`
+            console.error(`Oasis: ${err}`)
+            errors.push(err)
           }
         } catch (e) {
-          console.error(`Oasis: Error updating PAC '${pac.name}':`, e)
+          const err = `Error updating PAC '${pac.name}': ${e.message}`
+          console.error(`Oasis: ${err}`, e)
+          errors.push(err)
         }
       }
     }
@@ -56,16 +61,18 @@ export async function checkUpdates() {
     for (const policy of Object.values(config.policies)) {
       if (!policy) continue
       // Helper handles fetching and tracking changes locally
-      const changed = await updatePolicyRuleSets(policy)
-      if (changed) configChanged = true
+      const result = await updatePolicyRuleSets(policy)
+      if (result.changed) configChanged = true
+      if (result.errors && result.errors.length) errors.push(...result.errors)
 
       // Also check rejectRules if they exist (though usually rulesets are in main rules)
       // If rejectRules structure mirrors standard rules, we can try to update them too
       if (policy.rejectRules) {
         // Wrap rejectRules in a pseudo-policy object because updatePolicyRuleSets expects { rules: [] }
         const rejectWrapper = { rules: policy.rejectRules }
-        const rejectChanged = await updatePolicyRuleSets(rejectWrapper)
-        if (rejectChanged) configChanged = true
+        const rejectResult = await updatePolicyRuleSets(rejectWrapper)
+        if (rejectResult.changed) configChanged = true
+        if (rejectResult.errors && rejectResult.errors.length) errors.push(...rejectResult.errors)
       }
     }
   }
@@ -77,6 +84,8 @@ export async function checkUpdates() {
   } else {
     console.log('Oasis: No updates found.')
   }
+  
+  return { changed: configChanged, errors }
 }
 
 // Listen for Alarms

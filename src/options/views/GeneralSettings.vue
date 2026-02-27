@@ -60,15 +60,15 @@
                   <p class="text-xs ui-text-secondary mt-1 m-0">{{ $t('descUpdateCycle') }}</p>
                 </div>
               </div>
-              <select
-                v-model="config.update.interval"
-                class="form-select ui-input block rounded-lg border py-0 ps-2 pe-4"
-                style="width: 8rem"
-              >
-                <option v-for="inv in updateIntervals" :key="inv.value" :value="inv.value">
-                  {{ inv.label }}
-                </option>
-              </select>
+                <select
+                  v-model="config.update.interval"
+                  class="form-select ui-input block rounded-lg border py-0 ps-2 pe-4"
+                  style="width: 8rem"
+                >
+                  <option v-for="inv in updateIntervals" :key="inv.value" :value="inv.value">
+                    {{ inv.label }}
+                  </option>
+                </select>
             </div>
 
             <!-- Rule Priority -->
@@ -266,6 +266,7 @@ import { useGeneralSettings } from '../../composables/useGeneralSettings'
 
 const { t } = inject('i18n')
 const { config, localRulePriority, loadData, updateRulePriority } = useGeneralSettings()
+
 const extensionVersion = chrome.runtime.getManifest().version
 
 const styleOptions = computed(() => [

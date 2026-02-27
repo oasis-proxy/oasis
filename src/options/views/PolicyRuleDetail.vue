@@ -145,14 +145,6 @@
       @close="showDeleteModal = false"
       @delete="handleDelete"
     />
-    <RuleSetContentModal
-      :show="showRuleSetModal"
-      :content="selectedRuleSetContent"
-      :url="selectedRuleSetUrl"
-      :lastUpdated="selectedRuleSetLastUpdated"
-      @close="showRuleSetModal = false"
-      @update="handleRuleSetUpdate"
-    />
     <BatchProxyReplaceModal
       :visible="showBatchReplaceModal"
       :proxies="config?.proxies"
@@ -175,7 +167,6 @@ import { ref, computed, onMounted, watch, nextTick, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '../router'
 import { loadConfig, savePolicies } from '../../common/storage'
-import { decodeRuleSetContent, updateRuleSetContent } from '../../common/ruleset'
 import { generatePacScriptFromPolicy } from '../../common/pac'
 import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
@@ -216,8 +207,30 @@ const loadPolicyData = async () => {
   } else router.push('/settings')
 }
 
+const sanitizeForDirtyCheck = (p) => {
+  if (!p) return p
+  const clone = JSON.parse(JSON.stringify(p))
+  const sanitizeRules = (rules) => {
+    if (!Array.isArray(rules)) return
+    rules.forEach((r) => {
+      if (r.ruleSet) {
+        delete r.ruleSet.lastUpdated
+        delete r.ruleSet.lastFetched
+        delete r.ruleSet.fetchError
+        // We might also want to delete content if we don't care about content changes making it dirty
+        // but if the content changed, it is a change. However, usually we just care if the URL changed.
+        // For rulesets, the pattern is the URL. Let's ignore content for dirty check so fetching doesn't cause dirty state.
+        delete r.ruleSet.content
+      }
+    })
+  }
+  sanitizeRules(clone.rules)
+  sanitizeRules(clone.rejectRules)
+  return clone
+}
+
 const isDirty = computed(
-  () => JSON.stringify(policy.value) !== JSON.stringify(originalPolicy.value)
+  () => JSON.stringify(sanitizeForDirtyCheck(policy.value)) !== JSON.stringify(sanitizeForDirtyCheck(originalPolicy.value))
 )
 
 onMounted(() => {

@@ -72,13 +72,14 @@ export async function fetchRuleSetContent(url) {
 /**
  * Update RuleSets for a given policy.
  * @param {object} policy - The policy object containing rules.
- * @returns {Promise<boolean>} - True if any rule was updated.
+ * @returns {Promise<{changed: boolean, errors: string[]}>} - Result with changed flag and errors array.
  */
 export async function updatePolicyRuleSets(policy) {
   let configChanged = false
+  const errors = []
 
   const rules = policy.rules
-  if (!rules || !Array.isArray(rules)) return false
+  if (!rules || !Array.isArray(rules)) return { changed: false, errors }
 
   for (const rule of rules) {
     // Check if rule has a subscription URL (RuleSet)
@@ -105,6 +106,7 @@ export async function updatePolicyRuleSets(policy) {
           rule.ruleSet.fetchError = result.fetchError
           rule.ruleSet.lastFetched = result.lastFetched
           configChanged = true // Save error state
+          errors.push(`Failed to update RuleSet '${url}': ${result.fetchError}`)
         }
       } catch (e) {
         // Should be caught by fetchRuleSetContent, but safe to have extra catch
@@ -112,8 +114,9 @@ export async function updatePolicyRuleSets(policy) {
         if (!rule.ruleSet) rule.ruleSet = {}
         rule.ruleSet.fetchError = e.message
         configChanged = true
+        errors.push(`Unexpected error updating RuleSet '${url}': ${e.message}`)
       }
     }
   }
-  return configChanged
+  return { changed: configChanged, errors }
 }
