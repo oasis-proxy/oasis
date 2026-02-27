@@ -40,7 +40,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   const targetUrl = lang.startsWith('zh') ? CHANGELOG_URL_ZH : CHANGELOG_URL_EN
 
   if (details.reason === 'install' || details.reason === 'update') {
-    chrome.tabs.create({ url: targetUrl })
+    if (import.meta.env.MODE !== 'development') {
+      chrome.tabs.create({ url: targetUrl })
+    }
   }
 
   // Open options page on first install

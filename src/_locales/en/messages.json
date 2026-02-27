@@ -97,6 +97,8 @@
   "descRepo": { "message": "Source code and contributions." },
   "lblWiki": { "message": "Wiki Address" },
   "descWiki": { "message": "Documentation and guides." },
+  "lblChangelog": { "message": "Changelog" },
+  "descChangelog": { "message": "See what's new in this release" },
   "themeLight": { "message": "Light" },
   "themeDark": { "message": "Dark" },
   "themeSystem": { "message": "System" },
