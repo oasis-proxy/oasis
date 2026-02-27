@@ -68,7 +68,6 @@
   font-weight: 900;
   height: 36px;
   color: var(--ui-text-primary);
-  letter-spacing: -0.02em;
   white-space: nowrap;
 }
 

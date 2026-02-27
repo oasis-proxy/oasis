@@ -3,10 +3,7 @@
     <div class="d-flex flex-column gap-4 h-100" style="max-height: 70vh">
       <!-- Section 1: Target Policy -->
       <section>
-        <h4
-          class="text-xs fw-bold ui-text-secondary text-uppercase mb-2"
-          style="letter-spacing: 0.1em"
-        >
+        <h4 class="text-xs fw-bold ui-text-secondary text-uppercase mb-2">
           {{ $t('smmmSectionTarget') }}
         </h4>
         <select
@@ -23,10 +20,7 @@
       <!-- Section 2: Source Rules (Read-only) -->
       <section>
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <h4
-            class="text-xs fw-bold ui-text-secondary text-uppercase m-0"
-            style="letter-spacing: 0.1em"
-          >
+          <h4 class="text-xs fw-bold ui-text-secondary text-uppercase m-0">
             {{ $t('smmmSectionSource') }}
           </h4>
           <span class="text-xs ui-button-secondary px-2 py-1 rounded-pill"
@@ -82,10 +76,7 @@
       <!-- Section 3: Merged Preview -->
       <section>
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <h4
-            class="text-xs fw-bold ui-text-secondary text-uppercase m-0"
-            style="letter-spacing: 0.1em"
-          >
+          <h4 class="text-xs fw-bold ui-text-secondary text-uppercase m-0">
             {{ $t('smmmSectionPreview') }}
           </h4>
           <div class="d-flex align-items-center gap-2">
@@ -126,10 +117,7 @@
 
       <!-- Section 4: Conflict Resolution -->
       <section v-if="!hideConflict">
-        <h4
-          class="text-xs fw-bold ui-text-secondary text-uppercase mb-2"
-          style="letter-spacing: 0.1em"
-        >
+        <h4 class="text-xs fw-bold ui-text-secondary text-uppercase mb-2">
           {{ $t('armLabelConflict') }}
         </h4>
         <ConflictModeSelector v-model="conflictMode" />

@@ -21,8 +21,7 @@
   font-weight: var(--font-weight-semibold) !important;
   margin: 0 !important;
   line-height: normal !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important; /* tracking-wide */
+  text-transform: uppercase;
 }
 
 .ui-card-header,
@@ -34,8 +33,7 @@
   font-size: var(--font-xs) !important;
   font-weight: var(--font-weight-semibold) !important;
   color: var(--ui-text-secondary) !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important; /* tracking-wider */
+  text-transform: uppercase;
 }
 
 .ui-card-header {
@@ -61,7 +59,6 @@
   font-weight: var(--font-weight-semibold) !important;
   color: var(--ui-text-secondary) !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
 }
 
 /* Selectable Options Card (used in modals) */

@@ -100,7 +100,6 @@ body {
   font-size: 10px; /* var(--font-2xs) doesn't exist. --font-xs is 12. 10 is very small. I'll use 10px literal or add var? I'll leave 10px as it's specific micro-copy. */
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
   color: var(--ui-text-secondary);
   padding: 0.375rem 0.75rem;
   margin: 0 0 0.25rem 0;

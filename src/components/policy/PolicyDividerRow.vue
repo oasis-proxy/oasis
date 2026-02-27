@@ -24,7 +24,7 @@
         v-if="!isEditing"
         @dblclick="$emit('edit')"
         class="text-xs fw-semibold ui-text-secondary text-uppercase cursor-pointer transition-colors px-2 d-flex align-items-center gap-2"
-        style="user-select: none; line-height: 1; letter-spacing: 0.1em"
+        style="user-select: none; line-height: 1"
         :title="$t('descEditSection')"
       >
         {{ rule.label || $t('lblNewSection') }}
@@ -39,7 +39,7 @@
         @keyup.enter="$emit('save')"
         @keyup.esc="$emit('cancel')"
         class="form-control ui-input ui-input-sm fw-semibold text-uppercase text-center w-auto mx-auto"
-        style="min-width: 150px; padding: 2px 8px; letter-spacing: 0.1em"
+        style="min-width: 150px; padding: 2px 8px"
       />
       <div style="flex: 1; height: 1px; border-top: 1px solid var(--ui-border)"></div>
     </div>

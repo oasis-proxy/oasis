@@ -10,7 +10,7 @@
         <h1
           v-if="title"
           class="h4 fw-bold ui-text-primary m-0 text-truncate"
-          style="max-width: 300px; letter-spacing: -0.025em"
+          style="max-width: 300px"
           :title="title"
         >
           {{ title }}

@@ -29,10 +29,7 @@
             <div class="d-flex flex-column gap-3 position-relative z-10">
               <!-- Last Modified -->
               <div class="d-flex justify-content-between align-items-center">
-                <p
-                  class="text-xs fw-medium ui-text-secondary text-uppercase m-0"
-                  style="letter-spacing: 0.05em"
-                >
+                <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0">
                   {{ $t('lblLastModified') }}
                 </p>
                 <p class="text-xs font-monospace ui-text-primary m-0 text-end">
@@ -42,10 +39,7 @@
 
               <!-- Config Version -->
               <div class="d-flex justify-content-between align-items-center">
-                <p
-                  class="text-xs fw-medium ui-text-secondary text-uppercase m-0"
-                  style="letter-spacing: 0.05em"
-                >
+                <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0">
                   {{ $t('lblConfigVer') }}
                 </p>
                 <p class="text-xs font-monospace ui-text-primary m-0 text-end">
@@ -56,10 +50,7 @@
               <div class="pt-3 border-top border-subtle d-flex flex-column gap-3">
                 <!-- Proxy Hosts -->
                 <div class="d-flex justify-content-between align-items-start">
-                  <p
-                    class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5"
-                    style="letter-spacing: 0.05em"
-                  >
+                  <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5">
                     {{ $t('lblProxyHosts') }}
                   </p>
                   <span class="text-xs font-monospace ui-text-primary">{{ proxyCount }}</span>
@@ -67,10 +58,7 @@
 
                 <!-- Policies -->
                 <div class="d-flex justify-content-between align-items-start">
-                  <p
-                    class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5"
-                    style="letter-spacing: 0.05em"
-                  >
+                  <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5">
                     {{ $t('lblPolicies') }}
                   </p>
                   <span class="text-xs font-monospace ui-text-primary">{{ policyCount }}</span>
@@ -97,10 +85,7 @@
             <div class="d-flex flex-column gap-3 position-relative z-10">
               <!-- Last Modified -->
               <div class="d-flex justify-content-between align-items-center">
-                <p
-                  class="text-xs fw-medium ui-text-secondary text-uppercase m-0"
-                  style="letter-spacing: 0.05em"
-                >
+                <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0">
                   {{ $t('lblLastModified') }}
                 </p>
                 <p class="text-xs font-monospace ui-text-primary m-0 text-end">
@@ -110,10 +95,7 @@
 
               <!-- Config Version -->
               <div class="d-flex justify-content-between align-items-center">
-                <p
-                  class="text-xs fw-medium ui-text-secondary text-uppercase m-0"
-                  style="letter-spacing: 0.05em"
-                >
+                <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0">
                   {{ $t('lblConfigVer') }}
                 </p>
                 <p class="text-xs font-monospace ui-text-primary m-0 text-end">
@@ -124,10 +106,7 @@
               <div class="pt-3 border-top border-subtle d-flex flex-column gap-3">
                 <!-- Proxy Hosts -->
                 <div class="d-flex justify-content-between align-items-start">
-                  <p
-                    class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5"
-                    style="letter-spacing: 0.05em"
-                  >
+                  <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5">
                     {{ $t('lblProxyHosts') }}
                   </p>
                   <span class="text-xs font-monospace ui-text-primary">{{ cloudProxyCount }}</span>
@@ -135,10 +114,7 @@
 
                 <!-- Policies -->
                 <div class="d-flex justify-content-between align-items-start">
-                  <p
-                    class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5"
-                    style="letter-spacing: 0.05em"
-                  >
+                  <p class="text-xs fw-medium ui-text-secondary text-uppercase m-0 mt-0.5">
                     {{ $t('lblPolicies') }}
                   </p>
                   <span class="text-xs font-monospace ui-text-primary">{{ cloudPolicyCount }}</span>
