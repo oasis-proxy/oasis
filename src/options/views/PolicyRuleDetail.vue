@@ -300,7 +300,17 @@ const handleBatchReplace = (fromId, toId) => {
     }
   })
   if (count > 0) {
-    toast.success(t('bpmMsgReplaced', [count]))
+    const getProxyLabel = (id) => {
+      if (id === 'direct') return t('directConnect')
+      if (id === 'system') return t('systemProxy')
+      if (id === 'reject') return t('lblReject')
+      const proxy = config.value?.proxies?.[id]
+      if (proxy) return proxy.name || proxy.host
+      const group = config.value?.proxyGroups?.[id]
+      if (group) return group.name
+      return id
+    }
+    toast.success(t('bpmMsgReplaced', [count, getProxyLabel(fromId), getProxyLabel(toId)]))
     showBatchReplaceModal.value = false
   } else toast.info(t('bpmMsgNoMatch'))
 }
@@ -350,13 +360,15 @@ const handlePolicyMerge = ({ sourceId, conflictMode, importNormal, importReject 
 
   if (importNormal && s.rules) {
     const { newRules, indicesToRemove } = mergeCheck(policy.value.rules, s.rules, conflictMode)
+    let updatedRules = [...policy.value.rules]
     if (indicesToRemove.size > 0) {
-      policy.value.rules = policy.value.rules.filter((_, i) => !indicesToRemove.has(i))
+      updatedRules = updatedRules.filter((_, i) => !indicesToRemove.has(i))
     }
     if (newRules.length > 0) {
-      policy.value.rules = [...policy.value.rules, ...newRules]
+      updatedRules = [...newRules, ...updatedRules]
       mergedCount += newRules.length
     }
+    policy.value.rules = updatedRules
   }
 
   if (importReject && s.rejectRules) {
@@ -365,13 +377,15 @@ const handlePolicyMerge = ({ sourceId, conflictMode, importNormal, importReject 
       s.rejectRules,
       conflictMode
     )
+    let updatedRejectRules = [...policy.value.rejectRules]
     if (indicesToRemove.size > 0) {
-      policy.value.rejectRules = policy.value.rejectRules.filter((_, i) => !indicesToRemove.has(i))
+      updatedRejectRules = updatedRejectRules.filter((_, i) => !indicesToRemove.has(i))
     }
     if (newRules.length > 0) {
-      policy.value.rejectRules = [...policy.value.rejectRules, ...newRules]
+      updatedRejectRules = [...newRules, ...updatedRejectRules]
       mergedCount += newRules.length
     }
+    policy.value.rejectRules = updatedRejectRules
   }
 
   if (mergedCount > 0) toast.success(t('msgPolicyMerged'))

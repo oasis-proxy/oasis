@@ -332,7 +332,7 @@ const openSmartMerge = () => {
 
 const handleSmartMerge = ({ conflictMode, rules: mergedRules }) => {
   const sourcePatterns = new Set(smartMergeSourceRules.value.map((r) => r.pattern))
-  localRules.value = localRules.value.filter((r) => {
+  let updatedRules = localRules.value.filter((r) => {
     if (r.type === 'divider') return true
     if (r.ruleType !== 'wildcard') return true
     if (!r.pattern || r.pattern.includes('*') || r.pattern.startsWith('.')) return true
@@ -342,7 +342,7 @@ const handleSmartMerge = ({ conflictMode, rules: mergedRules }) => {
   const newRules = []
   const indicesToRemove = new Set()
   mergedRules.forEach((mr) => {
-    const existingIndex = localRules.value.findIndex(
+    const existingIndex = updatedRules.findIndex(
       (r) => r.type !== 'divider' && r.ruleType === mr.ruleType && r.pattern === mr.pattern
     )
     if (existingIndex !== -1) {
@@ -369,9 +369,12 @@ const handleSmartMerge = ({ conflictMode, rules: mergedRules }) => {
     }
   })
   if (indicesToRemove.size > 0) {
-    localRules.value = localRules.value.filter((_, i) => !indicesToRemove.has(i))
+    updatedRules = updatedRules.filter((_, i) => !indicesToRemove.has(i))
   }
-  if (newRules.length > 0) localRules.value.unshift(...newRules)
+  if (newRules.length > 0) {
+    updatedRules = [...newRules, ...updatedRules]
+  }
+  localRules.value = updatedRules
   showSmartMerge.value = false
   const diff = smartMergeSourceRules.value.length - mergedRules.length
   if (diff > 0) toast.success(t('smmmMsgOptimized', [diff]))

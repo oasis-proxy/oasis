@@ -269,7 +269,7 @@
   "btnImport": { "message": "Import" },
   "btnExport": { "message": "Export" },
   "btnClearLocal": { "message": "Clear Local" },
-  "btnClearSync": { "message": "Clear Sync" },
+  "btnClearSync": { "message": "Clear Cloud" },
   "lblLocalVersion": { "message": "Local Version" },
   "lblCloudVersion": { "message": "Cloud Version" },
   "lblLastModified": { "message": "Last Modified" },
@@ -470,6 +470,7 @@
       "target": { "content": "$3" }
     }
   },
+  "bpmMsgNoMatch": { "message": "No rules using the source proxy were found." },
   "msgPolicySaved": { "message": "Policy saved successfully" },
   "appmTitle": { "message": "AutoProxy Preview" },
   "appmFilterAll": { "message": "All" },

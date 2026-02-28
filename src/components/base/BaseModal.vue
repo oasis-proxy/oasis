@@ -25,7 +25,7 @@
         <!-- Modal Header -->
         <div class="d-flex justify-content-between align-items-center p-4">
           <slot name="header">
-            <h3 class="text-lg fw-semibold ui-text-primary m-0" :class="titleClass">
+            <h3 class="ui-text-primary modal-header m-0 fs-5" :class="titleClass">
               {{ title }}
             </h3>
           </slot>

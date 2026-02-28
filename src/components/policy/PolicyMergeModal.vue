@@ -43,12 +43,8 @@
         <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr">
           <!-- Ignore Option -->
           <label
-            class="position-relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
-            :class="
-              conflictMode === 'ignore'
-                ? 'border-primary bg-primary-subtle'
-                : 'ui-card hover:border-default'
-            "
+            class="position-relative d-flex cursor-pointer rounded-lg p-3 shadow-sm transition-all ui-selectable-card"
+            :class="{ active: conflictMode === 'ignore' }"
           >
             <input
               v-model="conflictMode"
@@ -78,12 +74,8 @@
 
           <!-- Overwrite Option -->
           <label
-            class="position-relative d-flex cursor-pointer rounded-lg border p-3 shadow-sm transition-all"
-            :class="
-              conflictMode === 'overwrite'
-                ? 'border-primary bg-primary-subtle'
-                : 'ui-card hover:border-default'
-            "
+            class="position-relative d-flex cursor-pointer rounded-lg p-3 shadow-sm transition-all ui-selectable-card"
+            :class="{ active: conflictMode === 'overwrite' }"
           >
             <input
               v-model="conflictMode"

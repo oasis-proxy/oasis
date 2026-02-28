@@ -173,6 +173,7 @@
       "target": { "content": "$3" }
     }
   },
+  "bpmMsgNoMatch": { "message": "未找到使用源代理的规则。" },
   "msgPolicySaved": { "message": "策略已保存" },
   "msgPolicyMerged": { "message": "策略合并成功" },
 
@@ -282,7 +283,7 @@
   "btnImport": { "message": "导 入" },
   "btnExport": { "message": "导 出" },
   "btnClearLocal": { "message": "清除本地" },
-  "btnClearSync": { "message": "清除同步" },
+  "btnClearSync": { "message": "清除云端" },
   "lblLocalVersion": { "message": "本地版本" },
   "lblCloudVersion": { "message": "云端版本" },
   "lblLastModified": { "message": "最后修改" },
