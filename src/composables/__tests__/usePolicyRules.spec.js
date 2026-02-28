@@ -53,12 +53,10 @@ describe('usePolicyRules', () => {
         }
       ])
       
-      validatePattern.mockReturnValue({ valid: true })
-      
-      const { validateRule, fetchingRuleSetIndex } = usePolicyRules(rules)
+      const { triggerRuleSetFetch } = usePolicyRules(rules)
       
       // Should trigger sendMessage to fetch
-      validateRule(0, rules.value[0])
+      triggerRuleSetFetch(0, rules.value[0])
       
       expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({
         type: 'FETCH_RULESET',
@@ -80,10 +78,8 @@ describe('usePolicyRules', () => {
         }
       ])
       
-      validatePattern.mockReturnValue({ valid: true })
-      
-      const { validateRule } = usePolicyRules(rules)
-      validateRule(0, rules.value[0])
+      const { triggerRuleSetFetch } = usePolicyRules(rules)
+      triggerRuleSetFetch(0, rules.value[0])
       
       expect(rules.value[0].ruleSet.fetchError).toBeNull()
       expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({
@@ -106,10 +102,8 @@ describe('usePolicyRules', () => {
         }
       ])
       
-      validatePattern.mockReturnValue({ valid: true })
-      
-      const { validateRule } = usePolicyRules(rules)
-      validateRule(0, rules.value[0])
+      const { triggerRuleSetFetch } = usePolicyRules(rules)
+      triggerRuleSetFetch(0, rules.value[0])
       
       expect(rules.value[0].ruleSet.fetchError).toBe('Network Error')
       expect(chrome.runtime.sendMessage).not.toHaveBeenCalled()

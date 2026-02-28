@@ -174,6 +174,7 @@ import { t } from '../../common/i18n'
 import { toast } from '../../options/utils/toast'
 import { decodeRuleSetContent } from '../../common/ruleset'
 import { usePolicyRules } from '../../composables/usePolicyRules'
+import { savePolicies } from '../../common/storage'
 
 // Components
 import RuleSetContentModal from '../rule/RuleSetContentModal.vue'
@@ -233,13 +234,32 @@ const {
   insertDividerBelow,
   deleteRule,
   fetchRuleSetContent,
+  triggerRuleSetFetch,
   dragOverIndex,
   handleDragStart,
   handleDragOver,
   handleDrop,
   handleDragEnd
 } = usePolicyRules(localRules, {
-  defaultProxyId: props.isReject ? 'reject' : 'direct'
+  defaultProxyId: props.isReject ? 'reject' : 'direct',
+  onRuleSetFetched: async (rule, index) => {
+    const savedPolicy = props.config?.policies?.[props.policyId]
+    if (!savedPolicy) return
+    
+    // Check both normal and reject rules arrays
+    let savedRule = null
+    if (savedPolicy.rules) {
+      savedRule = savedPolicy.rules.find((r) => r.id === rule.id)
+    }
+    if (!savedRule && savedPolicy.rejectRules) {
+      savedRule = savedPolicy.rejectRules.find((r) => r.id === rule.id)
+    }
+
+    if (savedRule && savedRule.pattern === rule.pattern) {
+      savedRule.ruleSet = JSON.parse(JSON.stringify(rule.ruleSet))
+      await savePolicies(props.config.policies, true, true)
+    }
+  }
 })
 
 const showAutoProxyPreview = ref(false)
@@ -272,9 +292,8 @@ const handleRuleTypeChange = (index, rule) => {
 const handleRuleBlur = (index, rule) => {
   focusedIndex.value = null
   nextTick(() => {
-    // We must validate the *latest* rule from localRules because @input update:rule 
-    // might still be queuing its reactive flush during the exact moment @blur fires.
     validateRule(index, localRules.value[index])
+    triggerRuleSetFetch(index, localRules.value[index])
   })
 }
 
@@ -395,6 +414,7 @@ const handleSmartMerge = ({ conflictMode, rules: mergedRules }) => {
 
 // Expose internal revalidation if needed (optional)
 defineExpose({
-  revalidateAllRules
+  revalidateAllRules,
+  fetchRuleSetContent
 })
 </script>

@@ -108,6 +108,7 @@
 
     <!-- Normal Rules Section -->
     <PolicyRuleList
+      ref="normalRulesRef"
       v-model="policy.rules"
       :title="$t('phHeaderNormalRules')"
       :config="config"
@@ -119,6 +120,7 @@
 
     <!-- Reject Rules Section -->
     <PolicyRuleList
+      ref="rejectRulesRef"
       v-model="policy.rejectRules"
       :title="$t('phHeaderRejectRules')"
       :config="config"
@@ -187,6 +189,8 @@ const router = useRouter()
 const config = ref(null)
 const policy = ref({ rules: [], rejectRules: [] })
 const originalPolicy = ref({})
+const normalRulesRef = ref(null)
+const rejectRulesRef = ref(null)
 
 // UI States
 const showRenameModal = ref(false)
@@ -256,6 +260,28 @@ watch(
 const resetChanges = () => loadPolicyData()
 const saveChanges = async () => {
   if (!config.value || !policy.value) return
+
+  const fetchPromises = []
+  const fetchFromList = (ruleList, listRef) => {
+    if (!listRef) return
+    ruleList.forEach((r, index) => {
+      if (r.ruleType === 'ruleset' && r.pattern && r.pattern.trim()) {
+        const url = r.pattern.trim()
+        if (!r.ruleSet?.content || r.ruleSet?.url !== url) {
+          fetchPromises.push(listRef.fetchRuleSetContent(index, url))
+        }
+      }
+    })
+  }
+
+  fetchFromList(policy.value.rules, normalRulesRef.value)
+  fetchFromList(policy.value.rejectRules, rejectRulesRef.value)
+
+  if (fetchPromises.length > 0) {
+    toast.info(t('msgFetchingRuleSets'))
+    await Promise.allSettled(fetchPromises)
+  }
+
   policy.value.rejectRules.forEach((r) => {
     if (r.type === 'rule') r.proxyId = 'reject'
   })

@@ -526,6 +526,8 @@
   "afmRoundFixed": { "message": "Newly routed" },
   "afmLabelFixedWithRound": { "message": "Routed Domains" },
   "lblUpdate": { "message": "Update" },
+  "lblEmpty": { "message": "Empty" },
+  "msgFetchingRuleSets": { "message": "Fetching pending RuleSets..." },
   "lblLastUpdated": { "message": "Updated:" },
   "lblView": { "message": "View" },
   "lblTabClosed": { "message": "Closed" }

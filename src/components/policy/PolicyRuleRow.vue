@@ -46,16 +46,21 @@
 
     <div style="width: 44%" class="pt-1">
       <div v-if="rule.ruleType === 'ruleset'" class="w-100 d-flex flex-column pb-0.5">
-        <input
-          :value="rule.pattern"
-          @input="update('pattern', $event.target.value)"
-          type="text"
-          placeholder="https://example.com/rules.txt"
-          class="form-control ui-input ui-input-sm w-100 mw-100 rounded py-0 px-2 font-monospace"
-          :style="`${isDuplicate ? ' border-color: var(--bs-primary) !important;' : hasError ? ' border-color: var(--ui-danger) !important;' : ''}`"
-          @focus="$emit('focus')"
-          @blur="$emit('blur')"
-        />
+        <div class="position-relative w-100">
+          <input
+            :value="rule.pattern"
+            @input="update('pattern', $event.target.value)"
+            type="text"
+            placeholder="https://example.com/rules.txt"
+            class="form-control ui-input ui-input-sm w-100 mw-100 rounded py-0 px-2 font-monospace"
+            :style="`${isDuplicate ? ' border-color: var(--bs-primary) !important;' : hasError ? ' border-color: var(--ui-danger) !important;' : ''} padding-right: 50px;`"
+            @focus="$emit('focus')"
+            @blur="$emit('blur')"
+          />
+          <div v-if="!rule.ruleSet?.content && !isFetching && !rule.ruleSet?.fetchError" class="position-absolute h-100 d-flex align-items-center pe-none" style="right: 8px; top: 0;">
+            <span class="badge bg-secondary-subtle ui-text-secondary border text-xxs fw-normal px-1 py-0.5" style="font-size: 9px">{{ $t('lblEmpty') || 'Empty' }}</span>
+          </div>
+        </div>
         <div class="w-100 d-flex align-items-center justify-content-between px-1 mt-1" style="font-size: 10px; line-height: 1;">
           <div class="ui-text-secondary w-75 text-truncate" :title="rule.ruleSet?.fetchError || ''">
             <span v-if="rule.ruleSet?.lastUpdated">

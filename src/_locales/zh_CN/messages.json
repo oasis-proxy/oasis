@@ -510,6 +510,8 @@
   "afmRoundFixed": { "message": "本轮新增路由" },
   "afmLabelFixedWithRound": { "message": "已路由域名" },
   "lblUpdate": { "message": "更新" },
+  "lblEmpty": { "message": "空规则" },
+  "msgFetchingRuleSets": { "message": "正在获取未缓存的规则集..." },
   "lblLastUpdated": { "message": "更新时间：" },
   "lblView": { "message": "查看" },
   "lblTabClosed": { "message": "已关闭" }
