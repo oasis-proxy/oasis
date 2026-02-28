@@ -276,11 +276,12 @@ const handleRuleBlur = (index, rule) => {
 const openRuleSetModal = (rule, index) => {
   if (!rule.ruleSet?.content) {
     toast.warning('No content available for this RuleSet yet.')
-    fetchRuleSetContent(index, rule.pattern)
+    const url = (rule.pattern || '').trim()
+    fetchRuleSetContent(index, url)
     return
   }
   selectedRuleSetContent.value = decodeRuleSetContent(rule.ruleSet.content)
-  selectedRuleSetUrl.value = rule.ruleSet.url || rule.pattern
+  selectedRuleSetUrl.value = rule.ruleSet.url || (rule.pattern || '').trim()
   selectedRuleSetLastUpdated.value = rule.ruleSet.lastUpdated
   selectedRuleSetIndex.value = index
   showRuleSetModal.value = true
@@ -290,7 +291,7 @@ const handleRuleSetUpdate = async () => {
   if (selectedRuleSetIndex.value !== null) {
     const index = selectedRuleSetIndex.value
     const rule = localRules.value[index]
-    const url = rule.ruleSet?.url || rule.pattern
+    const url = rule.ruleSet?.url || (rule.pattern || '').trim()
     if (!url) return
 
     await fetchRuleSetContent(index, url, true)

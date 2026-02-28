@@ -17,11 +17,18 @@ export function usePolicyRules(rulesRef, options = {}) {
 
       // Auto-fetch ruleset content if it's a valid new/modified ruleset URL
       if (rule.ruleType === 'ruleset' && rule.pattern?.trim()) {
-        const needsFetch = !rule.ruleSet?.content || rule.ruleSet?.url !== rule.pattern
-        const hasFailedRecently = rule.ruleSet?.fetchError && rule.ruleSet?.url === rule.pattern
+        const url = rule.pattern.trim()
+        const needsFetch = !rule.ruleSet?.content || rule.ruleSet?.url !== url
+        
+        // If the URL has changed, we should reset the fetch error so it tries again
+        if (rule.ruleSet?.url !== url) {
+          if (rule.ruleSet) rule.ruleSet.fetchError = null
+        }
+
+        const hasFailedRecently = rule.ruleSet?.fetchError && rule.ruleSet?.url === url
 
         if (needsFetch && !hasFailedRecently) {
-          fetchRuleSetContent(index, rule.pattern)
+          fetchRuleSetContent(index, url)
         }
       }
     } else {
@@ -105,18 +112,27 @@ export function usePolicyRules(rulesRef, options = {}) {
   const fetchRuleSetContent = async (index, url, force = false) => {
     if (!url) return
     const rule = rulesRef.value[index]
+    if (!rule) return
+    if (!rule.ruleSet) rule.ruleSet = {}
+    
     if (!force && rule.ruleSet?.url === url && rule.ruleSet?.content) return
 
     fetchingRuleSetIndex.value = index
     try {
       const response = await chrome.runtime.sendMessage({ type: 'FETCH_RULESET', url })
       if (response?.success) {
-        rule.ruleSet = { url, content: response.content, lastUpdated: Date.now() }
+        rule.ruleSet = { url, content: response.content, lastUpdated: Date.now(), fetchError: null }
+      } else {
+        rule.ruleSet.fetchError = response?.error || 'Failed to fetch'
+        rule.ruleSet.url = url
       }
     } catch (e) {
       console.error('Fetch ruleset error', e)
+      rule.ruleSet.fetchError = e.message
+      rule.ruleSet.url = url
     } finally {
       fetchingRuleSetIndex.value = null
+      if (onRulesChanged) onRulesChanged()
     }
   }
 
