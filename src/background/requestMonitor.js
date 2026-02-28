@@ -37,13 +37,33 @@ async function shouldMonitorRequest() {
   }
 }
 
-// Forward request start to Monitor page (only if auto policy active and monitoring enabled)
 async function onRequestStartHandler(details) {
   if (details.tabId === -1) return
   if (!details.url.startsWith('http://') && !details.url.startsWith('https://')) return
 
   const { shouldMonitor } = await shouldMonitorRequest()
   if (!shouldMonitor) return
+
+  // STRICT TAB FILTERING: Only record requests if the tab ITSELF is an HTTP/HTTPS page.
+  try {
+    const tab = await chrome.tabs.get(details.tabId)
+    let tabUrl = tab.url || tab.pendingUrl || ''
+    
+    const isHttpTab = tabUrl.startsWith('http://') || tabUrl.startsWith('https://')
+
+    // If the tab is not an HTTP tab (e.g., chrome://newtab, empty, etc.), we generally drop its requests.
+    // However, if the tab is transitioning FROM a non-HTTP page TO a real webpage,
+    // (e.g., typing a URL in chrome://newtab), the main_frame request will have a valid HTTP URL
+    // while the tab URL might still temporarily read as chrome://newtab or be empty.
+    // In this specific transition case, we allow the request to pass.
+    if (!isHttpTab) {
+      if (details.type !== 'main_frame') {
+        return // Drop all background noise from non-HTTP tabs
+      }
+    }
+  } catch (e) {
+    // If we can't get the tab info (e.g. it closed), we let the UI handle fallback logic
+  }
 
   broadcastToMonitor({
     type: 'REQUEST_STARTED',

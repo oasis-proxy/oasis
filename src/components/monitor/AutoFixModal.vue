@@ -44,11 +44,10 @@
           type="range"
           min="1"
           max="15"
-          class="w-100"
-          style="accent-color: var(--ui-primary)"
+          class="form-range"
         />
         <div class="d-flex justify-content-between text-xs ui-text-tertiary">
-          <span>1</span><span>8</span><span>15</span>
+          <span>1</span><span>15</span>
         </div>
       </div>
 
@@ -70,11 +69,10 @@
           min="5"
           max="60"
           step="5"
-          class="w-100"
-          style="accent-color: var(--ui-primary)"
+          class="form-range"
         />
         <div class="d-flex justify-content-between text-xs ui-text-tertiary">
-          <span>5s</span><span>30s</span><span>60s</span>
+          <span>5s</span><span>60s</span>
         </div>
       </div>
 

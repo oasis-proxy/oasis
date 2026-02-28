@@ -14,43 +14,59 @@ export function useMonitorData(historyLimit, matchFn) {
   }
 
   function isHttpTab(url) {
-    return typeof url === 'string' && (url.startsWith('http://') || url.startsWith('https://'))
+    if (!url || typeof url !== 'string') return false
+    return url.startsWith('http://') || url.startsWith('https://')
   }
 
-  async function updateTabInfo(tabId) {
+  async function updateTabInfo(tabId, fallbackUrl) {
     try {
       const tab = await chrome.tabs.get(tabId)
-      // Only track http/https tabs — skip chrome://, chrome-extension://, etc.
-      const url = tab.url || tab.pendingUrl || ''
+      let url = tab.url || tab.pendingUrl || ''
+      
+      // If the URL isn't HTTP, but we have a valid fallback (e.g., from a main_frame request)
+      // we use it to initialize the tab.
+      if (!isHttpTab(url) && fallbackUrl && isHttpTab(fallbackUrl)) {
+        url = fallbackUrl
+      }
+      
+      // Final validation
       if (!isHttpTab(url)) return
+
       tabs.value[tabId] = {
         id: tabId,
         title: tab.title,
         url,
         favIconUrl: tab.favIconUrl,
-        lastActivity: Date.now(),
-        requestCount: (tabs.value[tabId]?.requestCount || 0) + 1
+        lastActivity: Date.now()
       }
     } catch {
       // chrome.tabs.get failed — tab is likely closed.
-      // Preserve any previously stored title/URL so the sidebar still shows
-      // meaningful info for closed tabs.
       const existing = tabs.value[tabId]
-      // If we never tracked this tab (no existing entry), skip it.
       if (!existing) return
       tabs.value[tabId] = {
-        id: tabId,
-        title: existing.title || `Tab ${tabId}`,
-        url: existing.url || '',
-        favIconUrl: existing.favIconUrl || '',
+        ...existing,
         lastActivity: Date.now(),
-        requestCount: (existing.requestCount || 0) + 1,
         closed: existing.closed ?? false
       }
     }
   }
 
-  function addRequest(request) {
+  async function addRequest(request) {
+    // Rely mostly on background filter, but handle any edge cases where
+    // a non-HTTP transition isn't caught.
+    let tabUrl = ''
+    try {
+      const tab = await chrome.tabs.get(request.tabId)
+      tabUrl = tab.url || tab.pendingUrl || ''
+    } catch {}
+
+    const isHttp = isHttpTab(tabUrl)
+    
+    // If it's a completely new tab that isn't HTTP yet, we only track it
+    // if this request is representing the navigation to a new valid page.
+    if (!isHttp && request.type !== 'main_frame' && !tabs.value[request.tabId]) {
+      return // Drop background noise from non-HTTP idle tabs
+    }
     const { rule, proxy, ruleSource } = matchFn(request.url)
     request.matchedRule = rule
     request.proxyUsed = proxy
@@ -64,12 +80,12 @@ export function useMonitorData(historyLimit, matchFn) {
       const requestDomain = getHostname(request.url)
       const tabDomain = getHostname(existingTab.url)
       if (requestDomain && tabDomain && requestDomain !== tabDomain) {
-        updateTabInfo(request.tabId)
+        updateTabInfo(request.tabId, request.url)
       } else {
         existingTab.lastActivity = request.startTime
       }
     } else {
-      updateTabInfo(request.tabId)
+      updateTabInfo(request.tabId, request.url)
     }
 
     while (requests.value.length > historyLimit.value) {

@@ -163,7 +163,7 @@ const isAutoPolicyActive = computed(() => {
 })
 const sortedTabs = computed(() =>
   Object.values(tabs.value)
-    .filter((tab) => tab.requestCount > 0)
+    .filter((tab) => getTabRequestCount(tab.id) > 0)
     .sort((a, b) => b.lastActivity - a.lastActivity)
 )
 const totalRequestCount = computed(() => requests.value.length)
