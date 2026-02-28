@@ -270,7 +270,11 @@ const handleRuleTypeChange = (index, rule) => {
 
 const handleRuleBlur = (index, rule) => {
   focusedIndex.value = null
-  validateRule(index, rule)
+  nextTick(() => {
+    // We must validate the *latest* rule from localRules because @input update:rule 
+    // might still be queuing its reactive flush during the exact moment @blur fires.
+    validateRule(index, localRules.value[index])
+  })
 }
 
 const openRuleSetModal = (rule, index) => {
