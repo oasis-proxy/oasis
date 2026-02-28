@@ -145,7 +145,7 @@
   "msgNoTagsDefined": { "message": "尚未定义标签。" },
   "msgUpdateAllSuccess": { "message": "已成功更新外部策略" },
   "msgUpdateAllFailed": { "message": "更新外部策略失败" },
-  "btnUpdateAllRuleSets": { "message": "更新外部策略" },
+  "btnUpdateAllRuleSets": { "message": "更新" },
   "lblUpdateAllRules": { "message": "更新外部策略" },
   "descUpdateAllRules": { "message": "立即获取并更新所有策略中的远程 PAC 脚本和规则集。" },
   "phDefault": { "message": "默认" },

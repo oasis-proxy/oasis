@@ -121,6 +121,7 @@ export async function clearConfig() {
 export async function exportConfig() {
   const config = await loadConfig()
   const payload = JSON.parse(JSON.stringify(config))
+  if (payload.activeProfileId) delete payload.activeProfileId
   optimizePayload(payload)
   return JSON.stringify(payload, null, 2)
 }

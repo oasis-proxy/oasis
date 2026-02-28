@@ -147,7 +147,7 @@
   "msgNoTagsDefined": { "message": "No tags defined." },
   "msgUpdateAllSuccess": { "message": "External policies updated successfully" },
   "msgUpdateAllFailed": { "message": "Failed to update external policies" },
-  "btnUpdateAllRuleSets": { "message": "Update External Policies" },
+  "btnUpdateAllRuleSets": { "message": "Update" },
   "lblUpdateAllRules": { "message": "Update External Policies" },
   "descUpdateAllRules": {
     "message": "Immediately fetch and update remote PAC scripts and RuleSets for all policies."
