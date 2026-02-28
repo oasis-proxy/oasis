@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { loadConfig, saveProxies } from '../common/storage'
 import { t } from '../common/i18n'
 import { toast } from '../options/utils/toast'
+import { isEqual } from '../common/utils/object'
 
 export function useProxyHost(id, router) {
   const proxy = ref(null)
@@ -62,7 +63,7 @@ export function useProxyHost(id, router) {
 
   const isDirty = computed(() => {
     if (!proxy.value || !originalProxy.value) return false
-    return JSON.stringify(proxy.value) !== JSON.stringify(originalProxy.value)
+    return !isEqual(proxy.value, originalProxy.value)
   })
 
   const saveChanges = async () => {

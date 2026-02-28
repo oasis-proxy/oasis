@@ -509,5 +509,8 @@
   "afmRoundCaptured": { "message": "本轮捕获错误" },
   "afmRoundFixed": { "message": "本轮新增路由" },
   "afmLabelFixedWithRound": { "message": "已路由域名" },
+  "lblUpdate": { "message": "更新" },
+  "lblLastUpdated": { "message": "更新时间：" },
+  "lblView": { "message": "查看" },
   "lblTabClosed": { "message": "已关闭" }
 }

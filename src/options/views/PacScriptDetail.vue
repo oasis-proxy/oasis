@@ -233,6 +233,7 @@ import { registerUnsavedChangesChecker, unregisterUnsavedChangesChecker } from '
 import { loadConfig, savePacs } from '../../common/storage'
 import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
+import { isEqual } from '../../common/utils/object'
 import ProxyRenameModal from '../../components/proxy/ProxyRenameModal.vue'
 import ProxyCloneModal from '../../components/proxy/ProxyCloneModal.vue'
 import ProxyDeleteModal from '../../components/proxy/ProxyDeleteModal.vue'
@@ -272,7 +273,7 @@ const loadPacData = async () => {
 // Dirty State
 const isDirty = computed(() => {
   if (!pac.value || !originalPac.value) return false
-  return JSON.stringify(pac.value) !== JSON.stringify(originalPac.value)
+  return !isEqual(pac.value, originalPac.value)
 })
 
 onMounted(() => {

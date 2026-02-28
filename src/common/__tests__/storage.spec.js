@@ -56,7 +56,9 @@ describe('storage', () => {
       // loadConfig returns DEFAULT_CONFIG if empty
       const configStr = await exportConfig()
       const config = JSON.parse(configStr)
-      expect(config).toMatchObject(DEFAULT_CONFIG)
+      const expected = { ...DEFAULT_CONFIG }
+      delete expected.activeProfileId
+      expect(config).toMatchObject(expected)
     })
 
     it('should return stored config as JSON string', async () => {
@@ -70,7 +72,7 @@ describe('storage', () => {
       const config = JSON.parse(configStr)
 
       expect(config.version).toBe(2)
-      expect(config.activeProfileId).toBe('system')
+      expect(config.activeProfileId).toBeUndefined()
       expect(config.proxies).toEqual({ p1: { id: 'p1' } })
     })
   })

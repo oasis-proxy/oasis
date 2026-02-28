@@ -525,5 +525,8 @@
   "afmRoundCaptured": { "message": "Captured errors" },
   "afmRoundFixed": { "message": "Newly routed" },
   "afmLabelFixedWithRound": { "message": "Routed Domains" },
+  "lblUpdate": { "message": "Update" },
+  "lblLastUpdated": { "message": "Updated:" },
+  "lblView": { "message": "View" },
   "lblTabClosed": { "message": "Closed" }
 }

@@ -81,6 +81,7 @@
             @dragend="handleDragEnd"
             @type-change="handleRuleTypeChange(index, rule)"
             @open-ruleset="openRuleSetModal(rule, index)"
+            @update-ruleset="handleRuleSetForceUpdate(index, rule)"
             @focus="focusedIndex = index"
             @blur="handleRuleBlur(index, rule)"
             @add-below="insertRuleBelow(index)"
@@ -275,6 +276,12 @@ const handleRuleBlur = (index, rule) => {
     // might still be queuing its reactive flush during the exact moment @blur fires.
     validateRule(index, localRules.value[index])
   })
+}
+
+const handleRuleSetForceUpdate = async (index, rule) => {
+  const url = (rule.pattern || '').trim()
+  if (!url || rule.ruleType !== 'ruleset') return
+  await fetchRuleSetContent(index, url, true)
 }
 
 const openRuleSetModal = (rule, index) => {

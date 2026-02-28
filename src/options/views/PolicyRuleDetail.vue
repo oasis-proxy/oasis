@@ -170,6 +170,7 @@ import { loadConfig, savePolicies } from '../../common/storage'
 import { generatePacScriptFromPolicy } from '../../common/pac'
 import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
+import { isEqual } from '../../common/utils/object'
 import { usePolicyRules } from '../../composables/usePolicyRules'
 
 // Components
@@ -230,9 +231,7 @@ const sanitizeForDirtyCheck = (p) => {
 }
 
 const isDirty = computed(
-  () =>
-    JSON.stringify(sanitizeForDirtyCheck(policy.value)) !==
-    JSON.stringify(sanitizeForDirtyCheck(originalPolicy.value))
+  () => !isEqual(sanitizeForDirtyCheck(policy.value), sanitizeForDirtyCheck(originalPolicy.value))
 )
 
 onMounted(() => {

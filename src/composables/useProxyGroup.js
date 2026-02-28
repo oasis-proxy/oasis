@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { loadConfig, saveProxyGroups } from '../common/storage'
 import { t } from '../common/i18n'
 import { toast } from '../options/utils/toast'
+import { isEqual } from '../common/utils/object'
 import { useDragDrop } from '../common/dragDrop'
 
 export function useProxyGroup(route, router) {
@@ -81,7 +82,7 @@ export function useProxyGroup(route, router) {
 
   const isDirty = computed(() => {
     if (!proxyGroup.value || !originalGroup.value) return false
-    return JSON.stringify(proxyGroup.value) !== JSON.stringify(originalGroup.value)
+    return !isEqual(proxyGroup.value, originalGroup.value)
   })
 
   const saveChanges = async () => {

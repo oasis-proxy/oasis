@@ -3,6 +3,7 @@ import { loadConfig, savePolicies } from '../common/storage'
 import { validatePattern } from '../common/validation'
 import { t } from '../common/i18n'
 import { toast } from '../options/utils/toast'
+import { isEqual } from '../common/utils/object'
 
 export function useTempRules() {
   const rules = ref([])
@@ -33,7 +34,7 @@ export function useTempRules() {
   }
 
   const isDirty = computed(
-    () => JSON.stringify(rules.value) !== JSON.stringify(originalRules.value)
+    () => !isEqual(rules.value, originalRules.value)
   )
 
   const activeAutoPolicyId = computed(() => {
