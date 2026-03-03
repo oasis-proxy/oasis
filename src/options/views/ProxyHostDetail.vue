@@ -262,7 +262,8 @@ const {
   handleRename,
   handleClone,
   handleDelete,
-  resetChanges
+  resetChanges,
+  checkUsage
 } = useProxyHost(route.params.id, router)
 
 // Helper computed properties
@@ -305,19 +306,7 @@ const getPortPlaceholder = (scheme) =>
   scheme === 'https' ? '443' : ['socks4', 'socks5'].includes(scheme) ? '1080' : '8080'
 
 const openDeleteModal = () => {
-  const proxyId = proxy.value.id
-  const usedInPolicies = []
-  if (config.value?.policies) {
-    Object.values(config.value.policies).forEach((policy) => {
-      if (
-        policy.defaultProfileId === proxyId ||
-        (policy.rules && policy.rules.some((rule) => rule.proxyId === proxyId))
-      )
-        usedInPolicies.push(policy.name || 'Unnamed Policy')
-    })
-  }
-  if (usedInPolicies.length > 0)
-    return toast.warning(`${t('phMsgDeleteUsed')} ${usedInPolicies.join(', ')}`)
+  if (checkUsage()) return
   showDeleteModal.value = true
 }
 

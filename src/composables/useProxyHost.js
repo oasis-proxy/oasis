@@ -123,8 +123,50 @@ export function useProxyHost(id, router) {
     router.push(`/host/${newId}`)
   }
 
+  const checkUsage = () => {
+    if (!proxy.value || !config.value) return false
+    const proxyId = proxy.value.id
+    
+    // Check usage in policies
+    const usedInPolicies = []
+    if (config.value?.policies) {
+      Object.values(config.value.policies).forEach((policy) => {
+        const isDefault = policy.defaultProfileId === proxyId
+        const isRuleProxy = policy.rules && policy.rules.some((rule) => rule.proxyId === proxyId)
+        if (isDefault || isRuleProxy) {
+          usedInPolicies.push(policy.name || 'Unnamed Policy')
+        }
+      })
+    }
+    
+    // Check usage in proxy groups
+    const usedInGroups = []
+    if (config.value?.proxyGroups) {
+      Object.values(config.value.proxyGroups).forEach((group) => {
+        if (group.proxies && group.proxies.includes(proxyId)) {
+          usedInGroups.push(group.name || 'Unnamed Group')
+        }
+      })
+    }
+
+    if (usedInGroups.length > 0) {
+      toast.warning(`${t('phMsgDeleteUsedGroup')} ${usedInGroups.join(', ')}`)
+      return true
+    }
+
+    if (usedInPolicies.length > 0) {
+      toast.warning(`${t('phMsgDeleteUsed')} ${usedInPolicies.join(', ')}`)
+      return true
+    }
+
+    return false
+  }
+
   const handleDelete = async () => {
     if (!proxy.value || !config.value) return
+    
+    if (checkUsage()) return
+
     delete config.value.proxies[proxy.value.id]
     await saveProxies(config.value.proxies)
     toast.success(t('phMsgDeleted'))
@@ -140,6 +182,7 @@ export function useProxyHost(id, router) {
     handleRename,
     handleClone,
     handleDelete,
-    resetChanges: loadProxyData
+    resetChanges: loadProxyData,
+    checkUsage
   }
 }

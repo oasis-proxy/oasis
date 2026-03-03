@@ -139,7 +139,12 @@
   "phMsgSaved": { "message": "Proxy saved successfully" },
   "phMsgRenameDirty": { "message": "Please save or reset your changes before renaming" },
   "phMsgCloneDirty": { "message": "Please save or reset your changes before cloning" },
-  "phMsgDeleteUsed": { "message": "Cannot delete proxy. It is used by:" },
+  "phMsgDeleteUsed": {
+    "message": "This proxy cannot be deleted because it is used by the following policies:"
+  },
+  "phMsgDeleteUsedGroup": {
+    "message": "This proxy cannot be deleted because it is used by the following proxy groups:"
+  },
   "phMsgRenamed": { "message": "Proxy renamed successfully" },
   "phMsgCloned": { "message": "Proxy cloned successfully" },
   "phMsgDeleted": { "message": "Proxy deleted successfully" },
