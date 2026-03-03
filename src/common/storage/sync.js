@@ -6,15 +6,19 @@ import { loadConfig, saveConfig } from './core'
  * Optimize config payload by stripping cached content.
  */
 export function optimizePayload(config) {
+  const stripRuleSetContent = (rules) => {
+    if (!Array.isArray(rules)) return
+    rules.forEach((rule) => {
+      if (rule.ruleType === 'ruleset' && rule.ruleSet) {
+        delete rule.ruleSet.content
+      }
+    })
+  }
+
   if (config.policies) {
     Object.values(config.policies).forEach((policy) => {
-      if (policy.rules && Array.isArray(policy.rules)) {
-        policy.rules.forEach((rule) => {
-          if (rule.ruleType === 'ruleset' && rule.ruleSet) {
-            delete rule.ruleSet.content
-          }
-        })
-      }
+      stripRuleSetContent(policy.rules)
+      stripRuleSetContent(policy.rejectRules)
     })
   }
   if (config.pacs) {
@@ -32,54 +36,56 @@ export function optimizePayload(config) {
 export async function hydrateConfig(config) {
   const localConfig = await loadConfig().catch(() => null)
   const promises = []
+
+  const findLocalRulesetCache = (url) => {
+    if (!localConfig?.policies) return null
+    for (const policy of Object.values(localConfig.policies)) {
+      const candidates = [...(policy.rules || []), ...(policy.rejectRules || [])]
+      const match = candidates.find(
+        (r) => r.ruleType === 'ruleset' && r.pattern === url && r.ruleSet?.content
+      )
+      if (match) return match.ruleSet
+    }
+    return null
+  }
+
+  const hydrateRuleList = (rules) => {
+    if (!Array.isArray(rules)) return
+    rules.forEach((rule) => {
+      if (
+        rule.ruleType === 'ruleset' &&
+        rule.pattern &&
+        rule.pattern.trim() &&
+        (!rule.ruleSet || !rule.ruleSet.content)
+      ) {
+        const url = rule.pattern.trim()
+        if (!rule.ruleSet) rule.ruleSet = {}
+        promises.push(
+          fetchRuleSetContent(url).then((result) => {
+            if (!result.fetchError) {
+              rule.ruleSet.content = result.content
+              rule.ruleSet.fetchError = null
+              rule.ruleSet.lastUpdated = result.lastUpdated
+            } else {
+              rule.ruleSet.fetchError = result.fetchError
+              const foundCache = findLocalRulesetCache(url)
+              if (foundCache) {
+                rule.ruleSet.content = foundCache.content
+                rule.ruleSet.lastUpdated = foundCache.lastUpdated
+              }
+            }
+            rule.ruleSet.url = url
+            rule.ruleSet.lastFetched = result.lastFetched
+          })
+        )
+      }
+    })
+  }
+
   if (config.policies) {
     Object.values(config.policies).forEach((policy) => {
-      // Find matching local policy to use as fallback
-      const localPolicy = localConfig?.policies?.[policy.id]
-      if (policy.rules && Array.isArray(policy.rules)) {
-        policy.rules.forEach((rule) => {
-          if (
-            rule.ruleType === 'ruleset' &&
-            rule.pattern &&
-            rule.pattern.trim() &&
-            (!rule.ruleSet || !rule.ruleSet.content)
-          ) {
-            const url = rule.pattern.trim()
-            if (!rule.ruleSet) rule.ruleSet = {}
-            promises.push(
-              fetchRuleSetContent(url).then((result) => {
-                if (!result.fetchError) {
-                  rule.ruleSet.content = result.content
-                  rule.ruleSet.fetchError = null
-                  rule.ruleSet.lastUpdated = result.lastUpdated
-                } else {
-                  // Fallback to local cache if download fails
-                  rule.ruleSet.fetchError = result.fetchError
-                  // Try to find ANY matching ruleset cache locally by URL
-                  let foundCache = null
-                  if (localConfig?.policies) {
-                    for (const p of Object.values(localConfig.policies)) {
-                      const match = p.rules?.find(
-                        (r) => r.ruleType === 'ruleset' && r.pattern === url && r.ruleSet?.content
-                      )
-                      if (match) {
-                        foundCache = match.ruleSet
-                        break
-                      }
-                    }
-                  }
-                  if (foundCache) {
-                    rule.ruleSet.content = foundCache.content
-                    rule.ruleSet.lastUpdated = foundCache.lastUpdated
-                  }
-                }
-                rule.ruleSet.url = url
-                rule.ruleSet.lastFetched = result.lastFetched
-              })
-            )
-          }
-        })
-      }
+      hydrateRuleList(policy.rules)
+      hydrateRuleList(policy.rejectRules)
     })
   }
   if (config.pacs) {
@@ -240,10 +246,29 @@ export async function syncFromCloud(force = false) {
     const localVer = local.version || 1
     if (force || uniqueVersion > localVer) {
       const syncEnabled = local.sync.enabled
+      const localActiveProfileId = local.activeProfileId
+
       const newConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG))
       Object.assign(newConfig, cloudConfig)
+      
       if (!newConfig.sync) newConfig.sync = {}
       newConfig.sync.enabled = syncEnabled
+
+      const profileExists = (profileId) => {
+        if (!profileId) return false
+        if (profileId === 'direct' || profileId === 'system' || profileId === 'reject') return true
+        if (newConfig.proxies && newConfig.proxies[profileId]) return true
+        if (newConfig.proxyGroups && newConfig.proxyGroups[profileId]) return true
+        if (newConfig.pacs && newConfig.pacs[profileId]) return true
+        if (newConfig.policies && newConfig.policies[profileId]) return true
+        return false
+      }
+
+      if (profileExists(localActiveProfileId)) {
+        newConfig.activeProfileId = localActiveProfileId
+      } else {
+        newConfig.activeProfileId = 'direct'
+      }
 
       await hydrateConfig(newConfig)
       await saveConfig(newConfig, true)

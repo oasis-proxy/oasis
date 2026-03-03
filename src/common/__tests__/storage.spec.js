@@ -207,5 +207,87 @@ describe('storage', () => {
       expect(rule.ruleSet.content).toBe('cached-content')
       expect(rule.ruleSet.fetchError).toBe('Network Error')
     })
+
+    it('should fetch ruleset content for rejectRules', async () => {
+      const { fetchRuleSetContent } = await import('../ruleset')
+      fetchRuleSetContent.mockResolvedValue({
+        content: 'reject-mock-content',
+        lastUpdated: 3000,
+        lastFetched: 3000,
+        fetchError: null
+      })
+
+      const config = {
+        policies: {
+          p1: {
+            id: 'p1',
+            rules: [],
+            rejectRules: [{ ruleType: 'ruleset', pattern: 'https://example.com/reject-rules.txt' }]
+          }
+        }
+      }
+
+      const { hydrateConfig } = await import('../storage/sync')
+      await hydrateConfig(config)
+
+      const rule = config.policies.p1.rejectRules[0]
+      expect(fetchRuleSetContent).toHaveBeenCalledWith('https://example.com/reject-rules.txt')
+      expect(rule.ruleSet.content).toBe('reject-mock-content')
+      expect(rule.ruleSet.url).toBe('https://example.com/reject-rules.txt')
+    })
+  })
+
+  describe('syncFromCloud', () => {
+    it('should preserve local activeProfileId if it still exists in cloud config', async () => {
+      storageLocal.get
+        .mockResolvedValueOnce({
+          config: { version: 1, sync: { enabled: true }, activeProfileId: 'policy_local' },
+          policies: { policy_local: { id: 'policy_local', rules: [], rejectRules: [] } }
+        })
+        .mockResolvedValueOnce({})
+
+      storageSync.get.mockResolvedValue({
+        sync_meta: { count: 1, version: 2 },
+        sync_chunk_0: JSON.stringify({
+          version: 2,
+          activeProfileId: 'policy_cloud',
+          policies: { policy_local: { id: 'policy_local', rules: [], rejectRules: [] } }
+        })
+      })
+
+      const { syncFromCloud } = await import('../storage/sync')
+      const success = await syncFromCloud(true)
+
+      expect(success).toBe(true)
+      const savedConfig = storageLocal.set.mock.calls[0][0].config
+      expect(savedConfig.activeProfileId).toBe('policy_local')
+      expect(savedConfig.sync.enabled).toBe(true)
+    })
+
+    it('should fallback activeProfileId to direct if local active profile no longer exists', async () => {
+      storageLocal.get
+        .mockResolvedValueOnce({
+          config: { version: 1, sync: { enabled: true }, activeProfileId: 'policy_missing' },
+          policies: { policy_missing: { id: 'policy_missing', rules: [], rejectRules: [] } }
+        })
+        .mockResolvedValueOnce({})
+
+      storageSync.get.mockResolvedValue({
+        sync_meta: { count: 1, version: 2 },
+        sync_chunk_0: JSON.stringify({
+          version: 2,
+          activeProfileId: 'policy_cloud',
+          policies: { policy_cloud: { id: 'policy_cloud', rules: [], rejectRules: [] } }
+        })
+      })
+
+      const { syncFromCloud } = await import('../storage/sync')
+      const success = await syncFromCloud(true)
+
+      expect(success).toBe(true)
+      const savedConfig = storageLocal.set.mock.calls[0][0].config
+      expect(savedConfig.activeProfileId).toBe('direct')
+      expect(savedConfig.sync.enabled).toBe(true)
+    })
   })
 })

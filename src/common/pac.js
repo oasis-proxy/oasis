@@ -256,6 +256,29 @@ export function generatePacScriptFromPolicy(
     rejectRules.forEach((rule) => {
       if (rule.type === 'divider') return
       if (rule.valid === false) return
+
+      if (rule.ruleType === 'ruleset') {
+        const ruleSetContent = rule.ruleSet?.content || ''
+        if (ruleSetContent) {
+          try {
+            const parsedRules = parseAutoProxyRules(ruleSetContent)
+            const internalRules = convertAutoProxyToInternalRules(parsedRules)
+            // Ignore whitelist rules (@@) entirely for reject rulesets
+            internalRules
+              .filter((r) => !r.isWhitelist)
+              .forEach((expandedRule) => {
+                const condition = generateRuleCondition(expandedRule)
+                if (condition) {
+                  block += `  if (${condition}) return "${rejectStr}";\n`
+                }
+              })
+          } catch (e) {
+            console.error('Error parsing RuleSet:', e)
+          }
+        }
+        return
+      }
+
       const condition = generateRuleCondition(rule)
       if (condition) {
         block += `  if (${condition}) return "${rejectStr}";\n`
@@ -270,6 +293,31 @@ export function generatePacScriptFromPolicy(
     let block = `  // Temporary Rules\n`
     tempRules.forEach((rule) => {
       if (rule.valid === false) return
+
+      if (rule.ruleType === 'ruleset') {
+        const ruleSetContent = rule.ruleSet?.content || ''
+        if (ruleSetContent) {
+          try {
+            const parsedRules = parseAutoProxyRules(ruleSetContent)
+            const internalRules = convertAutoProxyToInternalRules(parsedRules)
+            // Ignore whitelist rules (@@) entirely for temporary rulesets
+            internalRules
+              .filter((r) => !r.isWhitelist)
+              .forEach((expandedRule) => {
+                const condition = generateRuleCondition(expandedRule)
+                if (condition) {
+                  block += `  if (${condition}) {\n`
+                  block += generateProtocolBasedReturn(rule.proxyId, '    ')
+                  block += `  }\n`
+                }
+              })
+          } catch (e) {
+            console.error('Error parsing RuleSet:', e)
+          }
+        }
+        return
+      }
+
       const condition = generateRuleCondition(rule)
       if (condition) {
         block += `  if (${condition}) {\n`
