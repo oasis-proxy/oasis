@@ -71,21 +71,21 @@ When syncing _to_ the cloud (Manual or Auto):
 graph TD
     A[Start: Trigger Sync To Cloud] --> B[Deep Copy Local Config];
     B --> C{Remove Local-Only Data};
-    C --> |Delete| D1[activeProfileId];
-    C --> |Delete| D2[sync preferences];
+    C -->|"Delete"| D1[activeProfileId];
+    C -->|"Delete"| D2[sync preferences];
 
     C --> E[Optimize Payload];
-    E --> |Strip| F1[RuleSet cached content];
-    E --> |Strip| F2[Remote PAC cached scripts];
+    E -->|"Strip"| F1[RuleSet cached content];
+    E -->|"Strip"| F2[Remote PAC cached scripts];
 
     E --> G[Serialize to JSON];
     G --> H[Calculate Chunks];
-    H --> |Split every 7000 chars| I[Generate sync_chunk_N];
+    H -->|"Split every 7000 chars"| I[Generate sync_chunk_N];
     I --> J[Generate sync_meta];
 
     J --> K{Check Cloud Version};
-    K -->|Conflict: Cloud > Local| L[Throw SYNC_CONFLICT Error];
-    K -->|OK| M[Remove Old Chunks from Chrome Sync];
+    K -->|"Conflict: Cloud > Local"| L[Throw SYNC_CONFLICT Error];
+    K -->|"OK"| M[Remove Old Chunks from Chrome Sync];
 
     M --> N[Save New Chunks to Chrome Sync];
     N --> O[Update Local Last Synced Version];
@@ -117,34 +117,34 @@ When syncing _from_ the cloud:
 graph TD
     A[Start: Trigger Sync From Cloud] --> B[Fetch Data from Chrome Sync Storage];
     B --> C{Verify sync_meta exists};
-    C -->|No| D[Check for legacy 'config' key];
-    D -->|Found| E[Use legacy config];
-    D -->|Not Found| F[End: No Cloud Data];
+    C -->|"No"| D[Check for legacy 'config' key];
+    D -->|"Found"| E[Use legacy config];
+    D -->|"Not Found"| F[End: No Cloud Data];
 
-    C -->|Yes| G[Assemble Config from sync_chunk_N];
+    C -->|"Yes"| G[Assemble Config from sync_chunk_N];
     G --> H[Parse Combined JSON];
 
     H --> I{Compare Versions};
     E --> I;
-    I -->|Cloud <= Local| J[End: Already Up To Date];
-    I -->|Cloud > Local or Force| K[Initialize DEFAULT_CONFIG];
+    I -->|"Cloud <= Local"| J[End: Already Up To Date];
+    I -->|"Cloud > Local or Force"| K[Initialize DEFAULT_CONFIG];
 
     K --> L[Merge Cloud Config into DEFAULT];
 
     L --> M[Restore Local-Only Data];
-    M --> |Preserve| N1[sync.enabled state];
-    M --> |Preserve if Exists| N2[local.activeProfileId];
+    M -->|"Preserve"| N1[sync.enabled state];
+    M -->|"Preserve if Exists"| N2[local.activeProfileId];
 
     M --> O[Hydrate Config Resources];
-    O --> |Fetch/Restore| P1[RuleSet Contents];
-    O --> |Fetch| P2[Remote PAC Scripts];
+    O -->|"Fetch/Restore"| P1[RuleSet Contents];
+    O -->|"Fetch"| P2[Remote PAC Scripts];
 
     O --> Q[Save Merged Config to Local Storage];
     Q --> R[chrome.storage.onChanged triggers in Background];
 
     R --> S[Load Latest Config];
     S --> T[Apply Proxy Settings to Browser];
-    T --> |Fallback| U[Defaults to 'direct' ONLY if previous profile was deleted];
+    T -->|"Fallback"| U[Defaults to 'direct' ONLY if previous profile was deleted];
     T --> V[Clear temporary rules ONLY IF activeProfileId changed];
 
     T --> W[Update Context Menus & Monitoring State];

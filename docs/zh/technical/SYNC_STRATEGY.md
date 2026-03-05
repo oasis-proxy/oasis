@@ -71,21 +71,21 @@ config.updatedAt = Date.now()
 graph TD
     A[开始: 触发向云端同步] --> B[深拷贝本地配置];
     B --> C{剔除仅保留在本地的数据};
-    C --> |删除| D1[activeProfileId (活跃策略ID)];
-    C --> |删除| D2[同步偏好设置];
+    C -->|"删除"| D1[activeProfileId (活跃策略ID)];
+    C -->|"删除"| D2[同步偏好设置];
 
     C --> E[优化 Payload 数据量];
-    E --> |剥离| F1[RuleSet 缓存内容];
-    E --> |剥离| F2[远程 PAC 缓存脚本];
+    E -->|"剥离"| F1[RuleSet 缓存内容];
+    E -->|"剥离"| F2[远程 PAC 缓存脚本];
 
     E --> G[序列化为 JSON];
     G --> H[计算分块];
-    H --> |每 7000 字符分割| I[生成 sync_chunk_N];
+    H -->|"每 7000 字符分割"| I[生成 sync_chunk_N];
     I --> J[生成 sync_meta (元数据)];
 
     J --> K{校验云端版本};
-    K -->|冲突: 云端 > 本地| L[抛出 SYNC_CONFLICT 冲突异常];
-    K -->|校验通过| M[从 Chrome Sync 中移除旧分块];
+    K -->|"冲突: 云端 > 本地"| L[抛出 SYNC_CONFLICT 冲突异常];
+    K -->|"校验通过"| M[从 Chrome Sync 中移除旧分块];
 
     M --> N[将新分块保存回 Chrome Sync];
     N --> O[更新本地的最后同步版本记录];
@@ -117,34 +117,34 @@ graph TD
 graph TD
     A[开始: 触发从云端同步] --> B[从 Chrome Sync Storage 获取数据];
     B --> C{检查 sync_meta 是否存在};
-    C -->|否| D[检查遗留的 'config' 键];
-    D -->|存在| E[使用遗留配置];
-    D -->|不存在| F[结束: 无云端数据];
+    C -->|"否"| D[检查遗留的 'config' 键];
+    D -->|"存在"| E[使用遗留配置];
+    D -->|"不存在"| F[结束: 无云端数据];
 
-    C -->|是| G[从 sync_chunk_N 组装配置];
+    C -->|"是"| G[从 sync_chunk_N 组装配置];
     G --> H[解析合并后的 JSON];
 
     H --> I{比对版本号};
     E --> I;
-    I -->|云端 <= 本地| J[结束: 已经是最新版本];
-    I -->|云端 > 本地 或 强制同步| K[初始化 DEFAULT_CONFIG];
+    I -->|"云端 <= 本地"| J[结束: 已经是最新版本];
+    I -->|"云端 > 本地 或 强制同步"| K[初始化 DEFAULT_CONFIG];
 
     K --> L[将云端配置合并入 DEFAULT_CONFIG];
 
     L --> M[恢复仅保留在本地的数据];
-    M --> |保留| N1[sync.enabled 状态];
-    M --> |如有仍然存在则保留| N2[local.activeProfileId];
+    M -->|"保留"| N1[sync.enabled 状态];
+    M -->|"如有仍然存在则保留"| N2[local.activeProfileId];
 
     M --> O[水合配置资源 (Hydrate)];
-    O --> |请求/本地恢复| P1[RuleSet 规则集内容];
-    O --> |请求| P2[远程 PAC 脚本内容];
+    O -->|"请求/本地恢复"| P1[RuleSet 规则集内容];
+    O -->|"请求"| P2[远程 PAC 脚本内容];
 
     O --> Q[将合并后的最终配置写入本地存储];
     Q --> R[触发 Background 中的 chrome.storage.onChanged];
 
     R --> S[重新加载最新本地配置];
     S --> T[将代理设置应用到浏览器];
-    T --> |回退补救| U[仅当找不到之前的配置时重置为 'direct'];
+    T -->|"回退补救"| U[仅当找不到之前的配置时重置为 'direct'];
     T --> V[仅当 activeProfileId 发生变化时清空临时规则];
 
     T --> W[更新右键菜单与连接监控状态];
