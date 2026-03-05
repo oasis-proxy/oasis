@@ -10,7 +10,6 @@
         background-color: rgba(15, 23, 42, 0.5);
         backdrop-filter: blur(4px);
       "
-      @click.self="!noBackdropClose && $emit('close')"
     >
       <!-- Modal Card -->
       <div
@@ -65,10 +64,6 @@ defineProps({
   titleClass: {
     type: String,
     default: ''
-  },
-  noBackdropClose: {
-    type: Boolean,
-    default: false
   }
 })
 

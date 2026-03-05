@@ -3,7 +3,6 @@
     :visible="visible"
     :title="$t('afmTitle')"
     maxWidth="580px"
-    :noBackdropClose="phase === 'running' && props.autoFix.status.value === 'running'"
     @close="handleClose"
   >
     <!-- ── CONFIG PHASE ── -->
