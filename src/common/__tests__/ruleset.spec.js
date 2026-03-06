@@ -132,4 +132,57 @@ describe('updatePolicyRuleSets', () => {
     expect(configuredRuleSet.lastUpdated).toBeNull() // Old timestamp should be purged
     expect(configuredRuleSet.fetchError).toBe('HTTP 404') // New error captured
   })
+
+  it('should preserve old content when fetch fails and isManual is false', async () => {
+    const policy = {
+      rules: [
+        {
+          ruleType: 'ruleset',
+          pattern: 'https://example.com/rules.txt',
+          ruleSet: {
+            url: 'https://example.com/rules.txt',
+            content: '[AutoProxy]\nOLD_CONTENT',
+            lastUpdated: 1234567890,
+            fetchError: null
+          }
+        }
+      ]
+    }
+    global.fetch.mockResolvedValue({ ok: false, status: 500 })
+
+    const result = await updatePolicyRuleSets(policy, false)
+
+    expect(result.changed).toBe(true)
+    const configuredRuleSet = policy.rules[0].ruleSet
+    expect(configuredRuleSet.content).toBe('[AutoProxy]\nOLD_CONTENT')
+    expect(configuredRuleSet.lastUpdated).toBe(1234567890)
+    expect(configuredRuleSet.fetchError).toBe('HTTP 500')
+  })
+
+  it('should clear old content when fetch fails and isManual is true', async () => {
+    const policy = {
+      rules: [
+        {
+          ruleType: 'ruleset',
+          pattern: 'https://example.com/rules.txt',
+          ruleSet: {
+            url: 'https://example.com/rules.txt',
+            content: '[AutoProxy]\nOLD_CONTENT',
+            lastUpdated: 1234567890,
+            fetchError: null
+          }
+        }
+      ]
+    }
+    global.fetch.mockResolvedValue({ ok: false, status: 500 })
+
+    const result = await updatePolicyRuleSets(policy, true)
+
+    expect(result.changed).toBe(true)
+    const configuredRuleSet = policy.rules[0].ruleSet
+    expect(configuredRuleSet.content).toBeNull()
+    expect(configuredRuleSet.lastUpdated).toBeNull()
+    expect(configuredRuleSet.fetchError).toBe('HTTP 500')
+  })
 })
+

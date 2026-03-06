@@ -245,7 +245,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true
   }
   if (request.type === 'TRIGGER_UPDATE') {
-    checkUpdates()
+    checkUpdates(true)
       .then(({ changed, errors }) => {
         sendResponse({ success: true, changed, errors })
       })

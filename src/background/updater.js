@@ -19,8 +19,9 @@ export async function setupUpdateAlarm(intervalMinutes) {
 
 /**
  * Check and update external rule sets and PAC scripts.
+ * @param {boolean} isManual - Indicates if the update was triggered manually.
  */
-export async function checkUpdates() {
+export async function checkUpdates(isManual = false) {
   const config = await loadConfig()
   let configChanged = false
   const errors = []
@@ -61,7 +62,7 @@ export async function checkUpdates() {
     for (const policy of Object.values(config.policies)) {
       if (!policy) continue
       // Helper handles fetching and tracking changes locally
-      const result = await updatePolicyRuleSets(policy)
+      const result = await updatePolicyRuleSets(policy, isManual)
       if (result.changed) configChanged = true
       if (result.errors && result.errors.length) errors.push(...result.errors)
 
@@ -70,7 +71,7 @@ export async function checkUpdates() {
       if (policy.rejectRules) {
         // Wrap rejectRules in a pseudo-policy object because updatePolicyRuleSets expects { rules: [] }
         const rejectWrapper = { rules: policy.rejectRules }
-        const rejectResult = await updatePolicyRuleSets(rejectWrapper)
+        const rejectResult = await updatePolicyRuleSets(rejectWrapper, isManual)
         if (rejectResult.changed) configChanged = true
         if (rejectResult.errors && rejectResult.errors.length) errors.push(...rejectResult.errors)
       }

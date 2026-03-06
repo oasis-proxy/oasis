@@ -92,9 +92,10 @@ export async function fetchRuleSetContent(url) {
 /**
  * Update RuleSets for a given policy.
  * @param {object} policy - The policy object containing rules.
+ * @param {boolean} isManual - Indicates if the update was triggered manually.
  * @returns {Promise<{changed: boolean, errors: string[]}>} - Result with changed flag and errors array.
  */
-export async function updatePolicyRuleSets(policy) {
+export async function updatePolicyRuleSets(policy, isManual = false) {
   let configChanged = false
   const errors = []
 
@@ -137,9 +138,11 @@ export async function updatePolicyRuleSets(policy) {
           // Error
           rule.ruleSet.fetchError = result.fetchError
           rule.ruleSet.lastFetched = result.lastFetched
-          // CRITICAL: Dump old content/timestamp if it fails network even if URL didn't change
-          rule.ruleSet.content = null
-          rule.ruleSet.lastUpdated = null
+          if (isManual) {
+            // CRITICAL: Dump old content/timestamp if it fails network even if URL didn't change
+            rule.ruleSet.content = null
+            rule.ruleSet.lastUpdated = null
+          }
           configChanged = true // Save error state
           errors.push(`Failed to update RuleSet '${url}': ${result.fetchError}`)
         }
