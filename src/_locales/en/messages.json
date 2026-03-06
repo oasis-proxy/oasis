@@ -535,5 +535,17 @@
   "msgFetchingRuleSets": { "message": "Fetching pending RuleSets..." },
   "lblLastUpdated": { "message": "Updated:" },
   "lblView": { "message": "View" },
-  "lblTabClosed": { "message": "Closed" }
+  "lblTabClosed": { "message": "Closed" },
+  "msgNoUpdatesFound": { "message": "No rule sets or PAC scripts found to update." },
+  "lblStatus": { "message": "Status" },
+  "lblTarget": { "message": "Target" },
+  "lblMessage": { "message": "Message" },
+  "lblPolicy": { "message": "Policy" },
+  "lblSystemError": { "message": "System Error" },
+  "lblERR": { "message": "ERR" },
+  "lblOK": { "message": "OK" },
+  "msgUpdateSuccess": { "message": "Updated successfully" },
+  "msgNoChanges": { "message": "No changes" },
+  "msgPending": { "message": "Pending..." },
+  "lblUpdating": { "message": "Updating" }
 }

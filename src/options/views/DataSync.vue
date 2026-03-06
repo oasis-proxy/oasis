@@ -137,12 +137,19 @@
         @sync-local="resolveConflictLocal"
         @sync-cloud="resolveConflictCloud"
       />
+
+      <!-- Update Status Modal -->
+      <UpdateStatusModal
+        :visible="showUpdateModal"
+        :details="updateDetails"
+        @close="showUpdateModal = false"
+      />
     </template>
   </BaseDetailView>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import {
   exportConfig,
   importConfig,
@@ -153,6 +160,7 @@ import {
 import { t } from '../../common/i18n'
 import { toast } from '../utils/toast'
 import SyncConflictModal from '../../components/sync/SyncConflictModal.vue'
+import UpdateStatusModal from '../../components/sync/UpdateStatusModal.vue'
 import BaseDetailView from '../../components/base/BaseDetailView.vue'
 import SyncVersionCard from '../../components/sync/SyncVersionCard.vue'
 import { useDataSync } from '../../composables/useDataSync'
@@ -174,26 +182,64 @@ const {
 } = useDataSync()
 
 const isUpdatingRules = ref(false)
+const showUpdateModal = ref(false)
+const updateDetails = ref([])
 
 const handleUpdateAllRules = () => {
   if (isUpdatingRules.value) return
   isUpdatingRules.value = true
 
+  // 1. Kick off the update process and get the initial pending targets list immediately
   chrome.runtime.sendMessage({ type: 'TRIGGER_UPDATE' }, (res) => {
-    isUpdatingRules.value = false
     if (chrome.runtime.lastError || !res || !res.success) {
-      toast.error(t('msgUpdateAllFailed'))
-    } else if (res.errors && res.errors.length > 0) {
-      toast.error(t('msgUpdateAllFailed') + ': ' + res.errors[0])
-    } else {
-      toast.success(t('msgUpdateAllSuccess'))
+      isUpdatingRules.value = false
+      updateDetails.value = [{
+        id: 'sys-err',
+        type: 'system',
+        name: t('lblSystemError'),
+        success: false,
+        message: res?.error || chrome.runtime.lastError?.message || 'Unknown network error'
+      }]
+      showUpdateModal.value = true
+      return
     }
+
+    // Modal immediately pops up with 'Pending...' items
+    updateDetails.value = res.targets || []
+    showUpdateModal.value = true
   })
 }
 
+// 2. Listen for background streaming events resolving each pending item
+const progressListener = (msg) => {
+  if (msg.type === 'UPDATE_ITEM_STATUS' && msg.item) {
+    const idx = updateDetails.value.findIndex(d => d.id === msg.item.id)
+    if (idx !== -1) {
+      // Vue reactivity needs array index assignment or mutation
+      updateDetails.value[idx] = { ...updateDetails.value[idx], ...msg.item, status: 'done' }
+    }
+  } else if (msg.type === 'UPDATE_ALL_DONE') {
+    isUpdatingRules.value = false
+    if (!msg.success && msg.error) {
+       updateDetails.value.push({
+        id: 'sys-err-final',
+        type: 'system',
+        name: t('lblSystemError'),
+        success: false,
+        message: msg.error
+      })
+    }
+  }
+}
+
 onMounted(async () => {
+  chrome.runtime.onMessage.addListener(progressListener)
   await loadLocalData()
   await loadCloudData()
+})
+
+onUnmounted(() => {
+  chrome.runtime.onMessage.removeListener(progressListener)
 })
 
 // Maintenance Handlers

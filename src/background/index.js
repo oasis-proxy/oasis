@@ -6,7 +6,11 @@ import { createProxyConfig, collectProxyCredentials } from '../common/proxy_conf
 import { updateMonitoringState } from './monitoring'
 import './requestMonitor'
 import { updateContextMenus } from './contextMenu'
-import { setupUpdateAlarm, checkUpdates } from './updater'
+import {
+  checkUpdates,
+  setupUpdateAlarm,
+  getUpdateTargets
+} from './updater'
 
 // Store proxy authentication credentials
 // Map structure: "host:port" -> { username, password }
@@ -245,13 +249,23 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true
   }
   if (request.type === 'TRIGGER_UPDATE') {
-    checkUpdates(true)
-      .then(({ changed, errors }) => {
-        sendResponse({ success: true, changed, errors })
+    loadConfig().then(config => {
+      const targets = getUpdateTargets(config)
+      sendResponse({ success: true, targets })
+
+      // Detach the actual update sweep so the response can return immediately
+      checkUpdates(true, (item) => {
+        chrome.runtime.sendMessage({ type: 'UPDATE_ITEM_STATUS', item }).catch(() => {})
       })
-      .catch((error) => {
-        sendResponse({ success: false, error: error.message })
-      })
+        .then(({ changed, errors }) => {
+          chrome.runtime.sendMessage({ type: 'UPDATE_ALL_DONE', success: true, changed, errors }).catch(() => {})
+        })
+        .catch((error) => {
+          chrome.runtime.sendMessage({ type: 'UPDATE_ALL_DONE', success: false, error: error.message }).catch(() => {})
+        })
+    }).catch(error => {
+      sendResponse({ success: false, error: `Config load failed: ${error.message}` })
+    })
     return true
   }
   if (request.type === 'APPLY_TEMP_RULES') {

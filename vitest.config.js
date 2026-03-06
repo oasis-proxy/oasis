@@ -7,7 +7,8 @@ export default defineConfig((configEnv) =>
     defineConfig({
       test: {
         environment: 'happy-dom',
-        exclude: ['**/node_modules/**', '**/dist/**']
+        exclude: ['**/node_modules/**', '**/dist/**'],
+        setupFiles: ['./vitest.setup.js']
       }
     })
   )

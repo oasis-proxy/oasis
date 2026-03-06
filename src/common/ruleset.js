@@ -93,11 +93,12 @@ export async function fetchRuleSetContent(url) {
  * Update RuleSets for a given policy.
  * @param {object} policy - The policy object containing rules.
  * @param {boolean} isManual - Indicates if the update was triggered manually.
- * @returns {Promise<{changed: boolean, errors: string[]}>} - Result with changed flag and errors array.
+ * @returns {Promise<{changed: boolean, errors: string[], details: Array<{url: string, success: boolean, message: string}>}>} - Result with changed flag, errors array, and detailed results.
  */
-export async function updatePolicyRuleSets(policy, isManual = false) {
+export async function updatePolicyRuleSets(policy, isManual = false, onProgress = null) {
   let configChanged = false
   const errors = []
+  const details = []
 
   const rules = policy.rules
   if (!rules || !Array.isArray(rules)) return { changed: false, errors }
@@ -134,6 +135,13 @@ export async function updatePolicyRuleSets(policy, isManual = false) {
           rule.ruleSet.lastFetched = result.lastFetched
           rule.ruleSet.fetchError = null
           configChanged = true
+          const detailObj = {
+            url,
+            success: true,
+            message: 'msgUpdateSuccess'
+          }
+          details.push(detailObj)
+          if (onProgress) onProgress(detailObj)
         } else {
           // Error
           rule.ruleSet.fetchError = result.fetchError
@@ -145,6 +153,13 @@ export async function updatePolicyRuleSets(policy, isManual = false) {
           }
           configChanged = true // Save error state
           errors.push(`Failed to update RuleSet '${url}': ${result.fetchError}`)
+          const detailObj = {
+            url,
+            success: false,
+            message: `Failed: ${result.fetchError}`
+          }
+          details.push(detailObj)
+          if (onProgress) onProgress(detailObj)
         }
       } catch (e) {
         // Should be caught by fetchRuleSetContent, but safe to have extra catch
@@ -153,8 +168,13 @@ export async function updatePolicyRuleSets(policy, isManual = false) {
         rule.ruleSet.fetchError = e.message
         configChanged = true
         errors.push(`Unexpected error updating RuleSet '${url}': ${e.message}`)
+        details.push({
+          url,
+          success: false,
+          message: `Error: ${e.message}`
+        })
       }
     }
   }
-  return { changed: configChanged, errors }
+  return { changed: configChanged, errors, details }
 }
