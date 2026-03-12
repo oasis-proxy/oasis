@@ -6,6 +6,18 @@ Oasis is a modern, high-performance browser extension designed to give you compl
 
 ---
 
+## Store Release
+
+Oasis is now published in the Microsoft Edge Add-ons Store and the Chrome Web Store.
+
+[![Supported Browsers](https://img.shields.io/badge/Supported%20Browsers-Chrome%20%7C%20Edge-orange?style=flat)]
+
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/acclmfofilomofphlgfbkhheoakkannc)](https://chromewebstore.google.com/detail/oasis-proxy-2/acclmfofilomofphlgfbkhheoakkannc)
+
+[![Microsoft Edge Add-ons Store](https://img.shields.io/badge/dynamic/json?label=microsoft%20edge%20add-on&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fjbgfelnbpnjihfedcimphoimjfaeplmc)](https://microsoftedge.microsoft.com/addons/detail/jbgfelnbpnjihfedcimphoimjfaeplmc)
+
+---
+
 ## Features
 
 - **Protocol Support**: HTTP, HTTPS, SOCKS4, and SOCKS5.
