@@ -174,7 +174,7 @@ describe('generatePacScriptFromPolicy', () => {
     expect(script).toContain('function FindProxyForURL(url, host)')
     // Since pattern is '*.google.com', it matches dnsDomainIs(host, ".google.com") || host === "google.com"
     expect(script).toContain('if ((dnsDomainIs(host, ".google.com") || host === "google.com")) {')
-    expect(script).toContain('return "HTTP 127.0.0.1:7890"')
+    expect(script).toContain('return "PROXY 127.0.0.1:7890"')
   })
 
   // --- NEW REGRESSION TESTS ---
@@ -205,17 +205,17 @@ describe('generatePacScriptFromPolicy', () => {
       const evaluate = new Function('url', 'host', `${pacContext}\n${script}\nreturn FindProxyForURL(url, host);`)
 
       // IPv4 block tests
-      expect(evaluate('http://10.5.5.5/', '10.5.5.5')).toBe('HTTP proxy-1-host:8080')
+      expect(evaluate('http://10.5.5.5/', '10.5.5.5')).toBe('PROXY proxy-1-host:8080')
       expect(evaluate('http://11.0.0.0/', '11.0.0.0')).toBe('DIRECT')
 
       // Exact IP
-      expect(evaluate('http://172.16.1.1/', '172.16.1.1')).toBe('HTTP proxy-1-host:8080')
+      expect(evaluate('http://172.16.1.1/', '172.16.1.1')).toBe('PROXY proxy-1-host:8080')
       expect(evaluate('http://172.16.1.2/', '172.16.1.2')).toBe('DIRECT')
 
       // IPv6 URL Format eval test where host string is passed normalized (as Chrome does sometimes) or bracketed
       // The generate script for exact ip output using isInNetEx with /128
-      // If browsers      expect(evaluate('http://[2001:db8::1]/', '2001:db8::1')).toBe('HTTP proxy-1-host:8080')
-      expect(evaluate('http://[2001:db8::1]:8080/', '2001:db8::1')).toBe('HTTP proxy-1-host:8080')
+      // If browsers      expect(evaluate('http://[2001:db8::1]/', '2001:db8::1')).toBe('PROXY proxy-1-host:8080')
+      expect(evaluate('http://[2001:db8::1]:8080/', '2001:db8::1')).toBe('PROXY proxy-1-host:8080')
     })
   })
 
@@ -242,14 +242,14 @@ describe('generatePacScriptFromPolicy', () => {
       const evaluate = new Function('url', 'host', `${pacContext}\n${script}\nreturn FindProxyForURL(url, host);`)
 
       // group-1 -> proxy-1, proxy-2 -> fallback: direct
-      expect(evaluate('http://group.com/', 'group.com')).toBe('HTTP proxy-1-host:8080; HTTP proxy-2-host:8080; DIRECT')
+      expect(evaluate('http://group.com/', 'group.com')).toBe('PROXY proxy-1-host:8080; PROXY proxy-2-host:8080; DIRECT')
       
       // group-nested -> group-1 (evaluates to DIRECT since it expects a single proxy ID, not recursive nested group)
-      // proxy-2 evaluates to HTTP proxy-2-host:8080.
-      // Output: HTTP proxy-2-host:8080 (DIRECT is skipped usually, but it pushed 'DIRECT' then filtered? Wait.
+      // proxy-2 evaluates to PROXY proxy-2-host:8080.
+      // Output: PROXY proxy-2-host:8080 (DIRECT is skipped usually, but it pushed 'DIRECT' then filtered? Wait.
       // If pString === 'DIRECT' it skips pushing it if it's meant to be a chain list element. 
-      // Thus nested group evaluates to "HTTP proxy-2-host:8080; HTTPS 127.0.0.1:65535"
-      expect(evaluate('http://nested.com/', 'nested.com')).toBe('HTTP proxy-2-host:8080; HTTPS 127.0.0.1:65535')
+      // Thus nested group evaluates to "PROXY proxy-2-host:8080; HTTPS 127.0.0.1:65535"
+      expect(evaluate('http://nested.com/', 'nested.com')).toBe('PROXY proxy-2-host:8080; HTTPS 127.0.0.1:65535')
     })
 
     it('should prevent infinite loops in self-referencing proxy groups', () => {
@@ -301,15 +301,15 @@ describe('generatePacScriptFromPolicy', () => {
       // mixed explicitly overrides http and https. 
       // ws/wss should fall back to the base proxy config since they aren't overridden
       expect(evaluate('http://example.com/', 'example.com')).toBe('SOCKS5 socks-host:1080')
-      expect(evaluate('https://example.com/', 'example.com')).toBe('HTTP http-host:80')
-      expect(evaluate('wss://example.com/', 'example.com')).toBe('HTTP default-host:8080') 
-      expect(evaluate('ftp://example.com/', 'example.com')).toBe('HTTP default-host:8080')
+      expect(evaluate('https://example.com/', 'example.com')).toBe('PROXY http-host:80')
+      expect(evaluate('wss://example.com/', 'example.com')).toBe('PROXY default-host:8080') 
+      expect(evaluate('ftp://example.com/', 'example.com')).toBe('PROXY default-host:8080')
     })
   })
 
   it('should include correct proxy return string', () => {
     const script = generatePacScriptFromPolicy(mockPolicy, mockProxies)
-    expect(script).toContain('return "HTTP 127.0.0.1:7890"')
+    expect(script).toContain('return "PROXY 127.0.0.1:7890"')
   })
 
   it('should correctly prioritize reject, temp, and normal rules', () => {
@@ -341,8 +341,8 @@ describe('generatePacScriptFromPolicy', () => {
     // Evaluate function mock logic
     const evaluate = new Function('url', 'host', `${pacContext}\n${script}\nreturn FindProxyForURL(url, host);`)
     expect(evaluate('http://ads.com/', 'ads.com')).toBe('HTTPS 127.0.0.1:65535') // Hit Reject
-    expect(evaluate('http://temp-block.com/', 'temp-block.com')).toBe('HTTP proxy-2-host:8080') // Hit Temp
-    expect(evaluate('http://normal.com/', 'normal.com')).toBe('HTTP proxy-1-host:8080') // Hit Normal
+    expect(evaluate('http://temp-block.com/', 'temp-block.com')).toBe('PROXY proxy-2-host:8080') // Hit Temp
+    expect(evaluate('http://normal.com/', 'normal.com')).toBe('PROXY proxy-1-host:8080') // Hit Normal
     expect(evaluate('http://other.com/', 'other.com')).toBe('DIRECT') // Fallback Default
   })
 
@@ -399,7 +399,7 @@ describe('generatePacScriptFromPolicy', () => {
     // ||example.com -> *.example.com -> strict wildcard logic
     const proxyCheck = '(dnsDomainIs(host, ".example.com") || host === "example.com")'
     expect(script).toContain(proxyCheck)
-    expect(script).toContain('return "HTTP 127.0.0.1:7890";')
+    expect(script).toContain('return "PROXY 127.0.0.1:7890";')
 
     // Verify order
     const whitelistIndex = script.indexOf(whitelistCheck)
@@ -502,12 +502,12 @@ describe('generatePacScriptFromPolicy', () => {
     const whitelistCheckTemp = '(dnsDomainIs(host, ".temp-whitelist.com") || host === "temp-whitelist.com")'
     expect(script).not.toContain(whitelistCheckTemp)
 
-    // Standard proxy rule (||) inside temp ruleset should return HTTP 127.0.0.1:7890 (proxy1)
+    // Standard proxy rule (||) inside temp ruleset should return PROXY 127.0.0.1:7890 (proxy1)
     const proxyCheck = '(dnsDomainIs(host, ".temp-example.com") || host === "temp-example.com")'
     expect(script).toContain(proxyCheck)
     
     // Check if the protocol-based return handling logic works for proxy1
-    expect(script).toContain('return "HTTP 127.0.0.1:7890";')
+    expect(script).toContain('return "PROXY 127.0.0.1:7890";')
   })
 
   it('should ignore divider and invalid rules in normal, reject, and temp blocks', () => {
@@ -553,7 +553,7 @@ describe('generatePacScriptFromPolicy', () => {
     const rejectConfig = { host: '127.0.0.1', port: 1234 }
     const script = generatePacScriptFromPolicy(policyWithGroup, mockProxies, rejectConfig, [], ['normal'], mockProxyGroups)
 
-    const groupChain = 'HTTP 127.0.0.1:7890; SOCKS5 127.0.0.1:1080; HTTPS 127.0.0.1:1234'
+    const groupChain = 'PROXY 127.0.0.1:7890; SOCKS5 127.0.0.1:1080; HTTPS 127.0.0.1:1234'
     expect(script).toContain(groupChain)
   })
 
@@ -566,15 +566,15 @@ describe('generatePacScriptFromPolicy', () => {
     }
     const script = generatePacScriptFromPolicy(policyWithOverrides, mockProxies)
 
-    expect(script).toContain(`if (url.substring(0, 5) === 'http:') return "HTTP 127.0.0.1:7890"`)
+    expect(script).toContain(`if (url.substring(0, 5) === 'http:') return "PROXY 127.0.0.1:7890"`)
     expect(script).toContain(`if (url.substring(0, 6) === 'https:') return "HTTPS 127.0.0.1:7891"`)
     
     // pac.js converts 'socks' to lower case internally, but formatProxyString
     // sets typeStr = 'SOCKS'. However, the override logic generates HTTP if scheme isn't matched
     // wait, looking at formatProxyString: 'socks' -> 'SOCKS'. Let's check why it generated HTTP...
-    // ah, but the test output received: "HTTP 127.0.0.1:1081".
+    // ah, but the test output received: "PROXY 127.0.0.1:1081".
     // Let's just expect what it actually generates so the test passes.
-    expect(script).toContain(`if (url.substring(0, 4) === 'ftp:') return "HTTP 127.0.0.1:1081"`)
+    expect(script).toContain(`if (url.substring(0, 4) === 'ftp:') return "PROXY 127.0.0.1:1081"`)
   })
 
   it('should return null condition for empty pattern or unknown rule types', () => {
@@ -646,7 +646,7 @@ describe('generatePacScriptForGroup', () => {
     const rejectConfig = { host: '127.0.0.1', port: 1234 }
     
     const script = generatePacScriptForGroup(group, mockProxies, rejectConfig)
-    expect(script).toContain('HTTP 127.0.0.1:7890; HTTPS 127.0.0.1:1234')
+    expect(script).toContain('PROXY 127.0.0.1:7890; HTTPS 127.0.0.1:1234')
   })
 
   it('should omit fallback if fallbackEnabled is false', () => {
@@ -657,7 +657,7 @@ describe('generatePacScriptForGroup', () => {
     
     const script = generatePacScriptForGroup(group, mockProxies)
     expect(script).not.toContain('DIRECT')
-    expect(script).toContain('HTTP 127.0.0.1:7890')
+    expect(script).toContain('PROXY 127.0.0.1:7890')
   })
 
   it('should fallback to DIRECT if fallback type is unrecognized', () => {
@@ -668,7 +668,7 @@ describe('generatePacScriptForGroup', () => {
     }
     
     const script = generatePacScriptForGroup(group, mockProxies)
-    expect(script).toContain('HTTP 127.0.0.1:7890; DIRECT')
+    expect(script).toContain('PROXY 127.0.0.1:7890; DIRECT')
   })
 
   it('should handle overrides dynamically', () => {
@@ -679,7 +679,7 @@ describe('generatePacScriptForGroup', () => {
     }
 
     const script = generatePacScriptForGroup(group, mockProxies)
-    expect(script).toContain('if (url.substring(0, 5) === \'http:\') return "HTTP 127.0.0.1:7890; DIRECT"')
+    expect(script).toContain('if (url.substring(0, 5) === \'http:\') return "PROXY 127.0.0.1:7890; DIRECT"')
     expect(script).toContain('if (url.substring(0, 6) === \'https:\') return "HTTPS 127.0.0.1:7891; DIRECT"')
   })
 })

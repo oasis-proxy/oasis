@@ -101,7 +101,7 @@ export function generatePacScriptFromPolicy(
     if (s === 'socks' || s === 'socks4') typeStr = 'SOCKS'
     else if (s === 'socks5') typeStr = 'SOCKS5'
     else if (s === 'https') typeStr = 'HTTPS'
-    else typeStr = 'HTTP'
+    else typeStr = 'PROXY'
     return `${typeStr} ${host}:${port}`
   }
 
@@ -432,7 +432,7 @@ export function generatePacScriptForGroup(group, proxies, rejectConfig = null) {
     if (s === 'socks' || s === 'socks4') typeStr = 'SOCKS'
     else if (s === 'socks5') typeStr = 'SOCKS5'
     else if (s === 'https') typeStr = 'HTTPS'
-    else typeStr = 'HTTP'
+    else typeStr = 'PROXY'
     return `${typeStr} ${host}:${port}`
   }
 
