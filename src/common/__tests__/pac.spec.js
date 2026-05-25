@@ -610,6 +610,20 @@ describe('generatePacScriptFromPolicy', () => {
     // For strings without "/", it falls back to exact match
     expect(script).toContain('host === "invalid-ip-string"')
   })
+
+  it('should keep generated PAC script ASCII-safe when the policy name contains Chinese characters', () => {
+    const script = generatePacScriptFromPolicy(
+      {
+        ...mockPolicy,
+        name: '简体中文策略'
+      },
+      mockProxies
+    )
+
+    expect([...script].every((char) => char.charCodeAt(0) <= 0x7f)).toBe(true)
+    expect(script).toContain('// PAC Script generated from Oasis Policy')
+    expect(script).not.toContain('简体中文策略')
+  })
 })
 
 import { generatePacScriptForGroup } from '../pac'

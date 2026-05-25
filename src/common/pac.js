@@ -19,7 +19,6 @@ export function generatePacScriptFromPolicy(
   rulePriority = ['reject', 'temp', 'normal'],
   proxyGroups = {}
 ) {
-  const policyName = policy.name || 'Auto Policy'
   const rules = policy.rules || []
   const rejectRules = policy.rejectRules || []
 
@@ -391,7 +390,7 @@ export function generatePacScriptFromPolicy(
     normal: generateNormalBlock
   }
 
-  let pacContent = `// PAC Script generated from Oasis Policy: ${policyName}\n`
+  let pacContent = `// PAC Script generated from Oasis Policy\n`
   pacContent += `// Generated on: ${new Date().toISOString()}\n\n`
   pacContent += `function FindProxyForURL(url, host) {\n`
 
